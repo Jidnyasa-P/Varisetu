@@ -1,0 +1,807 @@
+/* WariSetu AI (v2 Light Theme - Grounded Government Portal Specification) */
+
+:root {
+  --bg-khadi: #F7F3EC;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #EFECE6;
+  --bg-darker: #E5E0D7;
+  
+  --maroon-primary: #7A1F1F;
+  --maroon-dark: #5C1515;
+  --maroon-light: #9B2D2D;
+  --maroon-bg: #F4EAEB;
+  
+  --saffron-gold: #D98E2C;
+  --saffron-light: #FAF0E1;
+
+  --text-primary: #2B2623;
+  --text-secondary: #5A534C;
+  --text-muted: #847C74;
+
+  --border-main: #D8D1C5;
+  --border-strong: #B5ACA0;
+  --border-focus: #7A1F1F;
+
+  /* Earthy Status Palette (Muted, Non-Neon) */
+  --status-green: #2E5B36;
+  --status-green-bg: #E8F2EA;
+  --status-yellow: #B07817;
+  --status-yellow-bg: #FAF3E6;
+  --status-orange: #B8551B;
+  --status-orange-bg: #FAECE5;
+  --status-red: #9A2525;
+  --status-red-bg: #F9EAEB;
+
+  --font-serif: 'Tiro Devanagari Marathi', 'IBM Plex Serif', Georgia, serif;
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-khadi);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Warli Traditional Border Strip */
+.top-warli-border {
+  height: 8px;
+  background-color: var(--maroon-primary);
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--saffron-gold) 0,
+    var(--saffron-gold) 6px,
+    var(--maroon-primary) 6px,
+    var(--maroon-primary) 14px
+  );
+  border-bottom: 1px solid var(--maroon-dark);
+}
+
+/* Header & Government Branding */
+.gov-header {
+  background-color: #FFFFFF;
+  border-bottom: 2px solid var(--border-strong);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo-img {
+  height: 56px;
+  width: auto;
+  border-radius: 2px;
+  border: 1px solid var(--border-main);
+  object-fit: contain;
+  background-color: var(--bg-khadi);
+  padding: 1px;
+}
+
+.mh-police-badge {
+  width: 44px;
+  height: 44px;
+  background: var(--maroon-primary);
+  color: #FFF;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 9px;
+  border: 1px solid var(--maroon-dark);
+  text-align: center;
+  line-height: 1.1;
+  padding: 2px;
+}
+
+.brand-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-marathi {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--maroon-primary);
+  letter-spacing: 0.2px;
+  line-height: 1.1;
+}
+
+.brand-english {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 12px;
+}
+
+.meta-pill {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-main);
+  padding: 4px 10px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--status-green);
+  border-radius: 50%;
+}
+
+/* Primary Navigation Bar */
+.nav-bar {
+  background-color: var(--maroon-primary);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--maroon-dark);
+  overflow-x: auto;
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  color: #E2D7D7;
+  padding: 10px 16px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.nav-tab:hover {
+  color: #FFF;
+  background-color: rgba(255,255,255,0.06);
+}
+
+.nav-tab.active {
+  color: #FFF;
+  background-color: var(--maroon-dark);
+  border-bottom-color: var(--saffron-gold);
+}
+
+.nav-tab .badge {
+  background-color: var(--saffron-gold);
+  color: #000;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+}
+
+/* Main Layout Structure */
+.app-container {
+  padding: 12px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.view-section {
+  display: none;
+}
+
+.view-section.active {
+  display: block;
+}
+
+/* Section Header */
+.section-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 4px solid var(--maroon-primary);
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--maroon-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-sub {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* Screen 1: Main Command Center Layout */
+.command-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr 300px;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 1280px) {
+  .command-grid {
+    grid-template-columns: 300px 1fr;
+  }
+  .right-col-panel {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .command-grid {
+    grid-template-columns: 1fr;
+  }
+  .right-col-panel {
+    grid-column: span 1;
+  }
+}
+
+/* CCTV Panel (Left Column) */
+.cctv-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: calc(100vh - 170px);
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.panel-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.panel-header {
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border-main);
+  padding: 6px 10px;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cctv-tile {
+  background: #0F1215;
+  border: 1px solid var(--border-strong);
+  border-left-width: 4px;
+  position: relative;
+  height: 125px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cctv-tile.status-normal { border-left-color: var(--status-green); }
+.cctv-tile.status-moderate { border-left-color: var(--status-yellow); }
+.cctv-tile.status-heavy { border-left-color: var(--status-orange); }
+.cctv-tile.status-critical { border-left-color: var(--status-red); }
+
+.cctv-feed-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.1) brightness(0.9) grayscale(0.2);
+  opacity: 0.85;
+}
+
+.cctv-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.7) 100%);
+}
+
+.cctv-top-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: #FFF;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-shadow: 0 1px 2px #000;
+}
+
+.cctv-cam-id {
+  background: rgba(0,0,0,0.65);
+  padding: 2px 4px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 2px;
+}
+
+.cctv-timestamp {
+  background: rgba(0,0,0,0.65);
+  padding: 2px 4px;
+  color: #00FF66;
+}
+
+.cctv-bottom-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cctv-location {
+  color: #FFF;
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 0 1px 3px #000;
+}
+
+.density-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 5px;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+}
+
+.density-tag.green { background: var(--status-green); color: #FFF; }
+.density-tag.yellow { background: var(--status-yellow); color: #FFF; }
+.density-tag.orange { background: var(--status-orange); color: #FFF; }
+.density-tag.red { background: var(--status-red); color: #FFF; }
+
+/* Center Route Map */
+.map-container {
+  height: calc(100vh - 220px);
+  min-height: 520px;
+  border: 1px solid var(--border-main);
+  background: #EAE6DF;
+  position: relative;
+  border-radius: 2px;
+}
+
+#routeMap {
+  width: 100%;
+  height: 100%;
+}
+
+.map-controls-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: #FFF;
+  border: 1px solid var(--border-strong);
+  padding: 8px;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-color-box {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+/* Stat Panels (Right Column) */
+.stat-panel-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.govt-stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  padding: 12px;
+  border-radius: 2px;
+  border-left: 4px solid var(--maroon-primary);
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  color: var(--maroon-primary);
+  margin: 4px 0 2px 0;
+}
+
+.stat-subtext {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Incident Log Ticker (Bottom Bar) */
+.incident-ticker-bar {
+  background: #231F1D;
+  color: #EFECE6;
+  border: 1px solid #111;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  border-radius: 2px;
+}
+
+.ticker-label {
+  background: var(--maroon-primary);
+  color: #FFF;
+  padding: 2px 8px;
+  font-weight: bold;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ticker-content {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-text {
+  display: inline-block;
+  animation: scrollTicker 35s linear infinite;
+}
+
+@keyframes scrollTicker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Government Plain Tables */
+.govt-table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-radius: 2px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
+
+.govt-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+}
+
+.govt-table th {
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--border-strong);
+  padding: 8px 12px;
+  white-space: nowrap;
+}
+
+.govt-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-main);
+  vertical-align: middle;
+}
+
+.govt-table tr:hover {
+  background-color: var(--bg-khadi);
+}
+
+/* Rectangular Government Buttons */
+.govt-btn {
+  background-color: var(--maroon-primary);
+  color: #FFFFFF;
+  border: 1px solid var(--maroon-dark);
+  padding: 5px 12px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: none;
+  transition: background-color 0.1s ease;
+}
+
+.govt-btn:hover {
+  background-color: var(--maroon-dark);
+}
+
+.govt-btn.btn-outline {
+  background-color: transparent;
+  color: var(--maroon-primary);
+  border-color: var(--maroon-primary);
+}
+
+.govt-btn.btn-outline:hover {
+  background-color: var(--maroon-bg);
+}
+
+.govt-btn.btn-disabled {
+  background-color: #D6D1C7;
+  border-color: #C2BBB0;
+  color: #7A746B;
+  cursor: not-allowed;
+}
+
+/* Screen 2: Crowd Intelligence Layout */
+.crowd-view-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 1024px) {
+  .crowd-view-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  padding: 14px;
+  border-radius: 2px;
+}
+
+.chart-title {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--maroon-primary);
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-main);
+  padding-bottom: 4px;
+}
+
+/* Screen 3: Lost & Found Desk */
+.lost-found-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 1024px) {
+  .lost-found-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.photo-placeholder-box {
+  width: 36px;
+  height: 36px;
+  background: var(--bg-darker);
+  border: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.transcript-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-left: 4px solid var(--saffron-gold);
+  padding: 14px;
+  border-radius: 2px;
+}
+
+.transcript-box {
+  background: var(--bg-khadi);
+  border: 1px solid var(--border-main);
+  padding: 10px;
+  font-family: var(--font-serif);
+  font-size: 13px;
+  line-height: 1.6;
+  color: #3B332B;
+  margin-top: 8px;
+  white-space: pre-line;
+}
+
+/* Screen 4: Medical Alerts Layout */
+.medical-view-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 1024px) {
+  .medical-view-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.alert-card-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-left: 4px solid var(--status-red);
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert-card-item.acknowledged {
+  border-left-color: var(--status-green);
+  opacity: 0.85;
+}
+
+.heat-risk-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  padding: 14px;
+  border-radius: 2px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--border-main);
+}
+
+.metric-row:last-child {
+  border-bottom: none;
+}
+
+.metric-key {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.metric-val {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Screen 5: Resource Management */
+.resource-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 1024px) {
+  .resource-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.route-status-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-pill {
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.status-pill.open { background: var(--status-green-bg); color: var(--status-green); border: 1px solid var(--status-green); }
+.status-pill.closed { background: var(--status-red-bg); color: var(--status-red); border: 1px solid var(--status-red); }
+.status-pill.diverted { background: var(--status-yellow-bg); color: var(--status-yellow); border: 1px solid var(--status-yellow); }
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal-content {
+  background: #FFF;
+  border: 2px solid var(--maroon-primary);
+  width: 90%;
+  max-width: 800px;
+  padding: 16px;
+  border-radius: 2px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-main);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.modal-title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  color: var(--maroon-primary);
+  font-weight: 700;
+}
+
+.close-modal-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-secondary);
+  cursor: pointer;
+}

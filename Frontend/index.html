@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>वारी सेतु | VARISETU - Maharashtra Police Command Center</title>
+  
+  <!-- Typography (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=Tiro+Devanagari+Marathi:ital@0;1&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Top Warli Pattern Woven Strip -->
+  <div class="top-warli-border"></div>
+
+  <!-- Government Portal Header -->
+  <header class="gov-header">
+    <div class="brand-section">
+      <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img">
+      <div class="mh-police-badge">
+        <span>म.पो.</span>
+        <span style="font-size:7px;">POLICE</span>
+      </div>
+      <div class="brand-titles">
+        <h1 class="brand-marathi">वारी सेतु</h1>
+        <span class="brand-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</span>
+      </div>
+    </div>
+
+    <div class="header-meta">
+      <div class="meta-pill">
+        <span class="live-dot"></span>
+        <span>SECTOR: PANDHARPUR PILGRIMAGE CORRIDOR</span>
+      </div>
+      <div class="meta-pill">
+        <i data-lucide="clock" style="width:13px; height:13px;"></i>
+        <span id="sysClock">28 JUL 2026 18:50:00 IST</span>
+      </div>
+      <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
+        <span>PILGRIM COUNT: ~8,45,000</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs Bar -->
+  <nav class="nav-bar">
+    <button class="nav-tab active" data-target="view-command">
+      <i data-lucide="layout-dashboard" style="width:14px; height:14px;"></i>
+      <span>Main Command Center</span>
+    </button>
+    <button class="nav-tab" data-target="view-crowd">
+      <i data-lucide="users" style="width:14px; height:14px;"></i>
+      <span>Crowd Intelligence</span>
+      <span class="badge">92% Max Density</span>
+    </button>
+    <button class="nav-tab" data-target="view-lost">
+      <i data-lucide="search" style="width:14px; height:14px;"></i>
+      <span>Lost & Found Desk</span>
+      <span class="badge" style="background:#B07817; color:#FFF;">4 Active</span>
+    </button>
+    <button class="nav-tab" data-target="view-medical">
+      <i data-lucide="heart-pulse" style="width:14px; height:14px;"></i>
+      <span>Medical Alerts</span>
+      <span class="badge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
+    </button>
+    <button class="nav-tab" data-target="view-resources">
+      <i data-lucide="truck" style="width:14px; height:14px;"></i>
+      <span>Resource Management</span>
+    </button>
+  </nav>
+
+  <!-- Main App Layout Container -->
+  <main class="app-container">
+
+    <!-- ==================== SCREEN 1: MAIN COMMAND CENTER ==================== -->
+    <section id="view-command" class="view-section active">
+      <div class="section-bar">
+        <div class="section-title">
+          <i data-lucide="shield-alert" style="width:16px; height:16px;"></i>
+          <span>Real-time Operational Command & Surveillance</span>
+        </div>
+        <div class="section-sub">
+          Active Surveillance: 14 CCTVs &bull; Route: Alandi - Dehu - Pune - Wakhri - Pandharpur
+        </div>
+      </div>
+
+      <div class="command-grid">
+        <!-- Left: CCTV surveillance tiles -->
+        <div class="cctv-column">
+          <div class="panel-header">
+            <span>CCTV FEEDS (GRAINY SURVEILLANCE)</span>
+            <span style="font-size:10px; color:var(--text-muted);">CLICK FEED TO ENLARGE</span>
+          </div>
+
+          <div class="cctv-tile status-heavy" onclick="openCamModal('CAM-12', 'Wakhri Phata Junction Cam 12', 'Heavy Crowd Density (88%)')">
+            <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 12">
+            <div class="cctv-overlay">
+              <div class="cctv-top-info">
+                <span class="cctv-cam-id">CAM-12</span>
+                <span class="cctv-timestamp">REC 18:50:12</span>
+              </div>
+              <div class="cctv-bottom-info">
+                <span class="cctv-location">Wakhri Phata Junction</span>
+                <span class="density-tag orange">HEAVY 88%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cctv-tile status-critical" onclick="openCamModal('CAM-04', 'Pandharpur Temple Chowk Cam 04', 'Critical Congestion (94%)')">
+            <img src="assets/wari_aerial_procession_1785244820232.jpg" class="cctv-feed-img" alt="CCTV Feed 04">
+            <div class="cctv-overlay">
+              <div class="cctv-top-info">
+                <span class="cctv-cam-id">CAM-04</span>
+                <span class="cctv-timestamp">REC 18:50:12</span>
+              </div>
+              <div class="cctv-bottom-info">
+                <span class="cctv-location">Pandharpur Chowk</span>
+                <span class="density-tag red">CRITICAL 94%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cctv-tile status-moderate" onclick="openCamModal('CAM-08', 'Saswad Highway Checkpoint Cam 08', 'Moderate Flow (62%)')">
+            <img src="assets/palkhi_procession_1785244851342.jpg" class="cctv-feed-img" alt="CCTV Feed 08">
+            <div class="cctv-overlay">
+              <div class="cctv-top-info">
+                <span class="cctv-cam-id">CAM-08</span>
+                <span class="cctv-timestamp">REC 18:50:10</span>
+              </div>
+              <div class="cctv-bottom-info">
+                <span class="cctv-location">Saswad Corridor</span>
+                <span class="density-tag yellow">MODERATE 62%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cctv-tile status-normal" onclick="openCamModal('CAM-01', 'Alandi Ghat Section Cam 01', 'Normal Clearance (35%)')">
+            <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 01">
+            <div class="cctv-overlay">
+              <div class="cctv-top-info">
+                <span class="cctv-cam-id">CAM-01</span>
+                <span class="cctv-timestamp">REC 18:50:08</span>
+              </div>
+              <div class="cctv-bottom-info">
+                <span class="cctv-location">Alandi Ghat Rd</span>
+                <span class="density-tag green">NORMAL 35%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Center: Interactive Route Map -->
+        <div class="map-container">
+          <div id="routeMap"></div>
+
+          <div class="map-controls-overlay">
+            <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px;">ROUTE MAP LEGEND</div>
+            <div class="map-legend-item">
+              <div class="legend-color-box" style="background:#9A2525;"></div>
+              <span>Critical Congestion</span>
+            </div>
+            <div class="map-legend-item">
+              <div class="legend-color-box" style="background:#B8551B;"></div>
+              <span>Heavy Density</span>
+            </div>
+            <div class="map-legend-item">
+              <div class="legend-color-box" style="background:#2E5B36;"></div>
+              <span>Clear Route</span>
+            </div>
+            <div class="map-legend-item" style="margin-top:4px;">
+              <i data-lucide="droplet" style="width:12px; height:12px; color:#1D6F8A;"></i>
+              <span>Water Tanker</span>
+            </div>
+            <div class="map-legend-item">
+              <i data-lucide="cross" style="width:12px; height:12px; color:#9A2525;"></i>
+              <span>Medical Van</span>
+            </div>
+            <div class="map-legend-item">
+              <i data-lucide="flag" style="width:12px; height:12px; color:#D98E2C;"></i>
+              <span>Palkhi Location</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Plain Stat Panels -->
+        <div class="right-col-panel">
+          <div class="stat-panel-group">
+            <div class="govt-stat-box">
+              <div class="stat-label">Lost & Found Desk</div>
+              <div class="stat-value">4 Active Cases</div>
+              <div class="stat-subtext">2 facial matches flagged by automated engine</div>
+            </div>
+
+            <div class="govt-stat-box" style="border-left-color: var(--status-red);">
+              <div class="stat-label">Medical Emergencies</div>
+              <div class="stat-value" style="color:var(--status-red);">2 Active Alerts</div>
+              <div class="stat-subtext">Sector 3 (Wakhri) & Sector 5 (Pandharpur)</div>
+            </div>
+
+            <div class="govt-stat-box" style="border-left-color: var(--status-green);">
+              <div class="stat-label">Resource Deployment</div>
+              <div class="stat-value" style="color:var(--status-green);">12 / 20 Tankers</div>
+              <div class="stat-subtext">8 reserves stationed at Pandharpur Depot</div>
+            </div>
+
+            <div class="govt-stat-box" style="border-left-color: var(--saffron-gold);">
+              <div class="stat-label">Main Palkhi Status</div>
+              <div class="stat-value" style="font-size:16px; color:#3B332B;">Sant Tukaram Maharaj Palkhi</div>
+              <div class="stat-subtext">Location: Approaching Wakhri Phata (Km 184)</div>
+            </div>
+
+            <!-- Mini Photo Texture Box (Grounded Reference) -->
+            <div class="panel-card" style="padding:8px;">
+              <div style="font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:4px;">PILGRIM FLOW FIELD PHOTO</div>
+              <img src="assets/palkhi_procession_1785244851342.jpg" style="width:100%; height:110px; object-fit:cover; border:1px solid var(--border-main);" alt="Warkaris">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Strip: Incident Log Ticker -->
+      <div class="incident-ticker-bar">
+        <div class="ticker-label">INCIDENT LOG</div>
+        <div class="ticker-content">
+          <div class="ticker-text" id="incidentLogText">
+            [18:48:10] CAM-12 Wakhri Phata: Density peak detected (88%) -- [18:45:22] Medical alert raised at Sector 4: Pilgrim fainting, Ambulance MH-12-PA-4022 dispatched -- [18:41:05] Lost Person Case #LF-802: Facial match confidence 89% on CAM-04 -- [18:38:00] Solapur Highway Diversion Gate 2 opened -- [18:30:15] Water tanker #WT-09 refilled at Wakhri Station.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 2: CROWD INTELLIGENCE ==================== -->
+    <section id="view-crowd" class="view-section">
+      <div class="section-bar">
+        <div class="section-title">
+          <i data-lucide="bar-chart-3" style="width:16px; height:16px;"></i>
+          <span>Zone Density Analytics & Congestion Forecast</span>
+        </div>
+        <div class="section-sub">
+          Crowd Density Monitoring across 6 Primary Pilgrimage Zones
+        </div>
+      </div>
+
+      <div class="crowd-view-grid">
+        <!-- Left: Zone Density Table -->
+        <div class="panel-card" style="padding:0;">
+          <div class="panel-header">
+            <span>ZONE-WISE CROWD DENSITY TABLE</span>
+            <span>UPDATED: JUST NOW</span>
+          </div>
+          <div class="govt-table-container" style="border:none; margin:0;">
+            <table class="govt-table">
+              <thead>
+                <tr>
+                  <th>Zone Name</th>
+                  <th>Density %</th>
+                  <th>Trend</th>
+                  <th>Recommended Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Pandharpur Chowk</strong></td>
+                  <td><span class="density-tag red">94%</span></td>
+                  <td><i data-lucide="trending-up" style="width:12px; height:12px; color:var(--status-red);"></i> Rising</td>
+                  <td>Divert pilgrim queue via North Ring Road</td>
+                </tr>
+                <tr>
+                  <td><strong>Wakhri Phata</strong></td>
+                  <td><span class="density-tag orange">88%</span></td>
+                  <td><i data-lucide="trending-up" style="width:12px; height:12px; color:var(--status-orange);"></i> Steady High</td>
+                  <td>Deploy 4 extra police constables to junction</td>
+                </tr>
+                <tr>
+                  <td><strong>Vakhri Naka</strong></td>
+                  <td><span class="density-tag yellow">74%</span></td>
+                  <td><i data-lucide="minus" style="width:12px; height:12px; color:var(--status-yellow);"></i> Stable</td>
+                  <td>Monitor bottleneck near bridge entry</td>
+                </tr>
+                <tr>
+                  <td><strong>Saswad Highway Stop</strong></td>
+                  <td><span class="density-tag yellow">62%</span></td>
+                  <td><i data-lucide="trending-down" style="width:12px; height:12px; color:var(--status-green);"></i> Easing</td>
+                  <td>Normal traffic regulation</td>
+                </tr>
+                <tr>
+                  <td><strong>Tarapur Phata</strong></td>
+                  <td><span class="density-tag green">45%</span></td>
+                  <td><i data-lucide="trending-down" style="width:12px; height:12px; color:var(--status-green);"></i> Clear</td>
+                  <td>Allow local supply vehicle passage</td>
+                </tr>
+                <tr>
+                  <td><strong>Alandi Corridor</strong></td>
+                  <td><span class="density-tag green">35%</span></td>
+                  <td><i data-lucide="minus" style="width:12px; height:12px; color:var(--status-green);"></i> Low</td>
+                  <td>Standard patrol active</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: Plain Gridlined Congestion Forecast Chart -->
+        <div class="chart-card">
+          <div class="chart-title">2-HOUR CONGESTION FORECAST MODEL</div>
+          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">
+            Predicted crowd accumulation at Wakhri Phata & Pandharpur Chowk (19:00 - 21:00 IST)
+          </div>
+          <div style="height: 300px; position: relative;">
+            <canvas id="forecastChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 3: LOST & FOUND DESK ==================== -->
+    <section id="view-lost" class="view-section">
+      <div class="section-bar">
+        <div class="section-title">
+          <i data-lucide="user-search" style="width:16px; height:16px;"></i>
+          <span>Lost & Found Incident Desk (Automated Match)</span>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="govt-btn" onclick="alert('New case entry form initiated.')">
+            <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
+          </button>
+        </div>
+      </div>
+
+      <div class="lost-found-grid">
+        <!-- Left Column: Plain Table of Active Cases -->
+        <div class="govt-table-container">
+          <table class="govt-table">
+            <thead>
+              <tr>
+                <th>Photo</th>
+                <th>Case ID</th>
+                <th>Name</th>
+                <th>Age / Gender</th>
+                <th>Clothing Description (Marathi & Eng)</th>
+                <th>Last Seen Cam</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="photo-placeholder-box">
+                    <i data-lucide="user" style="width:18px; height:18px;"></i>
+                  </div>
+                </td>
+                <td><strong>#LF-802</strong></td>
+                <td>Maruti Kisan Shinde</td>
+                <td>68 / M</td>
+                <td>पांढरा कुर्ता, धोती, पांढरी टोपी (White Kurta-Dhoti, Gandhi topi, carrying Tulsi mala)</td>
+                <td>CAM-04 (Pandharpur)</td>
+                <td><span class="density-tag red">MATCH (89%)</span></td>
+                <td>
+                  <button class="govt-btn btn-outline" onclick="showTranscript('LF-802')">View Call</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="photo-placeholder-box">
+                    <i data-lucide="user" style="width:18px; height:18px;"></i>
+                  </div>
+                </td>
+                <td><strong>#LF-805</strong></td>
+                <td>Anandita Ramesh Kulkarni</td>
+                <td>9 / F</td>
+                <td>पिवळा परकर पोलका (Yellow traditional dress, gold bangles)</td>
+                <td>CAM-12 (Wakhri)</td>
+                <td><span class="density-tag yellow">SEARCHING</span></td>
+                <td>
+                  <button class="govt-btn btn-outline" onclick="showTranscript('LF-805')">View Call</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="photo-placeholder-box">
+                    <i data-lucide="user" style="width:18px; height:18px;"></i>
+                  </div>
+                </td>
+                <td><strong>#LF-799</strong></td>
+                <td>Dnyaneshwar Mahadev Jadhav</td>
+                <td>72 / M</td>
+                <td>पांढरा पोशाख, लाल पटका (White dress, red scarf around neck)</td>
+                <td>CAM-08 (Saswad)</td>
+                <td><span class="density-tag green">REUNITED</span></td>
+                <td>
+                  <button class="govt-btn btn-disabled">Resolved</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="photo-placeholder-box">
+                    <i data-lucide="user" style="width:18px; height:18px;"></i>
+                  </div>
+                </td>
+                <td><strong>#LF-808</strong></td>
+                <td>Sunita Vitthal Patil</td>
+                <td>54 / F</td>
+                <td>हिरवी नऊवारी साडी, तुळशीचे वृंदावन डोक्यावर (Green Navvari saree)</td>
+                <td>CAM-01 (Alandi)</td>
+                <td><span class="density-tag yellow">SEARCHING</span></td>
+                <td>
+                  <button class="govt-btn btn-outline" onclick="showTranscript('LF-808')">View Call</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Right Column: Plain Devanagari Transcript Snippet -->
+        <div class="transcript-panel">
+          <div style="font-weight:700; color:var(--maroon-primary); font-size:13px; margin-bottom:4px;">
+            CALL-TO-CASE PIPELINE TRANSCRIPT
+          </div>
+          <div style="font-size:11px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;">
+            Helpline 112 Audio Recording Snippet (Deccan Dialect) &bull; Case #LF-802
+          </div>
+
+          <div class="transcript-box" id="transcriptBox">
+"हॅलो कंट्रोल रूम, आमचे आजोबा मारुती शिंदे (वय ६८) वारीत वाखरी फाट्याजवळ गर्दीत सुटले आहेत. त्यांनी पांढरा सुती कुर्ता, धोती आणि पांढरी टोपी घातली आहे. गळ्यात तुळशीची माळ आहे आणि हातात टाळ आहेत. कृपया शोध घेण्यास मदत करा."
+
+[Audio Analysis Summary]:
+- Subject: Male, ~68 yrs
+- Clothing: White Kurta, Dhoti, White Cap, Tulsi Mala
+- Audio Confidence score: High (0.94)
+- Vision Cross-Match: CAM-04 Pandharpur Chowk frame #4812 matching features.
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:8px;">
+            <button class="govt-btn" onclick="alert('Dispatching mobile patrol team to CAM-04 location.')">
+              Dispatch Nearby Volunteer
+            </button>
+            <button class="govt-btn btn-outline" onclick="alert('PA Announcement request queued for Wakhri Loudspeaker System.')">
+              Queue PA Announcement
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 4: MEDICAL ALERTS VIEW ==================== -->
+    <section id="view-medical" class="view-section">
+      <div class="section-bar">
+        <div class="section-title">
+          <i data-lucide="activity" style="width:16px; height:16px;"></i>
+          <span>Medical Emergencies & Heat-Risk Monitoring</span>
+        </div>
+        <div class="section-sub">
+          Active Field Ambulances: 8 &bull; Emergency Response Hubs: 4
+        </div>
+      </div>
+
+      <div class="medical-view-grid">
+        <!-- Left: Plain Card List of Alerts -->
+        <div>
+          <div class="panel-header" style="margin-bottom:8px;">
+            <span>ACTIVE MEDICAL ALERTS</span>
+            <span>2 REQUIRING IMMEDIATE ACKNOWLEDGEMENT</span>
+          </div>
+
+          <div class="alert-card-item" id="alert-1">
+            <div>
+              <div style="font-weight:700; color:var(--status-red); font-size:13px;">
+                FALL DETECTED / FAINTING PILGRIM
+              </div>
+              <div style="font-size:11px; color:var(--text-secondary); margin:2px 0;">
+                Location: Wakhri Phata Km 184 &bull; Elapsed: 4 mins ago
+              </div>
+              <div style="font-size:11px; color:var(--text-muted);">
+                Assigned Volunteer: Team Bravo (V. R. Kadam)
+              </div>
+            </div>
+            <div>
+              <button class="govt-btn" onclick="acknowledgeAlert('alert-1')">Acknowledge Alert</button>
+            </div>
+          </div>
+
+          <div class="alert-card-item" id="alert-2">
+            <div>
+              <div style="font-weight:700; color:var(--status-orange); font-size:13px;">
+                CROWD HEAT EXHAUSTION RISK (SECTOR 5)
+              </div>
+              <div style="font-size:11px; color:var(--text-secondary); margin:2px 0;">
+                Location: Pandharpur Temple Corridor &bull; Elapsed: 12 mins ago
+              </div>
+              <div style="font-size:11px; color:var(--text-muted);">
+                Assigned Volunteer: Medical Van #MV-02
+              </div>
+            </div>
+            <div>
+              <button class="govt-btn" onclick="acknowledgeAlert('alert-2')">Acknowledge Alert</button>
+            </div>
+          </div>
+
+          <div class="alert-card-item acknowledged">
+            <div>
+              <div style="font-weight:700; color:var(--status-green); font-size:13px;">
+                DEHYDROGENATION ASSIST & REHYDRATION (RESOLVED)
+              </div>
+              <div style="font-size:11px; color:var(--text-secondary); margin:2px 0;">
+                Location: Saswad Rest Stop &bull; Resolved 35 mins ago
+              </div>
+              <div style="font-size:11px; color:var(--text-muted);">
+                Handled by: Red Cross Volunteer Post #3
+              </div>
+            </div>
+            <div>
+              <button class="govt-btn btn-disabled">Acknowledged</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Heat-Risk Readout Box (Plain numbers in bordered box) -->
+        <div class="heat-risk-box">
+          <div style="font-weight:700; font-family:var(--font-serif); font-size:14px; color:var(--maroon-primary); margin-bottom:8px; border-bottom:1px solid var(--border-main); padding-bottom:4px;">
+            HEAT-RISK COMPUTED READOUT
+          </div>
+
+          <div class="metric-row">
+            <span class="metric-key">Ambient Temperature:</span>
+            <span class="metric-val">34° C</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-key">Relative Humidity:</span>
+            <span class="metric-val">72%</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-key">Computed Risk Index:</span>
+            <span class="metric-val" style="color:var(--status-orange);">7.8 / 10 (MODERATE HEAT RISK)</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-key">Water Stations Active:</span>
+            <span class="metric-val">12 Operational</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-key">ORSL Sachet Supplies:</span>
+            <span class="metric-val">14,200 Packets Available</span>
+          </div>
+
+          <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:11px; color:var(--text-secondary);">
+            <strong>Advisory Action:</strong> Trigger mist sprayer vans at Wakhri Junction & increase water distribution post deployment by 20%.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCREEN 5: RESOURCE MANAGEMENT ==================== -->
+    <section id="view-resources" class="view-section">
+      <div class="section-bar">
+        <div class="section-title">
+          <i data-lucide="layers" style="width:16px; height:16px;"></i>
+          <span>Resource Deployment & Route Diversion Control</span>
+        </div>
+        <div class="section-sub">
+          Police Forces, Water Tankers, Food Vans & Medical Units Logistics
+        </div>
+      </div>
+
+      <div class="resource-grid">
+        <!-- Left: Resource Table -->
+        <div class="govt-table-container">
+          <table class="govt-table">
+            <thead>
+              <tr>
+                <th>Resource Type</th>
+                <th>Deployed Count</th>
+                <th>Available Count</th>
+                <th>Current Key Location</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Water Tankers (10,000L)</strong></td>
+                <td>12 Units</td>
+                <td>8 Units</td>
+                <td>Wakhri Phata & Saswad Stop</td>
+                <td><span class="density-tag green">OPTIMAL</span></td>
+              </tr>
+              <tr>
+                <td><strong>Mobile Medical Vans</strong></td>
+                <td>6 Units</td>
+                <td>2 Units</td>
+                <td>Sector 2, 4 & Pandharpur Depot</td>
+                <td><span class="density-tag green">ACTIVE</span></td>
+              </tr>
+              <tr>
+                <td><strong>Police Patrol Squads</strong></td>
+                <td>45 Squads</td>
+                <td>15 Squads</td>
+                <td>Pilgrim Highway Corridor</td>
+                <td><span class="density-tag green">DEPLOYED</span></td>
+              </tr>
+              <tr>
+                <td><strong>Volunteer Dindi Stewards</strong></td>
+                <td>120 Personnel</td>
+                <td>30 Personnel</td>
+                <td>Palkhi Procession Perimeter</td>
+                <td><span class="density-tag green">ACTIVE</span></td>
+              </tr>
+              <tr>
+                <td><strong>Food Distribution Vans</strong></td>
+                <td>18 Units</td>
+                <td>5 Units</td>
+                <td>Bhalwani & Tarapur Phata</td>
+                <td><span class="density-tag green">OPTIMAL</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Right: Route Status Simple List -->
+        <div>
+          <div class="panel-header" style="margin-bottom:8px;">
+            <span>ROUTE STATUS & DIVERSION LOG</span>
+          </div>
+
+          <div class="route-status-item">
+            <div>
+              <div style="font-weight:600; font-size:12px;">NH-9 Solapur Highway Junction</div>
+              <div style="font-size:10px; color:var(--text-secondary);">Main heavy vehicle bypass route</div>
+            </div>
+            <span class="status-pill diverted">Diverted</span>
+          </div>
+
+          <div class="route-status-item">
+            <div>
+              <div style="font-weight:600; font-size:12px;">Pune-Saswad Pilgrimage Road</div>
+              <div style="font-size:10px; color:var(--text-secondary);">Primary Palkhi corridor</div>
+            </div>
+            <span class="status-pill open">Open (Pilgrims Only)</span>
+          </div>
+
+          <div class="route-status-item">
+            <div>
+              <div style="font-weight:600; font-size:12px;">Wakhri Phata Inner Access Road</div>
+              <div style="font-size:10px; color:var(--text-secondary);">Heavy congestion bottleneck zone</div>
+            </div>
+            <span class="status-pill closed">Closed to Traffic</span>
+          </div>
+
+          <div class="route-status-item">
+            <div>
+              <div style="font-weight:600; font-size:12px;">Pandharpur Temple Ring Road</div>
+              <div style="font-size:10px; color:var(--text-secondary);">Emergency ambulance corridor</div>
+            </div>
+            <span class="status-pill open">Emergency Access</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CCTV Expand Detail Modal -->
+  <div class="modal-backdrop" id="camModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modalCamTitle">CCTV CAMERA EXPANDED VIEW</div>
+        <button class="close-modal-btn" onclick="closeCamModal()">&times;</button>
+      </div>
+      <div style="height:360px; background:#000; position:relative; overflow:hidden; border:1px solid #333;">
+        <img id="modalCamImg" src="assets/cctv_wakhri_phata_1785244836537.jpg" style="width:100%; height:100%; object-fit:cover;" alt="Cam detail">
+        <div class="cctv-overlay">
+          <div class="cctv-top-info">
+            <span class="cctv-cam-id" id="modalCamId">CAM-12</span>
+            <span class="cctv-timestamp" style="color:#00FF66;">LIVE DENSITY FEED</span>
+          </div>
+          <div class="cctv-bottom-info">
+            <span class="cctv-location" id="modalCamStatus" style="background:rgba(0,0,0,0.7); padding:4px 8px;">Density 88%</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:11px; color:var(--text-secondary);" id="modalCamSub">Bounding Box Analytics Active</span>
+        <div style="display:flex; gap:8px;">
+          <button class="govt-btn" onclick="alert('PTZ Pan-Tilt-Zoom command dispatched.')">PTZ Control</button>
+          <button class="govt-btn btn-outline" onclick="closeCamModal()">Close Window</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic JavaScript -->
+  <script src="app.js"></script>
+
+</body>
+</html>
