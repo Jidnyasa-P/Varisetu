@@ -2653,7 +2653,13 @@ function renderResources(resources) {
 
   const grouped = {};
   resources.forEach(r => {
-    const key = r.resource_type?.replace('_', ' ') || 'GENERAL RESOURCE';
+    let key = r.resource_type?.replace('_', ' ') || 'GENERAL RESOURCE';
+    if (r.resource_type === 'WATER_TANKER') key = 'Water Tankers (10,000L)';
+    else if (r.resource_type === 'MEDICAL_VAN' || r.resource_type === 'AMBULANCE') key = 'Mobile Medical Vans & Ambulances';
+    else if (r.resource_type === 'POLICE_SQUAD') key = 'Police Patrol Squads';
+    else if (r.resource_type === 'VOLUNTEER_TEAM') key = 'Volunteer Dindi Stewards';
+    else if (r.resource_type === 'FOOD_VAN') key = 'Food Distribution Vans';
+
     if (!grouped[key]) {
       grouped[key] = { total: 0, available: 0, deployed: 0, locations: [] };
     }
@@ -2673,7 +2679,7 @@ function renderResources(resources) {
       <td><strong>${escapeHtml(type)}</strong></td>
       <td>${item.deployed} Units</td>
       <td>${item.available} Units</td>
-      <td>${escapeHtml(item.locations.slice(0, 2).join(', ') || 'Corridor Stations')}</td>
+      <td>${escapeHtml(item.locations.slice(0, 2).join(' & ') || 'Corridor Stations')}</td>
       <td>
         <span class="density-tag ${item.available > 0 ? 'green' : 'red'}">
           ${item.available > 0 ? 'OPTIMAL' : 'DEPLOYED'}
