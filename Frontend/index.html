@@ -27,443 +27,501 @@
 </head>
 <body>
 
-  <!-- Top Warli Pattern Woven Strip -->
-  <div class="top-warli-border"></div>
-
-  <!-- Government Portal Header -->
-  <header class="gov-header">
-    <div class="brand-section">
-      <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img">
-      <div class="mh-police-badge">
-        <span>म.पो.</span>
-        <span style="font-size:7px;">POLICE</span>
+  <!-- ==================== PRIVATE LOGIN ENTRY VIEW ==================== -->
+  <section id="loginView" class="login-view">
+    <div class="login-panel">
+      <div class="login-brand">
+        <img src="assets/varisetu_logo.png" alt="VariSetu Logo">
+        <div class="login-marathi">वारी सेतु</div>
+        <div class="login-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</div>
       </div>
-      <div class="brand-titles">
-        <h1 class="brand-marathi">वारी सेतु</h1>
-        <span class="brand-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</span>
+
+      <div class="login-divider"></div>
+
+      <div class="login-title">COMMAND CENTER ACCESS</div>
+
+      <form id="loginForm">
+        <label for="loginEmail">Official Email / Officer ID</label>
+        <input
+          id="loginEmail"
+          type="email"
+          autocomplete="username"
+          placeholder="control.room@mahapolice.gov.in"
+          required
+        />
+
+        <label for="loginPassword">Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+          required
+        />
+
+        <div id="loginError" class="login-error" hidden></div>
+
+        <button
+          type="submit"
+          class="govt-btn login-submit"
+          id="loginSubmitBtn">
+          SIGN IN
+        </button>
+      </form>
+
+      <div class="login-restricted-note">
+        Authorised Personnel Only &bull; Access Monitored
       </div>
     </div>
+  </section>
 
-    <div class="header-meta">
-      <div class="meta-pill" id="backendHealthBadge">
-        <span class="live-dot"></span>
-        <span id="backendHealthText">LIVE</span>
+  <!-- ==================== MAIN COMMAND CENTER DASHBOARD (AUTHENTICATED) ==================== -->
+  <div id="dashboardView" hidden>
+
+    <!-- Top Warli Pattern Woven Strip -->
+    <div class="top-warli-border"></div>
+
+    <!-- Government Portal Header -->
+    <header class="gov-header">
+      <div class="brand-section">
+        <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img">
+        <div class="mh-police-badge">
+          <span>म.पो.</span>
+          <span style="font-size:7px;">POLICE</span>
+        </div>
+        <div class="brand-titles">
+          <h1 class="brand-marathi">वारी सेतु</h1>
+          <span class="brand-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</span>
+        </div>
       </div>
-      <div class="meta-pill">
-        <i data-lucide="clock" style="width:13px; height:13px;"></i>
-        <span id="sysClock">28 JUL 2026 18:50:00 IST</span>
+
+      <div class="header-meta">
+        <div class="meta-pill" id="backendHealthBadge">
+          <span class="live-dot"></span>
+          <span id="backendHealthText">LIVE</span>
+        </div>
+        <div class="meta-pill">
+          <i data-lucide="clock" style="width:13px; height:13px;"></i>
+          <span id="sysClock">28 JUL 2026 18:50:00 IST</span>
+        </div>
+        <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
+          <span>PILGRIM COUNT: ~8,45,000</span>
+        </div>
+        <div class="meta-pill" id="userProfileBadge" style="display:flex; align-items:center; border-color:var(--maroon-primary);">
+          <i data-lucide="shield-check" style="width:13px; height:13px; color:var(--maroon-primary); margin-right:4px;"></i>
+          <span id="userProfileText" style="font-weight:700; color:var(--maroon-primary); text-transform:uppercase;">COMMANDER</span>
+          <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:9px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
+        </div>
+        <button class="govt-btn btn-outline" id="demoToggleBtn" type="button" style="font-size:10px; padding:4px 9px;">
+          <i data-lucide="play" style="width:11px; height:11px;"></i>
+          <span id="demoToggleText">Start Demo</span>
+        </button>
       </div>
-      <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
-        <span>PILGRIM COUNT: ~8,45,000</span>
-      </div>
-      <button class="govt-btn btn-outline" id="demoToggleBtn" type="button" style="font-size:10px; padding:4px 9px;">
-        <i data-lucide="play" style="width:11px; height:11px;"></i>
-        <span id="demoToggleText">Start Demo</span>
+    </header>
+
+    <!-- Navigation Tabs Bar -->
+    <nav class="nav-bar">
+      <button class="nav-tab active" data-target="view-command">
+        <i data-lucide="layout-dashboard" style="width:14px; height:14px;"></i>
+        <span>Main Command Center</span>
       </button>
-    </div>
-  </header>
+      <button class="nav-tab" data-target="view-crowd">
+        <i data-lucide="users" style="width:14px; height:14px;"></i>
+        <span>Crowd Intelligence</span>
+        <span class="badge" id="crowdNavBadge">94% Max Density</span>
+      </button>
+      <button class="nav-tab" data-target="view-lost">
+        <i data-lucide="search" style="width:14px; height:14px;"></i>
+        <span>Lost & Found Desk</span>
+        <span class="badge" id="lostNavBadge" style="background:#B07817; color:#FFF;">3 Active</span>
+      </button>
+      <button class="nav-tab" data-target="view-medical">
+        <i data-lucide="heart-pulse" style="width:14px; height:14px;"></i>
+        <span>Medical Alerts</span>
+        <span class="badge" id="medicalNavBadge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
+      </button>
+      <button class="nav-tab" data-target="view-resources">
+        <i data-lucide="truck" style="width:14px; height:14px;"></i>
+        <span>Resource Management</span>
+      </button>
+    </nav>
 
-  <!-- Navigation Tabs Bar -->
-  <nav class="nav-bar">
-    <button class="nav-tab active" data-target="view-command">
-      <i data-lucide="layout-dashboard" style="width:14px; height:14px;"></i>
-      <span>Main Command Center</span>
-    </button>
-    <button class="nav-tab" data-target="view-crowd">
-      <i data-lucide="users" style="width:14px; height:14px;"></i>
-      <span>Crowd Intelligence</span>
-      <span class="badge" id="crowdNavBadge">94% Max Density</span>
-    </button>
-    <button class="nav-tab" data-target="view-lost">
-      <i data-lucide="search" style="width:14px; height:14px;"></i>
-      <span>Lost & Found Desk</span>
-      <span class="badge" id="lostNavBadge" style="background:#B07817; color:#FFF;">3 Active</span>
-    </button>
-    <button class="nav-tab" data-target="view-medical">
-      <i data-lucide="heart-pulse" style="width:14px; height:14px;"></i>
-      <span>Medical Alerts</span>
-      <span class="badge" id="medicalNavBadge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
-    </button>
-    <button class="nav-tab" data-target="view-resources">
-      <i data-lucide="truck" style="width:14px; height:14px;"></i>
-      <span>Resource Management</span>
-    </button>
-  </nav>
+    <!-- Main App Layout Container -->
+    <main class="app-container">
 
-  <!-- Main App Layout Container -->
-  <main class="app-container">
-
-    <!-- ==================== SCREEN 1: MAIN COMMAND CENTER ==================== -->
-    <section id="view-command" class="view-section active">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="shield-alert" style="width:16px; height:16px;"></i>
-          <span>Real-time Operational Command & Surveillance</span>
-        </div>
-        <div class="section-sub">
-          Active Surveillance: 4 CCTVs &bull; Route: Alandi - Dehu - Pune - Wakhri - Pandharpur
-        </div>
-      </div>
-
-      <div class="command-grid">
-        <!-- Left: CCTV surveillance tiles -->
-        <div class="cctv-column" id="cctvTilesContainer">
-          <div class="panel-header">
-            <span>CCTV FEEDS (SURVEILLANCE GRID)</span>
-            <span style="font-size:10px; color:var(--text-muted);">CLICK FEED FOR DETAILS / PTZ</span>
+      <!-- ==================== SCREEN 1: MAIN COMMAND CENTER ==================== -->
+      <section id="view-command" class="view-section active">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="shield-alert" style="width:16px; height:16px;"></i>
+            <span>Real-time Operational Command & Surveillance</span>
           </div>
-
-          <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12">
-            <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 12">
-            <div class="cctv-overlay">
-              <div class="cctv-top-info">
-                <span class="cctv-cam-id">CAM-12</span>
-                <span class="cctv-timestamp">LIVE STREAM</span>
-              </div>
-              <div class="cctv-bottom-info">
-                <span class="cctv-location">Wakhri Phata Junction</span>
-                <span class="density-tag orange">HEAVY 88%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04">
-            <img src="assets/wari_aerial_procession_1785244820232.jpg" class="cctv-feed-img" alt="CCTV Feed 04">
-            <div class="cctv-overlay">
-              <div class="cctv-top-info">
-                <span class="cctv-cam-id">CAM-04</span>
-                <span class="cctv-timestamp">LIVE STREAM</span>
-              </div>
-              <div class="cctv-bottom-info">
-                <span class="cctv-location">Pandharpur Chowk</span>
-                <span class="density-tag red">CRITICAL 94%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08">
-            <img src="assets/palkhi_procession_1785244851342.jpg" class="cctv-feed-img" alt="CCTV Feed 08">
-            <div class="cctv-overlay">
-              <div class="cctv-top-info">
-                <span class="cctv-cam-id">CAM-08</span>
-                <span class="cctv-timestamp">LIVE STREAM</span>
-              </div>
-              <div class="cctv-bottom-info">
-                <span class="cctv-location">Saswad Corridor</span>
-                <span class="density-tag yellow">MODERATE 62%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01">
-            <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 01">
-            <div class="cctv-overlay">
-              <div class="cctv-top-info">
-                <span class="cctv-cam-id">CAM-01</span>
-                <span class="cctv-timestamp">LIVE STREAM</span>
-              </div>
-              <div class="cctv-bottom-info">
-                <span class="cctv-location">Alandi Ghat Rd</span>
-                <span class="density-tag green">NORMAL 35%</span>
-              </div>
-            </div>
+          <div class="section-sub">
+            Active Surveillance: 4 CCTVs &bull; Route: Alandi - Dehu - Pune - Wakhri - Pandharpur
           </div>
         </div>
 
-        <!-- Center: Interactive Route Map -->
-        <div class="map-container">
-          <div id="routeMap"></div>
+        <div class="command-grid">
+          <!-- Left: CCTV surveillance tiles -->
+          <div class="cctv-column" id="cctvTilesContainer">
+            <div class="panel-header">
+              <span>CCTV FEEDS (SURVEILLANCE GRID)</span>
+              <span style="font-size:10px; color:var(--text-muted);">CLICK FEED FOR DETAILS / PTZ</span>
+            </div>
 
-          <div class="map-controls-overlay">
-            <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px;">ROUTE MAP LEGEND</div>
-            <div class="map-legend-item">
-              <div class="legend-color-box" style="background:#9A2525;"></div>
-              <span>Critical Congestion</span>
+            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12">
+              <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 12">
+              <div class="cctv-overlay">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-12</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+                <div class="cctv-bottom-info">
+                  <span class="cctv-location">Wakhri Phata Junction</span>
+                  <span class="density-tag orange">HEAVY 88%</span>
+                </div>
+              </div>
             </div>
-            <div class="map-legend-item">
-              <div class="legend-color-box" style="background:#B8551B;"></div>
-              <span>Heavy Density</span>
+
+            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04">
+              <img src="assets/wari_aerial_procession_1785244820232.jpg" class="cctv-feed-img" alt="CCTV Feed 04">
+              <div class="cctv-overlay">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-04</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+                <div class="cctv-bottom-info">
+                  <span class="cctv-location">Pandharpur Chowk</span>
+                  <span class="density-tag red">CRITICAL 94%</span>
+                </div>
+              </div>
             </div>
-            <div class="map-legend-item">
-              <div class="legend-color-box" style="background:#2E5B36;"></div>
-              <span>Clear Route</span>
+
+            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08">
+              <img src="assets/palkhi_procession_1785244851342.jpg" class="cctv-feed-img" alt="CCTV Feed 08">
+              <div class="cctv-overlay">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-08</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+                <div class="cctv-bottom-info">
+                  <span class="cctv-location">Saswad Corridor</span>
+                  <span class="density-tag yellow">MODERATE 62%</span>
+                </div>
+              </div>
             </div>
-            <div class="map-legend-item" style="margin-top:4px;">
-              <i data-lucide="droplet" style="width:12px; height:12px; color:#1D6F8A;"></i>
-              <span>Water Tanker</span>
+
+            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01">
+              <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 01">
+              <div class="cctv-overlay">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-01</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+                <div class="cctv-bottom-info">
+                  <span class="cctv-location">Alandi Ghat Rd</span>
+                  <span class="density-tag green">NORMAL 35%</span>
+                </div>
+              </div>
             </div>
-            <div class="map-legend-item">
-              <i data-lucide="cross" style="width:12px; height:12px; color:#9A2525;"></i>
-              <span>Medical Van</span>
+          </div>
+
+          <!-- Center: Interactive Route Map -->
+          <div class="map-container">
+            <div id="routeMap"></div>
+
+            <div class="map-controls-overlay">
+              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px;">ROUTE MAP LEGEND</div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#9A2525;"></div>
+                <span>Critical Congestion</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#B8551B;"></div>
+                <span>Heavy Density</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#2E5B36;"></div>
+                <span>Clear Route</span>
+              </div>
+              <div class="map-legend-item" style="margin-top:4px;">
+                <i data-lucide="droplet" style="width:12px; height:12px; color:#1D6F8A;"></i>
+                <span>Water Tanker</span>
+              </div>
+              <div class="map-legend-item">
+                <i data-lucide="cross" style="width:12px; height:12px; color:#9A2525;"></i>
+                <span>Medical Van</span>
+              </div>
+              <div class="map-legend-item">
+                <i data-lucide="flag" style="width:12px; height:12px; color:#D98E2C;"></i>
+                <span>Palkhi Location</span>
+              </div>
             </div>
-            <div class="map-legend-item">
-              <i data-lucide="flag" style="width:12px; height:12px; color:#D98E2C;"></i>
-              <span>Palkhi Location</span>
+          </div>
+
+          <!-- Right Column: Plain Stat Panels -->
+          <div class="right-col-panel">
+            <div class="stat-panel-group">
+              <div class="govt-stat-box">
+                <div class="stat-label">Lost & Found Desk</div>
+                <div class="stat-value" id="statLostCases">3 Active Cases</div>
+                <div class="stat-subtext">Automated facial matching engine active</div>
+              </div>
+
+              <div class="govt-stat-box" style="border-left-color: var(--status-red);">
+                <div class="stat-label">Medical Emergencies</div>
+                <div class="stat-value" id="statMedicalAlerts" style="color:var(--status-red);">2 Active Alerts</div>
+                <div class="stat-subtext">Sector 3 (Wakhri) & Sector 5 (Pandharpur)</div>
+              </div>
+
+              <div class="govt-stat-box" style="border-left-color: var(--status-green);">
+                <div class="stat-label">Resource Deployment</div>
+                <div class="stat-value" id="statResources" style="color:var(--status-green);">3 / 7 Deployed</div>
+                <div class="stat-subtext">Tankers, Ambulances & Patrol Squads stationed</div>
+              </div>
+
+              <div class="govt-stat-box" style="border-left-color: var(--saffron-gold);">
+                <div class="stat-label">Main Palkhi Status</div>
+                <div class="stat-value" id="statPalkhiStatus" style="font-size:16px; color:#3B332B;">Sant Tukaram Maharaj Palkhi</div>
+                <div class="stat-subtext" id="statPalkhiLocation">Location: Approaching Wakhri Phata (Km 184)</div>
+              </div>
+
+              <!-- Photo Texture Box -->
+              <div class="panel-card" style="padding:8px;">
+                <div style="font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:4px;">PILGRIM FLOW FIELD PHOTO</div>
+                <img src="assets/palkhi_procession_1785244851342.jpg" style="width:100%; height:110px; object-fit:cover; border:1px solid var(--border-main);" alt="Warkaris">
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Right Column: Plain Stat Panels -->
-        <div class="right-col-panel">
-          <div class="stat-panel-group">
-            <div class="govt-stat-box">
-              <div class="stat-label">Lost & Found Desk</div>
-              <div class="stat-value" id="statLostCases">3 Active Cases</div>
-              <div class="stat-subtext">Automated facial matching engine active</div>
-            </div>
-
-            <div class="govt-stat-box" style="border-left-color: var(--status-red);">
-              <div class="stat-label">Medical Emergencies</div>
-              <div class="stat-value" id="statMedicalAlerts" style="color:var(--status-red);">2 Active Alerts</div>
-              <div class="stat-subtext">Sector 3 (Wakhri) & Sector 5 (Pandharpur)</div>
-            </div>
-
-            <div class="govt-stat-box" style="border-left-color: var(--status-green);">
-              <div class="stat-label">Resource Deployment</div>
-              <div class="stat-value" id="statResources" style="color:var(--status-green);">3 / 7 Deployed</div>
-              <div class="stat-subtext">Tankers, Ambulances & Patrol Squads stationed</div>
-            </div>
-
-            <div class="govt-stat-box" style="border-left-color: var(--saffron-gold);">
-              <div class="stat-label">Main Palkhi Status</div>
-              <div class="stat-value" id="statPalkhiStatus" style="font-size:16px; color:#3B332B;">Sant Tukaram Maharaj Palkhi</div>
-              <div class="stat-subtext" id="statPalkhiLocation">Location: Approaching Wakhri Phata (Km 184)</div>
-            </div>
-
-            <!-- Photo Texture Box -->
-            <div class="panel-card" style="padding:8px;">
-              <div style="font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:4px;">PILGRIM FLOW FIELD PHOTO</div>
-              <img src="assets/palkhi_procession_1785244851342.jpg" style="width:100%; height:110px; object-fit:cover; border:1px solid var(--border-main);" alt="Warkaris">
+        <!-- Bottom Strip: Incident Log Ticker -->
+        <div class="incident-ticker-bar">
+          <div class="ticker-label">INCIDENT LOG</div>
+          <div class="ticker-content">
+            <div class="ticker-text" id="incidentLogText">
+              [LIVE] VariSetu Command Center connected &bull; Telemetry initialized.
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Bottom Strip: Incident Log Ticker -->
-      <div class="incident-ticker-bar">
-        <div class="ticker-label">INCIDENT LOG</div>
-        <div class="ticker-content">
-          <div class="ticker-text" id="incidentLogText">
-            [LIVE] VariSetu Command Center connected &bull; Telemetry initialized.
+      <!-- ==================== SCREEN 2: CROWD INTELLIGENCE ==================== -->
+      <section id="view-crowd" class="view-section">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="bar-chart-3" style="width:16px; height:16px;"></i>
+            <span>Zone Density Analytics & Congestion Forecast</span>
+          </div>
+          <div class="section-sub">
+            Crowd Density Monitoring across 6 Primary Pilgrimage Zones
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ==================== SCREEN 2: CROWD INTELLIGENCE ==================== -->
-    <section id="view-crowd" class="view-section">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="bar-chart-3" style="width:16px; height:16px;"></i>
-          <span>Zone Density Analytics & Congestion Forecast</span>
-        </div>
-        <div class="section-sub">
-          Crowd Density Monitoring across 6 Primary Pilgrimage Zones
-        </div>
-      </div>
-
-      <div class="crowd-view-grid">
-        <!-- Left: Zone Density Table -->
-        <div class="panel-card" style="padding:0;">
-          <div class="panel-header">
-            <span>ZONE-WISE CROWD DENSITY TABLE</span>
-            <span>UPDATED: LIVE TELEMETRY</span>
+        <div class="crowd-view-grid">
+          <!-- Left: Zone Density Table -->
+          <div class="panel-card" style="padding:0;">
+            <div class="panel-header">
+              <span>ZONE-WISE CROWD DENSITY TABLE</span>
+              <span>UPDATED: LIVE TELEMETRY</span>
+            </div>
+            <div class="govt-table-container" style="border:none; margin:0;">
+              <table class="govt-table">
+                <thead>
+                  <tr>
+                    <th>Zone Name</th>
+                    <th>Density %</th>
+                    <th>Trend</th>
+                    <th>Recommended Action</th>
+                  </tr>
+                </thead>
+                <tbody id="crowdZonesTableBody">
+                  <!-- Populated dynamically from /api/crowd/current -->
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div class="govt-table-container" style="border:none; margin:0;">
+
+          <!-- Right: Congestion Forecast Chart -->
+          <div class="chart-card">
+            <div class="chart-title">2-HOUR CONGESTION FORECAST MODEL</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">
+              Predicted crowd accumulation at Wakhri Phata & Pandharpur Chowk (19:00 - 21:00 IST)
+            </div>
+            <div style="height: 300px; position: relative;">
+              <canvas id="forecastChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN 3: LOST & FOUND DESK ==================== -->
+      <section id="view-lost" class="view-section">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="user-search" style="width:16px; height:16px;"></i>
+            <span>Lost & Found Incident Desk (Automated Match)</span>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="govt-btn" id="registerLostPersonBtn" type="button">
+              <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
+            </button>
+          </div>
+        </div>
+
+        <div class="lost-found-grid">
+          <!-- Left Column: Table of Active Cases -->
+          <div class="govt-table-container">
             <table class="govt-table">
               <thead>
                 <tr>
-                  <th>Zone Name</th>
-                  <th>Density %</th>
-                  <th>Trend</th>
-                  <th>Recommended Action</th>
+                  <th>Photo</th>
+                  <th>Case ID</th>
+                  <th>Name</th>
+                  <th>Age / Gender</th>
+                  <th>Clothing Description (Marathi & Eng)</th>
+                  <th>Last Seen Cam</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
-              <tbody id="crowdZonesTableBody">
-                <!-- Populated dynamically from /api/crowd/current -->
+              <tbody id="lostPersonsTableBody">
+                <!-- Populated dynamically from /api/lost-persons -->
               </tbody>
             </table>
           </div>
-        </div>
 
-        <!-- Right: Congestion Forecast Chart -->
-        <div class="chart-card">
-          <div class="chart-title">2-HOUR CONGESTION FORECAST MODEL</div>
-          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">
-            Predicted crowd accumulation at Wakhri Phata & Pandharpur Chowk (19:00 - 21:00 IST)
-          </div>
-          <div style="height: 300px; position: relative;">
-            <canvas id="forecastChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </section>
+          <!-- Right Column: Devanagari Transcript Snippet -->
+          <div class="transcript-panel">
+            <div style="font-weight:700; color:var(--maroon-primary); font-size:13px; margin-bottom:4px;">
+              CALL-TO-CASE PIPELINE TRANSCRIPT
+            </div>
+            <div style="font-size:11px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;" id="transcriptHeaderSub">
+              Helpline 112 Audio Recording Snippet (Deccan Dialect) &bull; Select a case
+            </div>
 
-    <!-- ==================== SCREEN 3: LOST & FOUND DESK ==================== -->
-    <section id="view-lost" class="view-section">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="user-search" style="width:16px; height:16px;"></i>
-          <span>Lost & Found Incident Desk (Automated Match)</span>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <button class="govt-btn" id="registerLostPersonBtn" type="button">
-            <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
-          </button>
-        </div>
-      </div>
+            <div class="transcript-box" id="transcriptBox">
+  Select a case to view call details and audio transcription.
+            </div>
 
-      <div class="lost-found-grid">
-        <!-- Left Column: Table of Active Cases -->
-        <div class="govt-table-container">
-          <table class="govt-table">
-            <thead>
-              <tr>
-                <th>Photo</th>
-                <th>Case ID</th>
-                <th>Name</th>
-                <th>Age / Gender</th>
-                <th>Clothing Description (Marathi & Eng)</th>
-                <th>Last Seen Cam</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="lostPersonsTableBody">
-              <!-- Populated dynamically from /api/lost-persons -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Right Column: Devanagari Transcript Snippet -->
-        <div class="transcript-panel">
-          <div style="font-weight:700; color:var(--maroon-primary); font-size:13px; margin-bottom:4px;">
-            CALL-TO-CASE PIPELINE TRANSCRIPT
-          </div>
-          <div style="font-size:11px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;" id="transcriptHeaderSub">
-            Helpline 112 Audio Recording Snippet (Deccan Dialect) &bull; Select a case
-          </div>
-
-          <div class="transcript-box" id="transcriptBox">
-Select a case to view call details and audio transcription.
-          </div>
-
-          <div style="margin-top:12px; display:flex; gap:8px;">
-            <button class="govt-btn" id="dispatchVolunteerBtn" type="button">
-              Dispatch Nearby Volunteer
-            </button>
-            <button class="govt-btn btn-outline" id="queuePaBtn" type="button">
-              Queue PA Announcement
-            </button>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+              <button class="govt-btn" id="dispatchVolunteerBtn" type="button">
+                Dispatch Nearby Volunteer
+              </button>
+              <button class="govt-btn btn-outline" id="queuePaBtn" type="button">
+                Queue PA Announcement
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ==================== SCREEN 4: MEDICAL ALERTS VIEW ==================== -->
-    <section id="view-medical" class="view-section">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="activity" style="width:16px; height:16px;"></i>
-          <span>Medical Emergencies & Heat-Risk Monitoring</span>
-        </div>
-        <div class="section-sub">
-          Active Field Ambulances & Emergency Medical Response Hubs
-        </div>
-      </div>
-
-      <div class="medical-view-grid">
-        <!-- Left: Card List of Alerts -->
-        <div>
-          <div class="panel-header" style="margin-bottom:8px;">
-            <span>ACTIVE MEDICAL ALERTS</span>
-            <span id="medicalAlertsSubHeader">LIVE FEED</span>
+      <!-- ==================== SCREEN 4: MEDICAL ALERTS VIEW ==================== -->
+      <section id="view-medical" class="view-section">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="activity" style="width:16px; height:16px;"></i>
+            <span>Medical Emergencies & Heat-Risk Monitoring</span>
           </div>
-
-          <div id="medicalAlertsContainer">
-            <!-- Populated dynamically from /api/medical-alerts -->
+          <div class="section-sub">
+            Active Field Ambulances & Emergency Medical Response Hubs
           </div>
         </div>
 
-        <!-- Right: Heat-Risk Readout Box -->
-        <div class="heat-risk-box">
-          <div style="font-weight:700; font-family:var(--font-serif); font-size:14px; color:var(--maroon-primary); margin-bottom:8px; border-bottom:1px solid var(--border-main); padding-bottom:4px;">
-            HEAT-RISK COMPUTED READOUT
+        <div class="medical-view-grid">
+          <!-- Left: Card List of Alerts -->
+          <div>
+            <div class="panel-header" style="margin-bottom:8px;">
+              <span>ACTIVE MEDICAL ALERTS</span>
+              <span id="medicalAlertsSubHeader">LIVE FEED</span>
+            </div>
+
+            <div id="medicalAlertsContainer">
+              <!-- Populated dynamically from /api/medical-alerts -->
+            </div>
           </div>
 
-          <div class="metric-row">
-            <span class="metric-key">Ambient Temperature:</span>
-            <span class="metric-val" id="heatTemp">34° C</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-key">Relative Humidity:</span>
-            <span class="metric-val" id="heatHumidity">72%</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-key">Computed Risk Index:</span>
-            <span class="metric-val" id="heatRiskIndex" style="color:var(--status-orange);">7.8 / 10 (MODERATE HEAT RISK)</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-key">Water Stations Active:</span>
-            <span class="metric-val" id="heatWaterStations">12 Operational</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-key">ORSL Sachet Supplies:</span>
-            <span class="metric-val" id="heatOrslSupplies">14,200 Packets Available</span>
-          </div>
+          <!-- Right: Heat-Risk Readout Box -->
+          <div class="heat-risk-box">
+            <div style="font-weight:700; font-family:var(--font-serif); font-size:14px; color:var(--maroon-primary); margin-bottom:8px; border-bottom:1px solid var(--border-main); padding-bottom:4px;">
+              HEAT-RISK COMPUTED READOUT
+            </div>
 
-          <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:11px; color:var(--text-secondary);" id="heatAdvisoryText">
-            <strong>Advisory Action:</strong> Trigger mist sprayer vans at Wakhri Junction & increase water distribution post deployment by 20%.
+            <div class="metric-row">
+              <span class="metric-key">Ambient Temperature:</span>
+              <span class="metric-val" id="heatTemp">34° C</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Relative Humidity:</span>
+              <span class="metric-val" id="heatHumidity">72%</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Computed Risk Index:</span>
+              <span class="metric-val" id="heatRiskIndex" style="color:var(--status-orange);">7.8 / 10 (MODERATE HEAT RISK)</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Water Stations Active:</span>
+              <span class="metric-val" id="heatWaterStations">12 Operational</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">ORSL Sachet Supplies:</span>
+              <span class="metric-val" id="heatOrslSupplies">14,200 Packets Available</span>
+            </div>
+
+            <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:11px; color:var(--text-secondary);" id="heatAdvisoryText">
+              <strong>Advisory Action:</strong> Trigger mist sprayer vans at Wakhri Junction & increase water distribution post deployment by 20%.
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ==================== SCREEN 5: RESOURCE MANAGEMENT ==================== -->
-    <section id="view-resources" class="view-section">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="layers" style="width:16px; height:16px;"></i>
-          <span>Resource Deployment & Route Diversion Control</span>
-        </div>
-        <div class="section-sub">
-          Police Forces, Water Tankers, Food Vans & Medical Units Logistics
-        </div>
-      </div>
-
-      <div class="resource-grid">
-        <!-- Left: Resource Table -->
-        <div class="govt-table-container">
-          <table class="govt-table">
-            <thead>
-              <tr>
-                <th>Resource Type</th>
-                <th>Deployed Count</th>
-                <th>Available Count</th>
-                <th>Current Key Location</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="resourcesTableBody">
-              <!-- Populated dynamically from /api/resources -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Right: Route Status Simple List -->
-        <div>
-          <div class="panel-header" style="margin-bottom:8px;">
-            <span>ROUTE STATUS & DIVERSION LOG</span>
+      <!-- ==================== SCREEN 5: RESOURCE MANAGEMENT ==================== -->
+      <section id="view-resources" class="view-section">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="layers" style="width:16px; height:16px;"></i>
+            <span>Resource Deployment & Route Diversion Control</span>
           </div>
-
-          <div id="routesContainer">
-            <!-- Populated dynamically from /api/routes -->
+          <div class="section-sub">
+            Police Forces, Water Tankers, Food Vans & Medical Units Logistics
           </div>
         </div>
-      </div>
-    </section>
 
-  </main>
+        <div class="resource-grid">
+          <!-- Left: Resource Table -->
+          <div class="govt-table-container">
+            <table class="govt-table">
+              <thead>
+                <tr>
+                  <th>Resource Type</th>
+                  <th>Deployed Count</th>
+                  <th>Available Count</th>
+                  <th>Current Key Location</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="resourcesTableBody">
+                <!-- Populated dynamically from /api/resources -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Right: Route Status Simple List -->
+          <div>
+            <div class="panel-header" style="margin-bottom:8px;">
+              <span>ROUTE STATUS & DIVERSION LOG</span>
+            </div>
+
+            <div id="routesContainer">
+              <!-- Populated dynamically from /api/routes -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div> <!-- End #dashboardView -->
 
   <!-- Reusable Clean Operational Action/Detail Modal -->
   <div class="app-modal-backdrop" id="appActionModal" aria-hidden="true">

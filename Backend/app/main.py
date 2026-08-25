@@ -1,6 +1,7 @@
 import os
 import time
 from contextlib import asynccontextmanager
+from typing import Optional
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -20,6 +21,7 @@ from app.core.config import settings
 from app.core.database import init_db
 from app.core.logging import setup_logging
 from app.core.redis import redis_client
+from app.core.security import decode_token
 from app.seed.seed_data import seed_database
 from app.services.demo_service import demo_service
 from app.websocket.manager import ws_manager
@@ -59,7 +61,7 @@ app = FastAPI(
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -97,10 +99,20 @@ app.include_router(audit_router, prefix=settings.API_V1_STR)
 app.include_router(demo_router, prefix=settings.API_V1_STR)
 
 
-# Realtime WebSockets Channels
+# Realtime WebSockets Channels with JWT Verification
 @app.websocket("/ws")
 @app.websocket("/ws/{channel}")
-async def websocket_endpoint(websocket: WebSocket, channel: str = "all"):
+async def websocket_endpoint(websocket: WebSocket, channel: str = "all", token: Optional[str] = None):
+    if settings.AUTH_REQUIRED:
+        auth_token = token or websocket.query_params.get("token")
+        if not auth_token:
+            await websocket.close(code=1008)
+            return
+        payload = decode_token(auth_token)
+        if not payload or payload.get("type") != "access":
+            await websocket.close(code=1008)
+            return
+
     await ws_manager.connect(websocket, channel=channel)
     try:
         while True:

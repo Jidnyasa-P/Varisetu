@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.integrations.notification_adapter import notification_adapter
 from app.integrations.speech_adapter import speech_adapter
 from app.integrations.storage_adapter import storage_adapter
@@ -22,7 +22,7 @@ from app.schemas.lost_person import (
 )
 from app.services.lost_person_service import lost_person_service
 
-router = APIRouter(prefix="/lost-persons", tags=["Lost & Found"])
+router = APIRouter(prefix="/lost-persons", tags=["Lost & Found"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[LostPersonCaseOut], summary="List lost person cases")
@@ -38,7 +38,7 @@ async def list_lost_person_cases(
 async def create_case(
     case_in: LostPersonCaseCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     case = await lost_person_service.create_case(db, case_in, user_id=user_id)
@@ -101,7 +101,7 @@ async def verify_match(
     match_id: str,
     req: FaceMatchVerifyRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     match = await lost_person_service.verify_match(db, case_id=id, match_id=match_id, verified=req.verified, user_id=user_id)
@@ -113,7 +113,7 @@ async def dispatch_volunteer(
     id: str,
     volunteer_name: str = "Nearby Volunteer Squad",
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     case = await lost_person_service.dispatch_volunteer(db, case_id=id, volunteer_name=volunteer_name, user_id=user_id)
@@ -124,7 +124,7 @@ async def dispatch_volunteer(
 async def reunite_case(
     id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     case = await lost_person_service.reunite_case(db, case_id=id, user_id=user_id)

@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.models.incident import Incident, IncidentEvent, IncidentSeverity, IncidentStatus, IncidentType
 from app.models.user import User
 from app.schemas.incident import (
@@ -19,7 +19,7 @@ from app.schemas.incident import (
 )
 from app.services.incident_service import incident_service
 
-router = APIRouter(prefix="/incidents", tags=["Incidents"])
+router = APIRouter(prefix="/incidents", tags=["Incidents"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[IncidentOut], summary="List incidents with pagination & filters")
@@ -40,7 +40,7 @@ async def list_incidents(
 async def create_incident(
     incident_in: IncidentCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     incident = await incident_service.create_incident(db, incident_in, user_id=user_id)
@@ -61,7 +61,7 @@ async def acknowledge_incident(
     id: str,
     ack_req: Optional[IncidentAcknowledgeRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     notes = ack_req.notes if ack_req else None
@@ -74,7 +74,7 @@ async def resolve_incident(
     id: str,
     resolve_req: IncidentResolveRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     incident = await incident_service.resolve_incident(db, id, resolve_req.resolution_notes, user_id=user_id)

@@ -5,13 +5,13 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.models.route import Route, RouteStatus
 from app.models.user import User
 from app.schemas.route import RouteActionRequest, RouteCreate, RouteOut, RouteUpdate
 from app.services.route_service import route_service
 
-router = APIRouter(prefix="/routes", tags=["Routes"])
+router = APIRouter(prefix="/routes", tags=["Routes"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[RouteOut], summary="List all monitored pilgrimage route segments")
@@ -42,7 +42,7 @@ async def divert_route(
     id: str,
     req: Optional[RouteActionRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     reason = req.reason if req else "Diverted by Command Center"
@@ -55,7 +55,7 @@ async def close_route(
     id: str,
     req: Optional[RouteActionRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     reason = req.reason if req else "Closed due to heavy pedestrian bottleneck"
@@ -68,7 +68,7 @@ async def open_route(
     id: str,
     req: Optional[RouteActionRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     reason = req.reason if req else "Corridor cleared for pilgrims"

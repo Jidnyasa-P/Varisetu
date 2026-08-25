@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.models.resource import Resource, ResourceAvailability, ResourceType
 from app.models.user import User
 from app.schemas.resource import (
@@ -18,7 +18,7 @@ from app.schemas.resource import (
 )
 from app.services.resource_service import resource_service
 
-router = APIRouter(prefix="/resources", tags=["Resources"])
+router = APIRouter(prefix="/resources", tags=["Resources"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[ResourceOut], summary="List all operational resources & units")
@@ -67,7 +67,7 @@ async def dispatch_resource(
     id: str,
     dispatch_req: ResourceDispatchRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     res = await resource_service.dispatch_resource(
@@ -85,7 +85,7 @@ async def update_resource_status(
     id: str,
     status_req: ResourceStatusUpdateRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     res = await resource_service.update_status(

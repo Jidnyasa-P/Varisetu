@@ -5,11 +5,12 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
+from app.core.rbac import get_current_user
 from app.models.zone import Zone
 from app.schemas.zone import ZoneCreate, ZoneCrowdMetrics, ZoneOut, ZoneUpdate
 from app.services.crowd_service import crowd_service
 
-router = APIRouter(prefix="/zones", tags=["Zones"])
+router = APIRouter(prefix="/zones", tags=["Zones"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[ZoneOut], summary="List all pilgrimage monitoring zones")

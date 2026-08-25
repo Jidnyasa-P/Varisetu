@@ -977,3 +977,126 @@ body {
   }
 }
 
+/* ==================== LOGIN VIEW (AUTHENTICATION ENTRY) ==================== */
+.login-view {
+  min-height: 100vh;
+  background: var(--bg-khadi);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.login-panel {
+  width: min(430px, 94vw);
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-top: 5px solid var(--maroon-primary);
+  box-shadow: 0 5px 22px rgba(0,0,0,0.10);
+  padding: 28px 24px;
+  box-sizing: border-box;
+}
+
+.login-brand {
+  text-align: center;
+}
+
+.login-brand img {
+  height: 64px;
+  width: auto;
+  margin-bottom: 10px;
+}
+
+.login-marathi {
+  font-family: var(--font-serif);
+  color: var(--maroon-primary);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.login-english {
+  font-size: 9px;
+  color: var(--text-secondary);
+  letter-spacing: 1.2px;
+  margin-top: 5px;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.login-divider {
+  height: 1px;
+  background: var(--border-main);
+  margin: 18px 0;
+}
+
+.login-title {
+  font-family: var(--font-serif);
+  color: var(--maroon-primary);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 16px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.login-panel label {
+  display: block;
+  margin: 12px 0 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.login-panel input {
+  width: 100%;
+  padding: 9px 10px;
+  background: #FFF;
+  border: 1px solid var(--border-main);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.login-panel input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px var(--maroon-bg);
+}
+
+.login-submit {
+  width: 100%;
+  margin-top: 18px;
+  justify-content: center;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.login-error {
+  margin-top: 12px;
+  padding: 9px 12px;
+  border: 1px solid var(--status-red);
+  background: var(--status-red-bg);
+  color: var(--status-red);
+  font-size: 11px;
+  line-height: 1.4;
+  border-radius: 2px;
+}
+
+.login-restricted-note {
+  margin-top: 18px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+

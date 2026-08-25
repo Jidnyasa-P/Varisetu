@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.rbac import get_current_user
+from app.core.rbac import UserRole, get_current_user, require_roles
 from app.models.user import User
 from app.schemas.auth import LoginRequest, RefreshTokenRequest, TokenResponse, UserCreate, UserOut
 from app.services.auth_service import auth_service
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/login", response_model=TokenResponse, summary="User authentication with JWT issuance")
 async def login(login_data: LoginRequest, db: AsyncSession = Depends(get_db)):
-    """Authenticate with email and password to receive JWT access and refresh tokens."""
+    """Authenticate with official email/officer ID and password to receive JWT tokens."""
     return await auth_service.authenticate_user(db, login_data)
 
 
@@ -30,10 +30,15 @@ async def get_current_user_profile(current_user: User = Depends(get_current_user
 
 @router.post("/logout", summary="Log out user and invalidate session")
 async def logout(current_user: User = Depends(get_current_user)):
-    """Log out current user (stateless JWT acknowledgment)."""
+    """Log out current user."""
     return {"success": True, "message": "Successfully logged out"}
 
 
-@router.post("/register", response_model=UserOut, summary="Register new user (Admin / Initial Setup)")
-async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
+@router.post("/register", response_model=UserOut, summary="Register new user (Admin Only)")
+async def register(
+    user_in: UserCreate,
+    current_admin: User = Depends(require_roles([UserRole.ADMIN])),
+    db: AsyncSession = Depends(get_db)
+):
+    """Admin-only endpoint to provision new authorised command center officers."""
     return await auth_service.register_user(db, user_in)

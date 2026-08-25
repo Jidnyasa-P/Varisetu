@@ -1,4 +1,4 @@
-/* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Command Center Logic & Realtime Client */
+/* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Private Command Center Logic & Realtime Client */
 
 const API_BASE =
   window.VARISETU_CONFIG?.API_BASE ||
@@ -10,8 +10,11 @@ const WS_BASE =
   localStorage.getItem('VARISETU_WS_BASE') ||
   'ws://localhost:8000/ws';
 
-// In-memory operational store for fast client-side cross-referencing
+const AUTH_STORAGE_KEY = 'varisetu_auth';
+
+// In-memory operational store
 const AppState = {
+  currentUser: null,
   cameras: [],
   lostCases: [],
   medicalAlerts: [],
@@ -23,12 +26,41 @@ const AppState = {
   ws: null
 };
 
-/* ==================== CENTRAL API CLIENT ==================== */
+let dashboardInitialized = false;
+
+/* ==================== AUTHENTICATION STATE MANAGER ==================== */
+function getStoredAuth() {
+  try {
+    return JSON.parse(sessionStorage.getItem(AUTH_STORAGE_KEY) || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function saveAuth(auth) {
+  sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(auth));
+}
+
+function clearAuth() {
+  sessionStorage.removeItem(AUTH_STORAGE_KEY);
+  AppState.currentUser = null;
+}
+
+function getAccessToken() {
+  return getStoredAuth()?.access_token || null;
+}
+
+function getRefreshToken() {
+  return getStoredAuth()?.refresh_token || null;
+}
+
+/* ==================== CENTRAL AUTHENTICATED API CLIENT ==================== */
 async function apiRequest(path, options = {}) {
   const {
     method = 'GET',
     body,
     headers = {},
+    skipAuthRefresh = false,
     ...rest
   } = options;
 
@@ -42,13 +74,51 @@ async function apiRequest(path, options = {}) {
     ...rest
   };
 
-  if (body !== undefined) {
-    config.body = typeof body === 'string'
-      ? body
-      : JSON.stringify(body);
+  const token = getAccessToken();
+  if (token && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE}${path}`, config);
+  if (body !== undefined) {
+    config.body = typeof body === 'string' ? body : JSON.stringify(body);
+  }
+
+  let response = await fetch(`${API_BASE}${path}`, config);
+
+  // Handle Token Expiration (401 Unauthorized)
+  if (response.status === 401 && !skipAuthRefresh) {
+    const refreshTokenStr = getRefreshToken();
+    if (refreshTokenStr) {
+      try {
+        const refreshRes = await fetch(`${API_BASE}/auth/refresh`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ refresh_token: refreshTokenStr })
+        });
+
+        if (refreshRes.ok) {
+          const newAuth = await refreshRes.json();
+          saveAuth(newAuth);
+
+          // Retry original request with new token
+          config.headers.Authorization = `Bearer ${newAuth.access_token}`;
+          response = await fetch(`${API_BASE}${path}`, config);
+        } else {
+          handleSessionExpiration();
+          throw new Error('Session expired. Please sign in again.');
+        }
+      } catch (e) {
+        handleSessionExpiration();
+        throw new Error('Session expired. Please sign in again.');
+      }
+    } else {
+      handleSessionExpiration();
+      throw new Error('Authentication required.');
+    }
+  }
 
   let payload = null;
   try {
@@ -74,10 +144,28 @@ async function apiRequest(path, options = {}) {
   return payload;
 }
 
+function handleSessionExpiration() {
+  clearAuth();
+  disconnectWebSocket();
+  showLoginView();
+  openAppModal({
+    title: 'SESSION EXPIRED',
+    kicker: 'SECURITY PROTOCOL',
+    bodyHtml: `
+      <div style="font-size:12px; line-height:1.6; color:var(--text-primary);">
+        Your command-center authorization session has expired or is invalid. Please sign in again to resume monitoring.
+      </div>
+    `,
+    footerHtml: `
+      <button class="govt-btn" id="sessionExpiryCloseBtn">Proceed to Sign In</button>
+    `
+  });
+  document.getElementById('sessionExpiryCloseBtn')?.addEventListener('click', closeAppModal);
+}
+
 /* ==================== UI STATE & SECURITY HELPERS ==================== */
 function setButtonLoading(button, loading, loadingText = 'Processing...') {
   if (!button) return;
-
   if (loading) {
     button.dataset.originalText = button.textContent;
     button.disabled = true;
@@ -127,7 +215,6 @@ function openAppModal({
 function closeAppModal() {
   const backdrop = document.getElementById('appActionModal');
   if (!backdrop) return;
-
   backdrop.classList.remove('open');
   backdrop.setAttribute('aria-hidden', 'true');
 }
@@ -156,26 +243,21 @@ function openConfirmModal({
   const confirmBtn = document.getElementById('appModalConfirm');
 
   cancelBtn?.addEventListener('click', closeAppModal);
-
   confirmBtn?.addEventListener('click', async () => {
     if (!onConfirm) return;
     setButtonLoading(confirmBtn, true, 'Processing...');
-
     try {
       await onConfirm();
       closeAppModal();
     } catch (error) {
       document.getElementById('appModalBody').innerHTML = `
-        <div class="modal-error">
-          ${escapeHtml(error.message || 'Operation failed.')}
-        </div>
+        <div class="modal-error">${escapeHtml(error.message || 'Operation failed.')}</div>
       `;
       setButtonLoading(confirmBtn, false, confirmText);
     }
   });
 }
 
-// Modal event listeners
 document.getElementById('appModalClose')?.addEventListener('click', closeAppModal);
 document.getElementById('appActionModal')?.addEventListener('click', (event) => {
   if (event.target.id === 'appActionModal') closeAppModal();
@@ -184,25 +266,128 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') closeAppModal();
 });
 
-/* ==================== PAGE INITIALIZATION ==================== */
+/* ==================== LOGIN & LOGOUT ROUTING ==================== */
 document.addEventListener('DOMContentLoaded', () => {
+  setupAuthEventListeners();
+  initializeApplication();
+});
+
+function setupAuthEventListeners() {
+  const loginForm = document.getElementById('loginForm');
+  loginForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail')?.value?.trim();
+    const password = document.getElementById('loginPassword')?.value;
+    const submitBtn = document.getElementById('loginSubmitBtn');
+    const errorEl = document.getElementById('loginError');
+
+    if (!email || !password) return;
+
+    if (errorEl) {
+      errorEl.hidden = true;
+      errorEl.textContent = '';
+    }
+    setButtonLoading(submitBtn, true, 'Signing in...');
+
+    try {
+      await login(email, password);
+    } catch (err) {
+      if (errorEl) {
+        errorEl.hidden = false;
+        errorEl.textContent = err.message || 'Invalid officer credentials. Access denied.';
+      }
+      setButtonLoading(submitBtn, false, 'SIGN IN');
+    }
+  });
+
+  document.getElementById('logoutBtn')?.addEventListener('click', logout);
+}
+
+async function initializeApplication() {
+  const auth = getStoredAuth();
+  if (!auth?.access_token) {
+    showLoginView();
+    return;
+  }
+
+  try {
+    const user = await apiRequest('/auth/me');
+    showDashboardView(user);
+  } catch (e) {
+    clearAuth();
+    showLoginView();
+  }
+}
+
+async function login(email, password) {
+  const result = await apiRequest('/auth/login', {
+    method: 'POST',
+    body: { email, password },
+    skipAuthRefresh: true
+  });
+
+  saveAuth(result);
+
+  const user = await apiRequest('/auth/me');
+  showDashboardView(user);
+  return user;
+}
+
+async function logout() {
+  try {
+    await apiRequest('/auth/logout', { method: 'POST' });
+  } catch {}
+
+  disconnectWebSocket();
+  clearAuth();
+  showLoginView();
+}
+
+function showLoginView() {
+  const loginView = document.getElementById('loginView');
+  const dashView = document.getElementById('dashboardView');
+  if (loginView) loginView.hidden = false;
+  if (dashView) dashView.hidden = true;
+
+  disconnectWebSocket();
+}
+
+function showDashboardView(user) {
+  AppState.currentUser = user;
+  const loginView = document.getElementById('loginView');
+  const dashView = document.getElementById('dashboardView');
+  if (loginView) loginView.hidden = true;
+  if (dashView) dashView.hidden = false;
+
+  const profileText = document.getElementById('userProfileText');
+  if (profileText && user) {
+    profileText.textContent = `${user.role || 'OFFICER'}`;
+  }
+
   if (window.lucide) {
     lucide.createIcons();
   }
 
-  updateClock();
-  setInterval(updateClock, 1000);
+  initializeDashboardAfterAuth(user);
+}
 
-  setupNavigation();
-  initRouteMap();
-  initForecastChart();
-  setupCctvModal();
-  setupDemoButton();
-  setupLostFoundButtons();
+async function initializeDashboardAfterAuth(user) {
+  if (!dashboardInitialized) {
+    updateClock();
+    setInterval(updateClock, 1000);
+    setupNavigation();
+    initRouteMap();
+    initForecastChart();
+    setupCctvModal();
+    setupDemoButton();
+    setupLostFoundButtons();
+    dashboardInitialized = true;
+  }
 
-  initLiveBackend();
-});
+  await initLiveBackend();
+}
 
+/* ==================== CLOCK & NAVIGATION ==================== */
 function updateClock() {
   const clockEl = document.getElementById('sysClock');
   if (!clockEl) return;
@@ -242,7 +427,7 @@ function setupNavigation() {
 /* ==================== LEAFLET MAP INITIALIZATION ==================== */
 function initRouteMap() {
   const mapElement = document.getElementById('routeMap');
-  if (!mapElement) return;
+  if (!mapElement || window.wariMap) return;
 
   const wariMap = L.map('routeMap', {
     center: [18.0000, 74.8000],
@@ -257,7 +442,6 @@ function initRouteMap() {
     maxZoom: 18
   }).addTo(wariMap);
 
-  // Wari Corridor Coordinates
   const routePoints = [
     [18.6772, 73.8967], // Alandi
     [18.5204, 73.8567], // Pune City
@@ -272,7 +456,6 @@ function initRouteMap() {
   L.polyline(routePoints.slice(2, 5), { color: '#B8551B', weight: 7, opacity: 0.85 }).addTo(wariMap).bindPopup('<b>Saswad-Bhalwani Sector:</b> Heavy Density (74%)');
   L.polyline(routePoints.slice(4, 7), { color: '#9A2525', weight: 8, opacity: 0.9 }).addTo(wariMap).bindPopup('<b>Wakhri-Pandharpur Sector:</b> CRITICAL CONGESTION (88-94%)');
 
-  // Palkhi Flag Marker
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:10px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 PALKHI (Wakhri)</div>`,
@@ -282,7 +465,6 @@ function initRouteMap() {
   L.marker([17.7280, 75.2950], { icon: palkhiIcon }).addTo(wariMap)
     .bindPopup('<b>Sant Tukaram Maharaj Palkhi</b><br>Location: Approaching Wakhri Phata (Km 184)<br>Speed: 3 km/h');
 
-  // Water Tankers Marker
   const waterIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 5px; font-size:9px; font-weight:bold; border-radius:2px;">💧 Tanker #09</div>`,
@@ -291,7 +473,6 @@ function initRouteMap() {
   L.marker([17.7400, 75.2800], { icon: waterIcon }).addTo(wariMap)
     .bindPopup('<b>Water Tanker #WT-09</b><br>Capacity: 10,000L (80% Full)<br>Stationed: Wakhri Access Rd');
 
-  // Medical Van Marker
   const medIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 5px; font-size:9px; font-weight:bold; border-radius:2px;">🚑 MedVan #02</div>`,
@@ -304,7 +485,7 @@ function initRouteMap() {
 /* ==================== CONGESTION FORECAST CHART ==================== */
 function initForecastChart() {
   const canvas = document.getElementById('forecastChart');
-  if (!canvas) return;
+  if (!canvas || window.forecastChartInstance) return;
 
   const ctx = canvas.getContext('2d');
 
@@ -386,7 +567,7 @@ async function checkHealth() {
   const badge = document.getElementById('backendHealthBadge');
   const text = document.getElementById('backendHealthText');
   try {
-    const res = await apiRequest('/health');
+    const res = await apiRequest('/health', { skipAuthRefresh: true });
     if (res && res.status === 'ok') {
       if (badge) badge.style.borderColor = 'var(--status-green)';
       if (text) text.textContent = 'LIVE';
@@ -394,7 +575,6 @@ async function checkHealth() {
   } catch (err) {
     if (badge) badge.style.borderColor = 'var(--status-orange)';
     if (text) text.textContent = 'STANDALONE';
-    console.debug('[VariSetu] Backend unavailable; operating in standalone offline mode.');
   }
 }
 
@@ -404,7 +584,7 @@ async function fetchLiveSummary() {
     updateDashboardSummary(data);
     return data;
   } catch (err) {
-    console.debug('[VariSetu] Dashboard summary fetch skipped:', err);
+    console.debug('[VariSetu] Dashboard summary fetch skipped.');
     return null;
   }
 }
@@ -677,7 +857,6 @@ function renderLostPersons(cases) {
     });
   });
 
-  // Default select first case in transcript box if available
   if (cases.length > 0 && !AppState.selectedLostCase) {
     showTranscript(cases[0]);
   }
@@ -1151,14 +1330,20 @@ function setupDemoButton() {
   });
 }
 
-/* ==================== REALTIME WEBSOCKET CLIENT ==================== */
+/* ==================== REALTIME AUTHENTICATED WEBSOCKET CLIENT ==================== */
 function connectWebSocket() {
+  disconnectWebSocket();
+
+  const token = getAccessToken();
+  if (!token) return;
+
   try {
-    const ws = new WebSocket(`${WS_BASE}/all`);
+    const ws = new WebSocket(`${WS_BASE}/all?token=${encodeURIComponent(token)}`);
+    window.varisetuWebSocket = ws;
     AppState.ws = ws;
 
     ws.onopen = () => {
-      console.log('[VariSetu Live] Realtime WebSocket connected to /ws/all');
+      console.log('[VariSetu Live] Authenticated WebSocket connected to /ws/all');
     };
 
     ws.onmessage = (event) => {
@@ -1170,11 +1355,26 @@ function connectWebSocket() {
       }
     };
 
-    ws.onclose = () => {
-      setTimeout(connectWebSocket, 5000);
+    ws.onclose = (event) => {
+      if (event.code === 1008) {
+        console.warn('[VariSetu Live] WebSocket authentication failed.');
+        handleSessionExpiration();
+      } else if (getAccessToken()) {
+        setTimeout(connectWebSocket, 5000);
+      }
     };
   } catch (err) {
     console.debug('[VariSetu Live] WebSocket initialization deferred.');
+  }
+}
+
+function disconnectWebSocket() {
+  if (window.varisetuWebSocket) {
+    try {
+      window.varisetuWebSocket.close();
+    } catch {}
+    window.varisetuWebSocket = null;
+    AppState.ws = null;
   }
 }
 

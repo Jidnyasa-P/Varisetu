@@ -45,8 +45,8 @@ class Settings(BaseSettings):
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    # When False, allows read/write access without token for prototyping
-    AUTH_REQUIRED: bool = False
+    # Authentication is enforced in the production system
+    AUTH_REQUIRED: bool = True
 
     # Modular Storage & AI Provider Settings
     STORAGE_PROVIDER: str = "local"
@@ -69,8 +69,7 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5174",
         "http://localhost:3000",
         "http://localhost:8000",
-        "http://127.0.0.1:8000",
-        "*"
+        "http://127.0.0.1:8000"
     ]
 
 

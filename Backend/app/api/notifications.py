@@ -5,15 +5,16 @@ from sqlalchemy import desc, select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
+from app.core.rbac import get_current_user
 from app.models.audit import AuditLog
 from app.models.notification import Notification
 from app.schemas.audit import AuditLogOut
 from app.schemas.notification import NotificationCreate, NotificationOut
 from app.services.demo_service import demo_service
 
-notifications_router = APIRouter(prefix="/notifications", tags=["Notifications"])
-audit_router = APIRouter(prefix="/audit", tags=["Audit"])
-demo_router = APIRouter(prefix="/demo", tags=["Demo"])
+notifications_router = APIRouter(prefix="/notifications", tags=["Notifications"], dependencies=[Depends(get_current_user)])
+audit_router = APIRouter(prefix="/audit", tags=["Audit"], dependencies=[Depends(get_current_user)])
+demo_router = APIRouter(prefix="/demo", tags=["Demo"], dependencies=[Depends(get_current_user)])
 health_router = APIRouter(tags=["Health"])
 
 
@@ -82,7 +83,7 @@ async def get_demo_status():
     return demo_service.get_status()
 
 
-# --- HEALTH CHECK ENDPOINTS ---
+# --- HEALTH CHECK ENDPOINTS (PUBLIC) ---
 @health_router.get("/health", summary="Basic health check")
 async def health_check():
     return {"status": "ok", "service": "varisetu-backend", "version": "2.0.0"}

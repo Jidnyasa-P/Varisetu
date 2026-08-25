@@ -6,11 +6,12 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
+from app.core.rbac import get_current_user
 from app.models.camera import Camera, CameraStatus
 from app.schemas.camera import CameraCreate, CameraHeartbeat, CameraOut, CameraPTZCommand, CameraUpdate
 from app.services.audit_service import audit_service
 
-router = APIRouter(prefix="/cameras", tags=["Cameras"])
+router = APIRouter(prefix="/cameras", tags=["Cameras"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[CameraOut], summary="List all CCTV surveillance cameras")

@@ -117,443 +117,501 @@
 </head>
 <body>
 
-  <!-- Top Warli Pattern Woven Strip -->
-  <div class="top-warli-border"></div>
-
-  <!-- Government Portal Header -->
-  <header class="gov-header">
-    <div class="brand-section">
-      <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img">
-      <div class="mh-police-badge">
-        <span>म.पो.</span>
-        <span style="font-size:7px;">POLICE</span>
+  <!-- ==================== PRIVATE LOGIN ENTRY VIEW ==================== -->
+  <section id="loginView" class="login-view">
+    <div class="login-panel">
+      <div class="login-brand">
+        <img src="assets/varisetu_logo.png" alt="VariSetu Logo">
+        <div class="login-marathi">वारी सेतु</div>
+        <div class="login-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</div>
       </div>
-      <div class="brand-titles">
-        <h1 class="brand-marathi">वारी सेतु</h1>
-        <span class="brand-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</span>
+
+      <div class="login-divider"></div>
+
+      <div class="login-title">COMMAND CENTER ACCESS</div>
+
+      <form id="loginForm">
+        <label for="loginEmail">Official Email / Officer ID</label>
+        <input
+          id="loginEmail"
+          type="email"
+          autocomplete="username"
+          placeholder="control.room@mahapolice.gov.in"
+          required
+        />
+
+        <label for="loginPassword">Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+          required
+        />
+
+        <div id="loginError" class="login-error" hidden></div>
+
+        <button
+          type="submit"
+          class="govt-btn login-submit"
+          id="loginSubmitBtn">
+          SIGN IN
+        </button>
+      </form>
+
+      <div class="login-restricted-note">
+        Authorised Personnel Only &bull; Access Monitored
       </div>
     </div>
+  </section>
 
-    <div class="header-meta">
-      <div class="meta-pill" id="backendHealthBadge">
-        <span class="live-dot"></span>
-        <span id="backendHealthText">LIVE</span>
+  <!-- ==================== MAIN COMMAND CENTER DASHBOARD (AUTHENTICATED) ==================== -->
+  <div id="dashboardView" hidden>
+
+    <!-- Top Warli Pattern Woven Strip -->
+    <div class="top-warli-border"></div>
+
+    <!-- Government Portal Header -->
+    <header class="gov-header">
+      <div class="brand-section">
+        <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img">
+        <div class="mh-police-badge">
+          <span>म.पो.</span>
+          <span style="font-size:7px;">POLICE</span>
+        </div>
+        <div class="brand-titles">
+          <h1 class="brand-marathi">वारी सेतु</h1>
+          <span class="brand-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</span>
+        </div>
       </div>
-      <div class="meta-pill">
-        <i data-lucide="clock" style="width:13px; height:13px;"></i>
-        <span id="sysClock">28 JUL 2026 18:50:00 IST</span>
+
+      <div class="header-meta">
+        <div class="meta-pill" id="backendHealthBadge">
+          <span class="live-dot"></span>
+          <span id="backendHealthText">LIVE</span>
+        </div>
+        <div class="meta-pill">
+          <i data-lucide="clock" style="width:13px; height:13px;"></i>
+          <span id="sysClock">28 JUL 2026 18:50:00 IST</span>
+        </div>
+        <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
+          <span>PILGRIM COUNT: ~8,45,000</span>
+        </div>
+        <div class="meta-pill" id="userProfileBadge" style="display:flex; align-items:center; border-color:var(--maroon-primary);">
+          <i data-lucide="shield-check" style="width:13px; height:13px; color:var(--maroon-primary); margin-right:4px;"></i>
+          <span id="userProfileText" style="font-weight:700; color:var(--maroon-primary); text-transform:uppercase;">COMMANDER</span>
+          <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:9px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
+        </div>
+        <button class="govt-btn btn-outline" id="demoToggleBtn" type="button" style="font-size:10px; padding:4px 9px;">
+          <i data-lucide="play" style="width:11px; height:11px;"></i>
+          <span id="demoToggleText">Start Demo</span>
+        </button>
       </div>
-      <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
-        <span>PILGRIM COUNT: ~8,45,000</span>
-      </div>
-      <button class="govt-btn btn-outline" id="demoToggleBtn" type="button" style="font-size:10px; padding:4px 9px;">
-        <i data-lucide="play" style="width:11px; height:11px;"></i>
-        <span id="demoToggleText">Start Demo</span>
+    </header>
+
+    <!-- Navigation Tabs Bar -->
+    <nav class="nav-bar">
+      <button class="nav-tab active" data-target="view-command">
+        <i data-lucide="layout-dashboard" style="width:14px; height:14px;"></i>
+        <span>Main Command Center</span>
       </button>
-    </div>
-  </header>
+      <button class="nav-tab" data-target="view-crowd">
+        <i data-lucide="users" style="width:14px; height:14px;"></i>
+        <span>Crowd Intelligence</span>
+        <span class="badge" id="crowdNavBadge">94% Max Density</span>
+      </button>
+      <button class="nav-tab" data-target="view-lost">
+        <i data-lucide="search" style="width:14px; height:14px;"></i>
+        <span>Lost & Found Desk</span>
+        <span class="badge" id="lostNavBadge" style="background:#B07817; color:#FFF;">3 Active</span>
+      </button>
+      <button class="nav-tab" data-target="view-medical">
+        <i data-lucide="heart-pulse" style="width:14px; height:14px;"></i>
+        <span>Medical Alerts</span>
+        <span class="badge" id="medicalNavBadge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
+      </button>
+      <button class="nav-tab" data-target="view-resources">
+        <i data-lucide="truck" style="width:14px; height:14px;"></i>
+        <span>Resource Management</span>
+      </button>
+    </nav>
 
-  <!-- Navigation Tabs Bar -->
-  <nav class="nav-bar">
-    <button class="nav-tab active" data-target="view-command">
-      <i data-lucide="layout-dashboard" style="width:14px; height:14px;"></i>
-      <span>Main Command Center</span>
-    </button>
-    <button class="nav-tab" data-target="view-crowd">
-      <i data-lucide="users" style="width:14px; height:14px;"></i>
-      <span>Crowd Intelligence</span>
-      <span class="badge" id="crowdNavBadge">94% Max Density</span>
-    </button>
-    <button class="nav-tab" data-target="view-lost">
-      <i data-lucide="search" style="width:14px; height:14px;"></i>
-      <span>Lost & Found Desk</span>
-      <span class="badge" id="lostNavBadge" style="background:#B07817; color:#FFF;">3 Active</span>
-    </button>
-    <button class="nav-tab" data-target="view-medical">
-      <i data-lucide="heart-pulse" style="width:14px; height:14px;"></i>
-      <span>Medical Alerts</span>
-      <span class="badge" id="medicalNavBadge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
-    </button>
-    <button class="nav-tab" data-target="view-resources">
-      <i data-lucide="truck" style="width:14px; height:14px;"></i>
-      <span>Resource Management</span>
-    </button>
-  </nav>
+    <!-- Main App Layout Container -->
+    <main class="app-container">
 
-  <!-- Main App Layout Container -->
-  <main class="app-container">
-
-    <!-- ==================== SCREEN 1: MAIN COMMAND CENTER ==================== -->
-    <section id="view-command" class="view-section active">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="shield-alert" style="width:16px; height:16px;"></i>
-          <span>Real-time Operational Command & Surveillance</span>
-        </div>
-        <div class="section-sub">
-          Active Surveillance: 4 CCTVs &bull; Route: Alandi - Dehu - Pune - Wakhri - Pandharpur
-        </div>
-      </div>
-
-      <div class="command-grid">
-        <!-- Left: CCTV surveillance tiles -->
-        <div class="cctv-column" id="cctvTilesContainer">
-          <div class="panel-header">
-            <span>CCTV FEEDS (SURVEILLANCE GRID)</span>
-            <span style="font-size:10px; color:var(--text-muted);">CLICK FEED FOR DETAILS / PTZ</span>
+      <!-- ==================== SCREEN 1: MAIN COMMAND CENTER ==================== -->
+      <section id="view-command" class="view-section active">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="shield-alert" style="width:16px; height:16px;"></i>
+            <span>Real-time Operational Command & Surveillance</span>
           </div>
-
-          <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12">
-            <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 12">
-            <div class="cctv-overlay">
-              <div class="cctv-top-info">
-                <span class="cctv-cam-id">CAM-12</span>
-                <span class="cctv-timestamp">LIVE STREAM</span>
-              </div>
-              <div class="cctv-bottom-info">
-                <span class="cctv-location">Wakhri Phata Junction</span>
-                <span class="density-tag orange">HEAVY 88%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04">
-            <img src="assets/wari_aerial_procession_1785244820232.jpg" class="cctv-feed-img" alt="CCTV Feed 04">
-            <div class="cctv-overlay">
-              <div class="cctv-top-info">
-                <span class="cctv-cam-id">CAM-04</span>
-                <span class="cctv-timestamp">LIVE STREAM</span>
-              </div>
-              <div class="cctv-bottom-info">
-                <span class="cctv-location">Pandharpur Chowk</span>
-                <span class="density-tag red">CRITICAL 94%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08">
-            <img src="assets/palkhi_procession_1785244851342.jpg" class="cctv-feed-img" alt="CCTV Feed 08">
-            <div class="cctv-overlay">
-              <div class="cctv-top-info">
-                <span class="cctv-cam-id">CAM-08</span>
-                <span class="cctv-timestamp">LIVE STREAM</span>
-              </div>
-              <div class="cctv-bottom-info">
-                <span class="cctv-location">Saswad Corridor</span>
-                <span class="density-tag yellow">MODERATE 62%</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01">
-            <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 01">
-            <div class="cctv-overlay">
-              <div class="cctv-top-info">
-                <span class="cctv-cam-id">CAM-01</span>
-                <span class="cctv-timestamp">LIVE STREAM</span>
-              </div>
-              <div class="cctv-bottom-info">
-                <span class="cctv-location">Alandi Ghat Rd</span>
-                <span class="density-tag green">NORMAL 35%</span>
-              </div>
-            </div>
+          <div class="section-sub">
+            Active Surveillance: 4 CCTVs &bull; Route: Alandi - Dehu - Pune - Wakhri - Pandharpur
           </div>
         </div>
 
-        <!-- Center: Interactive Route Map -->
-        <div class="map-container">
-          <div id="routeMap"></div>
+        <div class="command-grid">
+          <!-- Left: CCTV surveillance tiles -->
+          <div class="cctv-column" id="cctvTilesContainer">
+            <div class="panel-header">
+              <span>CCTV FEEDS (SURVEILLANCE GRID)</span>
+              <span style="font-size:10px; color:var(--text-muted);">CLICK FEED FOR DETAILS / PTZ</span>
+            </div>
 
-          <div class="map-controls-overlay">
-            <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px;">ROUTE MAP LEGEND</div>
-            <div class="map-legend-item">
-              <div class="legend-color-box" style="background:#9A2525;"></div>
-              <span>Critical Congestion</span>
+            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12">
+              <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 12">
+              <div class="cctv-overlay">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-12</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+                <div class="cctv-bottom-info">
+                  <span class="cctv-location">Wakhri Phata Junction</span>
+                  <span class="density-tag orange">HEAVY 88%</span>
+                </div>
+              </div>
             </div>
-            <div class="map-legend-item">
-              <div class="legend-color-box" style="background:#B8551B;"></div>
-              <span>Heavy Density</span>
+
+            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04">
+              <img src="assets/wari_aerial_procession_1785244820232.jpg" class="cctv-feed-img" alt="CCTV Feed 04">
+              <div class="cctv-overlay">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-04</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+                <div class="cctv-bottom-info">
+                  <span class="cctv-location">Pandharpur Chowk</span>
+                  <span class="density-tag red">CRITICAL 94%</span>
+                </div>
+              </div>
             </div>
-            <div class="map-legend-item">
-              <div class="legend-color-box" style="background:#2E5B36;"></div>
-              <span>Clear Route</span>
+
+            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08">
+              <img src="assets/palkhi_procession_1785244851342.jpg" class="cctv-feed-img" alt="CCTV Feed 08">
+              <div class="cctv-overlay">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-08</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+                <div class="cctv-bottom-info">
+                  <span class="cctv-location">Saswad Corridor</span>
+                  <span class="density-tag yellow">MODERATE 62%</span>
+                </div>
+              </div>
             </div>
-            <div class="map-legend-item" style="margin-top:4px;">
-              <i data-lucide="droplet" style="width:12px; height:12px; color:#1D6F8A;"></i>
-              <span>Water Tanker</span>
+
+            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01">
+              <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 01">
+              <div class="cctv-overlay">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-01</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+                <div class="cctv-bottom-info">
+                  <span class="cctv-location">Alandi Ghat Rd</span>
+                  <span class="density-tag green">NORMAL 35%</span>
+                </div>
+              </div>
             </div>
-            <div class="map-legend-item">
-              <i data-lucide="cross" style="width:12px; height:12px; color:#9A2525;"></i>
-              <span>Medical Van</span>
+          </div>
+
+          <!-- Center: Interactive Route Map -->
+          <div class="map-container">
+            <div id="routeMap"></div>
+
+            <div class="map-controls-overlay">
+              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px;">ROUTE MAP LEGEND</div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#9A2525;"></div>
+                <span>Critical Congestion</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#B8551B;"></div>
+                <span>Heavy Density</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#2E5B36;"></div>
+                <span>Clear Route</span>
+              </div>
+              <div class="map-legend-item" style="margin-top:4px;">
+                <i data-lucide="droplet" style="width:12px; height:12px; color:#1D6F8A;"></i>
+                <span>Water Tanker</span>
+              </div>
+              <div class="map-legend-item">
+                <i data-lucide="cross" style="width:12px; height:12px; color:#9A2525;"></i>
+                <span>Medical Van</span>
+              </div>
+              <div class="map-legend-item">
+                <i data-lucide="flag" style="width:12px; height:12px; color:#D98E2C;"></i>
+                <span>Palkhi Location</span>
+              </div>
             </div>
-            <div class="map-legend-item">
-              <i data-lucide="flag" style="width:12px; height:12px; color:#D98E2C;"></i>
-              <span>Palkhi Location</span>
+          </div>
+
+          <!-- Right Column: Plain Stat Panels -->
+          <div class="right-col-panel">
+            <div class="stat-panel-group">
+              <div class="govt-stat-box">
+                <div class="stat-label">Lost & Found Desk</div>
+                <div class="stat-value" id="statLostCases">3 Active Cases</div>
+                <div class="stat-subtext">Automated facial matching engine active</div>
+              </div>
+
+              <div class="govt-stat-box" style="border-left-color: var(--status-red);">
+                <div class="stat-label">Medical Emergencies</div>
+                <div class="stat-value" id="statMedicalAlerts" style="color:var(--status-red);">2 Active Alerts</div>
+                <div class="stat-subtext">Sector 3 (Wakhri) & Sector 5 (Pandharpur)</div>
+              </div>
+
+              <div class="govt-stat-box" style="border-left-color: var(--status-green);">
+                <div class="stat-label">Resource Deployment</div>
+                <div class="stat-value" id="statResources" style="color:var(--status-green);">3 / 7 Deployed</div>
+                <div class="stat-subtext">Tankers, Ambulances & Patrol Squads stationed</div>
+              </div>
+
+              <div class="govt-stat-box" style="border-left-color: var(--saffron-gold);">
+                <div class="stat-label">Main Palkhi Status</div>
+                <div class="stat-value" id="statPalkhiStatus" style="font-size:16px; color:#3B332B;">Sant Tukaram Maharaj Palkhi</div>
+                <div class="stat-subtext" id="statPalkhiLocation">Location: Approaching Wakhri Phata (Km 184)</div>
+              </div>
+
+              <!-- Photo Texture Box -->
+              <div class="panel-card" style="padding:8px;">
+                <div style="font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:4px;">PILGRIM FLOW FIELD PHOTO</div>
+                <img src="assets/palkhi_procession_1785244851342.jpg" style="width:100%; height:110px; object-fit:cover; border:1px solid var(--border-main);" alt="Warkaris">
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Right Column: Plain Stat Panels -->
-        <div class="right-col-panel">
-          <div class="stat-panel-group">
-            <div class="govt-stat-box">
-              <div class="stat-label">Lost & Found Desk</div>
-              <div class="stat-value" id="statLostCases">3 Active Cases</div>
-              <div class="stat-subtext">Automated facial matching engine active</div>
-            </div>
-
-            <div class="govt-stat-box" style="border-left-color: var(--status-red);">
-              <div class="stat-label">Medical Emergencies</div>
-              <div class="stat-value" id="statMedicalAlerts" style="color:var(--status-red);">2 Active Alerts</div>
-              <div class="stat-subtext">Sector 3 (Wakhri) & Sector 5 (Pandharpur)</div>
-            </div>
-
-            <div class="govt-stat-box" style="border-left-color: var(--status-green);">
-              <div class="stat-label">Resource Deployment</div>
-              <div class="stat-value" id="statResources" style="color:var(--status-green);">3 / 7 Deployed</div>
-              <div class="stat-subtext">Tankers, Ambulances & Patrol Squads stationed</div>
-            </div>
-
-            <div class="govt-stat-box" style="border-left-color: var(--saffron-gold);">
-              <div class="stat-label">Main Palkhi Status</div>
-              <div class="stat-value" id="statPalkhiStatus" style="font-size:16px; color:#3B332B;">Sant Tukaram Maharaj Palkhi</div>
-              <div class="stat-subtext" id="statPalkhiLocation">Location: Approaching Wakhri Phata (Km 184)</div>
-            </div>
-
-            <!-- Photo Texture Box -->
-            <div class="panel-card" style="padding:8px;">
-              <div style="font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:4px;">PILGRIM FLOW FIELD PHOTO</div>
-              <img src="assets/palkhi_procession_1785244851342.jpg" style="width:100%; height:110px; object-fit:cover; border:1px solid var(--border-main);" alt="Warkaris">
+        <!-- Bottom Strip: Incident Log Ticker -->
+        <div class="incident-ticker-bar">
+          <div class="ticker-label">INCIDENT LOG</div>
+          <div class="ticker-content">
+            <div class="ticker-text" id="incidentLogText">
+              [LIVE] VariSetu Command Center connected &bull; Telemetry initialized.
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Bottom Strip: Incident Log Ticker -->
-      <div class="incident-ticker-bar">
-        <div class="ticker-label">INCIDENT LOG</div>
-        <div class="ticker-content">
-          <div class="ticker-text" id="incidentLogText">
-            [LIVE] VariSetu Command Center connected &bull; Telemetry initialized.
+      <!-- ==================== SCREEN 2: CROWD INTELLIGENCE ==================== -->
+      <section id="view-crowd" class="view-section">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="bar-chart-3" style="width:16px; height:16px;"></i>
+            <span>Zone Density Analytics & Congestion Forecast</span>
+          </div>
+          <div class="section-sub">
+            Crowd Density Monitoring across 6 Primary Pilgrimage Zones
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ==================== SCREEN 2: CROWD INTELLIGENCE ==================== -->
-    <section id="view-crowd" class="view-section">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="bar-chart-3" style="width:16px; height:16px;"></i>
-          <span>Zone Density Analytics & Congestion Forecast</span>
-        </div>
-        <div class="section-sub">
-          Crowd Density Monitoring across 6 Primary Pilgrimage Zones
-        </div>
-      </div>
-
-      <div class="crowd-view-grid">
-        <!-- Left: Zone Density Table -->
-        <div class="panel-card" style="padding:0;">
-          <div class="panel-header">
-            <span>ZONE-WISE CROWD DENSITY TABLE</span>
-            <span>UPDATED: LIVE TELEMETRY</span>
+        <div class="crowd-view-grid">
+          <!-- Left: Zone Density Table -->
+          <div class="panel-card" style="padding:0;">
+            <div class="panel-header">
+              <span>ZONE-WISE CROWD DENSITY TABLE</span>
+              <span>UPDATED: LIVE TELEMETRY</span>
+            </div>
+            <div class="govt-table-container" style="border:none; margin:0;">
+              <table class="govt-table">
+                <thead>
+                  <tr>
+                    <th>Zone Name</th>
+                    <th>Density %</th>
+                    <th>Trend</th>
+                    <th>Recommended Action</th>
+                  </tr>
+                </thead>
+                <tbody id="crowdZonesTableBody">
+                  <!-- Populated dynamically from /api/crowd/current -->
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div class="govt-table-container" style="border:none; margin:0;">
+
+          <!-- Right: Congestion Forecast Chart -->
+          <div class="chart-card">
+            <div class="chart-title">2-HOUR CONGESTION FORECAST MODEL</div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">
+              Predicted crowd accumulation at Wakhri Phata & Pandharpur Chowk (19:00 - 21:00 IST)
+            </div>
+            <div style="height: 300px; position: relative;">
+              <canvas id="forecastChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCREEN 3: LOST & FOUND DESK ==================== -->
+      <section id="view-lost" class="view-section">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="user-search" style="width:16px; height:16px;"></i>
+            <span>Lost & Found Incident Desk (Automated Match)</span>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="govt-btn" id="registerLostPersonBtn" type="button">
+              <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
+            </button>
+          </div>
+        </div>
+
+        <div class="lost-found-grid">
+          <!-- Left Column: Table of Active Cases -->
+          <div class="govt-table-container">
             <table class="govt-table">
               <thead>
                 <tr>
-                  <th>Zone Name</th>
-                  <th>Density %</th>
-                  <th>Trend</th>
-                  <th>Recommended Action</th>
+                  <th>Photo</th>
+                  <th>Case ID</th>
+                  <th>Name</th>
+                  <th>Age / Gender</th>
+                  <th>Clothing Description (Marathi & Eng)</th>
+                  <th>Last Seen Cam</th>
+                  <th>Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
-              <tbody id="crowdZonesTableBody">
-                <!-- Populated dynamically from /api/crowd/current -->
+              <tbody id="lostPersonsTableBody">
+                <!-- Populated dynamically from /api/lost-persons -->
               </tbody>
             </table>
           </div>
-        </div>
 
-        <!-- Right: Congestion Forecast Chart -->
-        <div class="chart-card">
-          <div class="chart-title">2-HOUR CONGESTION FORECAST MODEL</div>
-          <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">
-            Predicted crowd accumulation at Wakhri Phata & Pandharpur Chowk (19:00 - 21:00 IST)
-          </div>
-          <div style="height: 300px; position: relative;">
-            <canvas id="forecastChart"></canvas>
-          </div>
-        </div>
-      </div>
-    </section>
+          <!-- Right Column: Devanagari Transcript Snippet -->
+          <div class="transcript-panel">
+            <div style="font-weight:700; color:var(--maroon-primary); font-size:13px; margin-bottom:4px;">
+              CALL-TO-CASE PIPELINE TRANSCRIPT
+            </div>
+            <div style="font-size:11px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;" id="transcriptHeaderSub">
+              Helpline 112 Audio Recording Snippet (Deccan Dialect) &bull; Select a case
+            </div>
 
-    <!-- ==================== SCREEN 3: LOST & FOUND DESK ==================== -->
-    <section id="view-lost" class="view-section">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="user-search" style="width:16px; height:16px;"></i>
-          <span>Lost & Found Incident Desk (Automated Match)</span>
-        </div>
-        <div style="display:flex; gap:8px;">
-          <button class="govt-btn" id="registerLostPersonBtn" type="button">
-            <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
-          </button>
-        </div>
-      </div>
+            <div class="transcript-box" id="transcriptBox">
+  Select a case to view call details and audio transcription.
+            </div>
 
-      <div class="lost-found-grid">
-        <!-- Left Column: Table of Active Cases -->
-        <div class="govt-table-container">
-          <table class="govt-table">
-            <thead>
-              <tr>
-                <th>Photo</th>
-                <th>Case ID</th>
-                <th>Name</th>
-                <th>Age / Gender</th>
-                <th>Clothing Description (Marathi & Eng)</th>
-                <th>Last Seen Cam</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="lostPersonsTableBody">
-              <!-- Populated dynamically from /api/lost-persons -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Right Column: Devanagari Transcript Snippet -->
-        <div class="transcript-panel">
-          <div style="font-weight:700; color:var(--maroon-primary); font-size:13px; margin-bottom:4px;">
-            CALL-TO-CASE PIPELINE TRANSCRIPT
-          </div>
-          <div style="font-size:11px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;" id="transcriptHeaderSub">
-            Helpline 112 Audio Recording Snippet (Deccan Dialect) &bull; Select a case
-          </div>
-
-          <div class="transcript-box" id="transcriptBox">
-Select a case to view call details and audio transcription.
-          </div>
-
-          <div style="margin-top:12px; display:flex; gap:8px;">
-            <button class="govt-btn" id="dispatchVolunteerBtn" type="button">
-              Dispatch Nearby Volunteer
-            </button>
-            <button class="govt-btn btn-outline" id="queuePaBtn" type="button">
-              Queue PA Announcement
-            </button>
+            <div style="margin-top:12px; display:flex; gap:8px;">
+              <button class="govt-btn" id="dispatchVolunteerBtn" type="button">
+                Dispatch Nearby Volunteer
+              </button>
+              <button class="govt-btn btn-outline" id="queuePaBtn" type="button">
+                Queue PA Announcement
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ==================== SCREEN 4: MEDICAL ALERTS VIEW ==================== -->
-    <section id="view-medical" class="view-section">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="activity" style="width:16px; height:16px;"></i>
-          <span>Medical Emergencies & Heat-Risk Monitoring</span>
-        </div>
-        <div class="section-sub">
-          Active Field Ambulances & Emergency Medical Response Hubs
-        </div>
-      </div>
-
-      <div class="medical-view-grid">
-        <!-- Left: Card List of Alerts -->
-        <div>
-          <div class="panel-header" style="margin-bottom:8px;">
-            <span>ACTIVE MEDICAL ALERTS</span>
-            <span id="medicalAlertsSubHeader">LIVE FEED</span>
+      <!-- ==================== SCREEN 4: MEDICAL ALERTS VIEW ==================== -->
+      <section id="view-medical" class="view-section">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="activity" style="width:16px; height:16px;"></i>
+            <span>Medical Emergencies & Heat-Risk Monitoring</span>
           </div>
-
-          <div id="medicalAlertsContainer">
-            <!-- Populated dynamically from /api/medical-alerts -->
+          <div class="section-sub">
+            Active Field Ambulances & Emergency Medical Response Hubs
           </div>
         </div>
 
-        <!-- Right: Heat-Risk Readout Box -->
-        <div class="heat-risk-box">
-          <div style="font-weight:700; font-family:var(--font-serif); font-size:14px; color:var(--maroon-primary); margin-bottom:8px; border-bottom:1px solid var(--border-main); padding-bottom:4px;">
-            HEAT-RISK COMPUTED READOUT
+        <div class="medical-view-grid">
+          <!-- Left: Card List of Alerts -->
+          <div>
+            <div class="panel-header" style="margin-bottom:8px;">
+              <span>ACTIVE MEDICAL ALERTS</span>
+              <span id="medicalAlertsSubHeader">LIVE FEED</span>
+            </div>
+
+            <div id="medicalAlertsContainer">
+              <!-- Populated dynamically from /api/medical-alerts -->
+            </div>
           </div>
 
-          <div class="metric-row">
-            <span class="metric-key">Ambient Temperature:</span>
-            <span class="metric-val" id="heatTemp">34° C</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-key">Relative Humidity:</span>
-            <span class="metric-val" id="heatHumidity">72%</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-key">Computed Risk Index:</span>
-            <span class="metric-val" id="heatRiskIndex" style="color:var(--status-orange);">7.8 / 10 (MODERATE HEAT RISK)</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-key">Water Stations Active:</span>
-            <span class="metric-val" id="heatWaterStations">12 Operational</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-key">ORSL Sachet Supplies:</span>
-            <span class="metric-val" id="heatOrslSupplies">14,200 Packets Available</span>
-          </div>
+          <!-- Right: Heat-Risk Readout Box -->
+          <div class="heat-risk-box">
+            <div style="font-weight:700; font-family:var(--font-serif); font-size:14px; color:var(--maroon-primary); margin-bottom:8px; border-bottom:1px solid var(--border-main); padding-bottom:4px;">
+              HEAT-RISK COMPUTED READOUT
+            </div>
 
-          <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:11px; color:var(--text-secondary);" id="heatAdvisoryText">
-            <strong>Advisory Action:</strong> Trigger mist sprayer vans at Wakhri Junction & increase water distribution post deployment by 20%.
+            <div class="metric-row">
+              <span class="metric-key">Ambient Temperature:</span>
+              <span class="metric-val" id="heatTemp">34° C</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Relative Humidity:</span>
+              <span class="metric-val" id="heatHumidity">72%</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Computed Risk Index:</span>
+              <span class="metric-val" id="heatRiskIndex" style="color:var(--status-orange);">7.8 / 10 (MODERATE HEAT RISK)</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">Water Stations Active:</span>
+              <span class="metric-val" id="heatWaterStations">12 Operational</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-key">ORSL Sachet Supplies:</span>
+              <span class="metric-val" id="heatOrslSupplies">14,200 Packets Available</span>
+            </div>
+
+            <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:11px; color:var(--text-secondary);" id="heatAdvisoryText">
+              <strong>Advisory Action:</strong> Trigger mist sprayer vans at Wakhri Junction & increase water distribution post deployment by 20%.
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ==================== SCREEN 5: RESOURCE MANAGEMENT ==================== -->
-    <section id="view-resources" class="view-section">
-      <div class="section-bar">
-        <div class="section-title">
-          <i data-lucide="layers" style="width:16px; height:16px;"></i>
-          <span>Resource Deployment & Route Diversion Control</span>
-        </div>
-        <div class="section-sub">
-          Police Forces, Water Tankers, Food Vans & Medical Units Logistics
-        </div>
-      </div>
-
-      <div class="resource-grid">
-        <!-- Left: Resource Table -->
-        <div class="govt-table-container">
-          <table class="govt-table">
-            <thead>
-              <tr>
-                <th>Resource Type</th>
-                <th>Deployed Count</th>
-                <th>Available Count</th>
-                <th>Current Key Location</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="resourcesTableBody">
-              <!-- Populated dynamically from /api/resources -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Right: Route Status Simple List -->
-        <div>
-          <div class="panel-header" style="margin-bottom:8px;">
-            <span>ROUTE STATUS & DIVERSION LOG</span>
+      <!-- ==================== SCREEN 5: RESOURCE MANAGEMENT ==================== -->
+      <section id="view-resources" class="view-section">
+        <div class="section-bar">
+          <div class="section-title">
+            <i data-lucide="layers" style="width:16px; height:16px;"></i>
+            <span>Resource Deployment & Route Diversion Control</span>
           </div>
-
-          <div id="routesContainer">
-            <!-- Populated dynamically from /api/routes -->
+          <div class="section-sub">
+            Police Forces, Water Tankers, Food Vans & Medical Units Logistics
           </div>
         </div>
-      </div>
-    </section>
 
-  </main>
+        <div class="resource-grid">
+          <!-- Left: Resource Table -->
+          <div class="govt-table-container">
+            <table class="govt-table">
+              <thead>
+                <tr>
+                  <th>Resource Type</th>
+                  <th>Deployed Count</th>
+                  <th>Available Count</th>
+                  <th>Current Key Location</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="resourcesTableBody">
+                <!-- Populated dynamically from /api/resources -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Right: Route Status Simple List -->
+          <div>
+            <div class="panel-header" style="margin-bottom:8px;">
+              <span>ROUTE STATUS & DIVERSION LOG</span>
+            </div>
+
+            <div id="routesContainer">
+              <!-- Populated dynamically from /api/routes -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  </div> <!-- End #dashboardView -->
 
   <!-- Reusable Clean Operational Action/Detail Modal -->
   <div class="app-modal-backdrop" id="appActionModal" aria-hidden="true">
@@ -1592,6 +1650,129 @@ body {
   }
 }
 
+/* ==================== LOGIN VIEW (AUTHENTICATION ENTRY) ==================== */
+.login-view {
+  min-height: 100vh;
+  background: var(--bg-khadi);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.login-panel {
+  width: min(430px, 94vw);
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-top: 5px solid var(--maroon-primary);
+  box-shadow: 0 5px 22px rgba(0,0,0,0.10);
+  padding: 28px 24px;
+  box-sizing: border-box;
+}
+
+.login-brand {
+  text-align: center;
+}
+
+.login-brand img {
+  height: 64px;
+  width: auto;
+  margin-bottom: 10px;
+}
+
+.login-marathi {
+  font-family: var(--font-serif);
+  color: var(--maroon-primary);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.login-english {
+  font-size: 9px;
+  color: var(--text-secondary);
+  letter-spacing: 1.2px;
+  margin-top: 5px;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.login-divider {
+  height: 1px;
+  background: var(--border-main);
+  margin: 18px 0;
+}
+
+.login-title {
+  font-family: var(--font-serif);
+  color: var(--maroon-primary);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 16px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.login-panel label {
+  display: block;
+  margin: 12px 0 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.login-panel input {
+  width: 100%;
+  padding: 9px 10px;
+  background: #FFF;
+  border: 1px solid var(--border-main);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.login-panel input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px var(--maroon-bg);
+}
+
+.login-submit {
+  width: 100%;
+  margin-top: 18px;
+  justify-content: center;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.login-error {
+  margin-top: 12px;
+  padding: 9px 12px;
+  border: 1px solid var(--status-red);
+  background: var(--status-red-bg);
+  color: var(--status-red);
+  font-size: 11px;
+  line-height: 1.4;
+  border-radius: 2px;
+}
+
+.login-restricted-note {
+  margin-top: 18px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+
 
 ```
 
@@ -1601,7 +1782,7 @@ body {
 `Frontend/app.js`
 
 ```javascript
-/* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Command Center Logic & Realtime Client */
+/* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Private Command Center Logic & Realtime Client */
 
 const API_BASE =
   window.VARISETU_CONFIG?.API_BASE ||
@@ -1613,8 +1794,11 @@ const WS_BASE =
   localStorage.getItem('VARISETU_WS_BASE') ||
   'ws://localhost:8000/ws';
 
-// In-memory operational store for fast client-side cross-referencing
+const AUTH_STORAGE_KEY = 'varisetu_auth';
+
+// In-memory operational store
 const AppState = {
+  currentUser: null,
   cameras: [],
   lostCases: [],
   medicalAlerts: [],
@@ -1626,12 +1810,41 @@ const AppState = {
   ws: null
 };
 
-/* ==================== CENTRAL API CLIENT ==================== */
+let dashboardInitialized = false;
+
+/* ==================== AUTHENTICATION STATE MANAGER ==================== */
+function getStoredAuth() {
+  try {
+    return JSON.parse(sessionStorage.getItem(AUTH_STORAGE_KEY) || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function saveAuth(auth) {
+  sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(auth));
+}
+
+function clearAuth() {
+  sessionStorage.removeItem(AUTH_STORAGE_KEY);
+  AppState.currentUser = null;
+}
+
+function getAccessToken() {
+  return getStoredAuth()?.access_token || null;
+}
+
+function getRefreshToken() {
+  return getStoredAuth()?.refresh_token || null;
+}
+
+/* ==================== CENTRAL AUTHENTICATED API CLIENT ==================== */
 async function apiRequest(path, options = {}) {
   const {
     method = 'GET',
     body,
     headers = {},
+    skipAuthRefresh = false,
     ...rest
   } = options;
 
@@ -1645,13 +1858,51 @@ async function apiRequest(path, options = {}) {
     ...rest
   };
 
-  if (body !== undefined) {
-    config.body = typeof body === 'string'
-      ? body
-      : JSON.stringify(body);
+  const token = getAccessToken();
+  if (token && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE}${path}`, config);
+  if (body !== undefined) {
+    config.body = typeof body === 'string' ? body : JSON.stringify(body);
+  }
+
+  let response = await fetch(`${API_BASE}${path}`, config);
+
+  // Handle Token Expiration (401 Unauthorized)
+  if (response.status === 401 && !skipAuthRefresh) {
+    const refreshTokenStr = getRefreshToken();
+    if (refreshTokenStr) {
+      try {
+        const refreshRes = await fetch(`${API_BASE}/auth/refresh`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ refresh_token: refreshTokenStr })
+        });
+
+        if (refreshRes.ok) {
+          const newAuth = await refreshRes.json();
+          saveAuth(newAuth);
+
+          // Retry original request with new token
+          config.headers.Authorization = `Bearer ${newAuth.access_token}`;
+          response = await fetch(`${API_BASE}${path}`, config);
+        } else {
+          handleSessionExpiration();
+          throw new Error('Session expired. Please sign in again.');
+        }
+      } catch (e) {
+        handleSessionExpiration();
+        throw new Error('Session expired. Please sign in again.');
+      }
+    } else {
+      handleSessionExpiration();
+      throw new Error('Authentication required.');
+    }
+  }
 
   let payload = null;
   try {
@@ -1677,10 +1928,28 @@ async function apiRequest(path, options = {}) {
   return payload;
 }
 
+function handleSessionExpiration() {
+  clearAuth();
+  disconnectWebSocket();
+  showLoginView();
+  openAppModal({
+    title: 'SESSION EXPIRED',
+    kicker: 'SECURITY PROTOCOL',
+    bodyHtml: `
+      <div style="font-size:12px; line-height:1.6; color:var(--text-primary);">
+        Your command-center authorization session has expired or is invalid. Please sign in again to resume monitoring.
+      </div>
+    `,
+    footerHtml: `
+      <button class="govt-btn" id="sessionExpiryCloseBtn">Proceed to Sign In</button>
+    `
+  });
+  document.getElementById('sessionExpiryCloseBtn')?.addEventListener('click', closeAppModal);
+}
+
 /* ==================== UI STATE & SECURITY HELPERS ==================== */
 function setButtonLoading(button, loading, loadingText = 'Processing...') {
   if (!button) return;
-
   if (loading) {
     button.dataset.originalText = button.textContent;
     button.disabled = true;
@@ -1730,7 +1999,6 @@ function openAppModal({
 function closeAppModal() {
   const backdrop = document.getElementById('appActionModal');
   if (!backdrop) return;
-
   backdrop.classList.remove('open');
   backdrop.setAttribute('aria-hidden', 'true');
 }
@@ -1759,26 +2027,21 @@ function openConfirmModal({
   const confirmBtn = document.getElementById('appModalConfirm');
 
   cancelBtn?.addEventListener('click', closeAppModal);
-
   confirmBtn?.addEventListener('click', async () => {
     if (!onConfirm) return;
     setButtonLoading(confirmBtn, true, 'Processing...');
-
     try {
       await onConfirm();
       closeAppModal();
     } catch (error) {
       document.getElementById('appModalBody').innerHTML = `
-        <div class="modal-error">
-          ${escapeHtml(error.message || 'Operation failed.')}
-        </div>
+        <div class="modal-error">${escapeHtml(error.message || 'Operation failed.')}</div>
       `;
       setButtonLoading(confirmBtn, false, confirmText);
     }
   });
 }
 
-// Modal event listeners
 document.getElementById('appModalClose')?.addEventListener('click', closeAppModal);
 document.getElementById('appActionModal')?.addEventListener('click', (event) => {
   if (event.target.id === 'appActionModal') closeAppModal();
@@ -1787,25 +2050,128 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') closeAppModal();
 });
 
-/* ==================== PAGE INITIALIZATION ==================== */
+/* ==================== LOGIN & LOGOUT ROUTING ==================== */
 document.addEventListener('DOMContentLoaded', () => {
+  setupAuthEventListeners();
+  initializeApplication();
+});
+
+function setupAuthEventListeners() {
+  const loginForm = document.getElementById('loginForm');
+  loginForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail')?.value?.trim();
+    const password = document.getElementById('loginPassword')?.value;
+    const submitBtn = document.getElementById('loginSubmitBtn');
+    const errorEl = document.getElementById('loginError');
+
+    if (!email || !password) return;
+
+    if (errorEl) {
+      errorEl.hidden = true;
+      errorEl.textContent = '';
+    }
+    setButtonLoading(submitBtn, true, 'Signing in...');
+
+    try {
+      await login(email, password);
+    } catch (err) {
+      if (errorEl) {
+        errorEl.hidden = false;
+        errorEl.textContent = err.message || 'Invalid officer credentials. Access denied.';
+      }
+      setButtonLoading(submitBtn, false, 'SIGN IN');
+    }
+  });
+
+  document.getElementById('logoutBtn')?.addEventListener('click', logout);
+}
+
+async function initializeApplication() {
+  const auth = getStoredAuth();
+  if (!auth?.access_token) {
+    showLoginView();
+    return;
+  }
+
+  try {
+    const user = await apiRequest('/auth/me');
+    showDashboardView(user);
+  } catch (e) {
+    clearAuth();
+    showLoginView();
+  }
+}
+
+async function login(email, password) {
+  const result = await apiRequest('/auth/login', {
+    method: 'POST',
+    body: { email, password },
+    skipAuthRefresh: true
+  });
+
+  saveAuth(result);
+
+  const user = await apiRequest('/auth/me');
+  showDashboardView(user);
+  return user;
+}
+
+async function logout() {
+  try {
+    await apiRequest('/auth/logout', { method: 'POST' });
+  } catch {}
+
+  disconnectWebSocket();
+  clearAuth();
+  showLoginView();
+}
+
+function showLoginView() {
+  const loginView = document.getElementById('loginView');
+  const dashView = document.getElementById('dashboardView');
+  if (loginView) loginView.hidden = false;
+  if (dashView) dashView.hidden = true;
+
+  disconnectWebSocket();
+}
+
+function showDashboardView(user) {
+  AppState.currentUser = user;
+  const loginView = document.getElementById('loginView');
+  const dashView = document.getElementById('dashboardView');
+  if (loginView) loginView.hidden = true;
+  if (dashView) dashView.hidden = false;
+
+  const profileText = document.getElementById('userProfileText');
+  if (profileText && user) {
+    profileText.textContent = `${user.role || 'OFFICER'}`;
+  }
+
   if (window.lucide) {
     lucide.createIcons();
   }
 
-  updateClock();
-  setInterval(updateClock, 1000);
+  initializeDashboardAfterAuth(user);
+}
 
-  setupNavigation();
-  initRouteMap();
-  initForecastChart();
-  setupCctvModal();
-  setupDemoButton();
-  setupLostFoundButtons();
+async function initializeDashboardAfterAuth(user) {
+  if (!dashboardInitialized) {
+    updateClock();
+    setInterval(updateClock, 1000);
+    setupNavigation();
+    initRouteMap();
+    initForecastChart();
+    setupCctvModal();
+    setupDemoButton();
+    setupLostFoundButtons();
+    dashboardInitialized = true;
+  }
 
-  initLiveBackend();
-});
+  await initLiveBackend();
+}
 
+/* ==================== CLOCK & NAVIGATION ==================== */
 function updateClock() {
   const clockEl = document.getElementById('sysClock');
   if (!clockEl) return;
@@ -1845,7 +2211,7 @@ function setupNavigation() {
 /* ==================== LEAFLET MAP INITIALIZATION ==================== */
 function initRouteMap() {
   const mapElement = document.getElementById('routeMap');
-  if (!mapElement) return;
+  if (!mapElement || window.wariMap) return;
 
   const wariMap = L.map('routeMap', {
     center: [18.0000, 74.8000],
@@ -1860,7 +2226,6 @@ function initRouteMap() {
     maxZoom: 18
   }).addTo(wariMap);
 
-  // Wari Corridor Coordinates
   const routePoints = [
     [18.6772, 73.8967], // Alandi
     [18.5204, 73.8567], // Pune City
@@ -1875,7 +2240,6 @@ function initRouteMap() {
   L.polyline(routePoints.slice(2, 5), { color: '#B8551B', weight: 7, opacity: 0.85 }).addTo(wariMap).bindPopup('<b>Saswad-Bhalwani Sector:</b> Heavy Density (74%)');
   L.polyline(routePoints.slice(4, 7), { color: '#9A2525', weight: 8, opacity: 0.9 }).addTo(wariMap).bindPopup('<b>Wakhri-Pandharpur Sector:</b> CRITICAL CONGESTION (88-94%)');
 
-  // Palkhi Flag Marker
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:10px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 PALKHI (Wakhri)</div>`,
@@ -1885,7 +2249,6 @@ function initRouteMap() {
   L.marker([17.7280, 75.2950], { icon: palkhiIcon }).addTo(wariMap)
     .bindPopup('<b>Sant Tukaram Maharaj Palkhi</b><br>Location: Approaching Wakhri Phata (Km 184)<br>Speed: 3 km/h');
 
-  // Water Tankers Marker
   const waterIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 5px; font-size:9px; font-weight:bold; border-radius:2px;">💧 Tanker #09</div>`,
@@ -1894,7 +2257,6 @@ function initRouteMap() {
   L.marker([17.7400, 75.2800], { icon: waterIcon }).addTo(wariMap)
     .bindPopup('<b>Water Tanker #WT-09</b><br>Capacity: 10,000L (80% Full)<br>Stationed: Wakhri Access Rd');
 
-  // Medical Van Marker
   const medIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 5px; font-size:9px; font-weight:bold; border-radius:2px;">🚑 MedVan #02</div>`,
@@ -1907,7 +2269,7 @@ function initRouteMap() {
 /* ==================== CONGESTION FORECAST CHART ==================== */
 function initForecastChart() {
   const canvas = document.getElementById('forecastChart');
-  if (!canvas) return;
+  if (!canvas || window.forecastChartInstance) return;
 
   const ctx = canvas.getContext('2d');
 
@@ -1989,7 +2351,7 @@ async function checkHealth() {
   const badge = document.getElementById('backendHealthBadge');
   const text = document.getElementById('backendHealthText');
   try {
-    const res = await apiRequest('/health');
+    const res = await apiRequest('/health', { skipAuthRefresh: true });
     if (res && res.status === 'ok') {
       if (badge) badge.style.borderColor = 'var(--status-green)';
       if (text) text.textContent = 'LIVE';
@@ -1997,7 +2359,6 @@ async function checkHealth() {
   } catch (err) {
     if (badge) badge.style.borderColor = 'var(--status-orange)';
     if (text) text.textContent = 'STANDALONE';
-    console.debug('[VariSetu] Backend unavailable; operating in standalone offline mode.');
   }
 }
 
@@ -2007,7 +2368,7 @@ async function fetchLiveSummary() {
     updateDashboardSummary(data);
     return data;
   } catch (err) {
-    console.debug('[VariSetu] Dashboard summary fetch skipped:', err);
+    console.debug('[VariSetu] Dashboard summary fetch skipped.');
     return null;
   }
 }
@@ -2280,7 +2641,6 @@ function renderLostPersons(cases) {
     });
   });
 
-  // Default select first case in transcript box if available
   if (cases.length > 0 && !AppState.selectedLostCase) {
     showTranscript(cases[0]);
   }
@@ -2754,14 +3114,20 @@ function setupDemoButton() {
   });
 }
 
-/* ==================== REALTIME WEBSOCKET CLIENT ==================== */
+/* ==================== REALTIME AUTHENTICATED WEBSOCKET CLIENT ==================== */
 function connectWebSocket() {
+  disconnectWebSocket();
+
+  const token = getAccessToken();
+  if (!token) return;
+
   try {
-    const ws = new WebSocket(`${WS_BASE}/all`);
+    const ws = new WebSocket(`${WS_BASE}/all?token=${encodeURIComponent(token)}`);
+    window.varisetuWebSocket = ws;
     AppState.ws = ws;
 
     ws.onopen = () => {
-      console.log('[VariSetu Live] Realtime WebSocket connected to /ws/all');
+      console.log('[VariSetu Live] Authenticated WebSocket connected to /ws/all');
     };
 
     ws.onmessage = (event) => {
@@ -2773,11 +3139,26 @@ function connectWebSocket() {
       }
     };
 
-    ws.onclose = () => {
-      setTimeout(connectWebSocket, 5000);
+    ws.onclose = (event) => {
+      if (event.code === 1008) {
+        console.warn('[VariSetu Live] WebSocket authentication failed.');
+        handleSessionExpiration();
+      } else if (getAccessToken()) {
+        setTimeout(connectWebSocket, 5000);
+      }
     };
   } catch (err) {
     console.debug('[VariSetu Live] WebSocket initialization deferred.');
+  }
+}
+
+function disconnectWebSocket() {
+  if (window.varisetuWebSocket) {
+    try {
+      window.varisetuWebSocket.close();
+    } catch {}
+    window.varisetuWebSocket = null;
+    AppState.ws = null;
   }
 }
 
@@ -2974,6 +3355,7 @@ testpaths = tests
 import os
 import time
 from contextlib import asynccontextmanager
+from typing import Optional
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -2993,6 +3375,7 @@ from app.core.config import settings
 from app.core.database import init_db
 from app.core.logging import setup_logging
 from app.core.redis import redis_client
+from app.core.security import decode_token
 from app.seed.seed_data import seed_database
 from app.services.demo_service import demo_service
 from app.websocket.manager import ws_manager
@@ -3032,7 +3415,7 @@ app = FastAPI(
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -3070,10 +3453,20 @@ app.include_router(audit_router, prefix=settings.API_V1_STR)
 app.include_router(demo_router, prefix=settings.API_V1_STR)
 
 
-# Realtime WebSockets Channels
+# Realtime WebSockets Channels with JWT Verification
 @app.websocket("/ws")
 @app.websocket("/ws/{channel}")
-async def websocket_endpoint(websocket: WebSocket, channel: str = "all"):
+async def websocket_endpoint(websocket: WebSocket, channel: str = "all", token: Optional[str] = None):
+    if settings.AUTH_REQUIRED:
+        auth_token = token or websocket.query_params.get("token")
+        if not auth_token:
+            await websocket.close(code=1008)
+            return
+        payload = decode_token(auth_token)
+        if not payload or payload.get("type") != "access":
+            await websocket.close(code=1008)
+            return
+
     await ws_manager.connect(websocket, channel=channel)
     try:
         while True:
@@ -3146,8 +3539,8 @@ class Settings(BaseSettings):
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    # When False, allows read/write access without token for prototyping
-    AUTH_REQUIRED: bool = False
+    # Authentication is enforced in the production system
+    AUTH_REQUIRED: bool = True
 
     # Modular Storage & AI Provider Settings
     STORAGE_PROVIDER: str = "local"
@@ -3170,8 +3563,7 @@ class Settings(BaseSettings):
         "http://127.0.0.1:5174",
         "http://localhost:3000",
         "http://localhost:8000",
-        "http://127.0.0.1:8000",
-        "*"
+        "http://127.0.0.1:8000"
     ]
 
 
@@ -7452,7 +7844,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
-from app.core.rbac import get_current_user
+from app.core.rbac import UserRole, get_current_user, require_roles
 from app.models.user import User
 from app.schemas.auth import LoginRequest, RefreshTokenRequest, TokenResponse, UserCreate, UserOut
 from app.services.auth_service import auth_service
@@ -7462,7 +7854,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/login", response_model=TokenResponse, summary="User authentication with JWT issuance")
 async def login(login_data: LoginRequest, db: AsyncSession = Depends(get_db)):
-    """Authenticate with email and password to receive JWT access and refresh tokens."""
+    """Authenticate with official email/officer ID and password to receive JWT tokens."""
     return await auth_service.authenticate_user(db, login_data)
 
 
@@ -7480,12 +7872,17 @@ async def get_current_user_profile(current_user: User = Depends(get_current_user
 
 @router.post("/logout", summary="Log out user and invalidate session")
 async def logout(current_user: User = Depends(get_current_user)):
-    """Log out current user (stateless JWT acknowledgment)."""
+    """Log out current user."""
     return {"success": True, "message": "Successfully logged out"}
 
 
-@router.post("/register", response_model=UserOut, summary="Register new user (Admin / Initial Setup)")
-async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
+@router.post("/register", response_model=UserOut, summary="Register new user (Admin Only)")
+async def register(
+    user_in: UserCreate,
+    current_admin: User = Depends(require_roles([UserRole.ADMIN])),
+    db: AsyncSession = Depends(get_db)
+):
+    """Admin-only endpoint to provision new authorised command center officers."""
     return await auth_service.register_user(db, user_in)
 
 ```
@@ -7501,10 +7898,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.rbac import get_current_user
+from app.models.user import User
 from app.schemas.dashboard import CorridorRouteSegment, DashboardSummary, HeatRiskReadout, IncidentTickerItem
 from app.services.dashboard_service import dashboard_service
 
-router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/summary", response_model=DashboardSummary, summary="Get real-time operational summary metrics")
@@ -7586,11 +7985,12 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
+from app.core.rbac import get_current_user
 from app.models.camera import Camera, CameraStatus
 from app.schemas.camera import CameraCreate, CameraHeartbeat, CameraOut, CameraPTZCommand, CameraUpdate
 from app.services.audit_service import audit_service
 
-router = APIRouter(prefix="/cameras", tags=["Cameras"])
+router = APIRouter(prefix="/cameras", tags=["Cameras"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[CameraOut], summary="List all CCTV surveillance cameras")
@@ -7727,11 +8127,12 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
+from app.core.rbac import get_current_user
 from app.models.zone import Zone
 from app.schemas.zone import ZoneCreate, ZoneCrowdMetrics, ZoneOut, ZoneUpdate
 from app.services.crowd_service import crowd_service
 
-router = APIRouter(prefix="/zones", tags=["Zones"])
+router = APIRouter(prefix="/zones", tags=["Zones"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[ZoneOut], summary="List all pilgrimage monitoring zones")
@@ -7776,13 +8177,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import desc, select
 
 from app.core.database import get_db
+from app.core.rbac import get_current_user
 from app.models.crowd import CrowdObservation
 from app.schemas.crowd import CrowdForecastResponse, CrowdObservationCreate, CrowdObservationOut
 from app.schemas.zone import ZoneCrowdMetrics
 from app.services.crowd_service import crowd_service
 from app.services.forecast_service import forecast_service
 
-router = APIRouter(prefix="/crowd", tags=["Crowd Intelligence"])
+router = APIRouter(prefix="/crowd", tags=["Crowd Intelligence"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/current", response_model=List[ZoneCrowdMetrics], summary="Get current zone density telemetry")
@@ -7832,7 +8234,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.models.incident import Incident, IncidentEvent, IncidentSeverity, IncidentStatus, IncidentType
 from app.models.user import User
 from app.schemas.incident import (
@@ -7845,7 +8247,7 @@ from app.schemas.incident import (
 )
 from app.services.incident_service import incident_service
 
-router = APIRouter(prefix="/incidents", tags=["Incidents"])
+router = APIRouter(prefix="/incidents", tags=["Incidents"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[IncidentOut], summary="List incidents with pagination & filters")
@@ -7866,7 +8268,7 @@ async def list_incidents(
 async def create_incident(
     incident_in: IncidentCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     incident = await incident_service.create_incident(db, incident_in, user_id=user_id)
@@ -7887,7 +8289,7 @@ async def acknowledge_incident(
     id: str,
     ack_req: Optional[IncidentAcknowledgeRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     notes = ack_req.notes if ack_req else None
@@ -7900,7 +8302,7 @@ async def resolve_incident(
     id: str,
     resolve_req: IncidentResolveRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     incident = await incident_service.resolve_incident(db, id, resolve_req.resolution_notes, user_id=user_id)
@@ -7929,7 +8331,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.integrations.notification_adapter import notification_adapter
 from app.integrations.speech_adapter import speech_adapter
 from app.integrations.storage_adapter import storage_adapter
@@ -7945,7 +8347,7 @@ from app.schemas.lost_person import (
 )
 from app.services.lost_person_service import lost_person_service
 
-router = APIRouter(prefix="/lost-persons", tags=["Lost & Found"])
+router = APIRouter(prefix="/lost-persons", tags=["Lost & Found"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[LostPersonCaseOut], summary="List lost person cases")
@@ -7961,7 +8363,7 @@ async def list_lost_person_cases(
 async def create_case(
     case_in: LostPersonCaseCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     case = await lost_person_service.create_case(db, case_in, user_id=user_id)
@@ -8024,7 +8426,7 @@ async def verify_match(
     match_id: str,
     req: FaceMatchVerifyRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     match = await lost_person_service.verify_match(db, case_id=id, match_id=match_id, verified=req.verified, user_id=user_id)
@@ -8036,7 +8438,7 @@ async def dispatch_volunteer(
     id: str,
     volunteer_name: str = "Nearby Volunteer Squad",
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     case = await lost_person_service.dispatch_volunteer(db, case_id=id, volunteer_name=volunteer_name, user_id=user_id)
@@ -8047,7 +8449,7 @@ async def dispatch_volunteer(
 async def reunite_case(
     id: str,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     case = await lost_person_service.reunite_case(db, case_id=id, user_id=user_id)
@@ -8104,7 +8506,7 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.models.medical import MedicalAlert, MedicalAlertStatus
 from app.models.user import User
 from app.schemas.medical import (
@@ -8116,7 +8518,7 @@ from app.schemas.medical import (
 )
 from app.services.medical_service import medical_service
 
-router = APIRouter(prefix="/medical-alerts", tags=["Medical Alerts"])
+router = APIRouter(prefix="/medical-alerts", tags=["Medical Alerts"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[MedicalAlertOut], summary="List active & resolved medical alerts")
@@ -8132,7 +8534,7 @@ async def list_medical_alerts(
 async def create_medical_alert(
     alert_in: MedicalAlertCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     alert = await medical_service.create_alert(db, alert_in, user_id=user_id)
@@ -8152,7 +8554,7 @@ async def acknowledge_medical_alert(
     id: str,
     ack_req: Optional[MedicalAlertAcknowledgeRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     vol_name = ack_req.assigned_volunteer_name if ack_req else None
@@ -8165,7 +8567,7 @@ async def dispatch_medical_unit(
     id: str,
     dispatch_req: MedicalAlertDispatchRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     alert = await medical_service.dispatch_medical_unit(
@@ -8183,7 +8585,7 @@ async def resolve_medical_alert(
     id: str,
     resolve_req: MedicalAlertResolveRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     alert = await medical_service.resolve_alert(db, alert_id=id, resolution_notes=resolve_req.resolution_notes, user_id=user_id)
@@ -8205,7 +8607,7 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.models.resource import Resource, ResourceAvailability, ResourceType
 from app.models.user import User
 from app.schemas.resource import (
@@ -8217,7 +8619,7 @@ from app.schemas.resource import (
 )
 from app.services.resource_service import resource_service
 
-router = APIRouter(prefix="/resources", tags=["Resources"])
+router = APIRouter(prefix="/resources", tags=["Resources"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[ResourceOut], summary="List all operational resources & units")
@@ -8266,7 +8668,7 @@ async def dispatch_resource(
     id: str,
     dispatch_req: ResourceDispatchRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     res = await resource_service.dispatch_resource(
@@ -8284,7 +8686,7 @@ async def update_resource_status(
     id: str,
     status_req: ResourceStatusUpdateRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     res = await resource_service.update_status(
@@ -8313,13 +8715,13 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.models.route import Route, RouteStatus
 from app.models.user import User
 from app.schemas.route import RouteActionRequest, RouteCreate, RouteOut, RouteUpdate
 from app.services.route_service import route_service
 
-router = APIRouter(prefix="/routes", tags=["Routes"])
+router = APIRouter(prefix="/routes", tags=["Routes"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[RouteOut], summary="List all monitored pilgrimage route segments")
@@ -8350,7 +8752,7 @@ async def divert_route(
     id: str,
     req: Optional[RouteActionRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     reason = req.reason if req else "Diverted by Command Center"
@@ -8363,7 +8765,7 @@ async def close_route(
     id: str,
     req: Optional[RouteActionRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     reason = req.reason if req else "Closed due to heavy pedestrian bottleneck"
@@ -8376,7 +8778,7 @@ async def open_route(
     id: str,
     req: Optional[RouteActionRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     reason = req.reason if req else "Corridor cleared for pilgrims"
@@ -8398,15 +8800,16 @@ from sqlalchemy import desc, select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
+from app.core.rbac import get_current_user
 from app.models.audit import AuditLog
 from app.models.notification import Notification
 from app.schemas.audit import AuditLogOut
 from app.schemas.notification import NotificationCreate, NotificationOut
 from app.services.demo_service import demo_service
 
-notifications_router = APIRouter(prefix="/notifications", tags=["Notifications"])
-audit_router = APIRouter(prefix="/audit", tags=["Audit"])
-demo_router = APIRouter(prefix="/demo", tags=["Demo"])
+notifications_router = APIRouter(prefix="/notifications", tags=["Notifications"], dependencies=[Depends(get_current_user)])
+audit_router = APIRouter(prefix="/audit", tags=["Audit"], dependencies=[Depends(get_current_user)])
+demo_router = APIRouter(prefix="/demo", tags=["Demo"], dependencies=[Depends(get_current_user)])
 health_router = APIRouter(tags=["Health"])
 
 
@@ -8475,7 +8878,7 @@ async def get_demo_status():
     return demo_service.get_status()
 
 
-# --- HEALTH CHECK ENDPOINTS ---
+# --- HEALTH CHECK ENDPOINTS (PUBLIC) ---
 @health_router.get("/health", summary="Basic health check")
 async def health_check():
     return {"status": "ok", "service": "varisetu-backend", "version": "2.0.0"}
@@ -8941,6 +9344,8 @@ async def client(test_db):
 
 ```python
 import pytest
+from app.core.rbac import UserRole
+from app.core.security import create_access_token
 
 
 @pytest.mark.asyncio
@@ -8951,8 +9356,104 @@ async def test_health_endpoints(client):
 
 
 @pytest.mark.asyncio
+async def test_authentication_flow(client):
+    # 1. Login with valid credentials
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    assert login_res.status_code == 200
+    login_data = login_res.json()
+    assert "access_token" in login_data
+    assert "refresh_token" in login_data
+    access_token = login_data["access_token"]
+    refresh_token = login_data["refresh_token"]
+
+    # 2. Login with wrong password (must fail 401)
+    wrong_login = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "wrongpassword"
+    })
+    assert wrong_login.status_code == 401
+
+    # 3. Call /api/auth/me with valid token
+    headers = {"Authorization": f"Bearer {access_token}"}
+    me_res = await client.get("/api/auth/me", headers=headers)
+    assert me_res.status_code == 200
+    me_data = me_res.json()
+    assert me_data["email"] == "test.commander@mahapolice.gov.in"
+    assert me_data["role"] == "ADMIN"
+
+    # 4. Call /api/auth/me without token (must fail 401)
+    unauth_me = await client.get("/api/auth/me")
+    assert unauth_me.status_code == 401
+
+    # 5. Refresh token flow
+    ref_res = await client.post("/api/auth/refresh", json={"refresh_token": refresh_token})
+    assert ref_res.status_code == 200
+    assert "access_token" in ref_res.json()
+
+    # 6. Logout
+    logout_res = await client.post("/api/auth/logout", headers=headers)
+    assert logout_res.status_code == 200
+    assert logout_res.json()["success"] is True
+
+
+@pytest.mark.asyncio
+async def test_admin_user_registration(client):
+    # Obtain admin token
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    admin_token = login_res.json()["access_token"]
+    admin_headers = {"Authorization": f"Bearer {admin_token}"}
+
+    # Admin registers a new police officer
+    reg_payload = {
+        "name": "Officer Sachin Shinde",
+        "email": "sachin.shinde@mahapolice.gov.in",
+        "phone": "+91-9822009988",
+        "password": "OfficerPassword@2026",
+        "role": "POLICE",
+        "department": "Wakhri Traffic Sector",
+        "is_active": True
+    }
+    reg_res = await client.post("/api/auth/register", json=reg_payload, headers=admin_headers)
+    assert reg_res.status_code == 200
+    new_user = reg_res.json()
+    assert new_user["email"] == "sachin.shinde@mahapolice.gov.in"
+    assert new_user["role"] == "POLICE"
+
+    # Log in as newly registered police officer
+    officer_login = await client.post("/api/auth/login", json={
+        "email": "sachin.shinde@mahapolice.gov.in",
+        "password": "OfficerPassword@2026"
+    })
+    assert officer_login.status_code == 200
+    officer_token = officer_login.json()["access_token"]
+    officer_headers = {"Authorization": f"Bearer {officer_token}"}
+
+    # Non-admin user attempts to register another user (must fail 403 Forbidden)
+    forbidden_reg = await client.post("/api/auth/register", json={
+        "name": "Another User",
+        "email": "another@mahapolice.gov.in",
+        "password": "password123",
+        "role": "VIEWER"
+    }, headers=officer_headers)
+    assert forbidden_reg.status_code == 403
+
+
+@pytest.mark.asyncio
 async def test_dashboard_summary(client):
-    res = await client.get("/api/dashboard/summary")
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    res = await client.get("/api/dashboard/summary", headers=headers)
     assert res.status_code == 200
     data = res.json()
     assert "active_incidents" in data
@@ -8962,7 +9463,14 @@ async def test_dashboard_summary(client):
 
 @pytest.mark.asyncio
 async def test_dashboard_heat_risk(client):
-    res = await client.get("/api/dashboard/heat-risk")
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    res = await client.get("/api/dashboard/heat-risk", headers=headers)
     assert res.status_code == 200
     data = res.json()
     assert "ambient_temperature" in data
@@ -8971,6 +9479,13 @@ async def test_dashboard_heat_risk(client):
 
 @pytest.mark.asyncio
 async def test_create_and_acknowledge_incident(client):
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
     # Create incident
     create_payload = {
         "title": "Pedestrian bottleneck test",
@@ -8979,25 +9494,32 @@ async def test_create_and_acknowledge_incident(client):
         "description": "Dense crowd surge at sector 2",
         "source": "OPERATOR"
     }
-    create_res = await client.post("/api/incidents", json=create_payload)
+    create_res = await client.post("/api/incidents", json=create_payload, headers=headers)
     assert create_res.status_code == 201
     inc_data = create_res.json()
     assert inc_data["status"] == "OPEN"
     inc_id = inc_data["id"]
 
     # Acknowledge incident
-    ack_res = await client.post(f"/api/incidents/{inc_id}/acknowledge", json={"notes": "Controller dispatched patrol squad"})
+    ack_res = await client.post(f"/api/incidents/{inc_id}/acknowledge", json={"notes": "Controller dispatched patrol squad"}, headers=headers)
     assert ack_res.status_code == 200
     assert ack_res.json()["status"] == "ACKNOWLEDGED"
 
     # Resolve incident
-    res_res = await client.post(f"/api/incidents/{inc_id}/resolve", json={"resolution_notes": "Queue cleared"})
+    res_res = await client.post(f"/api/incidents/{inc_id}/resolve", json={"resolution_notes": "Queue cleared"}, headers=headers)
     assert res_res.status_code == 200
     assert res_res.json()["status"] == "RESOLVED"
 
 
 @pytest.mark.asyncio
 async def test_lost_person_workflow(client):
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
     # Register lost person
     case_payload = {
         "name": "Maruti Kisan Shinde",
@@ -9008,30 +9530,37 @@ async def test_lost_person_workflow(client):
         "caller_name": "Namdeo Shinde",
         "caller_phone": "+91-9822014455"
     }
-    case_res = await client.post("/api/lost-persons", json=case_payload)
+    case_res = await client.post("/api/lost-persons", json=case_payload, headers=headers)
     assert case_res.status_code == 201
     case_data = case_res.json()
     assert case_data["name"] == "Maruti Kisan Shinde"
     case_id = case_data["id"]
 
     # Dispatch volunteer
-    disp_res = await client.post(f"/api/lost-persons/{case_id}/dispatch")
+    disp_res = await client.post(f"/api/lost-persons/{case_id}/dispatch", headers=headers)
     assert disp_res.status_code == 200
     assert disp_res.json()["status"] == "DISPATCHED"
 
     # Reunite case
-    reunite_res = await client.post(f"/api/lost-persons/{case_id}/reunite")
+    reunite_res = await client.post(f"/api/lost-persons/{case_id}/reunite", headers=headers)
     assert reunite_res.status_code == 200
     assert reunite_res.json()["status"] == "REUNITED"
 
-    # Purge sensitive biometric data (Privacy check)
-    purge_res = await client.post(f"/api/lost-persons/{case_id}/purge-sensitive-data")
+    # Purge sensitive biometric data
+    purge_res = await client.post(f"/api/lost-persons/{case_id}/purge-sensitive-data", headers=headers)
     assert purge_res.status_code == 200
     assert purge_res.json()["success"] is True
 
 
 @pytest.mark.asyncio
 async def test_medical_alert_workflow(client):
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
     # Create alert
     alert_payload = {
         "type": "FALL",
@@ -9040,36 +9569,43 @@ async def test_medical_alert_workflow(client):
         "longitude": 75.2950,
         "description": "Pilgrim fall detected at Wakhri junction"
     }
-    alert_res = await client.post("/api/medical-alerts", json=alert_payload)
+    alert_res = await client.post("/api/medical-alerts", json=alert_payload, headers=headers)
     assert alert_res.status_code == 201
     alert_data = alert_res.json()
     alert_id = alert_data["id"]
     assert alert_data["status"] == "ACTIVE"
 
     # Acknowledge alert
-    ack_res = await client.post(f"/api/medical-alerts/{alert_id}/acknowledge", json={"assigned_volunteer_name": "Team Alpha"})
+    ack_res = await client.post(f"/api/medical-alerts/{alert_id}/acknowledge", json={"assigned_volunteer_name": "Team Alpha"}, headers=headers)
     assert ack_res.status_code == 200
     assert ack_res.json()["status"] == "ACKNOWLEDGED"
 
     # Resolve alert
-    resolve_res = await client.post(f"/api/medical-alerts/{alert_id}/resolve", json={"resolution_notes": "First aid administered"})
+    resolve_res = await client.post(f"/api/medical-alerts/{alert_id}/resolve", json={"resolution_notes": "First aid administered"}, headers=headers)
     assert resolve_res.status_code == 200
     assert resolve_res.json()["status"] == "RESOLVED"
 
 
 @pytest.mark.asyncio
 async def test_routes_status_change(client):
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
     # Create route
     route_res = await client.post("/api/routes", json={
         "name": "NH-9 Solapur Corridor",
         "status": "OPEN",
         "priority": "PRIMARY"
-    })
+    }, headers=headers)
     assert route_res.status_code == 201
     route_id = route_res.json()["id"]
 
     # Divert route
-    divert_res = await client.post(f"/api/routes/{route_id}/divert", json={"reason": "Pedestrian safety"})
+    divert_res = await client.post(f"/api/routes/{route_id}/divert", json={"reason": "Pedestrian safety"}, headers=headers)
     assert divert_res.status_code == 200
     assert divert_res.json()["status"] == "DIVERTED"
 

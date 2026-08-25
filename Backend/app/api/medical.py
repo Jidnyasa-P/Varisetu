@@ -5,7 +5,7 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.exceptions import NotFoundException
-from app.core.rbac import get_current_user_optional
+from app.core.rbac import get_current_user
 from app.models.medical import MedicalAlert, MedicalAlertStatus
 from app.models.user import User
 from app.schemas.medical import (
@@ -17,7 +17,7 @@ from app.schemas.medical import (
 )
 from app.services.medical_service import medical_service
 
-router = APIRouter(prefix="/medical-alerts", tags=["Medical Alerts"])
+router = APIRouter(prefix="/medical-alerts", tags=["Medical Alerts"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("", response_model=List[MedicalAlertOut], summary="List active & resolved medical alerts")
@@ -33,7 +33,7 @@ async def list_medical_alerts(
 async def create_medical_alert(
     alert_in: MedicalAlertCreate,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     alert = await medical_service.create_alert(db, alert_in, user_id=user_id)
@@ -53,7 +53,7 @@ async def acknowledge_medical_alert(
     id: str,
     ack_req: Optional[MedicalAlertAcknowledgeRequest] = None,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     vol_name = ack_req.assigned_volunteer_name if ack_req else None
@@ -66,7 +66,7 @@ async def dispatch_medical_unit(
     id: str,
     dispatch_req: MedicalAlertDispatchRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     alert = await medical_service.dispatch_medical_unit(
@@ -84,7 +84,7 @@ async def resolve_medical_alert(
     id: str,
     resolve_req: MedicalAlertResolveRequest,
     db: AsyncSession = Depends(get_db),
-    current_user: Optional[User] = Depends(get_current_user_optional)
+    current_user: User = Depends(get_current_user)
 ):
     user_id = current_user.id if current_user else None
     alert = await medical_service.resolve_alert(db, alert_id=id, resolution_notes=resolve_req.resolution_notes, user_id=user_id)

@@ -3,10 +3,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
+from app.core.rbac import get_current_user
+from app.models.user import User
 from app.schemas.dashboard import CorridorRouteSegment, DashboardSummary, HeatRiskReadout, IncidentTickerItem
 from app.services.dashboard_service import dashboard_service
 
-router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
+router = APIRouter(prefix="/dashboard", tags=["Dashboard"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/summary", response_model=DashboardSummary, summary="Get real-time operational summary metrics")

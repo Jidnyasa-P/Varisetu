@@ -4,13 +4,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import desc, select
 
 from app.core.database import get_db
+from app.core.rbac import get_current_user
 from app.models.crowd import CrowdObservation
 from app.schemas.crowd import CrowdForecastResponse, CrowdObservationCreate, CrowdObservationOut
 from app.schemas.zone import ZoneCrowdMetrics
 from app.services.crowd_service import crowd_service
 from app.services.forecast_service import forecast_service
 
-router = APIRouter(prefix="/crowd", tags=["Crowd Intelligence"])
+router = APIRouter(prefix="/crowd", tags=["Crowd Intelligence"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/current", response_model=List[ZoneCrowdMetrics], summary="Get current zone density telemetry")
