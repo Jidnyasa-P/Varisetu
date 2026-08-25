@@ -1,4 +1,7 @@
-/* WariSetu AI (v2 Light Theme - Maharashtra Police IT Cell App Logic) */
+/* VariSetu (v2 Light Theme - Maharashtra Police IT Cell App Logic & Live Backend Client) */
+
+const API_BASE = 'http://localhost:8000/api';
+const WS_BASE = 'ws://localhost:8000/ws';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Lucide icons
@@ -18,17 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize Forecast Chart
   initForecastChart();
+
+  // Connect to Live Backend Services
+  initLiveBackend();
 });
 
 function updateClock() {
   const clockEl = document.getElementById('sysClock');
   if (!clockEl) return;
   const now = new Date();
-  const options = {
-    day: '2-digit', month: 'SHORT', year: 'NUMERIC',
-    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
-  };
-  // Format to match government clock style
   const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
   const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   clockEl.textContent = `${dateStr} ${timeStr} IST`;
@@ -213,6 +214,88 @@ function initForecastChart() {
   });
 }
 
+/* ==================== LIVE BACKEND CLIENT & WEBSOCKET ==================== */
+async function initLiveBackend() {
+  // Initial live data fetch
+  fetchLiveSummary();
+  fetchLiveForecast();
+
+  // Setup WebSocket connection
+  connectWebSocket();
+}
+
+async function fetchLiveSummary() {
+  try {
+    const res = await fetch(`${API_BASE}/dashboard/summary`);
+    if (!res.ok) return;
+    const data = await res.json();
+    console.log('[VariSetu Live] Dashboard Summary loaded:', data);
+  } catch (err) {
+    console.debug('[VariSetu Live] Operating in standalone frontend mode.');
+  }
+}
+
+async function fetchLiveForecast() {
+  try {
+    const res = await fetch(`${API_BASE}/crowd/forecast`);
+    if (!res.ok) return;
+    const forecastData = await res.json();
+    if (window.forecastChartInstance && forecastData.zones) {
+      window.forecastChartInstance.data.labels = forecastData.time_labels;
+      forecastData.zones.forEach((z, idx) => {
+        if (window.forecastChartInstance.data.datasets[idx]) {
+          window.forecastChartInstance.data.datasets[idx].data = z.forecast_points.map(p => p.predicted_density);
+        }
+      });
+      window.forecastChartInstance.update();
+    }
+  } catch (err) {
+    console.debug('[VariSetu Live] Using default forecast profile.');
+  }
+}
+
+function connectWebSocket() {
+  try {
+    const ws = new WebSocket(`${WS_BASE}/all`);
+
+    ws.onopen = () => {
+      console.log('[VariSetu Live] Realtime WebSocket connected.');
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const payload = JSON.parse(event.data);
+        console.log('[VariSetu Live WS Event]:', payload);
+        handleLiveEvent(payload);
+      } catch (e) {
+        console.error('[VariSetu Live] WS parse error:', e);
+      }
+    };
+
+    ws.onclose = () => {
+      // Automatic reconnect after 5 seconds
+      setTimeout(connectWebSocket, 5000);
+    };
+  } catch (err) {
+    console.debug('[VariSetu Live] WebSocket initialization deferred.');
+  }
+}
+
+function handleLiveEvent(msg) {
+  if (msg.event === 'TICKER_EVENT' && msg.data && msg.data.text) {
+    appendTickerEvent(msg.data.text);
+  }
+}
+
+function appendTickerEvent(text) {
+  const ticker = document.querySelector('.incident-ticker');
+  if (!ticker) return;
+  const item = document.createElement('span');
+  item.className = 'ticker-item';
+  item.textContent = text;
+  ticker.prepend(item);
+}
+
 /* ==================== INTERACTIVE HELPERS ==================== */
 window.showTranscript = function(caseId) {
   const box = document.getElementById('transcriptBox');
@@ -245,7 +328,7 @@ window.showTranscript = function(caseId) {
   }
 };
 
-window.acknowledgeAlert = function(alertId) {
+window.acknowledgeAlert = async function(alertId) {
   const alertEl = document.getElementById(alertId);
   if (!alertEl) return;
 
@@ -261,6 +344,17 @@ window.acknowledgeAlert = function(alertId) {
   const activeBadge = document.querySelector('.nav-tab[data-target="view-medical"] .badge');
   if (activeBadge) {
     activeBadge.textContent = '1 Alert';
+  }
+
+  // Send asynchronous acknowledgment to backend
+  try {
+    await fetch(`${API_BASE}/medical-alerts/${alertId}/acknowledge`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notes: 'Acknowledged via Dashboard UI' })
+    });
+  } catch (e) {
+    console.debug('[VariSetu Live] Offline acknowledgment fallback completed.');
   }
 };
 

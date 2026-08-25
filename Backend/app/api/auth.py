@@ -1,0 +1,39 @@
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.database import get_db
+from app.core.rbac import get_current_user
+from app.models.user import User
+from app.schemas.auth import LoginRequest, RefreshTokenRequest, TokenResponse, UserCreate, UserOut
+from app.services.auth_service import auth_service
+
+router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+
+@router.post("/login", response_model=TokenResponse, summary="User authentication with JWT issuance")
+async def login(login_data: LoginRequest, db: AsyncSession = Depends(get_db)):
+    """Authenticate with email and password to receive JWT access and refresh tokens."""
+    return await auth_service.authenticate_user(db, login_data)
+
+
+@router.post("/refresh", response_model=TokenResponse, summary="Refresh JWT access token")
+async def refresh_token(req: RefreshTokenRequest, db: AsyncSession = Depends(get_db)):
+    """Obtain a fresh access token using a valid refresh token."""
+    return await auth_service.refresh_tokens(db, req.refresh_token)
+
+
+@router.get("/me", response_model=UserOut, summary="Get current authenticated user profile")
+async def get_current_user_profile(current_user: User = Depends(get_current_user)):
+    """Retrieve profile and role details of the currently authenticated user."""
+    return UserOut.model_validate(current_user)
+
+
+@router.post("/logout", summary="Log out user and invalidate session")
+async def logout(current_user: User = Depends(get_current_user)):
+    """Log out current user (stateless JWT acknowledgment)."""
+    return {"success": True, "message": "Successfully logged out"}
+
+
+@router.post("/register", response_model=UserOut, summary="Register new user (Admin / Initial Setup)")
+async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
+    return await auth_service.register_user(db, user_in)
