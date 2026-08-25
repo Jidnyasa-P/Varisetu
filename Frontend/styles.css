@@ -804,4 +804,176 @@ body {
   font-weight: bold;
   color: var(--text-secondary);
   cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
 }
+
+.close-modal-btn:hover {
+  color: var(--maroon-primary);
+}
+
+/* ==================== REUSABLE CLEAN OPERATIONAL MODAL ==================== */
+.app-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(35, 31, 29, 0.58);
+}
+
+.app-modal-backdrop.open {
+  display: flex;
+}
+
+.app-modal {
+  width: min(680px, 94vw);
+  max-height: 88vh;
+  overflow: auto;
+  background: var(--bg-card);
+  border: 2px solid var(--maroon-primary);
+  border-radius: 2px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.22);
+}
+
+.app-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border-main);
+}
+
+.app-modal-kicker {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.app-modal-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--maroon-primary);
+}
+
+.app-modal-body {
+  padding: 16px;
+  color: var(--text-primary);
+}
+
+.app-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-main);
+  background: var(--bg-card);
+}
+
+.app-modal-body p {
+  margin-bottom: 8px;
+}
+
+.app-modal-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.app-modal-detail-item {
+  border: 1px solid var(--border-main);
+  background: var(--bg-subtle);
+  padding: 9px;
+}
+
+.app-modal-detail-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.app-modal-detail-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-error {
+  background: var(--status-red-bg);
+  border: 1px solid var(--status-red);
+  color: var(--status-red);
+  padding: 10px;
+  font-size: 12px;
+}
+
+.modal-success {
+  background: var(--status-green-bg);
+  border: 1px solid var(--status-green);
+  color: var(--status-green);
+  padding: 10px;
+  font-size: 12px;
+}
+
+.modal-loading {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  border: 1px solid var(--border-main);
+  background: #FFF;
+  color: var(--text-primary);
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--maroon-primary);
+}
+
+.govt-btn.is-loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .app-modal-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-modal-footer {
+    flex-direction: column-reverse;
+  }
+}
+

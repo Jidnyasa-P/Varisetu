@@ -36,8 +36,10 @@ class DashboardService:
         # Deployed vs Available resources
         dep_q = select(func.count(Resource.id)).where(Resource.availability.in_([ResourceAvailability.ASSIGNED, ResourceAvailability.EN_ROUTE, ResourceAvailability.ON_SCENE]))
         avail_q = select(func.count(Resource.id)).where(Resource.availability == ResourceAvailability.AVAILABLE)
+        total_res_q = select(func.count(Resource.id))
         deployed_res = (await db.execute(dep_q)).scalar() or 0
         avail_res = (await db.execute(avail_q)).scalar() or 0
+        total_res = (await db.execute(total_res_q)).scalar() or (deployed_res + avail_res)
 
         # Cameras count
         cam_online_q = select(func.count(Camera.id)).where(Camera.status == CameraStatus.ONLINE)
@@ -56,10 +58,12 @@ class DashboardService:
             critical_zones=crit_zones,
             deployed_resources=deployed_res,
             available_resources=avail_res,
+            total_resources=total_res,
             active_cameras=active_cams,
             total_cameras=total_cams,
             estimated_pilgrim_count=845000,
             max_crowd_density=float(max_density),
+            max_density=float(max_density),
             palkhi_location="Approaching Wakhri Phata (Km 184)",
             palkhi_status="Sant Tukaram Maharaj Palkhi",
             last_updated=datetime.now(timezone.utc)

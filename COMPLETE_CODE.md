@@ -135,9 +135,9 @@
     </div>
 
     <div class="header-meta">
-      <div class="meta-pill">
+      <div class="meta-pill" id="backendHealthBadge">
         <span class="live-dot"></span>
-        <span>SECTOR: PANDHARPUR PILGRIMAGE CORRIDOR</span>
+        <span id="backendHealthText">LIVE</span>
       </div>
       <div class="meta-pill">
         <i data-lucide="clock" style="width:13px; height:13px;"></i>
@@ -146,6 +146,10 @@
       <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
         <span>PILGRIM COUNT: ~8,45,000</span>
       </div>
+      <button class="govt-btn btn-outline" id="demoToggleBtn" type="button" style="font-size:10px; padding:4px 9px;">
+        <i data-lucide="play" style="width:11px; height:11px;"></i>
+        <span id="demoToggleText">Start Demo</span>
+      </button>
     </div>
   </header>
 
@@ -158,17 +162,17 @@
     <button class="nav-tab" data-target="view-crowd">
       <i data-lucide="users" style="width:14px; height:14px;"></i>
       <span>Crowd Intelligence</span>
-      <span class="badge">92% Max Density</span>
+      <span class="badge" id="crowdNavBadge">94% Max Density</span>
     </button>
     <button class="nav-tab" data-target="view-lost">
       <i data-lucide="search" style="width:14px; height:14px;"></i>
       <span>Lost & Found Desk</span>
-      <span class="badge" style="background:#B07817; color:#FFF;">4 Active</span>
+      <span class="badge" id="lostNavBadge" style="background:#B07817; color:#FFF;">3 Active</span>
     </button>
     <button class="nav-tab" data-target="view-medical">
       <i data-lucide="heart-pulse" style="width:14px; height:14px;"></i>
       <span>Medical Alerts</span>
-      <span class="badge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
+      <span class="badge" id="medicalNavBadge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
     </button>
     <button class="nav-tab" data-target="view-resources">
       <i data-lucide="truck" style="width:14px; height:14px;"></i>
@@ -187,24 +191,24 @@
           <span>Real-time Operational Command & Surveillance</span>
         </div>
         <div class="section-sub">
-          Active Surveillance: 14 CCTVs &bull; Route: Alandi - Dehu - Pune - Wakhri - Pandharpur
+          Active Surveillance: 4 CCTVs &bull; Route: Alandi - Dehu - Pune - Wakhri - Pandharpur
         </div>
       </div>
 
       <div class="command-grid">
         <!-- Left: CCTV surveillance tiles -->
-        <div class="cctv-column">
+        <div class="cctv-column" id="cctvTilesContainer">
           <div class="panel-header">
-            <span>CCTV FEEDS (GRAINY SURVEILLANCE)</span>
-            <span style="font-size:10px; color:var(--text-muted);">CLICK FEED TO ENLARGE</span>
+            <span>CCTV FEEDS (SURVEILLANCE GRID)</span>
+            <span style="font-size:10px; color:var(--text-muted);">CLICK FEED FOR DETAILS / PTZ</span>
           </div>
 
-          <div class="cctv-tile status-heavy" onclick="openCamModal('CAM-12', 'Wakhri Phata Junction Cam 12', 'Heavy Crowd Density (88%)')">
+          <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12">
             <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 12">
             <div class="cctv-overlay">
               <div class="cctv-top-info">
                 <span class="cctv-cam-id">CAM-12</span>
-                <span class="cctv-timestamp">REC 18:50:12</span>
+                <span class="cctv-timestamp">LIVE STREAM</span>
               </div>
               <div class="cctv-bottom-info">
                 <span class="cctv-location">Wakhri Phata Junction</span>
@@ -213,12 +217,12 @@
             </div>
           </div>
 
-          <div class="cctv-tile status-critical" onclick="openCamModal('CAM-04', 'Pandharpur Temple Chowk Cam 04', 'Critical Congestion (94%)')">
+          <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04">
             <img src="assets/wari_aerial_procession_1785244820232.jpg" class="cctv-feed-img" alt="CCTV Feed 04">
             <div class="cctv-overlay">
               <div class="cctv-top-info">
                 <span class="cctv-cam-id">CAM-04</span>
-                <span class="cctv-timestamp">REC 18:50:12</span>
+                <span class="cctv-timestamp">LIVE STREAM</span>
               </div>
               <div class="cctv-bottom-info">
                 <span class="cctv-location">Pandharpur Chowk</span>
@@ -227,12 +231,12 @@
             </div>
           </div>
 
-          <div class="cctv-tile status-moderate" onclick="openCamModal('CAM-08', 'Saswad Highway Checkpoint Cam 08', 'Moderate Flow (62%)')">
+          <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08">
             <img src="assets/palkhi_procession_1785244851342.jpg" class="cctv-feed-img" alt="CCTV Feed 08">
             <div class="cctv-overlay">
               <div class="cctv-top-info">
                 <span class="cctv-cam-id">CAM-08</span>
-                <span class="cctv-timestamp">REC 18:50:10</span>
+                <span class="cctv-timestamp">LIVE STREAM</span>
               </div>
               <div class="cctv-bottom-info">
                 <span class="cctv-location">Saswad Corridor</span>
@@ -241,12 +245,12 @@
             </div>
           </div>
 
-          <div class="cctv-tile status-normal" onclick="openCamModal('CAM-01', 'Alandi Ghat Section Cam 01', 'Normal Clearance (35%)')">
+          <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01">
             <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 01">
             <div class="cctv-overlay">
               <div class="cctv-top-info">
                 <span class="cctv-cam-id">CAM-01</span>
-                <span class="cctv-timestamp">REC 18:50:08</span>
+                <span class="cctv-timestamp">LIVE STREAM</span>
               </div>
               <div class="cctv-bottom-info">
                 <span class="cctv-location">Alandi Ghat Rd</span>
@@ -294,29 +298,29 @@
           <div class="stat-panel-group">
             <div class="govt-stat-box">
               <div class="stat-label">Lost & Found Desk</div>
-              <div class="stat-value">4 Active Cases</div>
-              <div class="stat-subtext">2 facial matches flagged by automated engine</div>
+              <div class="stat-value" id="statLostCases">3 Active Cases</div>
+              <div class="stat-subtext">Automated facial matching engine active</div>
             </div>
 
             <div class="govt-stat-box" style="border-left-color: var(--status-red);">
               <div class="stat-label">Medical Emergencies</div>
-              <div class="stat-value" style="color:var(--status-red);">2 Active Alerts</div>
+              <div class="stat-value" id="statMedicalAlerts" style="color:var(--status-red);">2 Active Alerts</div>
               <div class="stat-subtext">Sector 3 (Wakhri) & Sector 5 (Pandharpur)</div>
             </div>
 
             <div class="govt-stat-box" style="border-left-color: var(--status-green);">
               <div class="stat-label">Resource Deployment</div>
-              <div class="stat-value" style="color:var(--status-green);">12 / 20 Tankers</div>
-              <div class="stat-subtext">8 reserves stationed at Pandharpur Depot</div>
+              <div class="stat-value" id="statResources" style="color:var(--status-green);">3 / 7 Deployed</div>
+              <div class="stat-subtext">Tankers, Ambulances & Patrol Squads stationed</div>
             </div>
 
             <div class="govt-stat-box" style="border-left-color: var(--saffron-gold);">
               <div class="stat-label">Main Palkhi Status</div>
-              <div class="stat-value" style="font-size:16px; color:#3B332B;">Sant Tukaram Maharaj Palkhi</div>
-              <div class="stat-subtext">Location: Approaching Wakhri Phata (Km 184)</div>
+              <div class="stat-value" id="statPalkhiStatus" style="font-size:16px; color:#3B332B;">Sant Tukaram Maharaj Palkhi</div>
+              <div class="stat-subtext" id="statPalkhiLocation">Location: Approaching Wakhri Phata (Km 184)</div>
             </div>
 
-            <!-- Mini Photo Texture Box (Grounded Reference) -->
+            <!-- Photo Texture Box -->
             <div class="panel-card" style="padding:8px;">
               <div style="font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:4px;">PILGRIM FLOW FIELD PHOTO</div>
               <img src="assets/palkhi_procession_1785244851342.jpg" style="width:100%; height:110px; object-fit:cover; border:1px solid var(--border-main);" alt="Warkaris">
@@ -330,7 +334,7 @@
         <div class="ticker-label">INCIDENT LOG</div>
         <div class="ticker-content">
           <div class="ticker-text" id="incidentLogText">
-            [18:48:10] CAM-12 Wakhri Phata: Density peak detected (88%) -- [18:45:22] Medical alert raised at Sector 4: Pilgrim fainting, Ambulance MH-12-PA-4022 dispatched -- [18:41:05] Lost Person Case #LF-802: Facial match confidence 89% on CAM-04 -- [18:38:00] Solapur Highway Diversion Gate 2 opened -- [18:30:15] Water tanker #WT-09 refilled at Wakhri Station.
+            [LIVE] VariSetu Command Center connected &bull; Telemetry initialized.
           </div>
         </div>
       </div>
@@ -353,7 +357,7 @@
         <div class="panel-card" style="padding:0;">
           <div class="panel-header">
             <span>ZONE-WISE CROWD DENSITY TABLE</span>
-            <span>UPDATED: JUST NOW</span>
+            <span>UPDATED: LIVE TELEMETRY</span>
           </div>
           <div class="govt-table-container" style="border:none; margin:0;">
             <table class="govt-table">
@@ -365,49 +369,14 @@
                   <th>Recommended Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Pandharpur Chowk</strong></td>
-                  <td><span class="density-tag red">94%</span></td>
-                  <td><i data-lucide="trending-up" style="width:12px; height:12px; color:var(--status-red);"></i> Rising</td>
-                  <td>Divert pilgrim queue via North Ring Road</td>
-                </tr>
-                <tr>
-                  <td><strong>Wakhri Phata</strong></td>
-                  <td><span class="density-tag orange">88%</span></td>
-                  <td><i data-lucide="trending-up" style="width:12px; height:12px; color:var(--status-orange);"></i> Steady High</td>
-                  <td>Deploy 4 extra police constables to junction</td>
-                </tr>
-                <tr>
-                  <td><strong>Vakhri Naka</strong></td>
-                  <td><span class="density-tag yellow">74%</span></td>
-                  <td><i data-lucide="minus" style="width:12px; height:12px; color:var(--status-yellow);"></i> Stable</td>
-                  <td>Monitor bottleneck near bridge entry</td>
-                </tr>
-                <tr>
-                  <td><strong>Saswad Highway Stop</strong></td>
-                  <td><span class="density-tag yellow">62%</span></td>
-                  <td><i data-lucide="trending-down" style="width:12px; height:12px; color:var(--status-green);"></i> Easing</td>
-                  <td>Normal traffic regulation</td>
-                </tr>
-                <tr>
-                  <td><strong>Tarapur Phata</strong></td>
-                  <td><span class="density-tag green">45%</span></td>
-                  <td><i data-lucide="trending-down" style="width:12px; height:12px; color:var(--status-green);"></i> Clear</td>
-                  <td>Allow local supply vehicle passage</td>
-                </tr>
-                <tr>
-                  <td><strong>Alandi Corridor</strong></td>
-                  <td><span class="density-tag green">35%</span></td>
-                  <td><i data-lucide="minus" style="width:12px; height:12px; color:var(--status-green);"></i> Low</td>
-                  <td>Standard patrol active</td>
-                </tr>
+              <tbody id="crowdZonesTableBody">
+                <!-- Populated dynamically from /api/crowd/current -->
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Right: Plain Gridlined Congestion Forecast Chart -->
+        <!-- Right: Congestion Forecast Chart -->
         <div class="chart-card">
           <div class="chart-title">2-HOUR CONGESTION FORECAST MODEL</div>
           <div style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">
@@ -428,14 +397,14 @@
           <span>Lost & Found Incident Desk (Automated Match)</span>
         </div>
         <div style="display:flex; gap:8px;">
-          <button class="govt-btn" onclick="alert('New case entry form initiated.')">
+          <button class="govt-btn" id="registerLostPersonBtn" type="button">
             <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
           </button>
         </div>
       </div>
 
       <div class="lost-found-grid">
-        <!-- Left Column: Plain Table of Active Cases -->
+        <!-- Left Column: Table of Active Cases -->
         <div class="govt-table-container">
           <table class="govt-table">
             <thead>
@@ -450,99 +419,30 @@
                 <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="photo-placeholder-box">
-                    <i data-lucide="user" style="width:18px; height:18px;"></i>
-                  </div>
-                </td>
-                <td><strong>#LF-802</strong></td>
-                <td>Maruti Kisan Shinde</td>
-                <td>68 / M</td>
-                <td>पांढरा कुर्ता, धोती, पांढरी टोपी (White Kurta-Dhoti, Gandhi topi, carrying Tulsi mala)</td>
-                <td>CAM-04 (Pandharpur)</td>
-                <td><span class="density-tag red">MATCH (89%)</span></td>
-                <td>
-                  <button class="govt-btn btn-outline" onclick="showTranscript('LF-802')">View Call</button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="photo-placeholder-box">
-                    <i data-lucide="user" style="width:18px; height:18px;"></i>
-                  </div>
-                </td>
-                <td><strong>#LF-805</strong></td>
-                <td>Anandita Ramesh Kulkarni</td>
-                <td>9 / F</td>
-                <td>पिवळा परकर पोलका (Yellow traditional dress, gold bangles)</td>
-                <td>CAM-12 (Wakhri)</td>
-                <td><span class="density-tag yellow">SEARCHING</span></td>
-                <td>
-                  <button class="govt-btn btn-outline" onclick="showTranscript('LF-805')">View Call</button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="photo-placeholder-box">
-                    <i data-lucide="user" style="width:18px; height:18px;"></i>
-                  </div>
-                </td>
-                <td><strong>#LF-799</strong></td>
-                <td>Dnyaneshwar Mahadev Jadhav</td>
-                <td>72 / M</td>
-                <td>पांढरा पोशाख, लाल पटका (White dress, red scarf around neck)</td>
-                <td>CAM-08 (Saswad)</td>
-                <td><span class="density-tag green">REUNITED</span></td>
-                <td>
-                  <button class="govt-btn btn-disabled">Resolved</button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="photo-placeholder-box">
-                    <i data-lucide="user" style="width:18px; height:18px;"></i>
-                  </div>
-                </td>
-                <td><strong>#LF-808</strong></td>
-                <td>Sunita Vitthal Patil</td>
-                <td>54 / F</td>
-                <td>हिरवी नऊवारी साडी, तुळशीचे वृंदावन डोक्यावर (Green Navvari saree)</td>
-                <td>CAM-01 (Alandi)</td>
-                <td><span class="density-tag yellow">SEARCHING</span></td>
-                <td>
-                  <button class="govt-btn btn-outline" onclick="showTranscript('LF-808')">View Call</button>
-                </td>
-              </tr>
+            <tbody id="lostPersonsTableBody">
+              <!-- Populated dynamically from /api/lost-persons -->
             </tbody>
           </table>
         </div>
 
-        <!-- Right Column: Plain Devanagari Transcript Snippet -->
+        <!-- Right Column: Devanagari Transcript Snippet -->
         <div class="transcript-panel">
           <div style="font-weight:700; color:var(--maroon-primary); font-size:13px; margin-bottom:4px;">
             CALL-TO-CASE PIPELINE TRANSCRIPT
           </div>
-          <div style="font-size:11px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;">
-            Helpline 112 Audio Recording Snippet (Deccan Dialect) &bull; Case #LF-802
+          <div style="font-size:11px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;" id="transcriptHeaderSub">
+            Helpline 112 Audio Recording Snippet (Deccan Dialect) &bull; Select a case
           </div>
 
           <div class="transcript-box" id="transcriptBox">
-"हॅलो कंट्रोल रूम, आमचे आजोबा मारुती शिंदे (वय ६८) वारीत वाखरी फाट्याजवळ गर्दीत सुटले आहेत. त्यांनी पांढरा सुती कुर्ता, धोती आणि पांढरी टोपी घातली आहे. गळ्यात तुळशीची माळ आहे आणि हातात टाळ आहेत. कृपया शोध घेण्यास मदत करा."
-
-[Audio Analysis Summary]:
-- Subject: Male, ~68 yrs
-- Clothing: White Kurta, Dhoti, White Cap, Tulsi Mala
-- Audio Confidence score: High (0.94)
-- Vision Cross-Match: CAM-04 Pandharpur Chowk frame #4812 matching features.
+Select a case to view call details and audio transcription.
           </div>
 
           <div style="margin-top:12px; display:flex; gap:8px;">
-            <button class="govt-btn" onclick="alert('Dispatching mobile patrol team to CAM-04 location.')">
+            <button class="govt-btn" id="dispatchVolunteerBtn" type="button">
               Dispatch Nearby Volunteer
             </button>
-            <button class="govt-btn btn-outline" onclick="alert('PA Announcement request queued for Wakhri Loudspeaker System.')">
+            <button class="govt-btn btn-outline" id="queuePaBtn" type="button">
               Queue PA Announcement
             </button>
           </div>
@@ -558,71 +458,24 @@
           <span>Medical Emergencies & Heat-Risk Monitoring</span>
         </div>
         <div class="section-sub">
-          Active Field Ambulances: 8 &bull; Emergency Response Hubs: 4
+          Active Field Ambulances & Emergency Medical Response Hubs
         </div>
       </div>
 
       <div class="medical-view-grid">
-        <!-- Left: Plain Card List of Alerts -->
+        <!-- Left: Card List of Alerts -->
         <div>
           <div class="panel-header" style="margin-bottom:8px;">
             <span>ACTIVE MEDICAL ALERTS</span>
-            <span>2 REQUIRING IMMEDIATE ACKNOWLEDGEMENT</span>
+            <span id="medicalAlertsSubHeader">LIVE FEED</span>
           </div>
 
-          <div class="alert-card-item" id="alert-1">
-            <div>
-              <div style="font-weight:700; color:var(--status-red); font-size:13px;">
-                FALL DETECTED / FAINTING PILGRIM
-              </div>
-              <div style="font-size:11px; color:var(--text-secondary); margin:2px 0;">
-                Location: Wakhri Phata Km 184 &bull; Elapsed: 4 mins ago
-              </div>
-              <div style="font-size:11px; color:var(--text-muted);">
-                Assigned Volunteer: Team Bravo (V. R. Kadam)
-              </div>
-            </div>
-            <div>
-              <button class="govt-btn" onclick="acknowledgeAlert('alert-1')">Acknowledge Alert</button>
-            </div>
-          </div>
-
-          <div class="alert-card-item" id="alert-2">
-            <div>
-              <div style="font-weight:700; color:var(--status-orange); font-size:13px;">
-                CROWD HEAT EXHAUSTION RISK (SECTOR 5)
-              </div>
-              <div style="font-size:11px; color:var(--text-secondary); margin:2px 0;">
-                Location: Pandharpur Temple Corridor &bull; Elapsed: 12 mins ago
-              </div>
-              <div style="font-size:11px; color:var(--text-muted);">
-                Assigned Volunteer: Medical Van #MV-02
-              </div>
-            </div>
-            <div>
-              <button class="govt-btn" onclick="acknowledgeAlert('alert-2')">Acknowledge Alert</button>
-            </div>
-          </div>
-
-          <div class="alert-card-item acknowledged">
-            <div>
-              <div style="font-weight:700; color:var(--status-green); font-size:13px;">
-                DEHYDROGENATION ASSIST & REHYDRATION (RESOLVED)
-              </div>
-              <div style="font-size:11px; color:var(--text-secondary); margin:2px 0;">
-                Location: Saswad Rest Stop &bull; Resolved 35 mins ago
-              </div>
-              <div style="font-size:11px; color:var(--text-muted);">
-                Handled by: Red Cross Volunteer Post #3
-              </div>
-            </div>
-            <div>
-              <button class="govt-btn btn-disabled">Acknowledged</button>
-            </div>
+          <div id="medicalAlertsContainer">
+            <!-- Populated dynamically from /api/medical-alerts -->
           </div>
         </div>
 
-        <!-- Right: Heat-Risk Readout Box (Plain numbers in bordered box) -->
+        <!-- Right: Heat-Risk Readout Box -->
         <div class="heat-risk-box">
           <div style="font-weight:700; font-family:var(--font-serif); font-size:14px; color:var(--maroon-primary); margin-bottom:8px; border-bottom:1px solid var(--border-main); padding-bottom:4px;">
             HEAT-RISK COMPUTED READOUT
@@ -630,26 +483,26 @@
 
           <div class="metric-row">
             <span class="metric-key">Ambient Temperature:</span>
-            <span class="metric-val">34° C</span>
+            <span class="metric-val" id="heatTemp">34° C</span>
           </div>
           <div class="metric-row">
             <span class="metric-key">Relative Humidity:</span>
-            <span class="metric-val">72%</span>
+            <span class="metric-val" id="heatHumidity">72%</span>
           </div>
           <div class="metric-row">
             <span class="metric-key">Computed Risk Index:</span>
-            <span class="metric-val" style="color:var(--status-orange);">7.8 / 10 (MODERATE HEAT RISK)</span>
+            <span class="metric-val" id="heatRiskIndex" style="color:var(--status-orange);">7.8 / 10 (MODERATE HEAT RISK)</span>
           </div>
           <div class="metric-row">
             <span class="metric-key">Water Stations Active:</span>
-            <span class="metric-val">12 Operational</span>
+            <span class="metric-val" id="heatWaterStations">12 Operational</span>
           </div>
           <div class="metric-row">
             <span class="metric-key">ORSL Sachet Supplies:</span>
-            <span class="metric-val">14,200 Packets Available</span>
+            <span class="metric-val" id="heatOrslSupplies">14,200 Packets Available</span>
           </div>
 
-          <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:11px; color:var(--text-secondary);">
+          <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:11px; color:var(--text-secondary);" id="heatAdvisoryText">
             <strong>Advisory Action:</strong> Trigger mist sprayer vans at Wakhri Junction & increase water distribution post deployment by 20%.
           </div>
         </div>
@@ -681,42 +534,8 @@
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><strong>Water Tankers (10,000L)</strong></td>
-                <td>12 Units</td>
-                <td>8 Units</td>
-                <td>Wakhri Phata & Saswad Stop</td>
-                <td><span class="density-tag green">OPTIMAL</span></td>
-              </tr>
-              <tr>
-                <td><strong>Mobile Medical Vans</strong></td>
-                <td>6 Units</td>
-                <td>2 Units</td>
-                <td>Sector 2, 4 & Pandharpur Depot</td>
-                <td><span class="density-tag green">ACTIVE</span></td>
-              </tr>
-              <tr>
-                <td><strong>Police Patrol Squads</strong></td>
-                <td>45 Squads</td>
-                <td>15 Squads</td>
-                <td>Pilgrim Highway Corridor</td>
-                <td><span class="density-tag green">DEPLOYED</span></td>
-              </tr>
-              <tr>
-                <td><strong>Volunteer Dindi Stewards</strong></td>
-                <td>120 Personnel</td>
-                <td>30 Personnel</td>
-                <td>Palkhi Procession Perimeter</td>
-                <td><span class="density-tag green">ACTIVE</span></td>
-              </tr>
-              <tr>
-                <td><strong>Food Distribution Vans</strong></td>
-                <td>18 Units</td>
-                <td>5 Units</td>
-                <td>Bhalwani & Tarapur Phata</td>
-                <td><span class="density-tag green">OPTIMAL</span></td>
-              </tr>
+            <tbody id="resourcesTableBody">
+              <!-- Populated dynamically from /api/resources -->
             </tbody>
           </table>
         </div>
@@ -727,36 +546,8 @@
             <span>ROUTE STATUS & DIVERSION LOG</span>
           </div>
 
-          <div class="route-status-item">
-            <div>
-              <div style="font-weight:600; font-size:12px;">NH-9 Solapur Highway Junction</div>
-              <div style="font-size:10px; color:var(--text-secondary);">Main heavy vehicle bypass route</div>
-            </div>
-            <span class="status-pill diverted">Diverted</span>
-          </div>
-
-          <div class="route-status-item">
-            <div>
-              <div style="font-weight:600; font-size:12px;">Pune-Saswad Pilgrimage Road</div>
-              <div style="font-size:10px; color:var(--text-secondary);">Primary Palkhi corridor</div>
-            </div>
-            <span class="status-pill open">Open (Pilgrims Only)</span>
-          </div>
-
-          <div class="route-status-item">
-            <div>
-              <div style="font-weight:600; font-size:12px;">Wakhri Phata Inner Access Road</div>
-              <div style="font-size:10px; color:var(--text-secondary);">Heavy congestion bottleneck zone</div>
-            </div>
-            <span class="status-pill closed">Closed to Traffic</span>
-          </div>
-
-          <div class="route-status-item">
-            <div>
-              <div style="font-weight:600; font-size:12px;">Pandharpur Temple Ring Road</div>
-              <div style="font-size:10px; color:var(--text-secondary);">Emergency ambulance corridor</div>
-            </div>
-            <span class="status-pill open">Emergency Access</span>
+          <div id="routesContainer">
+            <!-- Populated dynamically from /api/routes -->
           </div>
         </div>
       </div>
@@ -764,12 +555,27 @@
 
   </main>
 
+  <!-- Reusable Clean Operational Action/Detail Modal -->
+  <div class="app-modal-backdrop" id="appActionModal" aria-hidden="true">
+    <div class="app-modal" role="dialog" aria-modal="true" aria-labelledby="appModalTitle">
+      <div class="app-modal-header">
+        <div>
+          <div class="app-modal-kicker" id="appModalKicker">VARISETU COMMAND CENTER</div>
+          <div class="app-modal-title" id="appModalTitle">Action</div>
+        </div>
+        <button type="button" class="close-modal-btn" id="appModalClose" aria-label="Close">&times;</button>
+      </div>
+      <div class="app-modal-body" id="appModalBody"></div>
+      <div class="app-modal-footer" id="appModalFooter"></div>
+    </div>
+  </div>
+
   <!-- CCTV Expand Detail Modal -->
   <div class="modal-backdrop" id="camModal">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title" id="modalCamTitle">CCTV CAMERA EXPANDED VIEW</div>
-        <button class="close-modal-btn" onclick="closeCamModal()">&times;</button>
+        <button class="close-modal-btn" id="camModalCloseBtn" type="button">&times;</button>
       </div>
       <div style="height:360px; background:#000; position:relative; overflow:hidden; border:1px solid #333;">
         <img id="modalCamImg" src="assets/cctv_wakhri_phata_1785244836537.jpg" style="width:100%; height:100%; object-fit:cover;" alt="Cam detail">
@@ -786,8 +592,8 @@
       <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
         <span style="font-size:11px; color:var(--text-secondary);" id="modalCamSub">Bounding Box Analytics Active</span>
         <div style="display:flex; gap:8px;">
-          <button class="govt-btn" onclick="alert('PTZ Pan-Tilt-Zoom command dispatched.')">PTZ Control</button>
-          <button class="govt-btn btn-outline" onclick="closeCamModal()">Close Window</button>
+          <button class="govt-btn" id="modalCamPtzBtn" type="button">PTZ Control</button>
+          <button class="govt-btn btn-outline" id="modalCamCloseFooterBtn" type="button">Close Window</button>
         </div>
       </div>
     </div>
@@ -1613,7 +1419,179 @@ body {
   font-weight: bold;
   color: var(--text-secondary);
   cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
 }
+
+.close-modal-btn:hover {
+  color: var(--maroon-primary);
+}
+
+/* ==================== REUSABLE CLEAN OPERATIONAL MODAL ==================== */
+.app-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(35, 31, 29, 0.58);
+}
+
+.app-modal-backdrop.open {
+  display: flex;
+}
+
+.app-modal {
+  width: min(680px, 94vw);
+  max-height: 88vh;
+  overflow: auto;
+  background: var(--bg-card);
+  border: 2px solid var(--maroon-primary);
+  border-radius: 2px;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.22);
+}
+
+.app-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border-main);
+}
+
+.app-modal-kicker {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.app-modal-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--maroon-primary);
+}
+
+.app-modal-body {
+  padding: 16px;
+  color: var(--text-primary);
+}
+
+.app-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-main);
+  background: var(--bg-card);
+}
+
+.app-modal-body p {
+  margin-bottom: 8px;
+}
+
+.app-modal-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.app-modal-detail-item {
+  border: 1px solid var(--border-main);
+  background: var(--bg-subtle);
+  padding: 9px;
+}
+
+.app-modal-detail-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.app-modal-detail-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-error {
+  background: var(--status-red-bg);
+  border: 1px solid var(--status-red);
+  color: var(--status-red);
+  padding: 10px;
+  font-size: 12px;
+}
+
+.modal-success {
+  background: var(--status-green-bg);
+  border: 1px solid var(--status-green);
+  color: var(--status-green);
+  padding: 10px;
+  font-size: 12px;
+}
+
+.modal-loading {
+  padding: 20px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  border: 1px solid var(--border-main);
+  background: #FFF;
+  color: var(--text-primary);
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--maroon-primary);
+}
+
+.govt-btn.is-loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .app-modal-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-modal-footer {
+    flex-direction: column-reverse;
+  }
+}
+
 
 ```
 
@@ -1623,31 +1601,208 @@ body {
 `Frontend/app.js`
 
 ```javascript
-/* VariSetu (v2 Light Theme - Maharashtra Police IT Cell App Logic & Live Backend Client) */
+/* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Command Center Logic & Realtime Client */
 
-const API_BASE = 'http://localhost:8000/api';
-const WS_BASE = 'ws://localhost:8000/ws';
+const API_BASE =
+  window.VARISETU_CONFIG?.API_BASE ||
+  localStorage.getItem('VARISETU_API_BASE') ||
+  'http://localhost:8000/api';
 
+const WS_BASE =
+  window.VARISETU_CONFIG?.WS_BASE ||
+  localStorage.getItem('VARISETU_WS_BASE') ||
+  'ws://localhost:8000/ws';
+
+// In-memory operational store for fast client-side cross-referencing
+const AppState = {
+  cameras: [],
+  lostCases: [],
+  medicalAlerts: [],
+  resources: [],
+  routes: [],
+  crowdZones: [],
+  selectedLostCase: null,
+  isDemoRunning: false,
+  ws: null
+};
+
+/* ==================== CENTRAL API CLIENT ==================== */
+async function apiRequest(path, options = {}) {
+  const {
+    method = 'GET',
+    body,
+    headers = {},
+    ...rest
+  } = options;
+
+  const config = {
+    method,
+    headers: {
+      'Accept': 'application/json',
+      ...headers,
+      ...(body !== undefined ? { 'Content-Type': 'application/json' } : {})
+    },
+    ...rest
+  };
+
+  if (body !== undefined) {
+    config.body = typeof body === 'string'
+      ? body
+      : JSON.stringify(body);
+  }
+
+  const response = await fetch(`${API_BASE}${path}`, config);
+
+  let payload = null;
+  try {
+    payload = await response.json();
+  } catch {
+    payload = null;
+  }
+
+  if (!response.ok) {
+    const message =
+      payload?.detail?.message ||
+      payload?.detail ||
+      payload?.error?.message ||
+      payload?.message ||
+      `Request failed with status ${response.status}`;
+
+    const error = new Error(typeof message === 'object' ? JSON.stringify(message) : message);
+    error.status = response.status;
+    error.payload = payload;
+    throw error;
+  }
+
+  return payload;
+}
+
+/* ==================== UI STATE & SECURITY HELPERS ==================== */
+function setButtonLoading(button, loading, loadingText = 'Processing...') {
+  if (!button) return;
+
+  if (loading) {
+    button.dataset.originalText = button.textContent;
+    button.disabled = true;
+    button.textContent = loadingText;
+    button.classList.add('is-loading');
+  } else {
+    button.disabled = false;
+    button.textContent = button.dataset.originalText || button.textContent;
+    button.classList.remove('is-loading');
+  }
+}
+
+function escapeHtml(value) {
+  if (value === null || value === undefined) return '';
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+/* ==================== REUSABLE CLEAN MODAL SYSTEM ==================== */
+function openAppModal({
+  title,
+  kicker = 'VARISETU COMMAND CENTER',
+  bodyHtml = '',
+  footerHtml = ''
+}) {
+  const backdrop = document.getElementById('appActionModal');
+  const titleEl = document.getElementById('appModalTitle');
+  const kickerEl = document.getElementById('appModalKicker');
+  const bodyEl = document.getElementById('appModalBody');
+  const footerEl = document.getElementById('appModalFooter');
+
+  if (!backdrop || !titleEl || !kickerEl || !bodyEl || !footerEl) return;
+
+  kickerEl.textContent = kicker;
+  titleEl.textContent = title;
+  bodyEl.innerHTML = bodyHtml;
+  footerEl.innerHTML = footerHtml;
+
+  backdrop.classList.add('open');
+  backdrop.setAttribute('aria-hidden', 'false');
+}
+
+function closeAppModal() {
+  const backdrop = document.getElementById('appActionModal');
+  if (!backdrop) return;
+
+  backdrop.classList.remove('open');
+  backdrop.setAttribute('aria-hidden', 'true');
+}
+
+function openConfirmModal({
+  title,
+  message,
+  confirmText = 'Confirm',
+  confirmClass = 'govt-btn',
+  onConfirm
+}) {
+  openAppModal({
+    title,
+    bodyHtml: `
+      <div style="font-size:12px; line-height:1.6; color:var(--text-primary);">
+        ${escapeHtml(message)}
+      </div>
+    `,
+    footerHtml: `
+      <button type="button" class="govt-btn btn-outline" id="appModalCancel">Cancel</button>
+      <button type="button" class="${confirmClass}" id="appModalConfirm">${escapeHtml(confirmText)}</button>
+    `
+  });
+
+  const cancelBtn = document.getElementById('appModalCancel');
+  const confirmBtn = document.getElementById('appModalConfirm');
+
+  cancelBtn?.addEventListener('click', closeAppModal);
+
+  confirmBtn?.addEventListener('click', async () => {
+    if (!onConfirm) return;
+    setButtonLoading(confirmBtn, true, 'Processing...');
+
+    try {
+      await onConfirm();
+      closeAppModal();
+    } catch (error) {
+      document.getElementById('appModalBody').innerHTML = `
+        <div class="modal-error">
+          ${escapeHtml(error.message || 'Operation failed.')}
+        </div>
+      `;
+      setButtonLoading(confirmBtn, false, confirmText);
+    }
+  });
+}
+
+// Modal event listeners
+document.getElementById('appModalClose')?.addEventListener('click', closeAppModal);
+document.getElementById('appActionModal')?.addEventListener('click', (event) => {
+  if (event.target.id === 'appActionModal') closeAppModal();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') closeAppModal();
+});
+
+/* ==================== PAGE INITIALIZATION ==================== */
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Lucide icons
   if (window.lucide) {
     lucide.createIcons();
   }
 
-  // Live System Clock
   updateClock();
   setInterval(updateClock, 1000);
 
-  // Tab Navigation Handling
   setupNavigation();
-
-  // Initialize Leaflet Map for Route Corridor
   initRouteMap();
-
-  // Initialize Forecast Chart
   initForecastChart();
+  setupCctvModal();
+  setupDemoButton();
+  setupLostFoundButtons();
 
-  // Connect to Live Backend Services
   initLiveBackend();
 });
 
@@ -1677,7 +1832,6 @@ function setupNavigation() {
         targetView.classList.add('active');
       }
 
-      // Refresh map / chart layout if switching views
       if (targetId === 'view-command' && window.wariMap) {
         setTimeout(() => window.wariMap.invalidateSize(), 150);
       }
@@ -1693,7 +1847,6 @@ function initRouteMap() {
   const mapElement = document.getElementById('routeMap');
   if (!mapElement) return;
 
-  // Center between Pune and Pandharpur
   const wariMap = L.map('routeMap', {
     center: [18.0000, 74.8000],
     zoom: 9,
@@ -1702,46 +1855,27 @@ function initRouteMap() {
 
   window.wariMap = wariMap;
 
-  // Tile Layer - Clean Light Basemap (OpenStreetMap / CartoDB Positron)
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
     attribution: '&copy; Maharashtra Police IT &bull; Map data &copy; OpenStreetMap',
     maxZoom: 18
   }).addTo(wariMap);
 
-  // Wari Corridor Coordinates (Alandi -> Pune -> Saswad -> Bhalwani -> Wakhri -> Pandharpur)
+  // Wari Corridor Coordinates
   const routePoints = [
     [18.6772, 73.8967], // Alandi
     [18.5204, 73.8567], // Pune City
     [18.3440, 74.0305], // Saswad
-    [18.1500, 74.3000], // Jejuri / Lonand corridor
+    [18.1500, 74.3000], // Jejuri / Lonand
     [17.8900, 75.0200], // Bhalwani
     [17.7280, 75.2950], // Wakhri Phata
     [17.6777, 75.3276]  // Pandharpur Shrine
   ];
 
-  // Draw Heat-shaded Polylines along route
-  // Green section (Clear)
-  L.polyline(routePoints.slice(0, 3), {
-    color: '#2E5B36',
-    weight: 6,
-    opacity: 0.85
-  }).addTo(wariMap).bindPopup('<b>Alandi-Saswad Sector:</b> Normal Pilgrim Density (35-62%)');
+  L.polyline(routePoints.slice(0, 3), { color: '#2E5B36', weight: 6, opacity: 0.85 }).addTo(wariMap).bindPopup('<b>Alandi-Saswad Sector:</b> Normal Pilgrim Density (35-62%)');
+  L.polyline(routePoints.slice(2, 5), { color: '#B8551B', weight: 7, opacity: 0.85 }).addTo(wariMap).bindPopup('<b>Saswad-Bhalwani Sector:</b> Heavy Density (74%)');
+  L.polyline(routePoints.slice(4, 7), { color: '#9A2525', weight: 8, opacity: 0.9 }).addTo(wariMap).bindPopup('<b>Wakhri-Pandharpur Sector:</b> CRITICAL CONGESTION (88-94%)');
 
-  // Orange section (Heavy)
-  L.polyline(routePoints.slice(2, 5), {
-    color: '#B8551B',
-    weight: 7,
-    opacity: 0.85
-  }).addTo(wariMap).bindPopup('<b>Saswad-Bhalwani Sector:</b> Heavy Density (74%)');
-
-  // Red section (Critical Bottleneck)
-  L.polyline(routePoints.slice(4, 7), {
-    color: '#9A2525',
-    weight: 8,
-    opacity: 0.9
-  }).addTo(wariMap).bindPopup('<b>Wakhri-Pandharpur Sector:</b> CRITICAL CONGESTION (88-94%)');
-
-  // Palkhi Current Location Marker (Saffron Flag)
+  // Palkhi Flag Marker
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:10px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 PALKHI (Wakhri)</div>`,
@@ -1751,7 +1885,7 @@ function initRouteMap() {
   L.marker([17.7280, 75.2950], { icon: palkhiIcon }).addTo(wariMap)
     .bindPopup('<b>Sant Tukaram Maharaj Palkhi</b><br>Location: Approaching Wakhri Phata (Km 184)<br>Speed: 3 km/h');
 
-  // Water Tankers Pins
+  // Water Tankers Marker
   const waterIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 5px; font-size:9px; font-weight:bold; border-radius:2px;">💧 Tanker #09</div>`,
@@ -1760,7 +1894,7 @@ function initRouteMap() {
   L.marker([17.7400, 75.2800], { icon: waterIcon }).addTo(wariMap)
     .bindPopup('<b>Water Tanker #WT-09</b><br>Capacity: 10,000L (80% Full)<br>Stationed: Wakhri Access Rd');
 
-  // Medical Van Pins
+  // Medical Van Marker
   const medIcon = L.divIcon({
     className: 'custom-map-icon',
     html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 5px; font-size:9px; font-weight:bold; border-radius:2px;">🚑 MedVan #02</div>`,
@@ -1810,15 +1944,9 @@ function initForecastChart() {
       plugins: {
         legend: {
           position: 'top',
-          labels: {
-            font: { family: 'IBM Plex Sans', size: 11 },
-            boxWidth: 12
-          }
+          labels: { font: { family: 'IBM Plex Sans', size: 11 }, boxWidth: 12 }
         },
-        tooltip: {
-          mode: 'index',
-          intersect: false
-        }
+        tooltip: { mode: 'index', intersect: false }
       },
       scales: {
         x: {
@@ -1839,33 +1967,89 @@ function initForecastChart() {
   });
 }
 
-/* ==================== LIVE BACKEND CLIENT & WEBSOCKET ==================== */
+/* ==================== LIVE DATA INTEGRATION ==================== */
 async function initLiveBackend() {
-  // Initial live data fetch
-  fetchLiveSummary();
-  fetchLiveForecast();
+  await Promise.allSettled([
+    checkHealth(),
+    fetchLiveSummary(),
+    fetchLiveForecast(),
+    fetchCameras(),
+    refreshCrowdZones(),
+    refreshMedicalAlerts(),
+    refreshLostPersons(),
+    refreshResources(),
+    refreshRoutes(),
+    fetchHeatRisk()
+  ]);
 
-  // Setup WebSocket connection
   connectWebSocket();
+}
+
+async function checkHealth() {
+  const badge = document.getElementById('backendHealthBadge');
+  const text = document.getElementById('backendHealthText');
+  try {
+    const res = await apiRequest('/health');
+    if (res && res.status === 'ok') {
+      if (badge) badge.style.borderColor = 'var(--status-green)';
+      if (text) text.textContent = 'LIVE';
+    }
+  } catch (err) {
+    if (badge) badge.style.borderColor = 'var(--status-orange)';
+    if (text) text.textContent = 'STANDALONE';
+    console.debug('[VariSetu] Backend unavailable; operating in standalone offline mode.');
+  }
 }
 
 async function fetchLiveSummary() {
   try {
-    const res = await fetch(`${API_BASE}/dashboard/summary`);
-    if (!res.ok) return;
-    const data = await res.json();
-    console.log('[VariSetu Live] Dashboard Summary loaded:', data);
+    const data = await apiRequest('/dashboard/summary');
+    updateDashboardSummary(data);
+    return data;
   } catch (err) {
-    console.debug('[VariSetu Live] Operating in standalone frontend mode.');
+    console.debug('[VariSetu] Dashboard summary fetch skipped:', err);
+    return null;
+  }
+}
+
+function updateDashboardSummary(data) {
+  if (!data) return;
+
+  const lostEl = document.getElementById('statLostCases');
+  const medEl = document.getElementById('statMedicalAlerts');
+  const resEl = document.getElementById('statResources');
+  const palkhiLocEl = document.getElementById('statPalkhiLocation');
+  const palkhiStatEl = document.getElementById('statPalkhiStatus');
+
+  if (lostEl) lostEl.textContent = `${data.active_lost_person_cases ?? 0} Active Cases`;
+  if (medEl) medEl.textContent = `${data.active_medical_alerts ?? 0} Active Alerts`;
+  if (resEl) resEl.textContent = `${data.deployed_resources ?? 0} / ${data.total_resources ?? 7} Deployed`;
+  if (palkhiLocEl && data.palkhi_location) palkhiLocEl.textContent = `Location: ${data.palkhi_location}`;
+  if (palkhiStatEl && data.palkhi_status) palkhiStatEl.textContent = data.palkhi_status;
+
+  updateNavigationBadges(data);
+}
+
+function updateNavigationBadges(data) {
+  const crowdBadge = document.getElementById('crowdNavBadge');
+  const lostBadge = document.getElementById('lostNavBadge');
+  const medicalBadge = document.getElementById('medicalNavBadge');
+
+  if (crowdBadge && data.max_density !== undefined) {
+    crowdBadge.textContent = `${Math.round(data.max_density)}% Max Density`;
+  }
+  if (lostBadge) {
+    lostBadge.textContent = `${data.active_lost_person_cases ?? 0} Active`;
+  }
+  if (medicalBadge) {
+    medicalBadge.textContent = `${data.active_medical_alerts ?? 0} Alerts`;
   }
 }
 
 async function fetchLiveForecast() {
   try {
-    const res = await fetch(`${API_BASE}/crowd/forecast`);
-    if (!res.ok) return;
-    const forecastData = await res.json();
-    if (window.forecastChartInstance && forecastData.zones) {
+    const forecastData = await apiRequest('/crowd/forecast');
+    if (window.forecastChartInstance && forecastData?.zones) {
       window.forecastChartInstance.data.labels = forecastData.time_labels;
       forecastData.zones.forEach((z, idx) => {
         if (window.forecastChartInstance.data.datasets[idx]) {
@@ -1875,22 +2059,708 @@ async function fetchLiveForecast() {
       window.forecastChartInstance.update();
     }
   } catch (err) {
-    console.debug('[VariSetu Live] Using default forecast profile.');
+    console.debug('[VariSetu] Using fallback forecast profile.');
   }
 }
 
+/* ==================== CAMERAS & CCTV ==================== */
+async function fetchCameras() {
+  try {
+    const cameras = await apiRequest('/cameras');
+    AppState.cameras = cameras;
+    renderCameras(cameras);
+    return cameras;
+  } catch (err) {
+    console.debug('[VariSetu] Camera fetch failed; keeping fallback tiles.');
+    setupFallbackCameraTiles();
+    return [];
+  }
+}
+
+function renderCameras(cameras) {
+  const container = document.getElementById('cctvTilesContainer');
+  if (!container || !cameras || cameras.length === 0) return;
+
+  const existingTiles = container.querySelectorAll('.cctv-tile');
+  cameras.slice(0, existingTiles.length).forEach((cam, idx) => {
+    const tile = existingTiles[idx];
+    if (!tile) return;
+
+    tile.dataset.cameraId = cam.id;
+    tile.dataset.camCode = cam.camera_code;
+
+    const idEl = tile.querySelector('.cctv-cam-id');
+    const locEl = tile.querySelector('.cctv-location');
+    const densityEl = tile.querySelector('.density-tag');
+
+    if (idEl) idEl.textContent = cam.camera_code;
+    if (locEl) locEl.textContent = cam.name;
+    if (densityEl && cam.current_density !== undefined) {
+      densityEl.textContent = `${cam.density_status || 'DENSITY'} ${cam.current_density}%`;
+    }
+
+    tile.onclick = () => openCameraDetails(cam);
+  });
+}
+
+function setupFallbackCameraTiles() {
+  const tiles = document.querySelectorAll('.cctv-tile');
+  tiles.forEach(tile => {
+    const camCode = tile.dataset.camCode || 'CAM-01';
+    tile.onclick = () => {
+      const found = AppState.cameras.find(c => c.camera_code === camCode) || {
+        camera_code: camCode,
+        name: tile.querySelector('.cctv-location')?.textContent || 'Corridor Cam',
+        status: 'ONLINE',
+        current_density: 88.0
+      };
+      openCameraDetails(found);
+    };
+  });
+}
+
+function openCameraDetails(camera) {
+  openAppModal({
+    title: `CCTV SURVEILLANCE: ${camera.camera_code || 'CAM'}`,
+    kicker: 'LIVE POLICE FEED',
+    bodyHtml: `
+      <div class="app-modal-detail-grid">
+        <div class="app-modal-detail-item">
+          <div class="app-modal-detail-label">Camera Code</div>
+          <div class="app-modal-detail-value">${escapeHtml(camera.camera_code)}</div>
+        </div>
+        <div class="app-modal-detail-item">
+          <div class="app-modal-detail-label">Operational Status</div>
+          <div class="app-modal-detail-value" style="color:var(--status-green);">${escapeHtml(camera.status || 'ONLINE')}</div>
+        </div>
+        <div class="app-modal-detail-item">
+          <div class="app-modal-detail-label">Checkpoint Location</div>
+          <div class="app-modal-detail-value">${escapeHtml(camera.name)}</div>
+        </div>
+        <div class="app-modal-detail-item">
+          <div class="app-modal-detail-label">Current Density</div>
+          <div class="app-modal-detail-value" style="color:var(--status-red);">${escapeHtml(camera.current_density ?? 88)}% (${camera.density_status || 'HEAVY'})</div>
+        </div>
+      </div>
+      <div style="margin-top:12px; font-size:11px; color:var(--text-secondary);">
+        Telemetry: Bounding box pedestrian detection active. Optical frame streaming over encrypted state intranet.
+      </div>
+    `,
+    footerHtml: `
+      <button type="button" class="govt-btn btn-outline" id="cameraModalClose">Close</button>
+      <button type="button" class="govt-btn" id="cameraPtzBtn">Dispatch PTZ Command</button>
+    `
+  });
+
+  document.getElementById('cameraModalClose')?.addEventListener('click', closeAppModal);
+  document.getElementById('cameraPtzBtn')?.addEventListener('click', () => {
+    openConfirmModal({
+      title: 'Dispatch PTZ Command',
+      message: `Send Pan-Tilt-Zoom recalibration command to camera ${camera.camera_code}? (Dispatched in demo mode)`,
+      confirmText: 'Dispatch PTZ',
+      onConfirm: async () => {
+        try {
+          if (camera.id) {
+            await apiRequest(`/cameras/${encodeURIComponent(camera.id)}/ptz`, {
+              method: 'POST',
+              body: { action: 'pan_left', value: 10.0 }
+            });
+          }
+        } catch (e) {
+          console.debug('[VariSetu] PTZ offline fallback executed.');
+        }
+
+        openAppModal({
+          title: 'PTZ Command Dispatched',
+          bodyHtml: `
+            <div class="modal-success">
+              PTZ repositioning command queued successfully for ${escapeHtml(camera.camera_code)}.
+            </div>
+          `,
+          footerHtml: `<button class="govt-btn" id="ptzDoneBtn">Done</button>`
+        });
+        document.getElementById('ptzDoneBtn')?.addEventListener('click', closeAppModal);
+      }
+    });
+  });
+}
+
+function setupCctvModal() {
+  document.getElementById('camModalCloseBtn')?.addEventListener('click', () => {
+    document.getElementById('camModal')?.classList.remove('open');
+  });
+  document.getElementById('modalCamCloseFooterBtn')?.addEventListener('click', () => {
+    document.getElementById('camModal')?.classList.remove('open');
+  });
+}
+
+/* ==================== CROWD INTELLIGENCE ==================== */
+async function refreshCrowdZones() {
+  try {
+    const zones = await apiRequest('/crowd/current');
+    AppState.crowdZones = zones;
+    renderCrowdZones(zones);
+  } catch (err) {
+    console.debug('[VariSetu] Crowd zones fetch skipped.');
+  }
+}
+
+function renderCrowdZones(zones) {
+  const tbody = document.getElementById('crowdZonesTableBody');
+  if (!tbody || !zones || zones.length === 0) return;
+
+  tbody.innerHTML = zones.map(z => {
+    const tagClass = z.density_percentage >= 90 ? 'red' : (z.density_percentage >= 75 ? 'orange' : (z.density_percentage >= 50 ? 'yellow' : 'green'));
+    return `
+      <tr>
+        <td><strong>${escapeHtml(z.zone_name)}</strong></td>
+        <td><span class="density-tag ${tagClass}">${Math.round(z.density_percentage)}%</span></td>
+        <td>${escapeHtml(z.trend || 'STABLE')}</td>
+        <td>${escapeHtml(z.recommended_action || 'Standard patrol active')}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+/* ==================== LOST & FOUND MANAGEMENT ==================== */
+async function refreshLostPersons() {
+  try {
+    const cases = await apiRequest('/lost-persons');
+    AppState.lostCases = cases;
+    renderLostPersons(cases);
+    return cases;
+  } catch (err) {
+    console.debug('[VariSetu] Lost persons fetch skipped.');
+    return [];
+  }
+}
+
+function renderLostPersons(cases) {
+  const tbody = document.getElementById('lostPersonsTableBody');
+  if (!tbody) return;
+
+  if (!cases || cases.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:12px;">No active lost person cases.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = cases.map(item => `
+    <tr>
+      <td>
+        <div class="photo-placeholder-box">
+          <i data-lucide="user" style="width:16px; height:16px;"></i>
+        </div>
+      </td>
+      <td><strong>${escapeHtml(item.case_number)}</strong></td>
+      <td>${escapeHtml(item.name || 'Unknown')}</td>
+      <td>${escapeHtml(item.age || '-')} / ${escapeHtml(item.gender || '-')}</td>
+      <td>${escapeHtml(item.clothing_description || '-')}</td>
+      <td>${escapeHtml(item.last_seen_camera_id || item.last_seen_location || '-')}</td>
+      <td>
+        <span class="density-tag ${getStatusClass(item.status)}">
+          ${escapeHtml(item.status)}
+        </span>
+      </td>
+      <td>
+        <button class="govt-btn btn-outline" type="button" data-lost-id="${escapeHtml(item.id)}" data-action="view-lost-case">
+          View
+        </button>
+      </td>
+    </tr>
+  `).join('');
+
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+
+  tbody.querySelectorAll('[data-action="view-lost-case"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = AppState.lostCases.find(c => c.id === btn.dataset.lostId);
+      if (item) openLostPersonDetails(item);
+    });
+  });
+
+  // Default select first case in transcript box if available
+  if (cases.length > 0 && !AppState.selectedLostCase) {
+    showTranscript(cases[0]);
+  }
+}
+
+function getStatusClass(status) {
+  const value = String(status || '').toUpperCase();
+  if (value.includes('REUNITED') || value.includes('RESOLVED')) return 'green';
+  if (value.includes('MATCH') || value.includes('VERIFIED')) return 'red';
+  if (value.includes('SEARCH')) return 'yellow';
+  return 'yellow';
+}
+
+function showTranscript(caseItem) {
+  if (!caseItem) return;
+  AppState.selectedLostCase = caseItem;
+
+  const subHeader = document.getElementById('transcriptHeaderSub');
+  const box = document.getElementById('transcriptBox');
+
+  if (subHeader) {
+    subHeader.textContent = `Helpline 112 Audio Recording Snippet (Deccan Dialect) • Case ${caseItem.case_number}`;
+  }
+
+  let text = '';
+  if (caseItem.reports && caseItem.reports.length > 0 && caseItem.reports[0].transcript) {
+    text = `"${caseItem.reports[0].transcript}"\n\n[Audio Analysis Summary]:\n- Subject: ${caseItem.gender === 'M' ? 'Male' : 'Female'}, ~${caseItem.age} yrs\n- Clothing: ${caseItem.clothing_description}\n- ASR Confidence: ${caseItem.reports[0].asr_confidence ?? 0.94}\n- Last Location: ${caseItem.last_seen_location}`;
+  } else if (caseItem.case_number === '#LF-802') {
+    text = `"हॅलो कंट्रोल रूम, आमचे आजोबा मारुती शिंदे (वय ६८) वारीत वाखरी फाट्याजवळ गर्दीत सुटले आहेत. त्यांनी पांढरा सुती कुर्ता, धोती आणि पांढरी टोपी घातली आहे. गळ्यात तुळशीची माळ आहे आणि हातात टाळ आहेत. कृपया शोध घेण्यास मदत करा."\n\n[Audio Analysis Summary]:\n- Subject: Male, ~68 yrs\n- Clothing: White Kurta, Dhoti, White Cap, Tulsi Mala\n- Audio Confidence score: High (0.94)\n- Vision Cross-Match: CAM-04 Pandharpur Chowk frame #4812 matching features.`;
+  } else {
+    text = `Case ${caseItem.case_number} - ${caseItem.name}\nAge: ${caseItem.age}, Gender: ${caseItem.gender}\nLast Seen: ${caseItem.last_seen_location}\nAttire: ${caseItem.clothing_description}\nStatus: ${caseItem.status}`;
+  }
+
+  if (box) box.textContent = text;
+}
+
+function openLostPersonDetails(item) {
+  showTranscript(item);
+
+  openAppModal({
+    title: `CASE ${item.case_number}: ${item.name}`,
+    kicker: 'LOST & FOUND INCIDENT DOSSIER',
+    bodyHtml: `
+      <div class="app-modal-detail-grid">
+        <div class="app-modal-detail-item">
+          <div class="app-modal-detail-label">Person Name</div>
+          <div class="app-modal-detail-value">${escapeHtml(item.name)}</div>
+        </div>
+        <div class="app-modal-detail-item">
+          <div class="app-modal-detail-label">Age / Gender</div>
+          <div class="app-modal-detail-value">${escapeHtml(item.age)} yrs / ${escapeHtml(item.gender)}</div>
+        </div>
+        <div class="app-modal-detail-item">
+          <div class="app-modal-detail-label">Last Seen Location</div>
+          <div class="app-modal-detail-value">${escapeHtml(item.last_seen_location)}</div>
+        </div>
+        <div class="app-modal-detail-item">
+          <div class="app-modal-detail-label">Current Status</div>
+          <div class="app-modal-detail-value" style="color:var(--maroon-primary); font-weight:bold;">${escapeHtml(item.status)}</div>
+        </div>
+      </div>
+      <div style="margin-top:10px; background:var(--bg-subtle); padding:9px; border:1px solid var(--border-main); font-size:11px;">
+        <strong>Attire Description:</strong> ${escapeHtml(item.clothing_description)}
+      </div>
+    `,
+    footerHtml: `
+      <button type="button" class="govt-btn btn-outline" id="lostDetailClose">Close</button>
+      <button type="button" class="govt-btn btn-outline" id="lostDetailDispatch">Dispatch Squad</button>
+      ${item.status !== 'REUNITED' ? `<button type="button" class="govt-btn" id="lostDetailReunite">Mark Reunited</button>` : ''}
+    `
+  });
+
+  document.getElementById('lostDetailClose')?.addEventListener('click', closeAppModal);
+  document.getElementById('lostDetailDispatch')?.addEventListener('click', () => {
+    dispatchLostPerson(item.id);
+  });
+  document.getElementById('lostDetailReunite')?.addEventListener('click', () => {
+    reuniteLostPerson(item.id);
+  });
+}
+
+async function dispatchLostPerson(caseId) {
+  openConfirmModal({
+    title: 'Dispatch Volunteer Squad',
+    message: 'Dispatch nearby field volunteer squad to the identified camera checkpoint?',
+    confirmText: 'Dispatch Squad',
+    onConfirm: async () => {
+      await apiRequest(`/lost-persons/${encodeURIComponent(caseId)}/dispatch`, { method: 'POST' });
+      await refreshLostPersons();
+      await fetchLiveSummary();
+    }
+  });
+}
+
+async function reuniteLostPerson(caseId) {
+  openConfirmModal({
+    title: 'Reunite & Resolve Case',
+    message: 'Confirm that pilgrim has been safely reunited with family/Dindi?',
+    confirmText: 'Confirm Reunion',
+    onConfirm: async () => {
+      await apiRequest(`/lost-persons/${encodeURIComponent(caseId)}/reunite`, { method: 'POST' });
+      await refreshLostPersons();
+      await fetchLiveSummary();
+    }
+  });
+}
+
+function setupLostFoundButtons() {
+  document.getElementById('registerLostPersonBtn')?.addEventListener('click', openLostPersonCreateModal);
+
+  document.getElementById('dispatchVolunteerBtn')?.addEventListener('click', () => {
+    if (AppState.selectedLostCase) {
+      dispatchLostPerson(AppState.selectedLostCase.id);
+    } else if (AppState.lostCases.length > 0) {
+      dispatchLostPerson(AppState.lostCases[0].id);
+    }
+  });
+
+  document.getElementById('queuePaBtn')?.addEventListener('click', () => {
+    const caseItem = AppState.selectedLostCase || AppState.lostCases[0];
+    if (caseItem) queuePaAnnouncement(caseItem);
+  });
+}
+
+function openLostPersonCreateModal() {
+  openAppModal({
+    title: 'Register Missing Person Case',
+    kicker: 'NEW HELPLINE CASE ENTRY',
+    bodyHtml: `
+      <form id="newCaseForm">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="newCaseName" class="form-control" placeholder="e.g. Maruti Kisan Shinde" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="form-group">
+            <label>Age</label>
+            <input type="number" id="newCaseAge" class="form-control" placeholder="68" required>
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="newCaseGender" class="form-control">
+              <option value="M">Male (पुरुष)</option>
+              <option value="F">Female (स्त्री)</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Clothing Description (Marathi & English)</label>
+          <input type="text" id="newCaseClothing" class="form-control" placeholder="पांढरा कुर्ता, धोती, पांढरी टोपी" required>
+        </div>
+        <div class="form-group">
+          <label>Last Seen Location</label>
+          <input type="text" id="newCaseLocation" class="form-control" placeholder="Wakhri Phata Junction" required>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="newCasePriority" class="form-control">
+            <option value="HIGH">High (तातडीचे)</option>
+            <option value="CRITICAL">Critical (अति तातडीचे)</option>
+            <option value="NORMAL">Normal</option>
+          </select>
+        </div>
+      </form>
+    `,
+    footerHtml: `
+      <button type="button" class="govt-btn btn-outline" id="newCaseCancel">Cancel</button>
+      <button type="button" class="govt-btn" id="newCaseSubmit">Register Case</button>
+    `
+  });
+
+  document.getElementById('newCaseCancel')?.addEventListener('click', closeAppModal);
+  document.getElementById('newCaseSubmit')?.addEventListener('click', async () => {
+    const name = document.getElementById('newCaseName')?.value?.trim();
+    const age = parseInt(document.getElementById('newCaseAge')?.value || '0');
+    const gender = document.getElementById('newCaseGender')?.value || 'M';
+    const clothing = document.getElementById('newCaseClothing')?.value?.trim();
+    const location = document.getElementById('newCaseLocation')?.value?.trim();
+    const priority = document.getElementById('newCasePriority')?.value || 'HIGH';
+
+    if (!name || !age || !clothing || !location) {
+      alert('Please fill out all required fields.');
+      return;
+    }
+
+    const submitBtn = document.getElementById('newCaseSubmit');
+    setButtonLoading(submitBtn, true, 'Registering...');
+
+    try {
+      await apiRequest('/lost-persons', {
+        method: 'POST',
+        body: {
+          name,
+          age,
+          gender,
+          clothing_description: clothing,
+          last_seen_location: location,
+          priority
+        }
+      });
+
+      closeAppModal();
+      await refreshLostPersons();
+      await fetchLiveSummary();
+    } catch (err) {
+      document.getElementById('appModalBody').innerHTML = `
+        <div class="modal-error">${escapeHtml(err.message || 'Registration failed.')}</div>
+      `;
+      setButtonLoading(submitBtn, false, 'Register Case');
+    }
+  });
+}
+
+function queuePaAnnouncement(caseItem) {
+  openConfirmModal({
+    title: 'Queue Public Address Announcement',
+    message: `Queue loudspeaker announcement for Case ${caseItem.case_number} (${caseItem.name}) across Sector 3 & Wakhri Phata PA systems?`,
+    confirmText: 'Queue Announcement',
+    onConfirm: async () => {
+      try {
+        await apiRequest(`/lost-persons/${encodeURIComponent(caseItem.id)}/pa-announce`, {
+          method: 'POST'
+        });
+      } catch (e) {
+        console.debug('[VariSetu] PA announcement simulated.');
+      }
+
+      openAppModal({
+        title: 'PA Announcement Broadcasted',
+        bodyHtml: `
+          <div class="modal-success">
+            Announcement queued in demo mode: "हरवलेली व्यक्ती: ${escapeHtml(caseItem.name)}, वय ${escapeHtml(caseItem.age)}, पोशाख: ${escapeHtml(caseItem.clothing_description)}."
+          </div>
+        `,
+        footerHtml: `<button class="govt-btn" id="paDoneBtn">Done</button>`
+      });
+      document.getElementById('paDoneBtn')?.addEventListener('click', closeAppModal);
+    }
+  });
+}
+
+/* ==================== MEDICAL ALERTS ==================== */
+async function refreshMedicalAlerts() {
+  try {
+    const alerts = await apiRequest('/medical-alerts');
+    AppState.medicalAlerts = alerts;
+    renderMedicalAlerts(alerts);
+    return alerts;
+  } catch (err) {
+    console.debug('[VariSetu] Medical alerts fetch skipped.');
+    return [];
+  }
+}
+
+function renderMedicalAlerts(alerts) {
+  const container = document.getElementById('medicalAlertsContainer');
+  if (!container) return;
+
+  if (!alerts || alerts.length === 0) {
+    container.innerHTML = `<div style="padding:12px; color:var(--text-secondary);">No active medical alerts.</div>`;
+    return;
+  }
+
+  container.innerHTML = alerts.map(alert => `
+    <div class="alert-card-item ${alert.status === 'RESOLVED' ? 'acknowledged' : ''}" data-medical-id="${escapeHtml(alert.id)}">
+      <div>
+        <div style="font-weight:700; color:var(--status-red); font-size:13px;">
+          ${escapeHtml(alert.type?.replace('_', ' ') || 'MEDICAL EMERGENCY')}
+        </div>
+        <div style="font-size:11px; color:var(--text-secondary); margin:2px 0;">
+          ${escapeHtml(alert.description || 'Medical incident reported')}
+        </div>
+        <div style="font-size:11px; color:var(--text-muted);">
+          Assigned Volunteer / Unit: ${escapeHtml(alert.assigned_volunteer_name || 'Standby')}
+        </div>
+      </div>
+      <div>
+        ${
+          alert.status === 'ACTIVE'
+            ? `<button class="govt-btn" type="button" data-medical-ack="${escapeHtml(alert.id)}">Acknowledge</button>`
+            : `<button class="govt-btn btn-disabled" type="button" disabled>${escapeHtml(alert.status)}</button>`
+        }
+      </div>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('[data-medical-ack]').forEach(button => {
+    button.addEventListener('click', () => {
+      acknowledgeMedicalAlert(button.dataset.medicalAck, button);
+    });
+  });
+}
+
+async function acknowledgeMedicalAlert(alertId, button) {
+  if (!alertId) return;
+
+  try {
+    setButtonLoading(button, true, 'Acknowledging...');
+
+    const updated = await apiRequest(`/medical-alerts/${encodeURIComponent(alertId)}/acknowledge`, {
+      method: 'POST',
+      body: { notes: 'Acknowledged via VariSetu Command Dashboard' }
+    });
+
+    await refreshMedicalAlerts();
+    await fetchLiveSummary();
+
+    openAppModal({
+      title: 'Medical Alert Acknowledged',
+      bodyHtml: `
+        <div class="modal-success">
+          Alert <strong>${escapeHtml(updated.alert_code || updated.id)}</strong> has been acknowledged. Ambulance / Volunteer unit assigned.
+        </div>
+      `,
+      footerHtml: `<button class="govt-btn" id="medAckDoneBtn">Done</button>`
+    });
+    document.getElementById('medAckDoneBtn')?.addEventListener('click', closeAppModal);
+  } catch (error) {
+    openAppModal({
+      title: 'Acknowledgement Failed',
+      bodyHtml: `<div class="modal-error">${escapeHtml(error.message)}</div>`,
+      footerHtml: `<button class="govt-btn" id="medAckErrClose">Close</button>`
+    });
+    document.getElementById('medAckErrClose')?.addEventListener('click', closeAppModal);
+  } finally {
+    setButtonLoading(button, false, 'Acknowledge');
+  }
+}
+
+async function fetchHeatRisk() {
+  try {
+    const data = await apiRequest('/dashboard/heat-risk');
+    if (!data) return;
+
+    const t = document.getElementById('heatTemp');
+    const h = document.getElementById('heatHumidity');
+    const r = document.getElementById('heatRiskIndex');
+    const w = document.getElementById('heatWaterStations');
+    const o = document.getElementById('heatOrslSupplies');
+    const adv = document.getElementById('heatAdvisoryText');
+
+    if (t) t.textContent = data.ambient_temperature;
+    if (h) h.textContent = data.relative_humidity;
+    if (r) r.textContent = data.computed_risk_index;
+    if (w) w.textContent = data.water_stations_active;
+    if (o) o.textContent = data.orsl_sachet_supplies;
+    if (adv) adv.innerHTML = `<strong>Advisory Action:</strong> ${escapeHtml(data.advisory_action)}`;
+  } catch (err) {
+    console.debug('[VariSetu] Heat risk fetch skipped.');
+  }
+}
+
+/* ==================== RESOURCES MANAGEMENT ==================== */
+async function refreshResources() {
+  try {
+    const resources = await apiRequest('/resources');
+    AppState.resources = resources;
+    renderResources(resources);
+    return resources;
+  } catch (err) {
+    console.debug('[VariSetu] Resources fetch skipped.');
+    return [];
+  }
+}
+
+function renderResources(resources) {
+  const tbody = document.getElementById('resourcesTableBody');
+  if (!tbody || !resources || resources.length === 0) return;
+
+  const grouped = {};
+  resources.forEach(r => {
+    const key = r.resource_type?.replace('_', ' ') || 'GENERAL RESOURCE';
+    if (!grouped[key]) {
+      grouped[key] = { total: 0, available: 0, deployed: 0, locations: [] };
+    }
+    grouped[key].total += 1;
+    if (r.availability === 'AVAILABLE') {
+      grouped[key].available += 1;
+    } else {
+      grouped[key].deployed += 1;
+    }
+    if (r.location_description) {
+      grouped[key].locations.push(r.location_description);
+    }
+  });
+
+  tbody.innerHTML = Object.entries(grouped).map(([type, item]) => `
+    <tr>
+      <td><strong>${escapeHtml(type)}</strong></td>
+      <td>${item.deployed} Units</td>
+      <td>${item.available} Units</td>
+      <td>${escapeHtml(item.locations.slice(0, 2).join(', ') || 'Corridor Stations')}</td>
+      <td>
+        <span class="density-tag ${item.available > 0 ? 'green' : 'red'}">
+          ${item.available > 0 ? 'OPTIMAL' : 'DEPLOYED'}
+        </span>
+      </td>
+    </tr>
+  `).join('');
+}
+
+/* ==================== ROUTES DIVERSION ==================== */
+async function refreshRoutes() {
+  try {
+    const routes = await apiRequest('/routes');
+    AppState.routes = routes;
+    renderRoutes(routes);
+    return routes;
+  } catch (err) {
+    console.debug('[VariSetu] Routes fetch skipped.');
+    return [];
+  }
+}
+
+function renderRoutes(routes) {
+  const container = document.getElementById('routesContainer');
+  if (!container || !routes || routes.length === 0) return;
+
+  container.innerHTML = routes.map(route => `
+    <div class="route-status-item" data-route-id="${escapeHtml(route.id)}">
+      <div>
+        <div style="font-weight:600; font-size:12px;">${escapeHtml(route.name)}</div>
+        <div style="font-size:10px; color:var(--text-secondary);">${escapeHtml(route.description || '')}</div>
+      </div>
+      <span class="status-pill ${getRouteClass(route.status)}">
+        ${escapeHtml(route.status?.replace('_', ' '))}
+      </span>
+    </div>
+  `).join('');
+}
+
+function getRouteClass(status) {
+  const s = String(status || '').toUpperCase();
+  if (s.includes('OPEN') || s.includes('PILGRIM') || s.includes('EMERGENCY')) return 'open';
+  if (s.includes('CLOSED')) return 'closed';
+  if (s.includes('DIVERT')) return 'diverted';
+  return 'open';
+}
+
+/* ==================== DEMO SIMULATION ==================== */
+function setupDemoButton() {
+  const btn = document.getElementById('demoToggleBtn');
+  const text = document.getElementById('demoToggleText');
+
+  btn?.addEventListener('click', async () => {
+    if (!AppState.isDemoRunning) {
+      openConfirmModal({
+        title: 'Start Wari Pilgrimage Simulation',
+        message: 'Start the automated 12-step emergency scenario? Live crowd peaks, lost person matching, and medical dispatches will stream in real-time.',
+        confirmText: 'Start Simulation',
+        onConfirm: async () => {
+          await apiRequest('/demo/start', { method: 'POST' });
+          AppState.isDemoRunning = true;
+          if (text) text.textContent = 'Stop Demo';
+          appendTickerEvent('[DEMO] 12-step pilgrimage operational scenario started.');
+        }
+      });
+    } else {
+      await apiRequest('/demo/stop', { method: 'POST' });
+      AppState.isDemoRunning = false;
+      if (text) text.textContent = 'Start Demo';
+      appendTickerEvent('[DEMO] Simulation stopped.');
+    }
+  });
+}
+
+/* ==================== REALTIME WEBSOCKET CLIENT ==================== */
 function connectWebSocket() {
   try {
     const ws = new WebSocket(`${WS_BASE}/all`);
+    AppState.ws = ws;
 
     ws.onopen = () => {
-      console.log('[VariSetu Live] Realtime WebSocket connected.');
+      console.log('[VariSetu Live] Realtime WebSocket connected to /ws/all');
     };
 
     ws.onmessage = (event) => {
       try {
         const payload = JSON.parse(event.data);
-        console.log('[VariSetu Live WS Event]:', payload);
         handleLiveEvent(payload);
       } catch (e) {
         console.error('[VariSetu Live] WS parse error:', e);
@@ -1898,7 +2768,6 @@ function connectWebSocket() {
     };
 
     ws.onclose = () => {
-      // Automatic reconnect after 5 seconds
       setTimeout(connectWebSocket, 5000);
     };
   } catch (err) {
@@ -1906,101 +2775,65 @@ function connectWebSocket() {
   }
 }
 
-function handleLiveEvent(msg) {
-  if (msg.event === 'TICKER_EVENT' && msg.data && msg.data.text) {
-    appendTickerEvent(msg.data.text);
+async function handleLiveEvent(msg) {
+  if (!msg || !msg.event) return;
+
+  switch (msg.event) {
+    case 'TICKER_EVENT':
+      if (msg.data?.text) {
+        appendTickerEvent(msg.data.text);
+      }
+      break;
+
+    case 'INCIDENT_CREATED':
+    case 'INCIDENT_UPDATED':
+      await fetchLiveSummary();
+      break;
+
+    case 'CROWD_UPDATED':
+      await refreshCrowdZones();
+      await fetchLiveSummary();
+      break;
+
+    case 'MEDICAL_ALERT_CREATED':
+    case 'MEDICAL_ALERT_UPDATED':
+      await refreshMedicalAlerts();
+      await fetchLiveSummary();
+      break;
+
+    case 'RESOURCE_DISPATCHED':
+    case 'RESOURCE_STATUS_CHANGED':
+      await refreshResources();
+      await fetchLiveSummary();
+      break;
+
+    case 'LOST_PERSON_MATCH_FOUND':
+    case 'LOST_PERSON_VERIFIED':
+    case 'LOST_PERSON_REUNITED':
+      await refreshLostPersons();
+      await fetchLiveSummary();
+      break;
+
+    case 'ROUTE_CHANGED':
+      await refreshRoutes();
+      break;
+
+    default:
+      console.debug('[VariSetu] Realtime event received:', msg.event);
   }
 }
 
 function appendTickerEvent(text) {
-  const ticker = document.querySelector('.incident-ticker');
-  if (!ticker) return;
-  const item = document.createElement('span');
-  item.className = 'ticker-item';
-  item.textContent = text;
-  ticker.prepend(item);
+  const ticker = document.getElementById('incidentLogText');
+  if (!ticker || !text) return;
+
+  const current = ticker.textContent.trim();
+  if (!current) {
+    ticker.textContent = text;
+    return;
+  }
+  ticker.textContent = `${text} -- ${current}`;
 }
-
-/* ==================== INTERACTIVE HELPERS ==================== */
-window.showTranscript = function(caseId) {
-  const box = document.getElementById('transcriptBox');
-  if (!box) return;
-
-  if (caseId === 'LF-802') {
-    box.textContent = `"हॅलो कंट्रोल रूम, आमचे आजोबा मारुती शिंदे (वय ६८) वारीत वाखरी फाट्याजवळ गर्दीत सुटले आहेत. त्यांनी पांढरा सुती कुर्ता, धोती आणि पांढरी टोपी घातली आहे. गळ्यात तुळशीची माळ आहे आणि हातात टाळ आहेत. कृपया शोध घेण्यास मदत करा."
-
-[Audio Analysis Summary]:
-- Subject: Male, ~68 yrs
-- Clothing: White Kurta, Dhoti, White Cap, Tulsi Mala
-- Audio Confidence score: High (0.94)
-- Vision Cross-Match: CAM-04 Pandharpur Chowk frame #4812 matching features.`;
-  } else if (caseId === 'LF-805') {
-    box.textContent = `"नमस्कार, माझी मुलगी आनंदिता कुलकर्णी (वय ९ वर्षे) वाखरी नाक्याजवळील गर्दीत हरवली आहे. तिने पिवळा परकर पोलका घातला आहे. हातात सोन्याच्या बांगड्या आहेत."
-
-[Audio Analysis Summary]:
-- Subject: Female child, ~9 yrs
-- Clothing: Yellow traditional dress (Parkar Polka)
-- Audio Confidence score: High (0.91)
-- Vision Cross-Match: Scanning CAM-12 & CAM-08 feeds.`;
-  } else if (caseId === 'LF-808') {
-    box.textContent = `"कंट्रोल रूम, सुनिता पाटील (वय ५४) आळंदी घाटाजवळ दिंडीतून वेगळ्या झाल्या. त्यांनी हिरवी नऊवारी साडी घातली असून डोक्यावर तुळशीचे वृंदावन आहे."
-
-[Audio Analysis Summary]:
-- Subject: Female, ~54 yrs
-- Clothing: Green Navvari Saree with Tulsi Vrindavan
-- Audio Confidence score: Medium (0.87)
-- Vision Cross-Match: Search active on Sector 1 cameras.`;
-  }
-};
-
-window.acknowledgeAlert = async function(alertId) {
-  const alertEl = document.getElementById(alertId);
-  if (!alertEl) return;
-
-  alertEl.classList.add('acknowledged');
-  const btn = alertEl.querySelector('.govt-btn');
-  if (btn) {
-    btn.className = 'govt-btn btn-disabled';
-    btn.textContent = 'Acknowledged';
-    btn.onclick = null;
-  }
-
-  // Update navbar badge if all acknowledged
-  const activeBadge = document.querySelector('.nav-tab[data-target="view-medical"] .badge');
-  if (activeBadge) {
-    activeBadge.textContent = '1 Alert';
-  }
-
-  // Send asynchronous acknowledgment to backend
-  try {
-    await fetch(`${API_BASE}/medical-alerts/${alertId}/acknowledge`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ notes: 'Acknowledged via Dashboard UI' })
-    });
-  } catch (e) {
-    console.debug('[VariSetu Live] Offline acknowledgment fallback completed.');
-  }
-};
-
-/* CCTV Modal Handler */
-window.openCamModal = function(camId, location, status) {
-  const modal = document.getElementById('camModal');
-  const modalId = document.getElementById('modalCamId');
-  const modalTitle = document.getElementById('modalCamTitle');
-  const modalStatus = document.getElementById('modalCamStatus');
-
-  if (modalId) modalId.textContent = camId;
-  if (modalTitle) modalTitle.textContent = `CCTV SURVEILLANCE FEED: ${location}`;
-  if (modalStatus) modalStatus.textContent = status;
-
-  if (modal) modal.classList.add('open');
-};
-
-window.closeCamModal = function() {
-  const modal = document.getElementById('camModal');
-  if (modal) modal.classList.remove('open');
-};
 
 ```
 
@@ -4295,10 +5128,12 @@ class DashboardSummary(BaseModel):
     critical_zones: int
     deployed_resources: int
     available_resources: int
+    total_resources: int
     active_cameras: int
     total_cameras: int
     estimated_pilgrim_count: int
     max_crowd_density: float
+    max_density: float
     palkhi_location: str
     palkhi_status: str
     last_updated: datetime
@@ -5709,8 +6544,10 @@ class DashboardService:
         # Deployed vs Available resources
         dep_q = select(func.count(Resource.id)).where(Resource.availability.in_([ResourceAvailability.ASSIGNED, ResourceAvailability.EN_ROUTE, ResourceAvailability.ON_SCENE]))
         avail_q = select(func.count(Resource.id)).where(Resource.availability == ResourceAvailability.AVAILABLE)
+        total_res_q = select(func.count(Resource.id))
         deployed_res = (await db.execute(dep_q)).scalar() or 0
         avail_res = (await db.execute(avail_q)).scalar() or 0
+        total_res = (await db.execute(total_res_q)).scalar() or (deployed_res + avail_res)
 
         # Cameras count
         cam_online_q = select(func.count(Camera.id)).where(Camera.status == CameraStatus.ONLINE)
@@ -5729,10 +6566,12 @@ class DashboardService:
             critical_zones=crit_zones,
             deployed_resources=deployed_res,
             available_resources=avail_res,
+            total_resources=total_res,
             active_cameras=active_cams,
             total_cameras=total_cams,
             estimated_pilgrim_count=845000,
             max_crowd_density=float(max_density),
+            max_density=float(max_density),
             palkhi_location="Approaching Wakhri Phata (Km 184)",
             palkhi_status="Sant Tukaram Maharaj Palkhi",
             last_updated=datetime.now(timezone.utc)

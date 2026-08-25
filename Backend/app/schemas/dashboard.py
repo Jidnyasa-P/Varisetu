@@ -10,10 +10,12 @@ class DashboardSummary(BaseModel):
     critical_zones: int
     deployed_resources: int
     available_resources: int
+    total_resources: int
     active_cameras: int
     total_cameras: int
     estimated_pilgrim_count: int
     max_crowd_density: float
+    max_density: float
     palkhi_location: str
     palkhi_status: str
     last_updated: datetime
