@@ -1117,33 +1117,35 @@ body {
 }
 
 .password-input-wrapper input {
-  padding-right: 36px !important;
+  padding-right: 38px !important;
 }
 
 .toggle-password-btn {
   position: absolute;
-  right: 6px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 4px;
-  color: var(--text-secondary);
+  color: #7A726A;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
 }
 
 .toggle-password-btn:hover {
   color: var(--maroon-primary);
 }
 
-.toggle-password-btn i,
 .toggle-password-btn svg {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
 }
+
 
 
 

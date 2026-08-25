@@ -155,7 +155,7 @@
             class="toggle-password-btn"
             aria-label="Toggle password visibility"
             title="Show / Hide Password">
-            <i data-lucide="eye" id="togglePasswordIcon"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="togglePasswordIcon"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
 
@@ -1804,33 +1804,35 @@ body {
 }
 
 .password-input-wrapper input {
-  padding-right: 36px !important;
+  padding-right: 38px !important;
 }
 
 .toggle-password-btn {
   position: absolute;
-  right: 6px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 4px;
-  color: var(--text-secondary);
+  color: #7A726A;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 5;
 }
 
 .toggle-password-btn:hover {
   color: var(--maroon-primary);
 }
 
-.toggle-password-btn i,
 .toggle-password-btn svg {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
 }
+
 
 
 
@@ -2113,6 +2115,9 @@ document.addEventListener('keydown', (event) => {
 
 /* ==================== LOGIN & LOGOUT ROUTING ==================== */
 document.addEventListener('DOMContentLoaded', () => {
+  if (window.lucide) {
+    lucide.createIcons();
+  }
   setupAuthEventListeners();
   initializeApplication();
 });
@@ -2150,15 +2155,14 @@ function setupAuthEventListeners() {
   // Password visibility toggle
   const togglePassBtn = document.getElementById('togglePasswordVisibilityBtn');
   const passInput = document.getElementById('loginPassword');
-  const passIcon = document.getElementById('togglePasswordIcon');
+  const eyeSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="togglePasswordIcon"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>`;
+  const eyeOffSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="togglePasswordIcon"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><line x1="2" x2="22" y1="2" y2="22"/></svg>`;
+
   togglePassBtn?.addEventListener('click', () => {
     if (!passInput) return;
     const isPassword = passInput.type === 'password';
     passInput.type = isPassword ? 'text' : 'password';
-    if (passIcon) {
-      passIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
-      if (window.lucide) lucide.createIcons();
-    }
+    togglePassBtn.innerHTML = isPassword ? eyeOffSvg : eyeSvg;
   });
 
   // Add new officer button (Admin only)
