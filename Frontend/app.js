@@ -346,8 +346,19 @@ async function logout() {
 function showLoginView() {
   const loginView = document.getElementById('loginView');
   const dashView = document.getElementById('dashboardView');
-  if (loginView) loginView.hidden = false;
-  if (dashView) dashView.hidden = true;
+  if (loginView) {
+    loginView.hidden = false;
+    loginView.style.display = 'flex';
+  }
+  if (dashView) {
+    dashView.hidden = true;
+    dashView.style.display = 'none';
+  }
+
+  const submitBtn = document.getElementById('loginSubmitBtn');
+  if (submitBtn) {
+    setButtonLoading(submitBtn, false, 'SIGN IN');
+  }
 
   disconnectWebSocket();
 }
@@ -356,8 +367,19 @@ function showDashboardView(user) {
   AppState.currentUser = user;
   const loginView = document.getElementById('loginView');
   const dashView = document.getElementById('dashboardView');
-  if (loginView) loginView.hidden = true;
-  if (dashView) dashView.hidden = false;
+  if (loginView) {
+    loginView.hidden = true;
+    loginView.style.display = 'none';
+  }
+  if (dashView) {
+    dashView.hidden = false;
+    dashView.style.display = 'block';
+  }
+
+  const submitBtn = document.getElementById('loginSubmitBtn');
+  if (submitBtn) {
+    setButtonLoading(submitBtn, false, 'SIGN IN');
+  }
 
   const profileText = document.getElementById('userProfileText');
   if (profileText && user) {
@@ -382,6 +404,14 @@ async function initializeDashboardAfterAuth(user) {
     setupDemoButton();
     setupLostFoundButtons();
     dashboardInitialized = true;
+  }
+
+  if (window.wariMap) {
+    setTimeout(() => {
+      try {
+        window.wariMap.invalidateSize();
+      } catch {}
+    }, 150);
   }
 
   await initLiveBackend();

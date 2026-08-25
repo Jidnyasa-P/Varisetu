@@ -977,7 +977,11 @@ body {
   }
 }
 
-/* ==================== LOGIN VIEW (AUTHENTICATION ENTRY) ==================== */
+/* ==================== HIDDEN UTILITY & LOGIN VIEW ==================== */
+[hidden] {
+  display: none !important;
+}
+
 .login-view {
   min-height: 100vh;
   background: var(--bg-khadi);
@@ -986,6 +990,12 @@ body {
   justify-content: center;
   padding: 24px;
   box-sizing: border-box;
+}
+
+.login-view[hidden],
+#loginView[hidden],
+#dashboardView[hidden] {
+  display: none !important;
 }
 
 .login-panel {
