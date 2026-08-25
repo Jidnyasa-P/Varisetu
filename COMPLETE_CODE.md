@@ -159,6 +159,24 @@
         </button>
       </form>
 
+      <div class="login-quick-accounts">
+        <div style="font-size:10px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; text-transform:uppercase;">Quick Demo Sign In:</div>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <button type="button" class="quick-login-chip" data-email="control.room@mahapolice.gov.in" data-pass="varisetu2026">
+            <strong>👑 Admin / Controller</strong>
+            <span>control.room@mahapolice.gov.in</span>
+          </button>
+          <button type="button" class="quick-login-chip" data-email="police.officer@mahapolice.gov.in" data-pass="varisetu2026">
+            <strong>👮 Police Officer</strong>
+            <span>police.officer@mahapolice.gov.in</span>
+          </button>
+          <button type="button" class="quick-login-chip" data-email="medical.team@varisetu.org" data-pass="varisetu2026">
+            <strong>🚑 Medical Team</strong>
+            <span>medical.team@varisetu.org</span>
+          </button>
+        </div>
+      </div>
+
       <div class="login-restricted-note">
         Authorised Personnel Only &bull; Access Monitored
       </div>
@@ -202,6 +220,10 @@
           <span id="userProfileText" style="font-weight:700; color:var(--maroon-primary); text-transform:uppercase;">COMMANDER</span>
           <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:9px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
         </div>
+        <button class="govt-btn btn-outline" id="addOfficerBtn" type="button" style="font-size:10px; padding:4px 9px;">
+          <i data-lucide="user-plus" style="width:11px; height:11px;"></i>
+          <span>+ Add Officer</span>
+        </button>
         <button class="govt-btn btn-outline" id="demoToggleBtn" type="button" style="font-size:10px; padding:4px 9px;">
           <i data-lucide="play" style="width:11px; height:11px;"></i>
           <span id="demoToggleText">Start Demo</span>
@@ -1782,6 +1804,40 @@ body {
   letter-spacing: 0.8px;
 }
 
+.login-quick-accounts {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-main);
+}
+
+.quick-login-chip {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-main);
+  padding: 6px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.quick-login-chip:hover {
+  border-color: var(--maroon-primary);
+  background: var(--maroon-bg);
+  color: var(--maroon-primary);
+}
+
+.quick-login-chip span {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--text-secondary);
+}
+
 
 
 ```
@@ -2095,6 +2151,20 @@ function setupAuthEventListeners() {
   });
 
   document.getElementById('logoutBtn')?.addEventListener('click', logout);
+
+  // Quick demo sign-in chips
+  document.querySelectorAll('.quick-login-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const emailInput = document.getElementById('loginEmail');
+      const passInput = document.getElementById('loginPassword');
+      if (emailInput && chip.dataset.email) emailInput.value = chip.dataset.email;
+      if (passInput && chip.dataset.pass) passInput.value = chip.dataset.pass;
+      document.getElementById('loginForm')?.requestSubmit();
+    });
+  });
+
+  // Add new officer button
+  document.getElementById('addOfficerBtn')?.addEventListener('click', openAddOfficerModal);
 }
 
 async function initializeApplication() {
@@ -2135,6 +2205,128 @@ async function logout() {
   disconnectWebSocket();
   clearAuth();
   showLoginView();
+}
+
+function openAddOfficerModal() {
+  openAppModal({
+    title: 'Provision Authorized Officer',
+    kicker: 'PERSONNEL & ACCESS CONTROL',
+    bodyHtml: `
+      <form id="newOfficerForm">
+        <div class="form-group">
+          <label>Officer Full Name</label>
+          <input type="text" id="officerName" class="form-control" placeholder="e.g. Inspector Vikram Jadhav" required>
+        </div>
+        <div class="form-group">
+          <label>Official Email ID</label>
+          <input type="email" id="officerEmail" class="form-control" placeholder="e.g. vikram.jadhav@mahapolice.gov.in" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" id="officerPhone" class="form-control" placeholder="+91-9822007788">
+          </div>
+          <div class="form-group">
+            <label>Access Role</label>
+            <select id="officerRole" class="form-control">
+              <option value="POLICE">POLICE (Traffic & Field Patrol)</option>
+              <option value="COMMANDER">COMMANDER (Command & Control)</option>
+              <option value="MEDICAL">MEDICAL (Ambulance / Health)</option>
+              <option value="RESOURCE_MANAGER">RESOURCE_MANAGER (Logistics)</option>
+              <option value="VOLUNTEER_COORDINATOR">VOLUNTEER_COORDINATOR</option>
+              <option value="VIEWER">VIEWER (Read-Only Monitor)</option>
+              <option value="ADMIN">ADMIN (Full System Administrator)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Department / Sector</label>
+          <input type="text" id="officerDept" class="form-control" placeholder="e.g. Pandharpur Quick Response Team">
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="officerPassword" class="form-control" value="varisetu2026" required>
+        </div>
+      </form>
+    `,
+    footerHtml: `
+      <button type="button" class="govt-btn btn-outline" id="officerCancel">Cancel</button>
+      <button type="button" class="govt-btn" id="officerSubmit">Create Officer Account</button>
+    `
+  });
+
+  document.getElementById('officerCancel')?.addEventListener('click', closeAppModal);
+  document.getElementById('officerSubmit')?.addEventListener('click', async () => {
+    const name = document.getElementById('officerName')?.value?.trim();
+    const email = document.getElementById('officerEmail')?.value?.trim();
+    const phone = document.getElementById('officerPhone')?.value?.trim() || null;
+    const role = document.getElementById('officerRole')?.value || 'POLICE';
+    const department = document.getElementById('officerDept')?.value?.trim() || 'Maharashtra Police';
+    const password = document.getElementById('officerPassword')?.value;
+    const submitBtn = document.getElementById('officerSubmit');
+
+    if (!name || !email || !password) {
+      alert('Please fill out Name, Official Email, and Password.');
+      return;
+    }
+
+    setButtonLoading(submitBtn, true, 'Creating account...');
+
+    try {
+      const created = await apiRequest('/auth/register', {
+        method: 'POST',
+        body: {
+          name,
+          email,
+          phone,
+          role,
+          department,
+          password,
+          is_active: true
+        }
+      });
+
+      openAppModal({
+        title: 'Officer Account Provisioned',
+        kicker: 'ACCESS AUTHORIZED',
+        bodyHtml: `
+          <div class="modal-success" style="margin-bottom:12px;">
+            Officer account for <strong>${escapeHtml(created.name)}</strong> provisioned successfully!
+          </div>
+          <div class="app-modal-detail-grid">
+            <div class="app-modal-detail-item">
+              <div class="app-modal-detail-label">Official Email</div>
+              <div class="app-modal-detail-value">${escapeHtml(created.email)}</div>
+            </div>
+            <div class="app-modal-detail-item">
+              <div class="app-modal-detail-label">Assigned Role</div>
+              <div class="app-modal-detail-value" style="font-weight:bold; color:var(--maroon-primary);">${escapeHtml(created.role)}</div>
+            </div>
+            <div class="app-modal-detail-item">
+              <div class="app-modal-detail-label">Department</div>
+              <div class="app-modal-detail-value">${escapeHtml(created.department || 'Maharashtra Police')}</div>
+            </div>
+            <div class="app-modal-detail-item">
+              <div class="app-modal-detail-label">Password</div>
+              <div class="app-modal-detail-value" style="font-family:var(--font-mono); font-size:11px;">${escapeHtml(password)}</div>
+            </div>
+          </div>
+          <div style="margin-top:12px; font-size:11px; color:var(--text-secondary);">
+            The officer can now immediately log in with these credentials.
+          </div>
+        `,
+        footerHtml: `
+          <button type="button" class="govt-btn" id="officerDoneBtn">Done</button>
+        `
+      });
+      document.getElementById('officerDoneBtn')?.addEventListener('click', closeAppModal);
+    } catch (err) {
+      document.getElementById('appModalBody').innerHTML = `
+        <div class="modal-error">${escapeHtml(err.message || 'Failed to create officer account.')}</div>
+      `;
+      setButtonLoading(submitBtn, false, 'Create Officer Account');
+    }
+  });
 }
 
 function showLoginView() {
@@ -5659,6 +5851,7 @@ audit_service = AuditService()
 
 ```python
 from datetime import datetime, timezone
+from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -5761,6 +5954,13 @@ class AuthService:
             entity_id=new_user.id
         )
         return UserOut.model_validate(new_user)
+
+    @staticmethod
+    async def get_all_users(db: AsyncSession) -> List[UserOut]:
+        query = select(User).order_by(User.name)
+        result = await db.execute(query)
+        users = result.scalars().all()
+        return [UserOut.model_validate(u) for u in users]
 
 
 auth_service = AuthService()
@@ -7880,6 +8080,7 @@ ws_manager = ConnectionManager()
 `Backend/app/api/auth.py`
 
 ```python
+from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7908,6 +8109,15 @@ async def refresh_token(req: RefreshTokenRequest, db: AsyncSession = Depends(get
 async def get_current_user_profile(current_user: User = Depends(get_current_user)):
     """Retrieve profile and role details of the currently authenticated user."""
     return UserOut.model_validate(current_user)
+
+
+@router.get("/users", response_model=List[UserOut], summary="List all registered officers (Admin Only)")
+async def list_users(
+    current_admin: User = Depends(require_roles([UserRole.ADMIN])),
+    db: AsyncSession = Depends(get_db)
+):
+    """Retrieve roster of all authorized police & medical officers."""
+    return await auth_service.get_all_users(db)
 
 
 @router.post("/logout", summary="Log out user and invalidate session")

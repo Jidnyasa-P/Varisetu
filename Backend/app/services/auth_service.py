@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
@@ -101,6 +102,13 @@ class AuthService:
             entity_id=new_user.id
         )
         return UserOut.model_validate(new_user)
+
+    @staticmethod
+    async def get_all_users(db: AsyncSession) -> List[UserOut]:
+        query = select(User).order_by(User.name)
+        result = await db.execute(query)
+        users = result.scalars().all()
+        return [UserOut.model_validate(u) for u in users]
 
 
 auth_service = AuthService()

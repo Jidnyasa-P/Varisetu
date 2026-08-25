@@ -69,6 +69,24 @@
         </button>
       </form>
 
+      <div class="login-quick-accounts">
+        <div style="font-size:10px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; text-transform:uppercase;">Quick Demo Sign In:</div>
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <button type="button" class="quick-login-chip" data-email="control.room@mahapolice.gov.in" data-pass="varisetu2026">
+            <strong>👑 Admin / Controller</strong>
+            <span>control.room@mahapolice.gov.in</span>
+          </button>
+          <button type="button" class="quick-login-chip" data-email="police.officer@mahapolice.gov.in" data-pass="varisetu2026">
+            <strong>👮 Police Officer</strong>
+            <span>police.officer@mahapolice.gov.in</span>
+          </button>
+          <button type="button" class="quick-login-chip" data-email="medical.team@varisetu.org" data-pass="varisetu2026">
+            <strong>🚑 Medical Team</strong>
+            <span>medical.team@varisetu.org</span>
+          </button>
+        </div>
+      </div>
+
       <div class="login-restricted-note">
         Authorised Personnel Only &bull; Access Monitored
       </div>
@@ -112,6 +130,10 @@
           <span id="userProfileText" style="font-weight:700; color:var(--maroon-primary); text-transform:uppercase;">COMMANDER</span>
           <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:9px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
         </div>
+        <button class="govt-btn btn-outline" id="addOfficerBtn" type="button" style="font-size:10px; padding:4px 9px;">
+          <i data-lucide="user-plus" style="width:11px; height:11px;"></i>
+          <span>+ Add Officer</span>
+        </button>
         <button class="govt-btn btn-outline" id="demoToggleBtn" type="button" style="font-size:10px; padding:4px 9px;">
           <i data-lucide="play" style="width:11px; height:11px;"></i>
           <span id="demoToggleText">Start Demo</span>

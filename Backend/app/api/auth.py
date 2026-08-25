@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -26,6 +27,15 @@ async def refresh_token(req: RefreshTokenRequest, db: AsyncSession = Depends(get
 async def get_current_user_profile(current_user: User = Depends(get_current_user)):
     """Retrieve profile and role details of the currently authenticated user."""
     return UserOut.model_validate(current_user)
+
+
+@router.get("/users", response_model=List[UserOut], summary="List all registered officers (Admin Only)")
+async def list_users(
+    current_admin: User = Depends(require_roles([UserRole.ADMIN])),
+    db: AsyncSession = Depends(get_db)
+):
+    """Retrieve roster of all authorized police & medical officers."""
+    return await auth_service.get_all_users(db)
 
 
 @router.post("/logout", summary="Log out user and invalidate session")
