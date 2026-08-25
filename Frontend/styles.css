@@ -1109,38 +1109,41 @@ body {
   letter-spacing: 0.8px;
 }
 
-.login-quick-accounts {
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px dashed var(--border-main);
-}
-
-.quick-login-chip {
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-main);
-  padding: 6px 8px;
-  border-radius: 2px;
-  cursor: pointer;
+.password-input-wrapper {
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 11px;
-  font-family: var(--font-sans);
-  color: var(--text-primary);
-  text-align: left;
-  transition: all 0.15s ease;
+  width: 100%;
 }
 
-.quick-login-chip:hover {
-  border-color: var(--maroon-primary);
-  background: var(--maroon-bg);
+.password-input-wrapper input {
+  padding-right: 36px !important;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password-btn:hover {
   color: var(--maroon-primary);
 }
 
-.quick-login-chip span {
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  color: var(--text-secondary);
+.toggle-password-btn i,
+.toggle-password-btn svg {
+  width: 15px;
+  height: 15px;
 }
+
 
 

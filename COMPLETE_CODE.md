@@ -141,13 +141,23 @@
         />
 
         <label for="loginPassword">Password</label>
-        <input
-          id="loginPassword"
-          type="password"
-          autocomplete="current-password"
-          placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-          required
-        />
+        <div class="password-input-wrapper">
+          <input
+            id="loginPassword"
+            type="password"
+            autocomplete="current-password"
+            placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+            required
+          />
+          <button
+            type="button"
+            id="togglePasswordVisibilityBtn"
+            class="toggle-password-btn"
+            aria-label="Toggle password visibility"
+            title="Show / Hide Password">
+            <i data-lucide="eye" id="togglePasswordIcon"></i>
+          </button>
+        </div>
 
         <div id="loginError" class="login-error" hidden></div>
 
@@ -158,24 +168,6 @@
           SIGN IN
         </button>
       </form>
-
-      <div class="login-quick-accounts">
-        <div style="font-size:10px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; text-transform:uppercase;">Quick Demo Sign In:</div>
-        <div style="display:flex; flex-direction:column; gap:4px;">
-          <button type="button" class="quick-login-chip" data-email="control.room@mahapolice.gov.in" data-pass="varisetu2026">
-            <strong>👑 Admin / Controller</strong>
-            <span>control.room@mahapolice.gov.in</span>
-          </button>
-          <button type="button" class="quick-login-chip" data-email="police.officer@mahapolice.gov.in" data-pass="varisetu2026">
-            <strong>👮 Police Officer</strong>
-            <span>police.officer@mahapolice.gov.in</span>
-          </button>
-          <button type="button" class="quick-login-chip" data-email="medical.team@varisetu.org" data-pass="varisetu2026">
-            <strong>🚑 Medical Team</strong>
-            <span>medical.team@varisetu.org</span>
-          </button>
-        </div>
-      </div>
 
       <div class="login-restricted-note">
         Authorised Personnel Only &bull; Access Monitored
@@ -220,7 +212,7 @@
           <span id="userProfileText" style="font-weight:700; color:var(--maroon-primary); text-transform:uppercase;">COMMANDER</span>
           <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:9px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
         </div>
-        <button class="govt-btn btn-outline" id="addOfficerBtn" type="button" style="font-size:10px; padding:4px 9px;">
+        <button class="govt-btn btn-outline" id="addOfficerBtn" type="button" style="display:none; font-size:10px; padding:4px 9px;">
           <i data-lucide="user-plus" style="width:11px; height:11px;"></i>
           <span>+ Add Officer</span>
         </button>
@@ -1804,39 +1796,42 @@ body {
   letter-spacing: 0.8px;
 }
 
-.login-quick-accounts {
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px dashed var(--border-main);
-}
-
-.quick-login-chip {
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-main);
-  padding: 6px 8px;
-  border-radius: 2px;
-  cursor: pointer;
+.password-input-wrapper {
+  position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 11px;
-  font-family: var(--font-sans);
-  color: var(--text-primary);
-  text-align: left;
-  transition: all 0.15s ease;
+  width: 100%;
 }
 
-.quick-login-chip:hover {
-  border-color: var(--maroon-primary);
-  background: var(--maroon-bg);
+.password-input-wrapper input {
+  padding-right: 36px !important;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-password-btn:hover {
   color: var(--maroon-primary);
 }
 
-.quick-login-chip span {
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  color: var(--text-secondary);
+.toggle-password-btn i,
+.toggle-password-btn svg {
+  width: 15px;
+  height: 15px;
 }
+
 
 
 
@@ -2152,18 +2147,21 @@ function setupAuthEventListeners() {
 
   document.getElementById('logoutBtn')?.addEventListener('click', logout);
 
-  // Quick demo sign-in chips
-  document.querySelectorAll('.quick-login-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const emailInput = document.getElementById('loginEmail');
-      const passInput = document.getElementById('loginPassword');
-      if (emailInput && chip.dataset.email) emailInput.value = chip.dataset.email;
-      if (passInput && chip.dataset.pass) passInput.value = chip.dataset.pass;
-      document.getElementById('loginForm')?.requestSubmit();
-    });
+  // Password visibility toggle
+  const togglePassBtn = document.getElementById('togglePasswordVisibilityBtn');
+  const passInput = document.getElementById('loginPassword');
+  const passIcon = document.getElementById('togglePasswordIcon');
+  togglePassBtn?.addEventListener('click', () => {
+    if (!passInput) return;
+    const isPassword = passInput.type === 'password';
+    passInput.type = isPassword ? 'text' : 'password';
+    if (passIcon) {
+      passIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+      if (window.lucide) lucide.createIcons();
+    }
   });
 
-  // Add new officer button
+  // Add new officer button (Admin only)
   document.getElementById('addOfficerBtn')?.addEventListener('click', openAddOfficerModal);
 }
 
@@ -2370,6 +2368,16 @@ function showDashboardView(user) {
   const profileText = document.getElementById('userProfileText');
   if (profileText && user) {
     profileText.textContent = `${user.role || 'OFFICER'}`;
+  }
+
+  // Strictly restrict + Add Officer button to ADMIN role only
+  const addOfficerBtn = document.getElementById('addOfficerBtn');
+  if (addOfficerBtn) {
+    if (user && user.role === 'ADMIN') {
+      addOfficerBtn.style.display = 'inline-flex';
+    } else {
+      addOfficerBtn.style.display = 'none';
+    }
   }
 
   if (window.lucide) {

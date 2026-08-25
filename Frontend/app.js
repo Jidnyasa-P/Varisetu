@@ -302,18 +302,21 @@ function setupAuthEventListeners() {
 
   document.getElementById('logoutBtn')?.addEventListener('click', logout);
 
-  // Quick demo sign-in chips
-  document.querySelectorAll('.quick-login-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      const emailInput = document.getElementById('loginEmail');
-      const passInput = document.getElementById('loginPassword');
-      if (emailInput && chip.dataset.email) emailInput.value = chip.dataset.email;
-      if (passInput && chip.dataset.pass) passInput.value = chip.dataset.pass;
-      document.getElementById('loginForm')?.requestSubmit();
-    });
+  // Password visibility toggle
+  const togglePassBtn = document.getElementById('togglePasswordVisibilityBtn');
+  const passInput = document.getElementById('loginPassword');
+  const passIcon = document.getElementById('togglePasswordIcon');
+  togglePassBtn?.addEventListener('click', () => {
+    if (!passInput) return;
+    const isPassword = passInput.type === 'password';
+    passInput.type = isPassword ? 'text' : 'password';
+    if (passIcon) {
+      passIcon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+      if (window.lucide) lucide.createIcons();
+    }
   });
 
-  // Add new officer button
+  // Add new officer button (Admin only)
   document.getElementById('addOfficerBtn')?.addEventListener('click', openAddOfficerModal);
 }
 
@@ -520,6 +523,16 @@ function showDashboardView(user) {
   const profileText = document.getElementById('userProfileText');
   if (profileText && user) {
     profileText.textContent = `${user.role || 'OFFICER'}`;
+  }
+
+  // Strictly restrict + Add Officer button to ADMIN role only
+  const addOfficerBtn = document.getElementById('addOfficerBtn');
+  if (addOfficerBtn) {
+    if (user && user.role === 'ADMIN') {
+      addOfficerBtn.style.display = 'inline-flex';
+    } else {
+      addOfficerBtn.style.display = 'none';
+    }
   }
 
   if (window.lucide) {
