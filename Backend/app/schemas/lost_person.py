@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel, ConfigDict, Field
+import json
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.models.face_match import FaceMatchStatus
 from app.models.lost_person import LostPersonStatus
@@ -51,7 +52,25 @@ class LostPersonCaseBase(BaseModel):
     last_seen_location: str = Field(..., min_length=2)
     last_seen_camera_id: Optional[str] = None
     photo_url: Optional[str] = None
+    photo_urls: Optional[List[str]] = None
     priority: str = "HIGH"
+
+    @field_validator('photo_urls', mode='before')
+    @classmethod
+    def parse_photo_urls(cls, v):
+        if v is None:
+            return None
+        if isinstance(v, list):
+            return v
+        if isinstance(v, str):
+            try:
+                parsed = json.loads(v)
+                if isinstance(parsed, list):
+                    return parsed
+                return [v]
+            except Exception:
+                return [v]
+        return [str(v)]
 
 
 class LostPersonCaseCreate(LostPersonCaseBase):

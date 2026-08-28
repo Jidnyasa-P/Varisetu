@@ -320,6 +320,11 @@ function setupAuthEventListeners() {
 
   // Add new officer button (Admin only)
   document.getElementById('addOfficerBtn')?.addEventListener('click', openAddOfficerModal);
+
+  // Public Pilgrim Portal event listeners
+  document.getElementById('openPublicPortalBtn')?.addEventListener('click', showPublicView);
+  document.getElementById('backToLoginBtn')?.addEventListener('click', showLoginView);
+  document.getElementById('publicReportMissingBtn')?.addEventListener('click', () => openLostPersonCreateModal(true));
 }
 
 async function initializeApplication() {
@@ -487,6 +492,8 @@ function openAddOfficerModal() {
 function showLoginView() {
   const loginView = document.getElementById('loginView');
   const dashView = document.getElementById('dashboardView');
+  const publicView = document.getElementById('publicView');
+
   if (loginView) {
     loginView.hidden = false;
     loginView.style.display = 'flex';
@@ -495,22 +502,116 @@ function showLoginView() {
     dashView.hidden = true;
     dashView.style.display = 'none';
   }
+  if (publicView) {
+    publicView.hidden = true;
+    publicView.style.display = 'none';
+  }
 
   const submitBtn = document.getElementById('loginSubmitBtn');
   if (submitBtn) {
     setButtonLoading(submitBtn, false, 'SIGN IN');
   }
 
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+
   disconnectWebSocket();
+}
+
+function showPublicView() {
+  const loginView = document.getElementById('loginView');
+  const dashView = document.getElementById('dashboardView');
+  const publicView = document.getElementById('publicView');
+
+  if (loginView) {
+    loginView.hidden = true;
+    loginView.style.display = 'none';
+  }
+  if (dashView) {
+    dashView.hidden = true;
+    dashView.style.display = 'none';
+  }
+  if (publicView) {
+    publicView.hidden = false;
+    publicView.style.display = 'block';
+  }
+
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+
+  setTimeout(() => initPublicRouteMap(), 150);
+}
+
+let publicMapInitialized = false;
+function initPublicRouteMap() {
+  const mapElement = document.getElementById('publicRouteMap');
+  if (!mapElement) return;
+  if (publicMapInitialized && window.publicWariMap) {
+    window.publicWariMap.invalidateSize();
+    return;
+  }
+
+  const publicMap = L.map('publicRouteMap', {
+    center: [18.0000, 74.8000],
+    zoom: 9,
+    zoomControl: true
+  });
+
+  window.publicWariMap = publicMap;
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; Maharashtra Police IT &bull; Map data &copy; OpenStreetMap',
+    maxZoom: 18
+  }).addTo(publicMap);
+
+  const routePoints = [
+    [18.6772, 73.8967], // Alandi
+    [18.5204, 73.8567], // Pune City
+    [18.3440, 74.0305], // Saswad
+    [18.1500, 74.3000], // Jejuri / Lonand
+    [17.8900, 75.0200], // Bhalwani
+    [17.7280, 75.2950], // Wakhri Phata
+    [17.6777, 75.3276]  // Pandharpur Shrine
+  ];
+
+  L.polyline(routePoints.slice(0, 4), { color: '#2E5B36', weight: 6, opacity: 0.85 }).addTo(publicMap).bindPopup('<b>Alandi-Saswad Corridor:</b> Normal Flow');
+  L.polyline(routePoints.slice(3, 7), { color: '#7A1F1F', weight: 7, opacity: 0.9 }).addTo(publicMap).bindPopup('<b>Wakhri-Pandharpur Sector:</b> Procession Approaching');
+
+  const palkhiIcon = L.divIcon({
+    className: 'custom-map-icon',
+    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:10px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 SANT TUKARAM PALKHI</div>`,
+    iconSize: [140, 24],
+    iconAnchor: [70, 12]
+  });
+  L.marker([17.7280, 75.2950], { icon: palkhiIcon }).addTo(publicMap)
+    .bindPopup('<b>Sant Tukaram Maharaj Palkhi</b><br>Approaching Wakhri Phata (Km 184)<br>Moving smoothly towards Pandharpur');
+
+  const pandharpurIcon = L.divIcon({
+    className: 'custom-map-icon',
+    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:10px; font-weight:bold; border-radius:2px;">🛕 Pandharpur Shrine</div>`,
+    iconSize: [130, 24]
+  });
+  L.marker([17.6777, 75.3276], { icon: pandharpurIcon }).addTo(publicMap)
+    .bindPopup('<b>Shri Vitthal-Rukmini Mandir</b><br>Pandharpur Final Destination');
+
+  publicMapInitialized = true;
 }
 
 function showDashboardView(user) {
   AppState.currentUser = user;
   const loginView = document.getElementById('loginView');
   const dashView = document.getElementById('dashboardView');
+  const publicView = document.getElementById('publicView');
+
   if (loginView) {
     loginView.hidden = true;
     loginView.style.display = 'none';
+  }
+  if (publicView) {
+    publicView.hidden = true;
+    publicView.style.display = 'none';
   }
   if (dashView) {
     dashView.hidden = false;
@@ -555,6 +656,7 @@ async function initializeDashboardAfterAuth(user) {
     setupCctvModal();
     setupDemoButton();
     setupLostFoundButtons();
+    setupMedicalEmergencyButtons();
     dashboardInitialized = true;
   }
 
@@ -1401,9 +1503,13 @@ function showTranscript(caseItem) {
 function openLostPersonDetails(item) {
   showTranscript(item);
 
+  const photos = (item.photo_urls && Array.isArray(item.photo_urls) && item.photo_urls.length > 0)
+    ? item.photo_urls
+    : (item.photo_url ? [item.photo_url] : ['assets/palkhi_procession_hd.jpg']);
+
   openAppModal({
     title: `CASE ${item.case_number}: ${item.name}`,
-    kicker: 'LOST & FOUND INCIDENT DOSSIER',
+    kicker: 'LOST & FOUND BIOMETRIC DOSSIER',
     bodyHtml: `
       <div class="app-modal-detail-grid">
         <div class="app-modal-detail-item">
@@ -1423,8 +1529,25 @@ function openLostPersonDetails(item) {
           <div class="app-modal-detail-value" style="color:var(--maroon-primary); font-weight:bold;">${escapeHtml(item.status)}</div>
         </div>
       </div>
+      
       <div style="margin-top:10px; background:var(--bg-subtle); padding:9px; border:1px solid var(--border-main); font-size:11px;">
         <strong>Attire Description:</strong> ${escapeHtml(item.clothing_description)}
+      </div>
+
+      <!-- Biometric Photo Gallery Section -->
+      <div style="margin-top:12px;">
+        <div class="app-modal-detail-label" style="margin-bottom:6px;">Biometric Photo Records & AI Match Pool (${photos.length} Photo${photos.length > 1 ? 's' : ''})</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          ${photos.map((url, idx) => `
+            <div class="photo-upload-thumbnail" style="width:72px; height:72px; position:relative; border:1px solid var(--border-main); background:#000; border-radius:2px; overflow:hidden;">
+              <img src="${url}" style="width:100%; height:100%; object-fit:cover;" alt="Photo ${idx + 1}">
+              <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.75); color:#00FF66; font-size:7.5px; font-family:var(--font-mono); text-align:center; padding:1px 0;">FACE #${idx + 1}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div style="margin-top:6px; font-size:10px; color:#2E5B36; font-family:var(--font-mono); display:flex; align-items:center; gap:4px;">
+          <span>✨ <strong>AI Face Recognition Active:</strong> 512-D embedding feature vectors extracted across 4 CCTV live streams.</span>
+        </div>
       </div>
     `,
     footerHtml: `
@@ -1470,7 +1593,7 @@ async function reuniteLostPerson(caseId) {
 }
 
 function setupLostFoundButtons() {
-  document.getElementById('registerLostPersonBtn')?.addEventListener('click', openLostPersonCreateModal);
+  document.getElementById('registerLostPersonBtn')?.addEventListener('click', () => openLostPersonCreateModal(false));
 
   document.getElementById('dispatchVolunteerBtn')?.addEventListener('click', () => {
     if (AppState.selectedLostCase) {
@@ -1486,23 +1609,25 @@ function setupLostFoundButtons() {
   });
 }
 
-function openLostPersonCreateModal() {
+function openLostPersonCreateModal(isPublic = false) {
+  let uploadedPhotos = [];
+
   openAppModal({
-    title: 'Register Missing Person Case',
-    kicker: 'NEW HELPLINE CASE ENTRY',
+    title: isPublic ? 'Public Missing Person Registration' : 'Register Missing Person Case',
+    kicker: isPublic ? 'CITIZEN REPORTING PORTAL' : 'POLICE HELPLINE CASE ENTRY',
     bodyHtml: `
       <form id="newCaseForm">
         <div class="form-group">
-          <label>Full Name</label>
+          <label>Full Name of Missing Person (हरवलेल्या व्यक्तीचे नाव)</label>
           <input type="text" id="newCaseName" class="form-control" placeholder="e.g. Maruti Kisan Shinde" required>
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
           <div class="form-group">
-            <label>Age</label>
+            <label>Age (वय)</label>
             <input type="number" id="newCaseAge" class="form-control" placeholder="68" required>
           </div>
           <div class="form-group">
-            <label>Gender</label>
+            <label>Gender (लिंग)</label>
             <select id="newCaseGender" class="form-control">
               <option value="M">Male (पुरुष)</option>
               <option value="F">Female (स्त्री)</option>
@@ -1511,13 +1636,26 @@ function openLostPersonCreateModal() {
           </div>
         </div>
         <div class="form-group">
-          <label>Clothing Description (Marathi & English)</label>
-          <input type="text" id="newCaseClothing" class="form-control" placeholder="पांढरा कुर्ता, धोती, पांढरी टोपी" required>
+          <label>Clothing Description (कपड्यांचे वर्णन)</label>
+          <input type="text" id="newCaseClothing" class="form-control" placeholder="पांढरा कुर्ता, धोती, पांढरी टोपी, गळ्यात तुळशी माळ" required>
         </div>
         <div class="form-group">
-          <label>Last Seen Location</label>
-          <input type="text" id="newCaseLocation" class="form-control" placeholder="Wakhri Phata Junction" required>
+          <label>Last Seen Location (शेवटचे पाहिलेले ठिकाण)</label>
+          <input type="text" id="newCaseLocation" class="form-control" placeholder="Wakhri Phata / Sector 3 near Water Station" required>
         </div>
+
+        ${isPublic ? `
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="form-group">
+            <label>Your Name (आपले नाव)</label>
+            <input type="text" id="newCaseCallerName" class="form-control" placeholder="e.g. Ramesh Shinde">
+          </div>
+          <div class="form-group">
+            <label>Contact Phone (मोबाईल नंबर)</label>
+            <input type="text" id="newCaseCallerPhone" class="form-control" placeholder="e.g. 9876543210">
+          </div>
+        </div>
+        ` : `
         <div class="form-group">
           <label>Priority</label>
           <select id="newCasePriority" class="form-control">
@@ -1526,12 +1664,86 @@ function openLostPersonCreateModal() {
             <option value="NORMAL">Normal</option>
           </select>
         </div>
+        `}
+
+        <!-- Multi-Photo Upload Section (4-5 Photos for AI Face Detection) -->
+        <div class="form-group" style="margin-top:10px;">
+          <label>Photographs for AI Facial Recognition (Upload 1-5 Photos / फोटो जोडा)</label>
+          <input type="file" id="lostPersonPhotoInput" multiple accept="image/*" style="display:none;">
+          
+          <div id="lostPersonDropzone" style="border:2px dashed var(--border-main); padding:12px; text-align:center; background:var(--bg-subtle); cursor:pointer; border-radius:2px; transition:border-color 0.2s;">
+            <div style="font-weight:600; font-size:11px; color:var(--maroon-primary); margin-bottom:2px;">
+              📁 Click to Upload 4-5 Photos (Frontal Face, Profile, Full Body)
+            </div>
+            <div style="font-size:9.5px; color:var(--text-muted);">
+              PNG, JPG, JPEG accepted &bull; Max 5 images
+            </div>
+          </div>
+
+          <div id="selectedPhotosPreviewContainer" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
+
+          <div id="aiEmbeddingBadge" style="margin-top:6px; font-size:10px; color:#2E5B36; font-family:var(--font-mono); background:#E8F5E9; border:1px solid #A5D6A7; padding:6px 8px; border-radius:2px; display:none;">
+            ✨ <strong>AI Face Recognition Model Slot Ready:</strong> Feature embeddings (512-D vectors) will be indexed for instant multi-camera CCTV matching.
+          </div>
+        </div>
       </form>
     `,
     footerHtml: `
       <button type="button" class="govt-btn btn-outline" id="newCaseCancel">Cancel</button>
-      <button type="button" class="govt-btn" id="newCaseSubmit">Register Case</button>
+      <button type="button" class="govt-btn" id="newCaseSubmit">${isPublic ? 'Submit Report (तक्रार दाखल करा)' : 'Register Case'}</button>
     `
+  });
+
+  // Setup Image Dropzone & Multi-file Upload
+  const dropzone = document.getElementById('lostPersonDropzone');
+  const fileInput = document.getElementById('lostPersonPhotoInput');
+  const previewContainer = document.getElementById('selectedPhotosPreviewContainer');
+  const aiBadge = document.getElementById('aiEmbeddingBadge');
+
+  dropzone?.addEventListener('click', () => fileInput?.click());
+
+  function renderPhotoThumbnails() {
+    if (!previewContainer) return;
+    previewContainer.innerHTML = '';
+
+    uploadedPhotos.forEach((dataUrl, idx) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'photo-upload-thumbnail';
+      thumb.innerHTML = `
+        <img src="${dataUrl}" alt="Face ${idx + 1}">
+        <button type="button" class="photo-upload-remove-btn" title="Remove" data-idx="${idx}">×</button>
+        <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:#00FF66; font-size:7px; font-family:var(--font-mono); text-align:center;">#${idx + 1}</div>
+      `;
+      thumb.querySelector('.photo-upload-remove-btn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        uploadedPhotos.splice(idx, 1);
+        renderPhotoThumbnails();
+      });
+      previewContainer.appendChild(thumb);
+    });
+
+    if (aiBadge) {
+      aiBadge.style.display = uploadedPhotos.length > 0 ? 'block' : 'none';
+    }
+  }
+
+  fileInput?.addEventListener('change', (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    const remainingSlots = 5 - uploadedPhotos.length;
+    const toProcess = files.slice(0, remainingSlots);
+
+    toProcess.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (loadEvt) => {
+        if (loadEvt.target?.result && uploadedPhotos.length < 5) {
+          uploadedPhotos.push(loadEvt.target.result);
+          renderPhotoThumbnails();
+        }
+      };
+      reader.readAsDataURL(file);
+    });
   });
 
   document.getElementById('newCaseCancel')?.addEventListener('click', closeAppModal);
@@ -1542,6 +1754,8 @@ function openLostPersonCreateModal() {
     const clothing = document.getElementById('newCaseClothing')?.value?.trim();
     const location = document.getElementById('newCaseLocation')?.value?.trim();
     const priority = document.getElementById('newCasePriority')?.value || 'HIGH';
+    const callerName = document.getElementById('newCaseCallerName')?.value?.trim() || null;
+    const callerPhone = document.getElementById('newCaseCallerPhone')?.value?.trim() || null;
 
     if (!name || !age || !clothing || !location) {
       alert('Please fill out all required fields.');
@@ -1549,29 +1763,159 @@ function openLostPersonCreateModal() {
     }
 
     const submitBtn = document.getElementById('newCaseSubmit');
-    setButtonLoading(submitBtn, true, 'Registering...');
+    setButtonLoading(submitBtn, true, 'Submitting...');
 
     try {
-      await apiRequest('/lost-persons', {
-        method: 'POST',
-        body: {
-          name,
-          age,
-          gender,
-          clothing_description: clothing,
-          last_seen_location: location,
-          priority
-        }
-      });
+      if (isPublic) {
+        const resp = await apiRequest('/public/report-lost', {
+          method: 'POST',
+          body: {
+            name,
+            age,
+            gender,
+            clothing_description: clothing,
+            last_seen_location: location,
+            caller_name: callerName,
+            caller_phone: callerPhone,
+            photo_urls: uploadedPhotos
+          },
+          skipAuthRefresh: true
+        });
 
-      closeAppModal();
-      await refreshLostPersons();
-      await fetchLiveSummary();
+        openAppModal({
+          title: 'Report Submitted Successfully',
+          kicker: 'AI FACIAL SEARCH ACTIVATED',
+          bodyHtml: `
+            <div style="text-align:center; padding:12px 0;">
+              <div style="font-size:28px; margin-bottom:8px;">✅</div>
+              <div style="font-weight:700; font-size:14px; color:var(--maroon-primary); margin-bottom:6px;">
+                Case Reference: ${escapeHtml(resp.case_number || '#LF-NEW')}
+              </div>
+              <div style="font-size:12px; color:var(--text-primary); line-height:1.5;">
+                Your report for <strong>${escapeHtml(name)}</strong> has been registered with the Police Command Center.<br>
+                ${uploadedPhotos.length} photo(s) submitted for biometric recognition across all CCTV checkpoints.
+              </div>
+            </div>
+          `,
+          footerHtml: `
+            <button type="button" class="govt-btn" id="publicSuccessClose">Close & Return to Map</button>
+          `
+        });
+        document.getElementById('publicSuccessClose')?.addEventListener('click', closeAppModal);
+      } else {
+        await apiRequest('/lost-persons', {
+          method: 'POST',
+          body: {
+            name,
+            age,
+            gender,
+            clothing_description: clothing,
+            last_seen_location: location,
+            priority,
+            photo_urls: uploadedPhotos,
+            photo_url: uploadedPhotos[0] || null
+          }
+        });
+
+        closeAppModal();
+        await refreshLostPersons();
+        await fetchLiveSummary();
+      }
     } catch (err) {
       document.getElementById('appModalBody').innerHTML = `
         <div class="modal-error">${escapeHtml(err.message || 'Registration failed.')}</div>
       `;
       setButtonLoading(submitBtn, false, 'Register Case');
+    }
+  });
+}
+
+function setupMedicalEmergencyButtons() {
+  document.getElementById('addMedicalAlertBtn')?.addEventListener('click', openAddMedicalEmergencyModal);
+}
+
+function openAddMedicalEmergencyModal() {
+  openAppModal({
+    title: 'Report Medical Emergency',
+    kicker: 'FIRST RESPONDER & AMBULANCE DISPATCH',
+    bodyHtml: `
+      <form id="newMedicalAlertForm">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div class="form-group">
+            <label>Emergency Category (प्रकार)</label>
+            <select id="medType" class="form-control" required>
+              <option value="HEAT_EXHAUSTION">HEAT_EXHAUSTION (उष्माघात / चक्कर)</option>
+              <option value="DEHYDRATION">DEHYDRATION (अशक्तपणा / निर्जलीकरण)</option>
+              <option value="FALL">FALL (पडून झालेली दुखापत)</option>
+              <option value="FAINTING">FAINTING (बेशुद्ध पडणे)</option>
+              <option value="CARDIAC_RISK">CARDIAC_RISK (हृदयविकार / छातीत दुखणे)</option>
+              <option value="OTHER">OTHER (इतर वैद्यकीय मदत)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Triage Severity Level</label>
+            <select id="medSeverity" class="form-control">
+              <option value="HIGH">HIGH (तातडीची मदत)</option>
+              <option value="CRITICAL">CRITICAL (गंभीर / जीवघेणी)</option>
+              <option value="MEDIUM">MEDIUM (मध्यम)</option>
+              <option value="LOW">LOW (किरकोळ)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Chokepoint / Route Location (ठिकाण)</label>
+          <input type="text" id="medLocation" class="form-control" placeholder="e.g. Sector 3 (Wakhri Phata Km 184) near Water Station #4" required>
+        </div>
+        <div class="form-group">
+          <label>Emergency Details / Pilgrim Symptoms (तपशील व लक्षणे)</label>
+          <textarea id="medDesc" class="form-control" rows="3" placeholder="Describe pilgrim condition, gender, age, symptoms and required immediate aid..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Assign First Responder / Ambulance Unit (Optional)</label>
+          <input type="text" id="medVolunteer" class="form-control" placeholder="e.g. Mobile Medical Van #MV-02 (Dr. Deshmukh)">
+        </div>
+      </form>
+    `,
+    footerHtml: `
+      <button type="button" class="govt-btn btn-outline" id="medCancelBtn">Cancel</button>
+      <button type="button" class="govt-btn" id="medSubmitBtn" style="background:var(--status-red);">Dispatch Medical Alert</button>
+    `
+  });
+
+  document.getElementById('medCancelBtn')?.addEventListener('click', closeAppModal);
+  document.getElementById('medSubmitBtn')?.addEventListener('click', async () => {
+    const type = document.getElementById('medType')?.value || 'HEAT_EXHAUSTION';
+    const severity = document.getElementById('medSeverity')?.value || 'HIGH';
+    const location = document.getElementById('medLocation')?.value?.trim();
+    const desc = document.getElementById('medDesc')?.value?.trim();
+    const volunteer = document.getElementById('medVolunteer')?.value?.trim() || null;
+    const submitBtn = document.getElementById('medSubmitBtn');
+
+    if (!location || !desc) {
+      alert('Please fill out Location and Emergency Details.');
+      return;
+    }
+
+    setButtonLoading(submitBtn, true, 'Dispatching...');
+
+    try {
+      await apiRequest('/medical-alerts', {
+        method: 'POST',
+        body: {
+          type,
+          severity,
+          latitude: 17.7280,
+          longitude: 75.2950,
+          description: `${location} - ${desc}`,
+          assigned_volunteer_name: volunteer,
+          is_demo: false
+        }
+      });
+      closeAppModal();
+      await refreshMedicalAlerts();
+    } catch (err) {
+      alert(err.message || 'Failed to dispatch medical alert.');
+      setButtonLoading(submitBtn, false, 'Dispatch Medical Alert');
     }
   });
 }

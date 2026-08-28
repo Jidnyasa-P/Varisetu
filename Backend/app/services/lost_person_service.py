@@ -21,10 +21,12 @@ from app.websocket.manager import ws_manager
 class LostPersonService:
     @staticmethod
     async def generate_case_number(db: AsyncSession) -> str:
-        count_q = select(func.count(LostPersonCase.id))
-        res = await db.execute(count_q)
-        total = res.scalar() or 0
-        return f"#LF-{total + 802}"
+        res = await db.execute(select(LostPersonCase.case_number))
+        existing = {row[0] for row in res.fetchall()}
+        num = 801
+        while f"#LF-{num}" in existing:
+            num += 1
+        return f"#LF-{num}"
 
     @staticmethod
     async def create_case(
@@ -49,6 +51,10 @@ class LostPersonService:
         db.add(incident)
         await db.flush()
 
+        import json
+        photo_urls_str = json.dumps(case_in.photo_urls) if case_in.photo_urls else None
+        photo_url_val = case_in.photo_url or (case_in.photo_urls[0] if case_in.photo_urls else None)
+
         case = LostPersonCase(
             case_number=case_number,
             incident_id=incident.id,
@@ -59,7 +65,8 @@ class LostPersonService:
             physical_description=case_in.physical_description,
             last_seen_location=case_in.last_seen_location,
             last_seen_camera_id=case_in.last_seen_camera_id,
-            photo_url=case_in.photo_url,
+            photo_url=photo_url_val,
+            photo_urls=photo_urls_str,
             priority=case_in.priority,
             status=LostPersonStatus.SEARCHING,
             created_by=user_id,

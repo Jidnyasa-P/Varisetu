@@ -14,6 +14,7 @@ from app.api.incidents import router as incidents_router
 from app.api.lost_persons import router as lost_persons_router
 from app.api.medical import router as medical_router
 from app.api.notifications import audit_router, demo_router, health_router, notifications_router
+from app.api.public import public_router
 from app.api.resources import router as resources_router
 from app.api.routes import router as routes_router
 from app.api.zones import router as zones_router
@@ -84,6 +85,7 @@ app.mount("/uploads", StaticFiles(directory=settings.STORAGE_LOCAL_DIR), name="u
 
 # Register REST Routers
 app.include_router(health_router)
+app.include_router(public_router, prefix=settings.API_V1_STR)
 app.include_router(auth_router, prefix=settings.API_V1_STR)
 app.include_router(dashboard_router, prefix=settings.API_V1_STR)
 app.include_router(cameras_router, prefix=settings.API_V1_STR)

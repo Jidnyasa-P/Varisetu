@@ -25,13 +25,30 @@ from app.services.lost_person_service import lost_person_service
 router = APIRouter(prefix="/lost-persons", tags=["Lost & Found"], dependencies=[Depends(get_current_user)])
 
 
+import json
+
+def _format_case_out(c: LostPersonCase) -> LostPersonCaseOut:
+    out = LostPersonCaseOut.model_validate(c)
+    if c.photo_urls:
+        if isinstance(c.photo_urls, str):
+            try:
+                out.photo_urls = json.loads(c.photo_urls)
+            except Exception:
+                out.photo_urls = [c.photo_urls]
+        elif isinstance(c.photo_urls, list):
+            out.photo_urls = c.photo_urls
+    elif c.photo_url:
+        out.photo_urls = [c.photo_url]
+    return out
+
+
 @router.get("", response_model=List[LostPersonCaseOut], summary="List lost person cases")
 async def list_lost_person_cases(
     status: Optional[LostPersonStatus] = None,
     db: AsyncSession = Depends(get_db)
 ):
     cases = await lost_person_service.get_cases(db, status=status)
-    return [LostPersonCaseOut.model_validate(c) for c in cases]
+    return [_format_case_out(c) for c in cases]
 
 
 @router.post("", response_model=LostPersonCaseOut, status_code=status.HTTP_201_CREATED, summary="Register missing person case")
@@ -42,7 +59,7 @@ async def create_case(
 ):
     user_id = current_user.id if current_user else None
     case = await lost_person_service.create_case(db, case_in, user_id=user_id)
-    return LostPersonCaseOut.model_validate(case)
+    return _format_case_out(case)
 
 
 @router.get("/{id}", response_model=LostPersonCaseOut, summary="Get lost person case details")
@@ -56,7 +73,7 @@ async def get_case(id: str, db: AsyncSession = Depends(get_db)):
     case = (await db.execute(query)).scalar_one_or_none()
     if not case:
         raise NotFoundException("Lost person case not found")
-    return LostPersonCaseOut.model_validate(case)
+    return _format_case_out(case)
 
 
 @router.post("/{id}/audio", response_model=LostPersonReportOut, summary="Upload & transcribe helpline call recording")

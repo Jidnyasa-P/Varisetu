@@ -30,6 +30,7 @@ class LostPersonCase(BaseModel):
     last_seen_location: Mapped[str] = mapped_column(String(150), nullable=False)
     last_seen_camera_id: Mapped[Optional[str]] = mapped_column(String(36), ForeignKey("cameras.id", ondelete="SET NULL"), nullable=True)
     photo_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    photo_urls: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     priority: Mapped[str] = mapped_column(String(20), default="HIGH", nullable=False)
     status: Mapped[LostPersonStatus] = mapped_column(
         Enum(LostPersonStatus, name="lost_person_statuses"),

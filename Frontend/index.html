@@ -30,10 +30,13 @@
   <!-- ==================== PRIVATE LOGIN ENTRY VIEW ==================== -->
   <section id="loginView" class="login-view">
     <div class="login-panel">
-      <div class="login-brand">
-        <img src="assets/varisetu_logo.png" alt="VariSetu Logo">
-        <div class="login-marathi">वारी सेतु</div>
-        <div class="login-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</div>
+      <div class="login-brand" style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 2px;">
+          <img src="assets/varisetu_logo.png" alt="VariSetu Logo" style="height: 68px; width: auto; object-fit: contain;">
+          <img src="assets/maharashtra_gov_seal.png" alt="Maharashtra Government Seal" class="mh-gov-seal-img" style="height: 58px; width: 58px;">
+        </div>
+        <div class="login-marathi" style="font-family: var(--font-serif); font-size: 24px; font-weight: 700; color: var(--maroon-primary); line-height: 1.1;">वारी सेतु</div>
+        <div class="login-english" style="font-size: 10px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.3px;">महाराष्ट्र शासन &bull; पंढरपूर आषाढी वारी नियंत्रण कक्ष</div>
       </div>
 
       <div class="login-divider"></div>
@@ -79,11 +82,143 @@
         </button>
       </form>
 
+      <div style="margin-top: 14px; text-align: center; border-top: 1px dashed var(--border-main); padding-top: 12px;">
+        <button type="button" id="openPublicPortalBtn" class="govt-btn btn-outline" style="width: 100%; padding: 8px 12px; font-size: 11px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <i data-lucide="users" style="width: 14px; height: 14px;"></i>
+          <span>👥 Public Pilgrim Portal & Helplines (नागरिक माहिती)</span>
+        </button>
+      </div>
+
       <div class="login-restricted-note">
         Authorised Personnel Only &bull; Access Monitored
       </div>
     </div>
   </section>
+
+  <!-- ==================== PUBLIC PILGRIM PORTAL (UNAUTHENTICATED / CITIZEN VIEW) ==================== -->
+  <div id="publicView" hidden style="display: none;">
+    <!-- Top Warli Pattern Woven Strip -->
+    <div class="top-warli-border"></div>
+
+    <!-- Government Portal Header -->
+    <header class="gov-header">
+      <div class="brand-section" style="display: flex; align-items: center; gap: 10px;">
+        <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img" style="height: 52px; width: auto;">
+        <img src="assets/maharashtra_gov_seal.png" alt="Maharashtra Government Seal" class="mh-gov-seal-img" style="height: 44px; width: 44px;">
+        <div class="brand-titles">
+          <h1 class="brand-marathi" style="font-size: 16px; font-weight: 700; color: var(--maroon-primary); margin: 0; line-height: 1.1;">वारी सेतु &bull; सार्वजनिक वारकरी सेवा पोर्टल</h1>
+          <span class="brand-english" style="font-size: 9.5px; color: var(--text-muted); font-weight: 600;">महाराष्ट्र शासन &bull; श्री क्षेत्र पंढरपूर आषाढी वारी सोहळा</span>
+        </div>
+      </div>
+
+      <div class="header-meta">
+        <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:700;">
+          <span>🚩 PALKHI: APPROACHING WAKHRI</span>
+        </div>
+        <button id="backToLoginBtn" type="button" class="govt-btn" style="font-size:10px; padding:4px 10px; display:flex; align-items:center; gap:4px;">
+          <i data-lucide="lock" style="width:12px; height:12px;"></i>
+          <span>Officer Login</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="app-container" style="padding: 14px 20px; max-width: 1300px; margin: 0 auto;">
+      <!-- Hero Banner -->
+      <div style="background: linear-gradient(135deg, var(--maroon-primary), #5C1515); color: #FFF; padding: 16px 20px; border-radius: 3px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
+        <div>
+          <div style="font-family: var(--font-serif); font-size: 20px; font-weight: 700; color: #F5D38A;">संत तुकाराम महाराज व संत ज्ञानेश्वर महाराज पालखी सोहळा २०२६</div>
+          <div style="font-size: 12px; color: #EFECE6; margin-top: 4px;">Live Location: Wakhri Phata Junction (Km 184) &bull; Moving smoothly towards Pandharpur Shrine</div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: #00FF66;">~8,45,000</div>
+          <div style="font-size: 10px; color: #DDD;">Estimated Pilgrim Count</div>
+        </div>
+      </div>
+
+      <!-- Main Public 2-Column Grid -->
+      <div style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px;">
+        <!-- Left: Interactive Route Map & Weather Advisories -->
+        <div>
+          <div class="panel-card" style="padding: 12px; margin-bottom: 12px;">
+            <div class="panel-header" style="margin-bottom: 8px;">
+              <span>PILGRIMAGE ROUTE & HALT STATIONS MAP</span>
+              <span style="font-size: 10px; color: var(--text-muted);">Alandi &rarr; Saswad &rarr; Lonand &rarr; Wakhri &rarr; Pandharpur</span>
+            </div>
+            <div id="publicRouteMap" style="height: 320px; width: 100%; border: 1px solid var(--border-main); border-radius: 2px;"></div>
+          </div>
+
+          <!-- Public Weather & Heat Advisory -->
+          <div class="panel-card" style="padding: 12px;">
+            <div class="panel-header" style="margin-bottom: 8px; color: var(--saffron-gold);">
+              <span>☀️ PILGRIM HEALTH & HYDRATION ADVISORY</span>
+              <span class="density-tag yellow">34°C MODERATE HEAT</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-primary); line-height: 1.5;">
+              <strong>Advisory:</strong> Drink plenty of water. Free ORSL salt sachets & medical assistance are available at all 24 water points and 16 medical tents stationed along the highway.
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Emergency Helplines & Public Missing Report -->
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Emergency Numbers -->
+          <div class="panel-card" style="padding: 12px; border-left: 4px solid var(--maroon-primary);">
+            <div class="panel-header" style="margin-bottom: 10px;">
+              <span>🚨 EMERGENCY & HELPLINE NUMBERS</span>
+              <span style="font-size: 10px; color: var(--status-green);">24x7 ACTIVE</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <a href="tel:112" class="public-helpline-card">
+                <div>
+                  <div class="public-helpline-title">Police Control Room (महाराष्ट्र पोलीस)</div>
+                  <div class="public-helpline-num">112 / 02186-223344</div>
+                </div>
+                <span class="govt-btn" style="padding: 3px 8px; font-size: 10px;">CALL NOW</span>
+              </a>
+
+              <a href="tel:108" class="public-helpline-card">
+                <div>
+                  <div class="public-helpline-title">Ambulance & Medical Emergency</div>
+                  <div class="public-helpline-num">108 / 102</div>
+                </div>
+                <span class="govt-btn" style="padding: 3px 8px; font-size: 10px; background: var(--status-red);">CALL NOW</span>
+              </a>
+
+              <a href="tel:18002330099" class="public-helpline-card">
+                <div>
+                  <div class="public-helpline-title">Lost & Found Pilgrim Assistance Booth</div>
+                  <div class="public-helpline-num">1800-233-0099 (Toll Free)</div>
+                </div>
+                <span class="govt-btn btn-outline" style="padding: 3px 8px; font-size: 10px;">CALL NOW</span>
+              </a>
+
+              <a href="tel:02186223550" class="public-helpline-card">
+                <div>
+                  <div class="public-helpline-title">Shri Vitthal Mandir Samiti Control Desk</div>
+                  <div class="public-helpline-num">02186-223550</div>
+                </div>
+                <span class="govt-btn btn-outline" style="padding: 3px 8px; font-size: 10px;">CALL NOW</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Public Report Missing Person -->
+          <div class="panel-card" style="padding: 12px; background: var(--bg-subtle);">
+            <div class="panel-header" style="margin-bottom: 6px;">
+              <span>🔍 REPORT MISSING FAMILY MEMBER</span>
+            </div>
+            <div style="font-size: 11.5px; color: var(--text-secondary); margin-bottom: 8px;">
+              Separated from your family or group in the crowd? Submit details and photos directly for instant AI matching across state CCTV cameras.
+            </div>
+            <button type="button" class="govt-btn" id="publicReportMissingBtn" style="width: 100%; padding: 8px 12px; font-size: 11px; display:flex; align-items:center; justify-content:center; gap:6px;">
+              <i data-lucide="user-plus" style="width: 13px; height: 13px;"></i>
+              <span>Submit Missing Person Report (तक्रार नोंदवा)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ==================== MAIN COMMAND CENTER DASHBOARD (AUTHENTICATED) ==================== -->
   <div id="dashboardView" hidden>
@@ -93,15 +228,12 @@
 
     <!-- Government Portal Header -->
     <header class="gov-header">
-      <div class="brand-section">
-        <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img">
-        <div class="mh-police-badge">
-          <span>म.पो.</span>
-          <span style="font-size:7px;">POLICE</span>
-        </div>
+      <div class="brand-section" style="display: flex; align-items: center; gap: 10px;">
+        <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img" style="height: 52px; width: auto;">
+        <img src="assets/maharashtra_gov_seal.png" alt="Maharashtra Government Seal" class="mh-gov-seal-img" style="height: 44px; width: 44px;">
         <div class="brand-titles">
-          <h1 class="brand-marathi">वारी सेतु</h1>
-          <span class="brand-english">VARISETU &bull; MAHARASHTRA POLICE IT CELL</span>
+          <h1 class="brand-marathi" style="font-size: 18px; font-weight: 700; color: var(--maroon-primary); margin: 0; line-height: 1.1;">वारी सेतु</h1>
+          <span class="brand-english" style="font-size: 9.5px; color: var(--text-muted); font-weight: 600;">महाराष्ट्र शासन &bull; महाराष्ट्र पोलीस नियंत्रण कक्ष</span>
         </div>
       </div>
 
@@ -441,14 +573,20 @@
 
       <!-- ==================== SCREEN 4: MEDICAL ALERTS VIEW ==================== -->
       <section id="view-medical" class="view-section">
-        <div class="section-bar">
-          <div class="section-title">
-            <i data-lucide="activity" style="width:16px; height:16px;"></i>
-            <span>Medical Emergencies & Heat-Risk Monitoring</span>
+        <div class="section-bar" style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div class="section-title">
+              <i data-lucide="activity" style="width:16px; height:16px;"></i>
+              <span>Medical Emergencies & Heat-Risk Monitoring</span>
+            </div>
+            <div class="section-sub">
+              Active Field Ambulances & Emergency Medical Response Hubs
+            </div>
           </div>
-          <div class="section-sub">
-            Active Field Ambulances & Emergency Medical Response Hubs
-          </div>
+          <button class="govt-btn" id="addMedicalAlertBtn" type="button" style="font-size:11px; padding:5px 12px; display:flex; align-items:center; gap:5px; background:var(--status-red);">
+            <i data-lucide="plus-circle" style="width:13px; height:13px;"></i>
+            <span>+ Report Medical Emergency</span>
+          </button>
         </div>
 
         <div class="medical-view-grid">

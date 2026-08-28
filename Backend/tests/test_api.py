@@ -263,3 +263,60 @@ async def test_routes_status_change(client):
     divert_res = await client.post(f"/api/routes/{route_id}/divert", json={"reason": "Pedestrian safety"}, headers=headers)
     assert divert_res.status_code == 200
     assert divert_res.json()["status"] == "DIVERTED"
+
+
+@pytest.mark.asyncio
+async def test_lost_person_with_multiple_photos(client):
+    login_res = await client.post("/api/auth/login", json={
+        "email": "test.commander@mahapolice.gov.in",
+        "password": "varisetu2026"
+    })
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    case_payload = {
+        "name": "Savitribai Patil",
+        "age": 62,
+        "gender": "F",
+        "clothing_description": "Green saree with red border",
+        "last_seen_location": "Sudarshan Chowk",
+        "photo_urls": [
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+            "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+        ],
+        "priority": "HIGH"
+    }
+
+    create_res = await client.post("/api/lost-persons", json=case_payload, headers=headers)
+    assert create_res.status_code == 201
+    data = create_res.json()
+    assert data["name"] == "Savitribai Patil"
+    assert len(data["photo_urls"]) == 2
+    assert data["photo_url"] is not None
+
+
+@pytest.mark.asyncio
+async def test_public_info_and_report_lost(client):
+    # Public info endpoint (no auth required)
+    info_res = await client.get("/api/public/info")
+    assert info_res.status_code == 200
+    info = info_res.json()
+    assert "Sant Tukaram Maharaj" in info["palkhi_name"]
+    assert len(info["helplines"]) >= 4
+
+    # Public missing person report (no auth required)
+    report_res = await client.post("/api/public/report-lost", json={
+        "name": "Kashinath Pawar",
+        "age": 70,
+        "gender": "M",
+        "clothing_description": "White Kurta, saffron shawl",
+        "last_seen_location": "Bhalwani halt",
+        "caller_name": "Ramesh Pawar",
+        "caller_phone": "9822001122",
+        "photo_urls": ["data:image/png;base64,test"]
+    })
+    assert report_res.status_code == 201
+    rep_data = report_res.json()
+    assert rep_data["status"] == "success"
+    assert "case_number" in rep_data
+
