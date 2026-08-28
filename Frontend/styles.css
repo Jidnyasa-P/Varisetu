@@ -320,12 +320,19 @@ body {
 .cctv-tile.status-heavy { border-left-color: var(--status-orange); }
 .cctv-tile.status-critical { border-left-color: var(--status-red); }
 
-.cctv-feed-img {
+.cctv-feed-img,
+.cctv-feed-canvas {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: contrast(1.1) brightness(0.9) grayscale(0.2);
-  opacity: 0.85;
+  display: block;
+  background: #0B0D0F;
+}
+
+.cctv-tile:hover {
+  box-shadow: 0 0 10px rgba(122, 31, 31, 0.4);
+  transform: translateY(-1px);
+  transition: all 0.15s ease;
 }
 
 .cctv-overlay {
@@ -369,6 +376,107 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  color: #FFF;
+  font-size: 11px;
+  font-weight: 600;
+  text-shadow: 0 1px 2px #000;
+}
+
+/* ==================== REALTIME CCTV MODAL STREAM & CONTROLS ==================== */
+.modal-cctv-wrapper {
+  position: relative;
+  width: 100%;
+  background: #000;
+  border: 1px solid #333;
+  overflow: hidden;
+  border-radius: 2px;
+  margin-bottom: 12px;
+}
+
+.modal-cctv-canvas {
+  width: 100%;
+  height: 280px;
+  display: block;
+  background: #000;
+}
+
+.modal-cctv-toolbar {
+  background: #181513;
+  border-top: 1px solid #333;
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cctv-tool-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cctv-ctrl-btn {
+  background: #2D2724;
+  border: 1px solid #4D4540;
+  color: #EAE6DF;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.15s ease;
+  font-family: var(--font-mono);
+}
+
+.cctv-ctrl-btn:hover {
+  background: var(--maroon-primary);
+  border-color: var(--maroon-dark);
+  color: #FFF;
+}
+
+.cctv-ctrl-btn.active {
+  background: #2E5B36;
+  border-color: #3E7B46;
+  color: #FFF;
+}
+
+.cctv-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cctv-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.cctv-info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  padding: 8px 10px;
+  border-radius: 2px;
+}
+
+.cctv-info-label {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cctv-info-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
 }
 
 .cctv-location {
@@ -829,8 +937,8 @@ body {
 }
 
 .app-modal {
-  width: min(680px, 94vw);
-  max-height: 88vh;
+  width: min(840px, 95vw);
+  max-height: 90vh;
   overflow: auto;
   background: var(--bg-card);
   border: 2px solid var(--maroon-primary);

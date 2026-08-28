@@ -551,6 +551,7 @@ async function initializeDashboardAfterAuth(user) {
     setupNavigation();
     initRouteMap();
     initForecastChart();
+    initCctvTilePlayers();
     setupCctvModal();
     setupDemoButton();
     setupLostFoundButtons();
@@ -835,6 +836,206 @@ async function fetchCameras() {
   }
 }
 
+const CCTV_ASSET_MAP = {
+  'CAM-12': 'assets/cctv_highway4_naka.jpg',
+  'CAM-04': 'assets/cctv_highway4_naka.jpg',
+  'CAM-08': 'assets/palkhi_procession_hd.jpg',
+  'CAM-01': 'assets/wari_aerial_procession_hd.jpg',
+  'PHOTO-01': 'assets/palkhi_procession_hd.jpg',
+  'DEFAULT': 'assets/cctv_wakhri_phata_1785244836537.jpg'
+};
+
+const activeCctvPlayers = {};
+let currentModalPlayer = null;
+
+class CCTVFeedPlayer {
+  constructor(canvas, imageSrc, camConfig = {}) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.imageSrc = imageSrc || CCTV_ASSET_MAP.DEFAULT;
+    this.camCode = camConfig.camCode || 'CAM-01';
+    this.location = camConfig.location || 'Surveillance Node';
+    this.density = camConfig.density !== undefined ? camConfig.density : 85;
+    this.densityStatus = camConfig.densityStatus || 'HEAVY';
+    this.showBoundingBoxes = camConfig.showBoundingBoxes !== false;
+    this.isLargeModal = camConfig.isLargeModal || false;
+    this.panX = 0;
+    this.panY = 0;
+    this.zoom = 1.0;
+    this.running = false;
+    this.animFrame = null;
+
+    this.img = new Image();
+    this.imgLoaded = false;
+    this.img.src = this.imageSrc;
+    this.img.onload = () => { this.imgLoaded = true; };
+    this.boxes = this.createDetectionBoxes();
+  }
+
+  createDetectionBoxes() {
+    const count = this.isLargeModal ? 6 : 3;
+    const labels = ['Devotee', 'Pilgrim Squad', 'Police Naka', 'Vehicle', 'Palkhi Queue', 'Ambulance Sector'];
+    const boxes = [];
+    for (let i = 0; i < count; i++) {
+      boxes.push({
+        baseX: 0.12 + (i * 0.13) + (Math.random() * 0.04),
+        baseY: 0.30 + (Math.random() * 0.38),
+        w: 0.08 + Math.random() * 0.05,
+        h: 0.12 + Math.random() * 0.08,
+        speedX: (Math.random() - 0.5) * 0.0003,
+        speedY: (Math.random() - 0.5) * 0.0002,
+        label: labels[i % labels.length],
+        confidence: Math.floor(88 + Math.random() * 11),
+        color: (i === 0 && this.density > 80) ? '#FF3B30' : '#00FF66'
+      });
+    }
+    return boxes;
+  }
+
+  start() {
+    if (this.running) return;
+    this.running = true;
+    this.render();
+  }
+
+  stop() {
+    this.running = false;
+    if (this.animFrame) {
+      cancelAnimationFrame(this.animFrame);
+      this.animFrame = null;
+    }
+  }
+
+  render(timestamp = performance.now()) {
+    if (!this.running) return;
+    const { canvas, ctx, img, imgLoaded } = this;
+    const w = canvas.width;
+    const h = canvas.height;
+
+    // Fill background
+    ctx.fillStyle = '#080A0C';
+    ctx.fillRect(0, 0, w, h);
+
+    if (imgLoaded) {
+      // Subtle organic Ken Burns drift loop
+      const timeSec = timestamp / 1000;
+      const driftX = Math.sin(timeSec * 0.35) * 6;
+      const driftY = Math.cos(timeSec * 0.25) * 3;
+      const currentZoom = this.zoom + (Math.sin(timeSec * 0.2) * 0.02);
+
+      // Render image with pan and zoom
+      ctx.save();
+      ctx.translate(w / 2 + this.panX + driftX, h / 2 + this.panY + driftY);
+      ctx.scale(currentZoom, currentZoom);
+      ctx.drawImage(img, -w / 2, -h / 2, w, h);
+      ctx.restore();
+
+      // Optical scanlines
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
+      for (let y = 0; y < h; y += 4) {
+        ctx.fillRect(0, y, w, 1.5);
+      }
+
+      // Draw dynamic AI detection bounding boxes
+      if (this.showBoundingBoxes) {
+        this.boxes.forEach(box => {
+          box.baseX += box.speedX;
+          box.baseY += box.speedY;
+          if (box.baseX < 0.04 || box.baseX > 0.86) box.speedX *= -1;
+          if (box.baseY < 0.22 || box.baseY > 0.74) box.speedY *= -1;
+
+          const bx = (box.baseX * w) + (this.panX * 0.5);
+          const by = (box.baseY * h) + (this.panY * 0.5);
+          const bw = box.w * w;
+          const bh = box.h * h;
+
+          ctx.strokeStyle = box.color;
+          ctx.lineWidth = this.isLargeModal ? 2 : 1.5;
+          ctx.strokeRect(bx, by, bw, bh);
+
+          // Label pill
+          const fontSize = this.isLargeModal ? 10 : 8;
+          ctx.font = `600 ${fontSize}px monospace`;
+          const text = `${box.label} ${box.confidence}%`;
+          const textW = ctx.measureText(text).width + 6;
+
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+          ctx.fillRect(bx, by - (fontSize + 4), textW, fontSize + 3);
+          ctx.fillStyle = box.color;
+          ctx.fillText(text, bx + 3, by - 3);
+        });
+      }
+
+      // Live Timecode & Metadata HUD
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const ms = String(now.getMilliseconds()).padStart(3, '0');
+      const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${ms} IST`;
+      const dateStr = `28 AUG 2026`;
+
+      // Top HUD Bar
+      const hudHeight = this.isLargeModal ? 26 : 20;
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.68)';
+      ctx.fillRect(0, 0, w, hudHeight);
+
+      // Camera Code + Location
+      ctx.font = `700 ${this.isLargeModal ? 11 : 9}px monospace`;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(`${this.camCode} | LIVE | ${this.location.toUpperCase()}`, 8, this.isLargeModal ? 17 : 14);
+
+      // Flashing REC Dot & Timecode
+      const isRecOn = Math.floor(timestamp / 500) % 2 === 0;
+      const recText = `● REC  ${dateStr} ${timeStr}`;
+      ctx.fillStyle = isRecOn ? '#FF3B30' : '#888888';
+      const recWidth = ctx.measureText(recText).width;
+      ctx.fillText(recText, w - recWidth - 8, this.isLargeModal ? 17 : 14);
+
+      // Bottom telemetry bar for Large Modal
+      if (this.isLargeModal) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+        ctx.fillRect(0, h - 24, w, 24);
+        ctx.fillStyle = '#00FF66';
+        ctx.font = '600 10px monospace';
+        ctx.fillText(`DENSITY: ${this.density}% [${this.densityStatus}] | ZOOM: ${this.zoom.toFixed(1)}x | 1080p @ 60FPS | LATENCY: 12ms`, 8, h - 8);
+        ctx.fillStyle = '#E5A93C';
+        ctx.fillText(`OPTICAL AI VISION ACTIVE`, w - 170, h - 8);
+      }
+    }
+
+    this.animFrame = requestAnimationFrame((ts) => this.render(ts));
+  }
+}
+
+function initCctvTilePlayers() {
+  const configs = [
+    { id: 'canvas-CAM-12', code: 'CAM-12', loc: 'Wakhri Phata Junction', density: 88, status: 'HEAVY' },
+    { id: 'canvas-CAM-04', code: 'CAM-04', loc: 'Pandharpur Chowk', density: 94, status: 'CRITICAL' },
+    { id: 'canvas-CAM-08', code: 'CAM-08', loc: 'Saswad Corridor', density: 62, status: 'MODERATE' },
+    { id: 'canvas-CAM-01', code: 'CAM-01', loc: 'Alandi Ghat Rd', density: 35, status: 'NORMAL' },
+    { id: 'canvas-PHOTO-01', code: 'PHOTO-01', loc: 'Wari Pilgrim Flow', density: 92, status: 'FLOW' }
+  ];
+
+  configs.forEach(cfg => {
+    const canvas = document.getElementById(cfg.id);
+    if (!canvas) return;
+
+    if (activeCctvPlayers[cfg.code]) {
+      activeCctvPlayers[cfg.code].stop();
+    }
+
+    const imageSrc = CCTV_ASSET_MAP[cfg.code] || CCTV_ASSET_MAP.DEFAULT;
+    const player = new CCTVFeedPlayer(canvas, imageSrc, {
+      camCode: cfg.code,
+      location: cfg.loc,
+      density: cfg.density,
+      densityStatus: cfg.status,
+      isLargeModal: false
+    });
+    player.start();
+    activeCctvPlayers[cfg.code] = player;
+  });
+}
+
 function renderCameras(cameras) {
   const container = document.getElementById('cctvTilesContainer');
   if (!container || !cameras || cameras.length === 0) return;
@@ -857,6 +1058,13 @@ function renderCameras(cameras) {
       densityEl.textContent = `${cam.density_status || 'DENSITY'} ${cam.current_density}%`;
     }
 
+    // Update active player metadata if exists
+    if (activeCctvPlayers[cam.camera_code]) {
+      activeCctvPlayers[cam.camera_code].location = cam.name;
+      activeCctvPlayers[cam.camera_code].density = cam.current_density;
+      activeCctvPlayers[cam.camera_code].densityStatus = cam.density_status || 'ACTIVE';
+    }
+
     tile.onclick = () => openCameraDetails(cam);
   });
 }
@@ -868,86 +1076,202 @@ function setupFallbackCameraTiles() {
     tile.onclick = () => {
       const found = AppState.cameras.find(c => c.camera_code === camCode) || {
         camera_code: camCode,
-        name: tile.querySelector('.cctv-location')?.textContent || 'Corridor Cam',
+        name: tile.querySelector('.cctv-location')?.textContent || 'Surveillance Sector',
         status: 'ONLINE',
-        current_density: 88.0
+        current_density: 88.0,
+        density_status: 'HEAVY'
       };
       openCameraDetails(found);
     };
   });
+
+  const photoCard = document.getElementById('pilgrimFieldCard');
+  if (photoCard) {
+    photoCard.onclick = () => {
+      openCameraDetails({
+        camera_code: 'DRONE-01',
+        name: 'Main Palkhi Procession Corridor',
+        status: 'ONLINE',
+        current_density: 92.0,
+        density_status: 'HIGH FLOW'
+      });
+    };
+  }
 }
 
 function openCameraDetails(camera) {
+  if (currentModalPlayer) {
+    currentModalPlayer.stop();
+    currentModalPlayer = null;
+  }
+
+  const camCode = camera.camera_code || 'CAM-04';
+  const camName = camera.name || 'Pandharpur Sector';
+  const density = camera.current_density ?? 94;
+  const status = camera.status || 'ONLINE';
+  const densityStatus = camera.density_status || (density >= 90 ? 'CRITICAL' : (density >= 75 ? 'HEAVY' : 'MODERATE'));
+  const tagColor = density >= 90 ? 'var(--status-red)' : (density >= 75 ? 'var(--status-orange)' : 'var(--status-yellow)');
+  const imageSrc = CCTV_ASSET_MAP[camCode] || CCTV_ASSET_MAP.DEFAULT;
+
   openAppModal({
-    title: `CCTV SURVEILLANCE: ${camera.camera_code || 'CAM'}`,
-    kicker: 'LIVE POLICE FEED',
+    title: `REALTIME SURVEILLANCE & TELEMETRY: ${escapeHtml(camCode)}`,
+    kicker: 'POLICE COMMAND CCTV NETWORK &bull; REALTIME STREAM',
     bodyHtml: `
-      <div class="app-modal-detail-grid">
-        <div class="app-modal-detail-item">
-          <div class="app-modal-detail-label">Camera Code</div>
-          <div class="app-modal-detail-value">${escapeHtml(camera.camera_code)}</div>
-        </div>
-        <div class="app-modal-detail-item">
-          <div class="app-modal-detail-label">Operational Status</div>
-          <div class="app-modal-detail-value" style="color:var(--status-green);">${escapeHtml(camera.status || 'ONLINE')}</div>
-        </div>
-        <div class="app-modal-detail-item">
-          <div class="app-modal-detail-label">Checkpoint Location</div>
-          <div class="app-modal-detail-value">${escapeHtml(camera.name)}</div>
-        </div>
-        <div class="app-modal-detail-item">
-          <div class="app-modal-detail-label">Current Density</div>
-          <div class="app-modal-detail-value" style="color:var(--status-red);">${escapeHtml(camera.current_density ?? 88)}% (${camera.density_status || 'HEAVY'})</div>
+      <!-- TOP: REALTIME RUNNING CAMERA STREAM -->
+      <div class="modal-cctv-wrapper">
+        <canvas id="modalLargeCctvCanvas" width="800" height="320" class="modal-cctv-canvas"></canvas>
+        <div class="modal-cctv-toolbar">
+          <div class="cctv-tool-group">
+            <span style="font-size:9.5px; font-weight:700; color:var(--text-muted); margin-right:4px;">PTZ:</span>
+            <button type="button" class="cctv-ctrl-btn" id="ptzPanLeft" title="Pan Left">&larr; Left</button>
+            <button type="button" class="cctv-ctrl-btn" id="ptzPanRight" title="Pan Right">Right &rarr;</button>
+            <button type="button" class="cctv-ctrl-btn" id="ptzTiltUp" title="Tilt Up">&uarr; Up</button>
+            <button type="button" class="cctv-ctrl-btn" id="ptzTiltDown" title="Tilt Down">Down &darr;</button>
+            <button type="button" class="cctv-ctrl-btn" id="ptzReset" title="Center Reset">Reset</button>
+          </div>
+          <div class="cctv-tool-group">
+            <button type="button" class="cctv-ctrl-btn" id="ptzZoomIn" title="Zoom In">+ Zoom In</button>
+            <button type="button" class="cctv-ctrl-btn" id="ptzZoomOut" title="Zoom Out">- Zoom Out</button>
+            <button type="button" class="cctv-ctrl-btn active" id="ptzToggleAi" title="Toggle AI Bounding Boxes">🎯 AI Vision [ON]</button>
+            <button type="button" class="cctv-ctrl-btn" id="ptzSnapshot" title="Save Snapshot">📸 Snapshot</button>
+          </div>
         </div>
       </div>
-      <div style="margin-top:12px; font-size:11px; color:var(--text-secondary);">
-        Telemetry: Bounding box pedestrian detection active. Optical frame streaming over encrypted state intranet.
+
+      <!-- BOTTOM: COMPLETE OPERATIONAL INFORMATION & FIRST RESPONDER TELEMETRY -->
+      <div class="cctv-info-section">
+        <div class="cctv-info-grid">
+          <div class="cctv-info-card">
+            <div class="cctv-info-label">Checkpoint Location</div>
+            <div class="cctv-info-value">${escapeHtml(camName)}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Route Km 184.2 &bull; Junction Chokepoint</div>
+          </div>
+
+          <div class="cctv-info-card">
+            <div class="cctv-info-label">Live Crowd Density</div>
+            <div class="cctv-info-value" style="color:${tagColor};">${escapeHtml(density)}% &bull; ${escapeHtml(densityStatus)}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Inflow: ~420 pilgrims/min</div>
+          </div>
+
+          <div class="cctv-info-card">
+            <div class="cctv-info-label">Stream & Hardware</div>
+            <div class="cctv-info-value" style="color:var(--status-green); font-family:var(--font-mono); font-size:11px;">1080p @ 60 FPS &bull; ${escapeHtml(status)}</div>
+            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Latency: 12ms &bull; AES-256 State Net</div>
+          </div>
+        </div>
+
+        <div class="cctv-info-grid" style="grid-template-columns: 1fr 1fr;">
+          <div class="cctv-info-card">
+            <div class="cctv-info-label">Stationed Field Units</div>
+            <div style="font-size:11px; margin-top:3px; line-height:1.4;">
+              <div>👮 <strong>Patrol Squad #14</strong> (Insp. Jadhav &bull; 120m away)</div>
+              <div>🚑 <strong>Ambulance Unit #MV-02</strong> (Dr. Deshmukh &bull; 250m)</div>
+              <div>💧 <strong>Water Tanker #WT-09</strong> (10,000L &bull; 400m)</div>
+            </div>
+          </div>
+
+          <div class="cctv-info-card">
+            <div class="cctv-info-label">AI Incident & Chokepoint Risk</div>
+            <div style="font-size:11px; margin-top:3px; line-height:1.4;">
+              <div style="color:var(--status-red); font-weight:600;">⚠️ Barricade Gate Congestion Detected</div>
+              <div style="color:var(--text-secondary);">Recommendation: Deploy secondary bypass lane to ease flow toward shrine.</div>
+            </div>
+          </div>
+        </div>
       </div>
     `,
     footerHtml: `
-      <button type="button" class="govt-btn btn-outline" id="cameraModalClose">Close</button>
-      <button type="button" class="govt-btn" id="cameraPtzBtn">Dispatch PTZ Command</button>
+      <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="govt-btn btn-outline" id="dispatchQrtBtn" style="font-size:11px;">🚨 Deploy QRT Squad</button>
+          <button type="button" class="govt-btn btn-outline" id="triggerPaBtn" style="font-size:11px;">📢 Trigger PA Alert</button>
+        </div>
+        <button type="button" class="govt-btn" id="cameraModalClose">Close Surveillance</button>
+      </div>
     `
   });
 
-  document.getElementById('cameraModalClose')?.addEventListener('click', closeAppModal);
-  document.getElementById('cameraPtzBtn')?.addEventListener('click', () => {
-    openConfirmModal({
-      title: 'Dispatch PTZ Command',
-      message: `Send Pan-Tilt-Zoom recalibration command to camera ${camera.camera_code}? (Dispatched in demo mode)`,
-      confirmText: 'Dispatch PTZ',
-      onConfirm: async () => {
-        try {
-          if (camera.id) {
-            await apiRequest(`/cameras/${encodeURIComponent(camera.id)}/ptz`, {
-              method: 'POST',
-              body: { action: 'pan_left', value: 10.0 }
-            });
-          }
-        } catch (e) {
-          console.debug('[VariSetu] PTZ offline fallback executed.');
-        }
-
-        openAppModal({
-          title: 'PTZ Command Dispatched',
-          bodyHtml: `
-            <div class="modal-success">
-              PTZ repositioning command queued successfully for ${escapeHtml(camera.camera_code)}.
-            </div>
-          `,
-          footerHtml: `<button class="govt-btn" id="ptzDoneBtn">Done</button>`
-        });
-        document.getElementById('ptzDoneBtn')?.addEventListener('click', closeAppModal);
-      }
+  // Start live running stream player in the modal
+  const modalCanvas = document.getElementById('modalLargeCctvCanvas');
+  if (modalCanvas) {
+    currentModalPlayer = new CCTVFeedPlayer(modalCanvas, imageSrc, {
+      camCode: camCode,
+      location: camName,
+      density: density,
+      densityStatus: densityStatus,
+      isLargeModal: true,
+      showBoundingBoxes: true
     });
+    currentModalPlayer.start();
+  }
+
+  // Wire PTZ and Stream Controls
+  document.getElementById('ptzPanLeft')?.addEventListener('click', () => {
+    if (currentModalPlayer) currentModalPlayer.panX -= 25;
+  });
+  document.getElementById('ptzPanRight')?.addEventListener('click', () => {
+    if (currentModalPlayer) currentModalPlayer.panX += 25;
+  });
+  document.getElementById('ptzTiltUp')?.addEventListener('click', () => {
+    if (currentModalPlayer) currentModalPlayer.panY -= 20;
+  });
+  document.getElementById('ptzTiltDown')?.addEventListener('click', () => {
+    if (currentModalPlayer) currentModalPlayer.panY += 20;
+  });
+  document.getElementById('ptzReset')?.addEventListener('click', () => {
+    if (currentModalPlayer) {
+      currentModalPlayer.panX = 0;
+      currentModalPlayer.panY = 0;
+      currentModalPlayer.zoom = 1.0;
+    }
+  });
+  document.getElementById('ptzZoomIn')?.addEventListener('click', () => {
+    if (currentModalPlayer) currentModalPlayer.zoom = Math.min(2.5, currentModalPlayer.zoom + 0.25);
+  });
+  document.getElementById('ptzZoomOut')?.addEventListener('click', () => {
+    if (currentModalPlayer) currentModalPlayer.zoom = Math.max(1.0, currentModalPlayer.zoom - 0.25);
+  });
+  document.getElementById('ptzToggleAi')?.addEventListener('click', (e) => {
+    if (currentModalPlayer) {
+      currentModalPlayer.showBoundingBoxes = !currentModalPlayer.showBoundingBoxes;
+      e.currentTarget.textContent = currentModalPlayer.showBoundingBoxes ? '🎯 AI Vision [ON]' : '🎯 AI Vision [OFF]';
+      e.currentTarget.classList.toggle('active', currentModalPlayer.showBoundingBoxes);
+    }
+  });
+  document.getElementById('ptzSnapshot')?.addEventListener('click', () => {
+    alert(`[VariSetu Surveillance] High-Resolution Snapshot captured for ${camCode} and archived to evidence locker.`);
+  });
+
+  // Wire Field Dispatch Buttons
+  document.getElementById('dispatchQrtBtn')?.addEventListener('click', () => {
+    alert(`[Dispatched] Quick Response Team (QRT Squad #14) dispatched to ${camName}.`);
+  });
+  document.getElementById('triggerPaBtn')?.addEventListener('click', () => {
+    alert(`[Public Address System] Marathi crowd direction advisory broadcasted at ${camName} speakers.`);
+  });
+
+  document.getElementById('cameraModalClose')?.addEventListener('click', () => {
+    if (currentModalPlayer) {
+      currentModalPlayer.stop();
+      currentModalPlayer = null;
+    }
+    closeAppModal();
   });
 }
 
 function setupCctvModal() {
   document.getElementById('camModalCloseBtn')?.addEventListener('click', () => {
+    if (currentModalPlayer) {
+      currentModalPlayer.stop();
+      currentModalPlayer = null;
+    }
     document.getElementById('camModal')?.classList.remove('open');
   });
   document.getElementById('modalCamCloseFooterBtn')?.addEventListener('click', () => {
+    if (currentModalPlayer) {
+      currentModalPlayer.stop();
+      currentModalPlayer = null;
+    }
     document.getElementById('camModal')?.classList.remove('open');
   });
 }

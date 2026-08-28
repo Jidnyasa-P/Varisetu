@@ -180,11 +180,11 @@
           <div class="cctv-column" id="cctvTilesContainer">
             <div class="panel-header">
               <span>CCTV FEEDS (SURVEILLANCE GRID)</span>
-              <span style="font-size:10px; color:var(--text-muted);">CLICK FEED FOR DETAILS / PTZ</span>
+              <span style="font-size:10px; color:var(--text-muted);"><span class="live-dot" style="display:inline-block; width:6px; height:6px; margin-right:4px;"></span>LIVE 60 FPS</span>
             </div>
 
-            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12">
-              <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 12">
+            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for live HD stream & telemetry">
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-12" width="360" height="200"></canvas>
               <div class="cctv-overlay">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-12</span>
@@ -197,8 +197,8 @@
               </div>
             </div>
 
-            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04">
-              <img src="assets/wari_aerial_procession_1785244820232.jpg" class="cctv-feed-img" alt="CCTV Feed 04">
+            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04" title="Click for live HD stream & telemetry">
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-04" width="360" height="200"></canvas>
               <div class="cctv-overlay">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-04</span>
@@ -211,8 +211,8 @@
               </div>
             </div>
 
-            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08">
-              <img src="assets/palkhi_procession_1785244851342.jpg" class="cctv-feed-img" alt="CCTV Feed 08">
+            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08" title="Click for live HD stream & telemetry">
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-08" width="360" height="200"></canvas>
               <div class="cctv-overlay">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-08</span>
@@ -225,8 +225,8 @@
               </div>
             </div>
 
-            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01">
-              <img src="assets/cctv_wakhri_phata_1785244836537.jpg" class="cctv-feed-img" alt="CCTV Feed 01">
+            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01" title="Click for live HD stream & telemetry">
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-01" width="360" height="200"></canvas>
               <div class="cctv-overlay">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-01</span>
@@ -300,10 +300,19 @@
                 <div class="stat-subtext" id="statPalkhiLocation">Location: Approaching Wakhri Phata (Km 184)</div>
               </div>
 
-              <!-- Photo Texture Box -->
-              <div class="panel-card" style="padding:8px;">
-                <div style="font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:4px;">PILGRIM FLOW FIELD PHOTO</div>
-                <img src="assets/palkhi_procession_1785244851342.jpg" style="width:100%; height:110px; object-fit:cover; border:1px solid var(--border-main);" alt="Warkaris">
+              <!-- Photo Texture Box / Live Flow Video -->
+              <div class="panel-card" style="padding:8px;" id="pilgrimFieldCard" data-cam-code="PHOTO-01" title="Click for live HD stream & telemetry">
+                <div style="font-size:10px; font-weight:600; color:var(--text-muted); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+                  <span>PILGRIM FLOW LIVE STREAM</span>
+                  <span style="color:#2E7D32; font-family:var(--font-mono); font-size:9px;"><span class="live-dot" style="display:inline-block; width:5px; height:5px; margin-right:3px;"></span>LIVE 60 FPS</span>
+                </div>
+                <div style="position:relative; width:100%; height:110px; overflow:hidden; border:1px solid var(--border-main); cursor:pointer;">
+                  <canvas class="cctv-feed-canvas" id="canvas-PHOTO-01" width="360" height="200" style="width:100%; height:100%; object-fit:cover; display:block;"></canvas>
+                  <div class="cctv-overlay" style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(0,0,0,0.8)); padding:4px 8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="color:#FFF; font-size:9.5px; font-weight:600;">Main Palkhi Procession Corridor</span>
+                    <span class="density-tag orange" style="font-size:9px; padding:1px 5px;">FLOW 92%</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
