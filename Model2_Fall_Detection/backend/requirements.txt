@@ -1,0 +1,10 @@
+# VariSetu — Model 2 (Fall/Medical-Distress Detection) backend requirements
+torch>=2.2.0
+numpy>=1.26.0
+opencv-python-headless>=4.10.0
+mediapipe>=0.10.14
+
+# Optional, only if you expose this via FastAPI directly (matches Model 3's stack)
+fastapi>=0.110.0
+uvicorn>=0.29.0
+python-multipart>=0.0.9
