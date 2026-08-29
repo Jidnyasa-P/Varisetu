@@ -551,7 +551,7 @@ if __name__ == "__main__":
 ---
 
 ## 7. Frontend HTML Interface
-**File Path:** `Frontend/index.html` | **Lines of Code:** 1596
+**File Path:** `Frontend/index.html` | **Lines of Code:** 1597
 
 ```html
 <!DOCTYPE html>
@@ -560,7 +560,8 @@ if __name__ == "__main__":
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>वारी सेतु | VARISETU - Maharashtra Police Command Center</title>
-  
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
   <!-- Typography (Google Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
