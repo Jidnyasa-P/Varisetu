@@ -37,7 +37,7 @@ class Settings(BaseSettings):
         return url
 
     # Redis Connection (Optional, falls back to in-memory)
-    REDIS_URL: Optional[str] = "redis://localhost:6379/0"
+    # REDIS_URL: Optional[str] = "redis://localhost:6379/0"
 
     # Security & JWT Token Config
     JWT_SECRET_KEY: str = "varisetu-super-secret-key-change-in-production-2026"
@@ -53,8 +53,8 @@ class Settings(BaseSettings):
     STORAGE_LOCAL_DIR: str = "./uploads"
 
     VECTOR_PROVIDER: str = "mock"
-    QDRANT_URL: str = "http://localhost:6333"
-    QDRANT_API_KEY: Optional[str] = None
+    # QDRANT_URL: str = "http://localhost:6333"
+    # QDRANT_API_KEY: Optional[str] = None
 
     SPEECH_PROVIDER: str = "mock"  # "sarvam", "groq", "mock"
     SARVAM_API_KEY: Optional[str] = None

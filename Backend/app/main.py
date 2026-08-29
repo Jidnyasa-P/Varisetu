@@ -25,7 +25,7 @@ from app.api.zones import router as zones_router
 from app.core.config import settings
 from app.core.database import init_db
 from app.core.logging import setup_logging
-from app.core.redis import redis_client
+# from app.core.redis import redis_client
 from app.core.security import decode_token
 from app.seed.seed_data import seed_database
 from app.services.demo_service import demo_service
@@ -38,7 +38,7 @@ logger = setup_logging()
 async def lifespan(app: FastAPI):
     # Startup sequence
     logger.info("Initializing VariSetu Command Center Backend...")
-    await redis_client.connect()
+    # await redis_client.connect()
     await init_db()
     try:
         await seed_database()
@@ -50,7 +50,7 @@ async def lifespan(app: FastAPI):
     # Shutdown sequence
     logger.info("Shutting down VariSetu Command Center Backend...")
     await demo_service.stop()
-    await redis_client.disconnect()
+    # await redis_client.disconnect()
 
 
 app = FastAPI(
