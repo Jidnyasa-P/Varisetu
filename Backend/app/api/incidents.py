@@ -86,3 +86,20 @@ async def get_incident_timeline(id: str, db: AsyncSession = Depends(get_db)):
     query = select(IncidentEvent).where(IncidentEvent.incident_id == id).order_by(IncidentEvent.created_at.desc())
     events = (await db.execute(query)).scalars().all()
     return [IncidentEventOut.model_validate(e) for e in events]
+
+
+@router.get("/events/all", summary="Get real-time chronological audit trail of all operational events")
+async def get_all_events(limit: int = 50, db: AsyncSession = Depends(get_db)):
+    query = select(IncidentEvent).order_by(IncidentEvent.created_at.desc()).limit(limit)
+    events = (await db.execute(query)).scalars().all()
+    return [
+        {
+            "id": e.id,
+            "incident_id": e.incident_id,
+            "event_type": e.event_type,
+            "message": e.message,
+            "created_at": e.created_at.isoformat() if e.created_at else None
+        }
+        for e in events
+    ]
+

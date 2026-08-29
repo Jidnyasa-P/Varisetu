@@ -98,3 +98,24 @@ async def update_resource_status(
         user_id=user_id
     )
     return ResourceOut.model_validate(res)
+
+
+@router.post("/{id}/reassign", response_model=ResourceOut, summary="Reassign resource sector & broadcast update")
+async def reassign_resource(
+    id: str,
+    status_req: ResourceStatusUpdateRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    user_id = current_user.id if current_user else None
+    res = await resource_service.update_status(
+        db,
+        resource_id=id,
+        availability=status_req.availability or ResourceAvailability.ASSIGNED,
+        status_tag=status_req.status_tag or "REASSIGNED",
+        latitude=status_req.latitude,
+        longitude=status_req.longitude,
+        user_id=user_id
+    )
+    return ResourceOut.model_validate(res)
+

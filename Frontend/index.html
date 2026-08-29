@@ -258,6 +258,14 @@
         <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
           <span>PILGRIM COUNT: ~8,45,000</span>
         </div>
+        <button class="govt-btn btn-outline" id="configGoogleMapsKeyBtn" type="button" style="font-size:10px; padding:4px 9px;" title="Configure Google Maps API Key & Vector Map Engine">
+          <i data-lucide="map" style="width:11px; height:11px;"></i>
+          <span>GIS Engine</span>
+        </button>
+        <button class="govt-btn btn-outline" id="openAuditTrailBtn" type="button" style="font-size:10px; padding:4px 9px;" title="Operational Incident Audit Trail & Report Exporter">
+          <i data-lucide="file-text" style="width:11px; height:11px;"></i>
+          <span>Audit Trail</span>
+        </button>
         <button class="govt-btn btn-outline" id="notifDrawerBtn" type="button" style="position:relative; font-size:10px; padding:4px 9px;" title="Operational Alerts & Outbox">
           <i data-lucide="bell" style="width:12px; height:12px;"></i>
           <span>Alerts</span>
@@ -278,6 +286,7 @@
         </button>
       </div>
     </header>
+
 
     <!-- Navigation Tabs Bar -->
     <nav class="nav-bar">
@@ -387,37 +396,66 @@
           </div>
 
           <!-- Center: Interactive Route Map & Live GIS Common Operating Picture -->
-          <div class="map-container">
+          <div class="map-container" style="position:relative;">
+            <!-- Interactive Corridor Waypoint HUD Bar -->
+            <div class="map-corridor-hud" id="mapCorridorHud">
+              <div class="hud-item">
+                <span class="hud-label">CORRIDOR</span>
+                <span class="hud-value" id="hudCorridorTitle">NH-60 (212 km) Pune ➔ Nashik</span>
+              </div>
+              <div class="hud-divider"></div>
+              <div class="hud-item">
+                <span class="hud-label">ACTIVE PALKHI</span>
+                <span class="hud-value" style="color: #D98E2C;" id="hudPalkhiStatus">Narayangaon (Km 84) • 3.2 km/h</span>
+              </div>
+              <div class="hud-divider"></div>
+              <div class="hud-item">
+                <span class="hud-label">SECTOR SURGE</span>
+                <span class="hud-value" style="color: #9A2525;" id="hudSectorStatus">S4 Nashik Surge (92%)</span>
+              </div>
+              <div class="hud-actions" style="display:flex; gap:6px; margin-left:auto;">
+                <button type="button" class="govt-btn" id="changeCorridorEndpointsBtn" style="font-size:9.5px; padding:3px 8px;">
+                  <i data-lucide="map-pin" style="width:10px; height:10px;"></i>
+                  <span>Change Origin / Destination</span>
+                </button>
+              </div>
+            </div>
+
             <div id="routeMap"></div>
 
             <div class="map-controls-overlay">
-              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px; font-size:10px;">ROUTE MAP LEGEND</div>
+              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px; font-size:10px;">NH-60 CORRIDOR MAP LEGEND</div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#9A2525;"></div>
-                <span>Critical Congestion</span>
+                <span>Sector 4 (Sangamner ➔ Nashik 92%)</span>
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#B8551B;"></div>
-                <span>Heavy Density</span>
+                <span>Sector 3 (Manchar ➔ Sangamner 82%)</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#D98E2C;"></div>
+                <span>Sector 2 (Bhosari ➔ Manchar 62%)</span>
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#2E5B36;"></div>
-                <span>Clear Route</span>
+                <span>Sector 1 (Pune ➔ Bhosari 38%)</span>
               </div>
               <div class="map-legend-item" style="margin-top:3px;">
                 <i data-lucide="navigation" style="width:11px; height:11px; color:#D98E2C;"></i>
-                <span>Live Palkhi GPS</span>
+                <span>Live Palkhi (Km 84 Narayangaon)</span>
               </div>
               <div class="map-legend-item">
                 <i data-lucide="cross" style="width:11px; height:11px; color:#9A2525;"></i>
-                <span>Ambulance / Medical</span>
+                <span>Medical Vans (MV-01/02/03)</span>
               </div>
               <div class="map-legend-item">
                 <i data-lucide="droplet" style="width:11px; height:11px; color:#1D6F8A;"></i>
-                <span>Water Tanker</span>
+                <span>Water Tankers (WT-09/04)</span>
               </div>
             </div>
           </div>
+
 
           <!-- Right Column: Plain Stat Panels -->
           <div class="right-col-panel">
@@ -587,7 +625,27 @@
           </div>
         </div>
 
+        <!-- AI Biometric CCTV Re-ID Matching Panel (Threshold: 0.1268) -->
+        <div class="panel-card" style="padding:0; margin-bottom:14px; border-left:4px solid var(--saffron-gold);">
+          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="scan-face" style="width:14px; height:14px; color:var(--saffron-gold);"></i>
+              <span style="font-weight:700; font-size:12px;">AI FACE MATCH CANDIDATES (BIOMETRIC CCTV RE-ID)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge" style="background:var(--saffron-light); color:var(--saffron-gold); font-size:9.5px; border:1px solid var(--saffron-gold);">Threshold: 0.1268 (97.28% LFW)</span>
+              <button type="button" class="govt-btn btn-outline" id="openAiDiscoveryBtn" style="font-size:9.5px; padding:2px 7px;">
+                <i data-lucide="info" style="width:10px; height:10px;"></i> 6-Stage AI Pipeline
+              </button>
+            </div>
+          </div>
+          <div id="biometricCandidatesContainer" style="padding:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap:10px;">
+            <!-- Populated dynamically with split-screen comparison cards -->
+          </div>
+        </div>
+
         <div class="lost-found-grid">
+
           <!-- Left Column: Table of Active Cases -->
           <div class="govt-table-container">
             <table class="govt-table">
@@ -712,8 +770,11 @@
         </div>
 
         <div class="resource-grid">
-          <!-- Left: Resource Table -->
+          <!-- Left: Resource Summary Table -->
           <div class="govt-table-container">
+            <div class="panel-header" style="margin-bottom:6px;">
+              <span>DEPLOYMENT SUMMARY METRICS</span>
+            </div>
             <table class="govt-table">
               <thead>
                 <tr>
@@ -730,14 +791,30 @@
             </table>
           </div>
 
-          <!-- Right: Route Status Simple List -->
+          <!-- Right: Route Status Simple List & Diversion Control -->
           <div>
-            <div class="panel-header" style="margin-bottom:8px;">
-              <span>ROUTE STATUS & DIVERSION LOG</span>
+            <div class="panel-header" style="margin-bottom:8px; justify-content:space-between;">
+              <span>ROUTE STATUS & CORRIDOR DIVERSION CONTROL</span>
             </div>
 
             <div id="routesContainer">
               <!-- Populated dynamically from /api/routes -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Field Logistics Fleet Cards Grid -->
+        <div class="panel-card" style="padding:0; margin-top:14px;">
+          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="truck" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:12px;">FIELD LOGISTICS & FLEET UNITS GRID</span>
+            </div>
+            <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:9.5px;" id="fleetUnitsCountBadge">7 Units Online</span>
+          </div>
+          <div class="field-logistics-grid" id="resourceCardsContainer" style="padding:10px;">
+            <!-- Populated dynamically with fleet cards for WT-09, WT-04, MV-01, MV-02, PS-14 -->
+          </div>
         </div>
 
         <!-- Live Incident & Logistics Action Timeline Stream -->
@@ -760,6 +837,7 @@
           </div>
         </div>
       </section>
+
 
     </main>
 
@@ -879,8 +957,266 @@
     </div>
   </div>
 
+  <!-- Google Maps / GIS Engine Configuration Modal -->
+  <div class="app-modal-backdrop" id="googleMapsKeyModalBackdrop" aria-hidden="true" style="display:none;">
+    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:480px;">
+      <div class="app-modal-header">
+        <div>
+          <div class="app-modal-kicker">GIS MAP ENGINE</div>
+          <div class="app-modal-title">Configure Map Engine & API Key</div>
+        </div>
+        <button type="button" class="close-modal-btn" id="closeGoogleMapsKeyModalBtn">&times;</button>
+      </div>
+      <form id="googleMapsKeyForm">
+        <div class="app-modal-body">
+          <p style="font-size:11.5px; color:var(--text-secondary); margin-bottom:12px;">
+            VariSetu uses high-performance dual map rendering. You can use Clean OpenStreetMap tiles (default) or Google Maps Platform vector map tiles.
+          </p>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Active Map Provider</label>
+            <select id="mapEngineSelect" class="govt-input">
+              <option value="OPENSTREETMAP">Clean OpenStreetMap (Default - Offline Resilient)</option>
+              <option value="GOOGLE_MAPS">Google Maps Platform Vector Engine (Cloud)</option>
+            </select>
+          </div>
+          <div style="margin-bottom:12px;" id="gmapsKeyGroup">
+            <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Google Maps JavaScript API Key</label>
+            <input type="password" id="gmapsApiKeyInput" class="govt-input" placeholder="AIzaSy..." autocomplete="off">
+            <div style="font-size:9.5px; color:var(--text-muted); margin-top:3px;">
+              Requires Maps JavaScript API & Places Library enabled.
+            </div>
+          </div>
+        </div>
+        <div class="app-modal-footer">
+          <button type="button" class="govt-btn btn-outline" id="cancelGoogleMapsKeyModalBtn">Cancel</button>
+          <button type="submit" class="govt-btn" id="saveGoogleMapsKeyBtn">Save & Apply Map Engine</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Corridor Origin & Destination Endpoints Modal -->
+  <div class="app-modal-backdrop" id="corridorEndpointsModalBackdrop" aria-hidden="true" style="display:none;">
+    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:520px;">
+      <div class="app-modal-header">
+        <div>
+          <div class="app-modal-kicker">NH-60 PILGRIMAGE CORRIDOR</div>
+          <div class="app-modal-title">Configure Pilgrimage Corridor Waypoints</div>
+        </div>
+        <button type="button" class="close-modal-btn" id="closeCorridorEndpointsModalBtn">&times;</button>
+      </div>
+      <form id="corridorEndpointsForm">
+        <div class="app-modal-body">
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11.5px; margin-bottom:4px;">Source Origin (Pune)</label>
+            <input type="text" id="corridorOriginInput" class="govt-input" value="Flat no A9, Garden View Society, Indira shankar nagri, Near Rahul Towers, Kothrud Depo, Pune - 411038" required>
+            <div style="font-size:9.5px; color:var(--text-muted); margin-top:2px;">Coordinates: 18.5074, 73.8077 (Kothrud Depo)</div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11.5px; margin-bottom:4px;">Destination Terminal (Nashik)</label>
+            <input type="text" id="corridorDestInput" class="govt-input" value="Narayan Park, Govind Nagar, Nashik, Maharashtra, Pin Code: 422009" required>
+            <div style="font-size:9.5px; color:var(--text-muted); margin-top:2px;">Coordinates: 19.9700, 73.7800 (Govind Nagar)</div>
+          </div>
+          <div style="background:var(--bg-subtle); padding:8px 10px; border:1px solid var(--border-main); font-size:10.5px; color:var(--text-secondary); border-radius:2px;">
+            <strong>Corridor Profile:</strong> NH-60 National Highway (212 km) • 4 Real-time Monitored Sectors with automatic density telemetry.
+          </div>
+        </div>
+        <div class="app-modal-footer">
+          <button type="button" class="govt-btn btn-outline" id="cancelCorridorEndpointsModalBtn">Cancel</button>
+          <button type="submit" class="govt-btn" id="saveCorridorEndpointsBtn">Update Active Corridor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6-Stage AI Discovery & Identification Timeline Modal -->
+  <div class="app-modal-backdrop" id="aiDiscoveryModalBackdrop" aria-hidden="true" style="display:none;">
+    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:580px;">
+      <div class="app-modal-header">
+        <div>
+          <div class="app-modal-kicker">BIOMETRIC RE-ID PIPELINE</div>
+          <div class="app-modal-title">AI Biometric Discovery & Match Pipeline</div>
+        </div>
+        <button type="button" class="close-modal-btn" id="closeAiDiscoveryModalBtn">&times;</button>
+      </div>
+      <div class="app-modal-body">
+        <div style="font-size:11.5px; color:var(--text-secondary); margin-bottom:10px;">
+          Maharashtra Police AI CCTV Re-Identification calibrated at <strong>0.1268 Cosine Distance Threshold</strong> (97.28% LFW Benchmark Accuracy, 5% FPR).
+        </div>
+        <div class="ai-pipeline-timeline">
+          <div class="ai-pipeline-step">
+            <div class="ai-step-num">1</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">HD Surveillance Video Ingestion</div>
+              <div class="ai-step-desc">60 FPS CCTV feeds ingested from CAM-01, CAM-08, CAM-12, CAM-04 across NH-60 corridor.</div>
+            </div>
+          </div>
+          <div class="ai-pipeline-step">
+            <div class="ai-step-num">2</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">Multi-Task MTCNN Facial Localization</div>
+              <div class="ai-step-desc">Real-time bounding box extraction, facial landmark alignment, and lighting compensation.</div>
+            </div>
+          </div>
+          <div class="ai-pipeline-step">
+            <div class="ai-step-num">3</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">512-Dimensional MobileNetV4 Embedding</div>
+              <div class="ai-step-desc">Extracts normalized 512-D deep biometric feature vectors for robust low-light & crowd matching.</div>
+            </div>
+          </div>
+          <div class="ai-pipeline-step">
+            <div class="ai-step-num">4</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">Cosine Vector Comparison against Dossiers</div>
+              <div class="ai-step-desc">Compares live CCTV embeddings against active lost person dossiers (e.g. Maruti Kisan Shinde #LF-802).</div>
+            </div>
+          </div>
+          <div class="ai-pipeline-step">
+            <div class="ai-step-num">5</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">Threshold Verification (Distance &le; 0.1268)</div>
+              <div class="ai-step-desc">Candidate flagged as high-confidence match (Confidence 94%, Similarity 0.89) at CAM-04 Pandharpur/Nashik.</div>
+            </div>
+          </div>
+          <div class="ai-pipeline-step">
+            <div class="ai-step-num">6</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">Commander Verification & Squad #14 Ground Dispatch</div>
+              <div class="ai-step-desc">Inspector Vikram Jadhav (Squad #14) dispatched for on-ground verification & DPDP-compliant reunion.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="app-modal-footer">
+        <button type="button" class="govt-btn" id="closeAiDiscoveryFooterBtn">Acknowledge Pipeline</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reassign Resource Sector Modal -->
+  <div class="app-modal-backdrop" id="reassignResourceModalBackdrop" aria-hidden="true" style="display:none;">
+    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:460px;">
+      <div class="app-modal-header">
+        <div>
+          <div class="app-modal-kicker">DYNAMIC RESOURCE ALLOCATION</div>
+          <div class="app-modal-title">Reassign Fleet Unit Sector</div>
+        </div>
+        <button type="button" class="close-modal-btn" id="closeReassignResourceModalBtn">&times;</button>
+      </div>
+      <form id="reassignResourceForm">
+        <input type="hidden" id="reassignResourceId">
+        <div class="app-modal-body">
+          <div style="margin-bottom:10px;">
+            <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Resource Code / Name</label>
+            <input type="text" id="reassignResourceName" class="govt-input" readonly style="background:var(--bg-subtle); font-weight:700;">
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Target Corridor Sector</label>
+            <select id="reassignSectorSelect" class="govt-input" required>
+              <option value="Sector 1 (Pune ➔ Bhosari)">Sector 1 (Pune ➔ Bhosari - 38% Flow)</option>
+              <option value="Sector 2 (Bhosari ➔ Manchar)">Sector 2 (Bhosari ➔ Manchar - 62% Flow)</option>
+              <option value="Sector 3 (Manchar ➔ Sangamner)" selected>Sector 3 (Manchar ➔ Sangamner - 82% Heavy Flow)</option>
+              <option value="Sector 4 (Sangamner ➔ Govind Nagar Nashik)">Sector 4 (Sangamner ➔ Govind Nagar Nashik - 92% Critical Surge)</option>
+            </select>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Operational Notes</label>
+            <input type="text" id="reassignNotes" class="govt-input" placeholder="E.g. Relocating to relieve Sector 3 bottleneck">
+          </div>
+        </div>
+        <div class="app-modal-footer">
+          <button type="button" class="govt-btn btn-outline" id="cancelReassignResourceModalBtn">Cancel</button>
+          <button type="submit" class="govt-btn" id="submitReassignResourceBtn">
+            <i data-lucide="refresh-cw" style="width:11px; height:11px;"></i>
+            <span>Confirm Reassignment</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Route Manage & Divert Corridor Control Modal -->
+  <div class="app-modal-backdrop" id="routeManageModalBackdrop" aria-hidden="true" style="display:none;">
+    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:500px;">
+      <div class="app-modal-header">
+        <div>
+          <div class="app-modal-kicker">TRAFFIC CORRIDOR CONTROL</div>
+          <div class="app-modal-title" id="routeManageModalTitle">Manage / Divert Route</div>
+        </div>
+        <button type="button" class="close-modal-btn" id="closeRouteManageModalBtn">&times;</button>
+      </div>
+      <form id="routeManageForm">
+        <input type="hidden" id="routeManageId">
+        <div class="app-modal-body">
+          <div style="margin-bottom:10px;">
+            <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Route Segment</label>
+            <input type="text" id="routeManageName" class="govt-input" readonly style="background:var(--bg-subtle); font-weight:700;">
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Corridor Status Action</label>
+            <select id="routeManageStatusSelect" class="govt-input">
+              <option value="OPEN">OPEN (Normal Flow)</option>
+              <option value="DIVERTED" selected>DIVERTED (Bypass Assigned)</option>
+              <option value="CLOSED">CLOSED (Prohibited)</option>
+              <option value="EMERGENCY_ONLY">EMERGENCY_ONLY (Ambulance / Police Access Only)</option>
+            </select>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Bypass / Diversion Path</label>
+            <input type="text" id="routeManageBypassInput" class="govt-input" value="Sinnar East Agricultural Bypass Road (Saves ~45 mins)">
+          </div>
+        </div>
+        <div class="app-modal-footer">
+          <button type="button" class="govt-btn btn-outline" id="cancelRouteManageModalBtn">Cancel</button>
+          <button type="submit" class="govt-btn" id="submitRouteManageBtn">Apply Corridor Control</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Operational Incident Audit Trail & Report Exporter Modal -->
+  <div class="app-modal-backdrop" id="auditTrailModalBackdrop" aria-hidden="true" style="display:none;">
+    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:720px;">
+      <div class="app-modal-header">
+        <div>
+          <div class="app-modal-kicker">MAHARASHTRA POLICE COMMAND RECORDS</div>
+          <div class="app-modal-title">Unified Operational Incident Timeline & Audit Exporter</div>
+        </div>
+        <button type="button" class="close-modal-btn" id="closeAuditTrailModalBtn">&times;</button>
+      </div>
+      <div class="app-modal-body">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span style="font-size:11px; color:var(--text-muted);">Real-time chronological audit trail of all crowd surges, lost persons, biometric matches, and dispatches.</span>
+          <button type="button" class="govt-btn" id="exportGovtReportBtn" style="font-size:10.5px; padding:4px 10px; display:flex; align-items:center; gap:5px;">
+            <i data-lucide="download" style="width:12px; height:12px;"></i>
+            <span>📥 Export Operational Summary (Govt Report)</span>
+          </button>
+        </div>
+        <div class="govt-table-container" style="max-height:340px; overflow-y:auto; border:1px solid var(--border-main);">
+          <table class="govt-table">
+            <thead>
+              <tr>
+                <th>Timestamp (IST)</th>
+                <th>Category</th>
+                <th>Details & Action Log</th>
+              </tr>
+            </thead>
+            <tbody id="auditTrailTableBody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="app-modal-footer">
+        <button type="button" class="govt-btn btn-outline" id="closeAuditTrailFooterBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Application Logic JavaScript -->
   <script src="app.js"></script>
 
 </body>
 </html>
+

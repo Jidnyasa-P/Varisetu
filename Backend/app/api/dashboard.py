@@ -45,42 +45,57 @@ async def get_heat_risk():
 
 @router.get("/map-corridor", response_model=List[CorridorRouteSegment], summary="Get route corridor segments with live density")
 async def get_map_corridor():
-    """Returns coordinate segments with heat density colors for Leaflet map overlay."""
+    """Returns coordinate segments with heat density colors for Leaflet map overlay along NH-60 Pune to Nashik."""
     return [
         CorridorRouteSegment(
-            name="Alandi - Saswad",
-            sector="Sector 1-2",
-            density_percentage=35.0,
+            name="Pune - Bhosari",
+            sector="Sector 1",
+            density_percentage=38.0,
             color_hex="#2E5B36",
             status_tag="NORMAL",
             coordinates=[
-                [18.6772, 73.8967],
-                [18.5204, 73.8567],
-                [18.3440, 74.0305]
+                [18.5074, 73.8077],
+                [18.5300, 73.8400],
+                [18.6270, 73.8470]
             ]
         ),
         CorridorRouteSegment(
-            name="Saswad - Bhalwani",
+            name="Bhosari - Manchar",
+            sector="Sector 2",
+            density_percentage=62.0,
+            color_hex="#D98E2C",
+            status_tag="MODERATE",
+            coordinates=[
+                [18.6270, 73.8470],
+                [18.7180, 73.8780],
+                [18.8600, 73.9100],
+                [19.0060, 73.9450]
+            ]
+        ),
+        CorridorRouteSegment(
+            name="Manchar - Sangamner",
             sector="Sector 3",
-            density_percentage=74.0,
+            density_percentage=82.0,
             color_hex="#B8551B",
             status_tag="HEAVY",
             coordinates=[
-                [18.3440, 74.0305],
-                [18.1500, 74.3000],
-                [17.8900, 75.0200]
+                [19.0060, 73.9450],
+                [19.1240, 73.9780],
+                [19.3100, 74.0600],
+                [19.5760, 74.2120]
             ]
         ),
         CorridorRouteSegment(
-            name="Wakhri - Pandharpur",
-            sector="Sector 4-5",
-            density_percentage=94.0,
+            name="Sangamner - Govind Nagar Nashik",
+            sector="Sector 4",
+            density_percentage=92.0,
             color_hex="#9A2525",
             status_tag="CRITICAL",
             coordinates=[
-                [17.8900, 75.0200],
-                [17.7280, 75.2950],
-                [17.6777, 75.3276]
+                [19.5760, 74.2120],
+                [19.7050, 73.9900],
+                [19.9700, 73.7800]
             ]
         )
     ]
+
