@@ -132,7 +132,10 @@ class YatraService:
         ]
 
         now = datetime.now(timezone.utc)
-        data_age = int((now - yatra.last_gps_update.replace(tzinfo=timezone.utc if yatra.last_gps_update.tzinfo is None else None)).total_seconds())
+        gps_time = yatra.last_gps_update if yatra.last_gps_update else now
+        if gps_time.tzinfo is None:
+            gps_time = gps_time.replace(tzinfo=timezone.utc)
+        data_age = max(0, int((now - gps_time).total_seconds()))
 
         # Checkpoints & ETA
         dist_to_pandharpur = google_maps_adapter.haversine_distance_km(yatra.current_latitude, yatra.current_longitude, 17.6777, 75.3276)

@@ -24,9 +24,6 @@ logger = logging.getLogger("varisetu.seed")
 
 
 async def seed_database():
-    logger.info("Initializing database schema...")
-    await init_db()
-
     async with AsyncSessionLocal() as db:
         # Check if users already exist
         existing_user = (await db.execute(select(User).limit(1))).scalar_one_or_none()
