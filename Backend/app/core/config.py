@@ -82,8 +82,8 @@ class Settings(BaseSettings):
     VAD_LONG_SILENCE_MS: int = 3000
     CALL_IDLE_TIMEOUT_MS: int = 60000
 
-    VISION_PROVIDER: str = "mock"
-    HF_SPACE_ID: str = "Jidnyasa-P/VariSetu-Vision"
+    VISION_PROVIDER: str = "hf_space"
+    HF_SPACE_ID: str = "Saj2005/VariSetu"
     WEATHER_PROVIDER: str = "mock"
     NOTIFICATION_PROVIDER: str = "mock"
 

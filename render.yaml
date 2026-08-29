@@ -1,0 +1,30 @@
+# VariSetu — Render Blueprint (optional).
+#
+# This lets you deploy via "New -> Blueprint" in Render's dashboard, pointing
+# at this repo, instead of filling in the New Web Service form by hand.
+# Either path works identically -- see DEPLOY_RENDER.md for the manual
+# dashboard steps if you'd rather not use this file.
+
+services:
+  - type: web
+    name: varisetu-backend
+    runtime: python
+    plan: free
+    rootDir: Backend
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: VISION_PROVIDER
+        value: hf_space
+      - key: HF_SPACE_ID
+        value: Saj2005/VariSetu
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: AUTH_REQUIRED
+        value: "true"
+      # Set these two manually in the Render dashboard after the Blueprint
+      # creates the service -- secrets should never live in a committed file:
+      #   DATABASE_URL   (your Supabase connection string)
+      #   JWT_SECRET_KEY (generate with: python -c "import secrets; print(secrets.token_urlsafe(48))")

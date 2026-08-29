@@ -3,12 +3,12 @@
 const API_BASE =
   window.VARISETU_CONFIG?.API_BASE ||
   localStorage.getItem('VARISETU_API_BASE') ||
-  'http://localhost:8000/api';
+  `${window.location.origin}/api`;
 
 const WS_BASE =
   window.VARISETU_CONFIG?.WS_BASE ||
   localStorage.getItem('VARISETU_WS_BASE') ||
-  'ws://localhost:8000/ws';
+  `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`;
 
 const AUTH_STORAGE_KEY = 'varisetu_auth';
 
