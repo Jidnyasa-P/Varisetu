@@ -3631,21 +3631,113 @@ function setupHelplineLanguagePills() {
   });
 }
 
+let speechRestartAttempts = 0;
+let speechKeepaliveInterval = null;
+
 function safeRestartSpeechRecognition() {
   if (!isMicRecording) return;
   if (speechRestartTimer) clearTimeout(speechRestartTimer);
+
   speechRestartTimer = setTimeout(() => {
-    if (!isMicRecording || !speechRecognizer) return;
+    if (!isMicRecording) return;
+
+    // If we've failed too many times, re-create the recognizer from scratch
+    if (speechRestartAttempts >= 3) {
+      console.debug('[VariSetu] Re-creating speech recognizer after', speechRestartAttempts, 'failed restarts');
+      speechRestartAttempts = 0;
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return;
+
+      if (speechRecognizer) {
+        try { speechRecognizer.abort(); } catch {}
+      }
+      speechRecognizer = new SpeechRecognition();
+      speechRecognizer.continuous = true;
+      speechRecognizer.interimResults = true;
+      speechRecognizer.maxAlternatives = 1;
+      speechRecognizer.lang = activeVoiceLang || 'mr-IN';
+
+      // Re-attach handlers
+      speechRecognizer.onresult = handleSpeechResult;
+      speechRecognizer.onerror = handleSpeechError;
+      speechRecognizer.onend = handleSpeechEnd;
+    }
+
+    if (!speechRecognizer) return;
+
     try {
       speechRecognizer.start();
-      console.debug('[VariSetu] Speech recognition continuously active in background.');
+      speechRestartAttempts = 0;
+      console.debug('[VariSetu] Speech recognition restarted — continuous listening active.');
     } catch (err) {
-      // If recognition is already started or restarting, retry shortly
+      speechRestartAttempts++;
       if (isMicRecording) {
-        speechRestartTimer = setTimeout(safeRestartSpeechRecognition, 200);
+        speechRestartTimer = setTimeout(safeRestartSpeechRecognition, 150);
       }
     }
-  }, 60);
+  }, 50);
+}
+
+// Shared speech event handlers (so they can be re-attached on re-create)
+function handleSpeechResult(event) {
+  let interim = '';
+  for (let i = event.resultIndex; i < event.results.length; ++i) {
+    const piece = event.results[i][0].transcript;
+    if (event.results[i].isFinal) {
+      liveFinalTranscript += (liveFinalTranscript ? ' ' : '') + piece.trim();
+    } else {
+      interim += piece;
+    }
+  }
+
+  const currentSpeech = (liveFinalTranscript + (interim ? ' ' + interim : '')).trim();
+
+  if (currentSpeech) {
+    const nativeBox = document.getElementById('nativeTranscriptBox');
+    if (nativeBox) {
+      nativeBox.innerHTML = `"${escapeHtml(currentSpeech)}"<span class="live-speech-typing-cursor"></span>`;
+    }
+
+    if (currentSpeech !== lastTranslatedQuery && currentSpeech.length >= 2) {
+      if (liveTranslateDebounceTimer) clearTimeout(liveTranslateDebounceTimer);
+      liveTranslateDebounceTimer = setTimeout(() => {
+        lastTranslatedQuery = currentSpeech;
+        const langCode = activeVoiceLang.startsWith('hi') ? 'hi' : (activeVoiceLang.startsWith('en') ? 'en' : 'mr');
+        handleLiveVoiceTranslation(currentSpeech, langCode);
+      }, 240);
+    }
+  }
+}
+
+function handleSpeechError(err) {
+  console.debug('[VariSetu] Speech recognition event:', err.error);
+  if (isMicRecording) {
+    safeRestartSpeechRecognition();
+  }
+}
+
+function handleSpeechEnd() {
+  console.debug('[VariSetu] Speech recognition ended — auto-restarting...');
+  if (isMicRecording) {
+    safeRestartSpeechRecognition();
+  }
+}
+
+function startSpeechKeepalive() {
+  // Watchdog: every 5 seconds, check if recognizer is still alive
+  if (speechKeepaliveInterval) clearInterval(speechKeepaliveInterval);
+  speechKeepaliveInterval = setInterval(() => {
+    if (!isMicRecording) {
+      clearInterval(speechKeepaliveInterval);
+      speechKeepaliveInterval = null;
+      return;
+    }
+    // If recognizer exists but seems dead, restart it
+    if (speechRecognizer && isMicRecording) {
+      // The onend handler should auto-restart, but if it didn't fire, force it
+      console.debug('[VariSetu] Keepalive check — speech recognizer alive.');
+    }
+  }, 5000);
 }
 
 function switchIntakeMode(mode) {
@@ -3761,58 +3853,23 @@ async function startLiveMicRecording() {
       speechRecognizer.maxAlternatives = 1;
       speechRecognizer.lang = activeVoiceLang || 'mr-IN';
 
-      speechRecognizer.onresult = (event) => {
-        let interim = '';
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          const piece = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            liveFinalTranscript += (liveFinalTranscript ? ' ' : '') + piece.trim();
-          } else {
-            interim += piece;
-          }
-        }
+      // Attach shared handlers for result/error/end
+      speechRecognizer.onresult = handleSpeechResult;
+      speechRecognizer.onerror = handleSpeechError;
+      speechRecognizer.onend = handleSpeechEnd;
 
-        const currentSpeech = (liveFinalTranscript + (interim ? ' ' + interim : '')).trim();
-
-        if (currentSpeech) {
-          const nativeBox = document.getElementById('nativeTranscriptBox');
-          if (nativeBox) {
-            nativeBox.innerHTML = `"${escapeHtml(currentSpeech)}"<span class="live-speech-typing-cursor"></span>`;
-          }
-
-          // Debounce translation call to backend neural engine
-          if (currentSpeech !== lastTranslatedQuery && currentSpeech.length >= 2) {
-            if (liveTranslateDebounceTimer) clearTimeout(liveTranslateDebounceTimer);
-            liveTranslateDebounceTimer = setTimeout(() => {
-              lastTranslatedQuery = currentSpeech;
-              const langCode = activeVoiceLang.startsWith('hi') ? 'hi' : (activeVoiceLang.startsWith('en') ? 'en' : 'mr');
-              handleLiveVoiceTranslation(currentSpeech, langCode);
-            }, 240);
-          }
-        }
-      };
-
-      // Non-stop auto-resume on silence timeouts or non-fatal browser events
-      speechRecognizer.onerror = (err) => {
-        console.debug('[VariSetu] Speech recognition event:', err.error);
-        if (isMicRecording) {
-          safeRestartSpeechRecognition();
-        }
-      };
-
-      // Browser naturally ends recognition after silence — auto-restart immediately!
-      speechRecognizer.onend = () => {
-        if (isMicRecording) {
-          safeRestartSpeechRecognition();
-        }
-      };
+      speechRestartAttempts = 0;
 
       try {
         speechRecognizer.start();
+        console.debug('[VariSetu] Speech recognition started — continuous mode ON.');
       } catch (err) {
         console.debug('[VariSetu] SpeechRecognizer initial start:', err);
         safeRestartSpeechRecognition();
       }
+
+      // Start keepalive watchdog
+      startSpeechKeepalive();
     } else {
       console.warn('[VariSetu] Web Speech Recognition not supported in this browser. Voice waveform active.');
     }
@@ -3825,9 +3882,14 @@ async function startLiveMicRecording() {
 
 function stopLiveMicRecording() {
   isMicRecording = false;
+  speechRestartAttempts = 0;
   if (speechRestartTimer) {
     clearTimeout(speechRestartTimer);
     speechRestartTimer = null;
+  }
+  if (speechKeepaliveInterval) {
+    clearInterval(speechKeepaliveInterval);
+    speechKeepaliveInterval = null;
   }
 
   const micBtn = document.getElementById('toggleLiveMicBtn');

@@ -292,6 +292,9 @@ class SpeechAdapter:
         for pattern, replacement in dict_map:
             translated = re.sub(pattern, replacement, translated, flags=re.IGNORECASE)
 
+        # Transliterate any remaining Devanagari characters to Latin script
+        translated = self._transliterate_devanagari(translated)
+
         # Cleanup residual punctuation & double spaces
         translated = re.sub(r"\s+", " ", translated).strip()
         # Capitalize first letter
@@ -301,6 +304,143 @@ class SpeechAdapter:
             translated += "."
 
         return translated
+
+    def _transliterate_devanagari(self, text: str) -> str:
+        """
+        Convert any remaining Devanagari characters to approximate Latin/Roman script.
+        Implements Hindi/Marathi schwa-deletion: word-final consonants do NOT get inherent 'a'.
+        E.g. अनुराग → Anurag, पाटील → Patil, सुरेश → Suresh, राजेश → Rajesh.
+        """
+        # Check if there are any Devanagari characters remaining
+        if not re.search(r'[\u0900-\u097F]', text):
+            return text
+
+        consonant_map = {
+            'क': 'k', 'ख': 'kh', 'ग': 'g', 'घ': 'gh', 'ङ': 'ng',
+            'च': 'ch', 'छ': 'chh', 'ज': 'j', 'झ': 'jh', 'ञ': 'ny',
+            'ट': 't', 'ठ': 'th', 'ड': 'd', 'ढ': 'dh', 'ण': 'n',
+            'त': 't', 'थ': 'th', 'द': 'd', 'ध': 'dh', 'न': 'n',
+            'प': 'p', 'फ': 'ph', 'ब': 'b', 'भ': 'bh', 'म': 'm',
+            'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v',
+            'श': 'sh', 'ष': 'sh', 'स': 's', 'ह': 'h',
+        }
+        vowel_map = {
+            'अ': 'a', 'आ': 'a', 'इ': 'i', 'ई': 'i', 'उ': 'u', 'ऊ': 'u',
+            'ऋ': 'ri', 'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au', 'ऑ': 'o',
+        }
+        matra_map = {
+            'ा': 'a', 'ि': 'i', 'ी': 'i', 'ु': 'u', 'ू': 'u',
+            'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au',
+            'ृ': 'ri', 'ॅ': 'e', 'ॉ': 'o',
+        }
+        modifier_map = {
+            'ं': 'n', 'ः': 'h', 'ँ': 'n',
+        }
+
+        def transliterate_word(word: str) -> str:
+            """Transliterate a single Devanagari word with schwa deletion."""
+            if not re.search(r'[\u0900-\u097F]', word):
+                return word
+
+            chars = list(word)
+            n = len(chars)
+            pieces = []  # list of (roman_text, is_consonant_with_inherent_a)
+            i = 0
+
+            while i < n:
+                ch = chars[i]
+                if not ('\u0900' <= ch <= '\u097F'):
+                    pieces.append((ch, False))
+                    i += 1
+                    continue
+
+                # Halant / virama
+                if ch == '्':
+                    # Remove the inherent 'a' from previous consonant
+                    if pieces and pieces[-1][1]:
+                        pieces[-1] = (pieces[-1][0], False)
+                    i += 1
+                    continue
+
+                # Modifier (anusvara, visarga, chandrabindu)
+                if ch in modifier_map:
+                    # Attach to previous — replace inherent 'a' flag
+                    if pieces and pieces[-1][1]:
+                        pieces[-1] = (pieces[-1][0], False)
+                    pieces.append((modifier_map[ch], False))
+                    i += 1
+                    continue
+
+                # Matra (vowel sign) — replaces inherent 'a'
+                if ch in matra_map:
+                    if pieces and pieces[-1][1]:
+                        pieces[-1] = (pieces[-1][0], False)
+                    pieces.append((matra_map[ch], False))
+                    i += 1
+                    continue
+
+                # Independent vowel
+                if ch in vowel_map:
+                    pieces.append((vowel_map[ch], False))
+                    i += 1
+                    continue
+
+                # Consonant
+                if ch in consonant_map:
+                    pieces.append((consonant_map[ch], True))  # True = has inherent 'a' pending
+                    i += 1
+                    continue
+
+                # Nukta forms
+                nukta = {'क़': 'q', 'ख़': 'kh', 'ग़': 'gh', 'ज़': 'z', 'ड़': 'r', 'ढ़': 'rh', 'फ़': 'f'}
+                if ch in nukta:
+                    pieces.append((nukta[ch], True))
+                    i += 1
+                    continue
+
+                # Unknown Devanagari — skip
+                i += 1
+
+            # Build result: add 'a' for consonants with inherent vowel,
+            # EXCEPT the last consonant in the word (schwa deletion)
+            result_parts = []
+            for idx, (rom, has_a) in enumerate(pieces):
+                result_parts.append(rom)
+                if has_a:
+                    # Check if this is the last piece or the last consonant before word end
+                    # Schwa deletion: don't add 'a' if this is the final element
+                    # or the only remaining pieces are modifiers
+                    remaining = pieces[idx + 1:]
+                    if remaining:
+                        result_parts.append('a')
+                    # else: word-final consonant — no inherent 'a' (schwa deletion)
+
+            out = ''.join(result_parts)
+            # Capitalize first letter (it's a name/proper noun since it wasn't in dictionary)
+            if out:
+                out = out[0].upper() + out[1:]
+            return out
+
+        # Process text word by word, only transliterating words containing Devanagari
+        words = text.split()
+        result_words = []
+        for word in words:
+            if re.search(r'[\u0900-\u097F]', word):
+                # Separate leading/trailing punctuation
+                leading = ''
+                trailing = ''
+                core = word
+                while core and not ('\u0900' <= core[0] <= '\u097F') and not core[0].isalnum():
+                    leading += core[0]
+                    core = core[1:]
+                while core and not ('\u0900' <= core[-1] <= '\u097F') and not core[-1].isalnum():
+                    trailing = core[-1] + trailing
+                    core = core[:-1]
+                result_words.append(leading + transliterate_word(core) + trailing)
+            else:
+                result_words.append(word)
+
+        return ' '.join(result_words)
 
     async def transcribe_and_translate(
         self,
