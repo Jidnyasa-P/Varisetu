@@ -10,16 +10,16 @@
 - [Project README (`README.md`)](#readmemd) — `174` lines
 - [Docker Compose Config (`docker-compose.yml`)](#docker-composeyml) — `50` lines
 - [Git Ignore Config (`.gitignore`)](#gitignore) — `1` lines
-- [Frontend HTML Interface (`Frontend/index.html`)](#frontendindexhtml) — `937` lines
-- [Frontend Styling Design System (`Frontend/styles.css`)](#frontendstylescss) — `1729` lines
+- [Frontend HTML Interface (`Frontend/index.html`)](#frontendindexhtml) — `886` lines
+- [Frontend Styling Design System (`Frontend/styles.css`)](#frontendstylescss) — `1743` lines
 - [Frontend Application & CCTV Engine (`Frontend/app.js`)](#frontendappjs) — `2941` lines
 - [Frontend Package Manifest (`Frontend/package.json`)](#frontendpackagejson) — `14` lines
 - [Backend Requirements (`Backend/requirements.txt`)](#backendrequirementstxt) — `18` lines
-- [Backend Environment Example (`Backend/.env.example`)](#backendenvexample) — `39` lines
+- [Backend Environment Example (`Backend/.env.example`)](#backendenvexample) — `42` lines
 - [Backend Pytest Config (`Backend/pytest.ini`)](#backendpytestini) — `4` lines
 - [Backend Alembic Migration Config (`Backend/alembic.ini`)](#backendalembicini) — `42` lines
 - [Backend Main Entrypoint (`Backend/app/main.py`)](#backendappmainpy) — `140` lines
-- [Backend Configuration & Settings (`Backend/app/core/config.py`)](#backendappcoreconfigpy) — `76` lines
+- [Backend Configuration & Settings (`Backend/app/core/config.py`)](#backendappcoreconfigpy) — `79` lines
 - [Backend Database Session & Engine (`Backend/app/core/database.py`)](#backendappcoredatabasepy) — `60` lines
 - [Backend Security, JWT & Hashes (`Backend/app/core/security.py`)](#backendappcoresecuritypy) — `93` lines
 - [Backend RBAC Permissions (`Backend/app/core/rbac.py`)](#backendappcorerbacpy) — `79` lines
@@ -100,7 +100,7 @@
 - [Backend API Unit Test Suite (`Backend/tests/test_api.py`)](#backendteststest-apipy) — `322` lines
 - [Backend Unified Command & Action Test Suite (`Backend/tests/test_unified_command.py`)](#backendteststest-unified-commandpy) — `217` lines
 
-**Total Tracked Code Files:** `88` | **Total Source Lines:** `13,142`
+**Total Tracked Code Files:** `88` | **Total Source Lines:** `13,111`
 
 ---
 
@@ -380,6 +380,9 @@ node_modules/
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Google Maps Platform JavaScript SDK (Optional: Uncomment and replace YOUR_KEY) -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_KEY&libraries=places,geometry"></script> -->
   
   <!-- Leaflet Map JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -747,35 +750,7 @@ node_modules/
 
           <!-- Center: Interactive Route Map & Live GIS Common Operating Picture -->
           <div class="map-container">
-            <!-- Map Mode Selector & GIS Status Bar -->
-            <div class="map-top-toolbar">
-              <div class="map-modes-group">
-                <button type="button" class="map-mode-btn active" data-mode="OPERATIONAL">OPERATIONAL</button>
-                <button type="button" class="map-mode-btn" data-mode="TRAFFIC">TRAFFIC</button>
-                <button type="button" class="map-mode-btn" data-mode="YATRA">LIVE YATRA</button>
-                <button type="button" class="map-mode-btn" data-mode="HEATMAP">HEATMAP</button>
-                <button type="button" class="map-mode-btn" data-mode="RESOURCE">RESOURCES</button>
-                <button type="button" class="map-mode-btn" data-mode="INCIDENT">INCIDENTS</button>
-              </div>
-              <div class="gis-provider-pill" id="gisProviderPill" title="Primary: Google Maps + deck.gl GPU Layer; Fallback: Leaflet">
-                <span class="live-dot" style="width:6px; height:6px;"></span>
-                <span id="gisProviderName">GOOGLE MAPS / DECK.GL</span>
-              </div>
-            </div>
-
             <div id="routeMap"></div>
-
-            <!-- Layer Toggle Pills Bar -->
-            <div class="map-layer-pills-bar">
-              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleYatra"><span>Palkhi</span></label>
-              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleHeatmap"><span>Crowd Heatmap</span></label>
-              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleCctv"><span>CCTV</span></label>
-              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleIncidents"><span>Incidents</span></label>
-              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleMedical"><span>Ambulances</span></label>
-              <label class="layer-chip active"><input type="checkbox" checked id="layerTogglePolice"><span>Police</span></label>
-              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleTankers"><span>Tankers</span></label>
-              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleRoutes"><span>Routes</span></label>
-            </div>
 
             <div class="map-controls-overlay">
               <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px; font-size:10px;">ROUTE MAP LEGEND</div>
@@ -827,10 +802,28 @@ node_modules/
                 <div class="stat-subtext">Tankers, Ambulances & Patrol Squads stationed</div>
               </div>
 
-              <div class="govt-stat-box" style="border-left-color: var(--saffron-gold);">
-                <div class="stat-label">Main Palkhi Status</div>
-                <div class="stat-value" id="statPalkhiStatus" style="font-size:16px; color:#3B332B;">Sant Tukaram Maharaj Palkhi</div>
-                <div class="stat-subtext" id="statPalkhiLocation">Location: Approaching Wakhri Phata (Km 184)</div>
+              <!-- Public PA Broadcast (Replaced Main Palkhi Status) -->
+              <div class="govt-stat-box" style="border-left-color: var(--maroon-primary); padding: 8px 10px; display:flex; flex-direction:column; justify-content:space-between;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+                  <div style="font-weight:700; font-size:11px; color:var(--maroon-primary); display:flex; align-items:center; gap:4px;">
+                    <i data-lucide="megaphone" style="width:12px; height:12px;"></i>
+                    <span>PUBLIC PA BROADCAST</span>
+                  </div>
+                  <span class="badge" style="background:var(--status-green); color:#FFF; font-size:8px; padding:1px 4px;">MARATHI • ENG</span>
+                </div>
+                <div style="font-size:9.5px; color:var(--text-secondary); margin-bottom:4px; line-height:1.2;">
+                  Broadcast urgent crowd advisories across temple chowki loudspeakers.
+                </div>
+                <div style="display:flex; gap:5px; align-items:center; margin-bottom:3px;">
+                  <button class="govt-btn" id="openAnnouncementModalBtn" type="button" style="font-size:9px; padding:3px 7px; flex-shrink:0;">
+                    <i data-lucide="send" style="width:9px; height:9px;"></i>
+                    <span>+ Queue PA</span>
+                  </button>
+                  <div id="activeBroadcastTicker" style="background:var(--bg-subtle); border:1px solid var(--border-main); padding:3px 6px; font-size:9px; color:var(--text-primary); border-radius:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
+                    <strong style="color:var(--maroon-primary);">Active Broadcast:</strong> <span id="activeBroadcastText">वाखरी फाटा येथे पर्यायी पायी मार्गाचा वापर करावा.</span>
+                  </div>
+                </div>
+                <div class="stat-subtext" style="font-size:9px; color:var(--text-muted);">Real-time crowd alert & route advisory system</div>
               </div>
 
               <!-- Photo Texture Box / Live Flow Video -->
@@ -851,96 +844,20 @@ node_modules/
           </div>
         </div>
 
-        <!-- Operational Command Action Modules Grid -->
-        <div class="operational-command-grid">
-          
-          <!-- Column 1: Incident Command Queue & SLA Timers -->
-          <div class="panel-card" style="padding:0;">
-            <div class="panel-header">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <i data-lucide="shield-alert" style="width:13px; height:13px; color:var(--status-red);"></i>
-                <span>INCIDENT COMMAND QUEUE</span>
-              </div>
-              <span class="badge" style="background:var(--status-red); color:#FFF;" id="incidentQueueCountBadge">2 Critical</span>
+        <!-- Elongated Emergency Dispatch & Route Recommendations Action Panel (Full Width) -->
+        <div class="panel-card elongated-dispatch-panel" style="padding:0; margin-top:10px;">
+          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i data-lucide="cpu" style="width:15px; height:15px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:12px; letter-spacing:0.3px;">DISPATCH & ROUTE RECOMMENDATIONS (AI OPTIMIZATION LAYER)</span>
             </div>
-            <div class="command-action-queue-list" id="incidentCommandQueueList">
-              <!-- Populated dynamically from CommandPicture / API -->
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:10.5px; color:var(--text-muted);">Corridor Logistics & Nearest Squad Matching</span>
+              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:9.5px;" id="recsQueueBadge">AI Ranked</span>
             </div>
           </div>
-
-          <!-- Column 2: Candidate Face Matches & Missing Person Desk -->
-          <div class="panel-card" style="padding:0;">
-            <div class="panel-header">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <i data-lucide="scan-face" style="width:13px; height:13px; color:var(--saffron-gold);"></i>
-                <span>BIOMETRIC FACE MATCH QUEUE</span>
-              </div>
-              <span class="badge" style="background:var(--saffron-gold); color:#FFF;" id="faceMatchQueueBadge">1 Candidate</span>
-            </div>
-            <div class="command-action-queue-list" id="faceMatchQueueList">
-              <!-- Populated dynamically -->
-            </div>
-          </div>
-
-          <!-- Column 3: Emergency Dispatch & Route Recommendations -->
-          <div class="panel-card" style="padding:0;">
-            <div class="panel-header">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <i data-lucide="cpu" style="width:13px; height:13px; color:var(--maroon-primary);"></i>
-                <span>DISPATCH & ROUTE RECOMMENDATIONS</span>
-              </div>
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF;" id="recsQueueBadge">AI Ranked</span>
-            </div>
-            <div class="command-action-queue-list" id="recommendationsQueueList">
-              <!-- Populated dynamically -->
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Incident Timeline & Public Announcement Broadcast Strip -->
-        <div class="timeline-announcement-grid">
-          <!-- Left: Chronological Operational Timeline -->
-          <div class="panel-card" style="padding:0; flex:1;">
-            <div class="panel-header" style="justify-content:space-between;">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <i data-lucide="activity" style="width:13px; height:13px; color:var(--maroon-primary);"></i>
-                <span>LIVE INCIDENT TIMELINE</span>
-              </div>
-              <div class="timeline-filter-group">
-                <button type="button" class="timeline-filter-btn active" data-filter="ALL">ALL</button>
-                <button type="button" class="timeline-filter-btn" data-filter="DISPATCH">DISPATCH</button>
-                <button type="button" class="timeline-filter-btn" data-filter="ROUTE">ROUTE</button>
-                <button type="button" class="timeline-filter-btn" data-filter="ANNOUNCEMENT">PA</button>
-                <button type="button" class="timeline-filter-btn" data-filter="MEDICAL">MEDICAL</button>
-              </div>
-            </div>
-            <div class="timeline-events-container" id="incidentTimelineStream">
-              <!-- Populated dynamically -->
-            </div>
-          </div>
-
-          <!-- Right: Public Announcement PA Bar -->
-          <div class="panel-card" style="padding:10px; width:340px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <div style="font-weight:700; font-size:12px; color:var(--maroon-primary); display:flex; align-items:center; gap:5px;">
-                <i data-lucide="megaphone" style="width:14px; height:14px;"></i>
-                <span>PUBLIC PA BROADCAST</span>
-              </div>
-              <span class="badge" style="background:var(--status-green); color:#FFF; font-size:9px;">MARATHI &bull; ENGLISH</span>
-            </div>
-            <p style="font-size:11px; color:var(--text-secondary); margin-bottom:8px;">
-              Broadcast urgent crowd advisories, route diversions, or lost person notices across temple chowki loudspeakers.
-            </p>
-            <div style="display:flex; flex-direction:column; gap:6px;">
-              <button class="govt-btn" id="openAnnouncementModalBtn" type="button" style="width:100%; font-size:11px; padding:7px 10px;">
-                <i data-lucide="send" style="width:12px; height:12px;"></i>
-                <span>+ Queue New PA Announcement</span>
-              </button>
-              <div id="activeBroadcastTicker" style="background:var(--bg-subtle); border:1px solid var(--border-main); padding:6px 8px; font-size:10px; color:var(--text-primary); border-radius:2px;">
-                <strong style="color:var(--maroon-primary);">Active Broadcast:</strong> <span id="activeBroadcastText">वाखरी फाटा येथे पर्यायी पायी मार्गाचा वापर करावा.</span>
-              </div>
-            </div>
+          <div class="command-action-queue-list elongated-recs-grid" id="recommendationsQueueList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:10px; padding:12px; max-height:none; overflow:visible;">
+            <!-- Populated dynamically with dispatch & route diversion recommendations -->
           </div>
         </div>
 
@@ -1015,6 +932,20 @@ node_modules/
             <button class="govt-btn" id="registerLostPersonBtn" type="button">
               <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
             </button>
+          </div>
+        </div>
+
+        <!-- Incident Command & Lost/Found Escalation Queue -->
+        <div class="panel-card" style="padding:0; margin-bottom:14px;">
+          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="shield-alert" style="width:14px; height:14px; color:var(--status-red);"></i>
+              <span style="font-weight:700; font-size:12px;">INCIDENT COMMAND & ESCALATION QUEUE</span>
+            </div>
+            <span class="badge" style="background:var(--status-red); color:#FFF; font-size:9.5px;" id="incidentQueueCountBadge">2 Critical</span>
+          </div>
+          <div class="command-action-queue-list" id="incidentCommandQueueList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:8px; padding:10px; max-height:220px; overflow-y:auto;">
+            <!-- Populated dynamically from CommandPicture / API -->
           </div>
         </div>
 
@@ -1169,7 +1100,25 @@ node_modules/
 
             <div id="routesContainer">
               <!-- Populated dynamically from /api/routes -->
+        </div>
+
+        <!-- Live Incident & Logistics Action Timeline Stream -->
+        <div class="panel-card" style="padding:0; margin-top:14px;">
+          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="activity" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:12px;">LIVE INCIDENT & LOGISTICS ACTION TIMELINE</span>
             </div>
+            <div class="timeline-filter-group">
+              <button type="button" class="timeline-filter-btn active" data-filter="ALL">ALL</button>
+              <button type="button" class="timeline-filter-btn" data-filter="DISPATCH">DISPATCH</button>
+              <button type="button" class="timeline-filter-btn" data-filter="ROUTE">ROUTE</button>
+              <button type="button" class="timeline-filter-btn" data-filter="ANNOUNCEMENT">PA</button>
+              <button type="button" class="timeline-filter-btn" data-filter="MEDICAL">MEDICAL</button>
+            </div>
+          </div>
+          <div class="timeline-events-container" id="incidentTimelineStream" style="max-height:280px; overflow-y:auto; padding:10px;">
+            <!-- Populated dynamically -->
           </div>
         </div>
       </section>
@@ -2781,6 +2730,20 @@ body {
   margin-top: 10px;
 }
 
+.elongated-dispatch-panel {
+  width: 100%;
+  border: 1px solid var(--border-main);
+  background: var(--bg-card);
+  border-radius: 2px;
+}
+
+.elongated-recs-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+  padding: 12px;
+}
+
 .command-action-queue-list {
   display: flex;
   flex-direction: column;
@@ -2794,11 +2757,11 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-main);
   border-left: 3px solid var(--maroon-primary);
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-radius: 2px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   transition: all 0.15s ease;
 }
 
@@ -3607,9 +3570,9 @@ function initPublicRouteMap() {
 
   window.publicWariMap = publicMap;
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; Maharashtra Police IT &bull; Map data &copy; OpenStreetMap',
-    maxZoom: 18
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &bull; Maharashtra Police IT',
+    maxZoom: 19
   }).addTo(publicMap);
 
   const routePoints = [
@@ -3767,9 +3730,9 @@ function initRouteMap() {
 
   window.wariMap = wariMap;
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; Maharashtra Police IT &bull; Map data &copy; OpenStreetMap',
-    maxZoom: 18
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &bull; Maharashtra Police IT',
+    maxZoom: 19
   }).addTo(wariMap);
 
   const routePoints = [
@@ -6081,6 +6044,9 @@ VISION_PROVIDER=mock
 WEATHER_PROVIDER=mock
 NOTIFICATION_PROVIDER=mock
 
+# Google Maps Platform Server API Key (Enables Live Routes API & Roads Snap-to-Road)
+GOOGLE_MAPS_SERVER_API_KEY=
+
 # CORS Allowed Origins
 CORS_ORIGINS=["http://localhost:5173","http://localhost:5174","http://127.0.0.1:5173","http://127.0.0.1:5174","http://localhost:3000"]
 
@@ -6367,6 +6333,9 @@ class Settings(BaseSettings):
     VISION_PROVIDER: str = "mock"
     WEATHER_PROVIDER: str = "mock"
     NOTIFICATION_PROVIDER: str = "mock"
+
+    # Google Maps Platform Server API Key (for Routes API, Roads API)
+    GOOGLE_MAPS_SERVER_API_KEY: Optional[str] = None
 
     # CORS Allowed Origins
     CORS_ORIGINS: List[str] = [

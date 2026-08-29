@@ -61,6 +61,9 @@ class Settings(BaseSettings):
     WEATHER_PROVIDER: str = "mock"
     NOTIFICATION_PROVIDER: str = "mock"
 
+    # Google Maps Platform Server API Key (for Routes API, Roads API)
+    GOOGLE_MAPS_SERVER_API_KEY: Optional[str] = None
+
     # CORS Allowed Origins
     CORS_ORIGINS: List[str] = [
         "http://localhost:5173",

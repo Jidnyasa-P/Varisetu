@@ -561,9 +561,9 @@ function initPublicRouteMap() {
 
   window.publicWariMap = publicMap;
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; Maharashtra Police IT &bull; Map data &copy; OpenStreetMap',
-    maxZoom: 18
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &bull; Maharashtra Police IT',
+    maxZoom: 19
   }).addTo(publicMap);
 
   const routePoints = [
@@ -721,9 +721,9 @@ function initRouteMap() {
 
   window.wariMap = wariMap;
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; Maharashtra Police IT &bull; Map data &copy; OpenStreetMap',
-    maxZoom: 18
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &bull; Maharashtra Police IT',
+    maxZoom: 19
   }).addTo(wariMap);
 
   const routePoints = [
