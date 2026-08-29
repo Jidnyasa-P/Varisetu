@@ -261,3 +261,53 @@ async def scan_cctv_for_lost_person(
             for c in scan_res.candidates
         ]
     }
+
+
+from app.integrations.vision_adapter import vision_adapter
+
+
+@router.post("/compare-faces", summary="Compare two face/person photos using HF Space Face Recognition & Re-ID models")
+async def compare_faces_biometric(
+    face1: Optional[UploadFile] = File(None),
+    face2: Optional[UploadFile] = File(None),
+    face1_preset: Optional[str] = Form(None),
+    face2_preset: Optional[str] = Form(None)
+):
+    """
+    Runs pairwise Face Recognition and Person Re-Identification on two images
+    using the deployed models from Saj2005/VariSetu on Hugging Face Space.
+    """
+    import os
+
+    def _resolve_bytes(file_obj, preset_name):
+        if file_obj and file_obj.filename:
+            return file_obj.file.read()
+        if preset_name:
+            for d in ["Frontend/assets", "Backend/cctv video"]:
+                p = os.path.join(d, preset_name)
+                if os.path.exists(p):
+                    with open(p, "rb") as f:
+                        return f.read()
+        return None
+
+    img1_bytes = _resolve_bytes(face1, face1_preset)
+    img2_bytes = _resolve_bytes(face2, face2_preset)
+
+    # Fallback to sample assets if none provided
+    if not img1_bytes and os.path.exists("Frontend/assets/cctv_highway4_naka.jpg"):
+        with open("Frontend/assets/cctv_highway4_naka.jpg", "rb") as f:
+            img1_bytes = f.read()
+    if not img2_bytes and os.path.exists("Frontend/assets/palkhi_procession_hd.jpg"):
+        with open("Frontend/assets/palkhi_procession_hd.jpg", "rb") as f:
+            img2_bytes = f.read()
+
+    face_res = await vision_adapter.verify_pair_face(img1_bytes, img2_bytes)
+    reid_res = await vision_adapter.verify_pair_reid(img1_bytes, img2_bytes)
+
+    return {
+        "success": True,
+        "face_recognition": face_res,
+        "person_reid": reid_res,
+        "timestamp": "2026-08-30T02:00:00Z"
+    }
+

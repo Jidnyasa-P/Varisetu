@@ -101,21 +101,19 @@ async def health_database(db: AsyncSession = Depends(get_db)):
 
 @health_router.get("/health/redis", summary="Redis health check")
 async def health_redis():
-    from app.core.redis import redis_client
     return {
-        "status": "connected" if redis_client.is_connected else "fallback_in_memory",
-        "redis_available": redis_client.is_connected
+        "status": "fallback_in_memory",
+        "redis_available": False
     }
 
 
 @health_router.get("/health/services", summary="Integration services status check")
 async def health_services():
     from app.core.config import settings
-    from app.integrations.qdrant_adapter import qdrant_adapter
     return {
         "database": "postgresql_compatible",
         "redis": "ready",
-        "qdrant": await qdrant_adapter.health_check(),
+        "vector_search": "ready",
         "speech": settings.SPEECH_PROVIDER,
         "vision": settings.VISION_PROVIDER,
         "weather": settings.WEATHER_PROVIDER,

@@ -591,6 +591,86 @@
             </div>
           </div>
         </div>
+
+        <!-- Real AI Model: Crowd Density Frame Analyzer -->
+        <div class="panel-card" style="margin-top:14px; padding:12px; border:1px solid var(--border-main);">
+          <div class="panel-header" style="margin-bottom:10px; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="scan" style="width:14px; height:14px;"></i>
+              <span style="font-weight:700;">AI CCTV FRAME DENSITY ESTIMATION MODEL (CSRNET)</span>
+            </div>
+            <span class="badge" style="font-size:11.5px; background:var(--status-blue); color:#fff;">HF Space: Saj2005/VariSetu</span>
+          </div>
+          <div class="ai-model-grid">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:13.5px; color:var(--text-secondary);">Select CCTV camera feed or drag-and-drop a high-density frame:</div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <select id="aiCrowdCamSelect" class="lost-status-filter" style="flex:1;">
+                  <option value="CAM-04">CAM-04 (Pandharpur Temple Chowk)</option>
+                  <option value="CAM-12">CAM-12 (Wakhri Phata Junction)</option>
+                  <option value="CAM-08">CAM-08 (Saswad Highway Stop)</option>
+                  <option value="CAM-01">CAM-01 (Alandi Corridor)</option>
+                </select>
+                <button type="button" class="govt-btn" id="aiRunCrowdDensityBtn" style="font-size:13px; padding:4px 12px; background:var(--maroon-primary); color:#FFF;">
+                  <i data-lucide="play" style="width:12px; height:12px;"></i> Analyze Density
+                </button>
+              </div>
+              
+              <!-- Gradio-Style Upload Card with Live Thumbnail -->
+              <div class="gradio-upload-card" id="aiCrowdCard">
+                <div class="gradio-card-header">
+                  <div class="gradio-badge">
+                    <i data-lucide="image" style="width:11px; height:11px;"></i>
+                    <span>CCTV Frame</span>
+                  </div>
+                </div>
+                <div class="ai-dark-dropzone" id="aiCrowdDropzone">
+                  <input type="file" id="aiCrowdFileInput" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;">
+                  <div id="aiCrowdPlaceholder" class="ai-dark-dropzone-inner">
+                    <div class="ai-upload-icon-wrap">
+                      <i data-lucide="upload" class="ai-upload-icon"></i>
+                    </div>
+                    <div class="ai-upload-title">Drop Image Here</div>
+                    <div class="ai-upload-divider">- or -</div>
+                    <div class="ai-upload-action">Click to Upload</div>
+                  </div>
+                  <div id="aiCrowdPreviewWrap" class="ai-preview-container" style="display:none;">
+                    <img id="aiCrowdPreviewImg" class="ai-dark-preview-img" alt="Crowd Frame Preview" title="Click to view 100% full pixel resolution">
+                  </div>
+                </div>
+                <div class="gradio-card-footer">
+                  <button type="button" class="gradio-tool-btn" id="aiCrowdChangeBtn" title="Upload Image"><i data-lucide="upload" style="width:13px; height:13px;"></i></button>
+                  <button type="button" class="gradio-tool-btn" id="aiCrowdClearBtn" title="Clear Image"><i data-lucide="x" style="width:13px; height:13px;"></i></button>
+                  <span id="aiCrowdFileName" style="font-size:11px; color:#94a3b8; margin-left:auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Active source: Live CCTV Frame Buffer</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detailed Computed Results Readout -->
+            <div id="aiCrowdResultBox" style="background:var(--bg-subtle); padding:12px; border:1px solid var(--border-main); border-radius:2px; font-size:13.5px; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span><strong>Estimated Devotees:</strong> <span id="aiCrowdCountVal" style="color:var(--text-primary); font-weight:700; font-size:15px;">630 People</span></span>
+                <span id="aiCrowdLevelVal" class="badge badge-critical" style="text-transform:uppercase;">CRITICAL</span>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary);">
+                  <span>Density Congestion Load</span>
+                  <span id="aiCrowdPercentVal">85% of zone threshold</span>
+                </div>
+                <div class="ai-progress-bar">
+                  <div id="aiCrowdProgressBar" class="ai-progress-fill" style="width:85%; background:var(--status-red);"></div>
+                </div>
+              </div>
+              <div style="background:var(--bg-card); padding:6px 8px; border:1px solid var(--border-main); border-radius:2px; font-size:12.5px;" id="aiCrowdAdvisory">
+                <strong>Recommended Action:</strong> Divert pedestrian flow to North Ring Road bypass.
+              </div>
+              <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--text-muted); margin-top:2px;">
+                <span>Model: <span id="aiCrowdSourceVal">CSRNet (Saj2005/VariSetu)</span></span>
+                <span id="aiCrowdStatusVal" style="color:var(--status-green);">● Model Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ==================== SCREEN 3: LOST & FOUND DESK ==================== -->
@@ -626,6 +706,120 @@
           </div>
           <div id="biometricCandidatesContainer" style="padding:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:10px;">
             <!-- Populated dynamically with paginated candidate cards -->
+          </div>
+        </div>
+
+        <!-- Real AI Model: Face Recognition & Person Re-ID Pairwise Verifier -->
+        <div class="panel-card" style="padding:14px; margin-bottom:16px; border:1px solid var(--border-main);">
+          <div class="panel-header" style="margin-bottom:12px; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i data-lucide="scan-face" style="width:16px; height:16px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:14.5px;">AI BIOMETRIC FACE RECOGNITION &amp; PERSON RE-ID (MODELS 3A &amp; 3B)</span>
+            </div>
+            <span class="badge" style="font-size:11.5px; background:var(--saffron-gold); color:#111; font-weight:600;">HF Space: Saj2005/VariSetu</span>
+          </div>
+
+          <!-- Symmetrical 2-Column Pairwise Comparison Dropzones (Gradio Format) -->
+          <div class="ai-pairwise-grid" style="margin-bottom:14px;">
+            <!-- Face 1 Query Dropzone -->
+            <div class="gradio-upload-card" id="aiFace1Card">
+              <div class="gradio-card-header">
+                <div class="gradio-badge">
+                  <i data-lucide="scan-face" style="width:11px; height:11px;"></i>
+                  <span>Query crop</span>
+                </div>
+                <button type="button" class="btn-text-action" id="aiFace1SampleBtn" style="font-size:11.5px; color:#cbd5e1; cursor:pointer;">Use Sample</button>
+              </div>
+              
+              <div class="ai-dark-dropzone" id="aiFace1Dropzone">
+                <input type="file" id="aiFace1Input" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;">
+                <div id="aiFace1Placeholder" class="ai-dark-dropzone-inner">
+                  <div class="ai-upload-icon-wrap">
+                    <i data-lucide="upload" class="ai-upload-icon"></i>
+                  </div>
+                  <div class="ai-upload-title">Drop Image Here</div>
+                  <div class="ai-upload-divider">- or -</div>
+                  <div class="ai-upload-action">Click to Upload</div>
+                </div>
+
+                <!-- Live Preview State -->
+                <div id="aiFace1PreviewWrap" class="ai-preview-container" style="display:none;">
+                  <img id="aiFace1PreviewImg" class="ai-dark-preview-img" alt="Photo 1 Preview" title="Click to view 100% full pixel resolution">
+                </div>
+              </div>
+
+              <div class="gradio-card-footer">
+                <button type="button" class="gradio-tool-btn" id="aiFace1ChangeBtn" title="Upload Image"><i data-lucide="upload" style="width:13px; height:13px;"></i></button>
+                <button type="button" class="gradio-tool-btn" id="aiFace1ClearBtn" title="Clear Image"><i data-lucide="x" style="width:13px; height:13px;"></i></button>
+                <span id="aiFace1Name" style="font-size:11px; color:#94a3b8; margin-left:auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">No file selected</span>
+              </div>
+            </div>
+
+            <!-- Face 2 Candidate Dropzone -->
+            <div class="gradio-upload-card" id="aiFace2Card">
+              <div class="gradio-card-header">
+                <div class="gradio-badge">
+                  <i data-lucide="image" style="width:11px; height:11px;"></i>
+                  <span>Gallery crop</span>
+                </div>
+                <button type="button" class="btn-text-action" id="aiFace2SampleBtn" style="font-size:11.5px; color:#cbd5e1; cursor:pointer;">Use Sample</button>
+              </div>
+              
+              <div class="ai-dark-dropzone" id="aiFace2Dropzone">
+                <input type="file" id="aiFace2Input" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;">
+                <div id="aiFace2Placeholder" class="ai-dark-dropzone-inner">
+                  <div class="ai-upload-icon-wrap">
+                    <i data-lucide="upload" class="ai-upload-icon"></i>
+                  </div>
+                  <div class="ai-upload-title">Drop Image Here</div>
+                  <div class="ai-upload-divider">- or -</div>
+                  <div class="ai-upload-action">Click to Upload</div>
+                </div>
+
+                <!-- Live Preview State -->
+                <div id="aiFace2PreviewWrap" class="ai-preview-container" style="display:none;">
+                  <img id="aiFace2PreviewImg" class="ai-dark-preview-img" alt="Photo 2 Preview" title="Click to view 100% full pixel resolution">
+                </div>
+              </div>
+
+              <div class="gradio-card-footer">
+                <button type="button" class="gradio-tool-btn" id="aiFace2ChangeBtn" title="Upload Image"><i data-lucide="upload" style="width:13px; height:13px;"></i></button>
+                <button type="button" class="gradio-tool-btn" id="aiFace2ClearBtn" title="Clear Image"><i data-lucide="x" style="width:13px; height:13px;"></i></button>
+                <span id="aiFace2Name" style="font-size:11px; color:#94a3b8; margin-left:auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">No file selected</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action & Full Computed Metrics Bar -->
+          <div style="background:var(--bg-subtle); padding:12px 14px; border:1px solid var(--border-main); border-radius:4px; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <button type="button" class="govt-btn" id="aiCompareFacesBtn" style="font-size:13px; padding:5px 14px; background:var(--maroon-primary); color:#FFF; font-weight:600; display:flex; align-items:center; gap:6px;">
+                  <i data-lucide="scan" style="width:13px; height:13px;"></i> Run Biometric Compare
+                </button>
+                <span id="aiFaceMatchBadge" class="badge badge-normal" style="font-size:12px; padding:3px 8px;">Pending</span>
+              </div>
+              <span style="font-size:11.5px; color:var(--text-muted);">InsightFace ArcFace 512-D + OSNet Feature Extraction</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; background:var(--bg-card); padding:8px 12px; border:1px solid var(--border-main); border-radius:3px; font-size:12.5px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--text-secondary);">Face Cosine Sim (InsightFace):</span>
+                <strong id="aiFaceSimVal" style="color:var(--text-primary); font-size:13px;">--</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--text-secondary);">Person Re-ID Sim (OSNet):</span>
+                <strong id="aiReidSimVal" style="color:var(--text-primary); font-size:13px;">--</strong>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px; color:var(--text-muted);">
+                <span>Calibration Thresholds:</span>
+                <span>Face: &ge;0.1268 | Re-ID: &ge;0.5604</span>
+              </div>
+            </div>
+
+            <div id="aiBiometricVerdictText" style="font-size:12px; background:var(--bg-card); padding:7px 10px; border:1px solid var(--border-main); border-radius:3px; color:var(--text-primary);">
+              <strong>Verdict:</strong> Ready for verification pair comparison. Select or upload query &amp; CCTV candidate images.
+            </div>
           </div>
         </div>
 
@@ -762,6 +956,86 @@
 
             <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:14.5px; color:var(--text-secondary);" id="heatAdvisoryText">
               <strong>Advisory Action:</strong> Trigger mist sprayer vans at Wakhri Junction & increase water distribution post deployment by 20%.
+            </div>
+          </div>
+        </div>
+
+        <!-- Real AI Model: Fall & Chokepoint Stampede Detection -->
+        <div class="panel-card" style="margin-top:14px; padding:12px; border:1px solid var(--border-main);">
+          <div class="panel-header" style="margin-bottom:10px; justify-content:space-between;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="alert-triangle" style="width:14px; height:14px; color:var(--status-red);"></i>
+              <span style="font-weight:700;">AI FALL &amp; CHOKEPOINT STAMPEDE DETECTOR (MODEL 2)</span>
+            </div>
+            <span class="badge" style="font-size:11.5px; background:var(--status-red); color:#fff;">HF Space: Saj2005/VariSetu</span>
+          </div>
+          <div class="ai-model-grid">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <div style="font-size:13.5px; color:var(--text-secondary);">Select CCTV video feed or drag-and-drop a tracked clip:</div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <select id="aiFallCamSelect" class="lost-status-filter" style="flex:1;">
+                  <option value="CAM-04">CAM-04 (Pandharpur Temple Chowk Feed)</option>
+                  <option value="CAM-12">CAM-12 (Wakhri Phata Feed)</option>
+                  <option value="CAM-08">CAM-08 (Saswad Highway Checkpoint)</option>
+                  <option value="CAM-01">CAM-01 (Alandi Starting Corridor)</option>
+                </select>
+                <button type="button" class="govt-btn" id="aiRunFallBtn" style="font-size:13px; padding:4px 12px; background:var(--status-red); color:#FFF;">
+                  <i data-lucide="activity" style="width:12px; height:12px;"></i> Analyze Fall
+                </button>
+              </div>
+              
+              <!-- Gradio-Style Video Upload Card -->
+              <div class="gradio-upload-card" id="aiFallCard">
+                <div class="gradio-card-header">
+                  <div class="gradio-badge">
+                    <i data-lucide="video" style="width:11px; height:11px;"></i>
+                    <span>CCTV Video Clip</span>
+                  </div>
+                </div>
+                <div class="ai-dark-dropzone" id="aiFallDropzone">
+                  <input type="file" id="aiFallFileInput" accept="video/mp4,video/webm,video/ogg,video/quicktime" style="display:none;">
+                  <div id="aiFallPlaceholder" class="ai-dark-dropzone-inner">
+                    <div class="ai-upload-icon-wrap">
+                      <i data-lucide="upload" class="ai-upload-icon"></i>
+                    </div>
+                    <div class="ai-upload-title">Drop Video Here</div>
+                    <div class="ai-upload-divider">- or -</div>
+                    <div class="ai-upload-action">Click to Upload</div>
+                  </div>
+                  <div id="aiFallPreviewWrap" class="ai-preview-container" style="display:none;">
+                    <video id="aiFallPreviewVideo" controls playsinline muted class="ai-dark-preview-video"></video>
+                  </div>
+                </div>
+                <div class="gradio-card-footer">
+                  <button type="button" class="gradio-tool-btn" id="aiFallChangeBtn" title="Upload Video"><i data-lucide="upload" style="width:13px; height:13px;"></i></button>
+                  <button type="button" class="gradio-tool-btn" id="aiFallClearBtn" title="Clear Video"><i data-lucide="x" style="width:13px; height:13px;"></i></button>
+                  <span id="aiFallFileName" style="font-size:11px; color:#94a3b8; margin-left:auto; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Active source: CCTV Stream Ingestion Buffer</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Detailed Computed Results Readout -->
+            <div id="aiFallResultBox" style="background:var(--bg-subtle); padding:12px; border:1px solid var(--border-main); border-radius:2px; font-size:13.5px; display:flex; flex-direction:column; gap:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span id="aiFallDetectedVal" style="color:var(--status-green); font-weight:700; font-size:14.5px;">✅ No Fall Detected</span>
+                <span id="aiFallProbBadge" class="badge badge-normal">Risk: 12%</span>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary);">
+                  <span>Fall Probability (Threshold: 42%)</span>
+                  <span id="aiFallProbVal">12%</span>
+                </div>
+                <div class="ai-progress-bar">
+                  <div id="aiFallProgressBar" class="ai-progress-fill" style="width:12%; background:var(--status-green);"></div>
+                </div>
+              </div>
+              <div style="background:var(--bg-card); padding:6px 8px; border:1px solid var(--border-main); border-radius:2px; font-size:12.5px;" id="aiFallAdvisory">
+                <strong>Medical Action:</strong> Normal movement posture detected. Maintain active camera polling.
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px; color:var(--text-muted); margin-top:2px;">
+                <span>Inference: <span id="aiFallSourceVal">Pose Velocity Model (Saj2005/VariSetu)</span></span>
+                <button type="button" class="govt-btn" id="aiCreateAlertFromFallBtn" style="font-size:11.5px; padding:3px 8px; background:var(--status-red); color:#fff; display:none;">+ Dispatch Ambulance</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1610,6 +1884,28 @@
           <div class="cctv-candidates-grid" id="cctvCandidatesGrid">
             <!-- Dynamic Candidate Cards -->
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== UNIVERSAL PIXEL IMAGE LIGHTBOX INSPECTOR ==================== -->
+  <div id="pixelLightboxModal" class="pixel-lightbox-modal">
+    <div class="pixel-lightbox-content">
+      <div class="pixel-lightbox-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <i data-lucide="zoom-in" style="width:15px; height:15px; color:var(--maroon-primary);"></i>
+          <strong id="pixelLightboxTitle" style="font-size:14.5px; font-family:var(--font-serif); color:var(--maroon-primary);">End-to-End Pixel Resolution Inspector</strong>
+          <span id="pixelLightboxDim" class="pixel-resolution-badge">1920 × 1080 px (100% Uncropped Scale)</span>
+        </div>
+        <button type="button" id="pixelLightboxClose" class="pagination-btn" style="padding:2px 8px; font-weight:700;">&times; Close</button>
+      </div>
+      <div class="pixel-lightbox-body">
+        <img id="pixelLightboxImg" src="" alt="Full Pixel View">
+        <div style="font-size:12px; color:#D8D1C5; margin-top:8px; display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+          <span>&bull; Uncropped Edge-to-Edge Signal</span>
+          <span>&bull; 100% Native Sensor Pixel Density</span>
+          <span>&bull; Zero Cropping / Full Aspect Ratio</span>
         </div>
       </div>
     </div>

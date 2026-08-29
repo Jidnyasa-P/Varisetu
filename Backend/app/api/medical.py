@@ -89,3 +89,44 @@ async def resolve_medical_alert(
     user_id = current_user.id if current_user else None
     alert = await medical_service.resolve_alert(db, alert_id=id, resolution_notes=resolve_req.resolution_notes, user_id=user_id)
     return MedicalAlertOut.model_validate(alert)
+
+
+from fastapi import File, Form, UploadFile
+from app.integrations.vision_adapter import vision_adapter
+
+
+@router.post("/analyze-fall", summary="Analyze video clip for pilgrim fall & stampede risk via HF Space model")
+async def analyze_fall_video(
+    file: Optional[UploadFile] = File(None),
+    camera_id: str = Form("CAM-04"),
+    preset_video: Optional[str] = Form(None)
+):
+    """
+    Analyzes short CCTV video clips for pilgrim fall detection using the
+    Pose/Velocity ML Model from Saj2005/VariSetu on HF Space.
+    """
+    video_data = None
+    if file and file.filename:
+        video_data = await file.read()
+    elif preset_video:
+        import os
+        for search_dir in ["Frontend/assets/videos", "Frontend/assets", "Backend/cctv video"]:
+            candidate = os.path.join(search_dir, preset_video)
+            if os.path.exists(candidate):
+                video_data = candidate
+                break
+
+    if not video_data:
+        import os
+        fallback_file = "Frontend/assets/videos/cctv_cam_04_pandharpur.mp4"
+        if os.path.exists(fallback_file):
+            video_data = fallback_file
+
+    res = await vision_adapter.detect_fall(camera_id=camera_id, video_clip=video_data)
+    return {
+        "success": True,
+        "camera_id": camera_id,
+        "result": res,
+        "timestamp": "2026-08-30T02:00:00Z"
+    }
+

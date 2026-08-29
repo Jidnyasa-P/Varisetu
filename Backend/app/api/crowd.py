@@ -52,3 +52,46 @@ async def get_crowd_heatmap(db: AsyncSession = Depends(get_db)):
     from app.services.heatmap_service import heatmap_service
     return await heatmap_service.generate_heatmap_points(db)
 
+
+from fastapi import File, Form, UploadFile
+from app.integrations.vision_adapter import vision_adapter
+
+
+@router.post("/analyze-frame", summary="Analyze CCTV frame for crowd density with HF Space CSRNet model")
+async def analyze_crowd_frame(
+    file: Optional[UploadFile] = File(None),
+    camera_id: str = Form("CAM-04"),
+    preset_frame: Optional[str] = Form(None)
+):
+    """
+    Accepts an uploaded image frame or uses preset CCTV frame to estimate
+    crowd density using the deployed CSRNet model from Saj2005/VariSetu on HF Space.
+    """
+    frame_bytes = None
+    if file and file.filename:
+        frame_bytes = await file.read()
+    elif preset_frame:
+        import os
+        for search_dir in ["Frontend/assets", "Frontend/assets/videos", "Backend/cctv video"]:
+            candidate = os.path.join(search_dir, preset_frame)
+            if os.path.exists(candidate):
+                with open(candidate, "rb") as f:
+                    frame_bytes = f.read()
+                break
+
+    if not frame_bytes:
+        import os
+        fallback_file = "Frontend/assets/cctv_highway4_naka.jpg"
+        if os.path.exists(fallback_file):
+            with open(fallback_file, "rb") as f:
+                frame_bytes = f.read()
+
+    res = await vision_adapter.estimate_crowd(camera_id=camera_id, frame=frame_bytes)
+    return {
+        "success": True,
+        "camera_id": camera_id,
+        "result": res,
+        "timestamp": "2026-08-30T02:00:00Z"
+    }
+
+
