@@ -9,7 +9,6 @@ from app.integrations.notification_adapter import notification_adapter
 from app.integrations.storage_adapter import storage_adapter
 
 __all__ = [
-    "qdrant_adapter",
     "vision_adapter",
     "speech_adapter",
     "weather_adapter",
