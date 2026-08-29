@@ -295,12 +295,12 @@
       <button class="nav-tab" data-target="view-lost">
         <i data-lucide="search" style="width:14px; height:14px;"></i>
         <span>Lost & Found Desk</span>
-        <span class="badge" id="lostNavBadge" style="background:#B07817; color:#FFF;">3 Active</span>
+        <span class="badge" id="lostNavBadge">3 Active</span>
       </button>
       <button class="nav-tab" data-target="view-medical">
         <i data-lucide="heart-pulse" style="width:14px; height:14px;"></i>
         <span>Medical Alerts</span>
-        <span class="badge" id="medicalNavBadge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
+        <span class="badge" id="medicalNavBadge">2 Alerts</span>
       </button>
       <button class="nav-tab" data-target="view-resources">
         <i data-lucide="truck" style="width:14px; height:14px;"></i>
@@ -455,7 +455,7 @@
                     <i data-lucide="megaphone" style="width:12px; height:12px;"></i>
                     <span>PUBLIC PA BROADCAST</span>
                   </div>
-                  <span class="badge" style="background:var(--status-green); color:#FFF; font-size:11.5px; padding:1px 4px;">MARATHI • ENG</span>
+                  <span class="badge">MARATHI • ENG</span>
                 </div>
                 <div style="font-size:13px; color:var(--text-secondary); margin-bottom:4px; line-height:1.2;">
                   Broadcast urgent crowd advisories across temple chowki loudspeakers.
@@ -645,7 +645,7 @@
                   <option value="MATCH_FOUND">Match Found (सापडला)</option>
                   <option value="REUNITED">Reunited (एकत्र आले)</option>
                 </select>
-                <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:13.5px;" id="lostTotalCountBadge">100 Cases</span>
+                <span class="badge" id="lostTotalCountBadge">100 Cases</span>
               </div>
             </div>
 
@@ -817,7 +817,7 @@
               <span style="font-weight:700; font-size:15.5px; letter-spacing:0.3px;">DISPATCH &amp; ROUTE RECOMMENDATIONS</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="recsQueueBadge">Active Queue</span>
+              <span class="badge" id="recsQueueBadge">Active Queue</span>
               <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
@@ -836,7 +836,7 @@
               <span style="font-weight:700; font-size:15.5px;">FIELD LOGISTICS &amp; FLEET UNITS</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;" id="fleetUnitsCountBadge">80 Units Managed</span>
+              <span class="badge" id="fleetUnitsCountBadge">80 Units Managed</span>
               <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
@@ -855,7 +855,7 @@
               <span style="font-weight:700; font-size:15.5px;">ROUTE STATUS &amp; CORRIDOR DIVERSION CONTROL</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;">NH-60 Corridor</span>
+              <span class="badge">NH-60 Corridor</span>
               <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
@@ -874,7 +874,7 @@
               <span style="font-weight:700; font-size:15.5px;">RESOURCE ALLOCATION &amp; DISPATCH HISTORY</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="activeAllocationsBadge">6 Active</span>
+              <span class="badge" id="activeAllocationsBadge">6 Active</span>
               <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
@@ -1306,7 +1306,7 @@
             <div style="font-size:17.5px; font-weight:700; display:flex; align-items:center; gap:8px; font-family:var(--font-serif); flex-wrap:wrap;">
               <span> EMERGENCY 112 CITIZEN HELPLINE INTAKE &bull; नागरीक मदत केंद्र</span>
               <span class="call-state-badge call-state-IDLE" id="callStateMachineBadge">IDLE</span>
-              <span class="badge" style="background:#00E676; color:#000; font-size:13px; font-weight:800;" id="callStatusBadge"> READY / STANDBY</span>
+              <span class="badge" id="callStatusBadge"> READY / STANDBY</span>
             </div>
             <div style="font-size:14px; color:#FFE082;">Dial-in Line: 1800-233-0099 (Wari Control Desk #04) &bull; 16kHz PCM16 Stream & Indic Neural Pipeline</div>
           </div>
@@ -1351,7 +1351,7 @@
               <i data-lucide="sparkles" style="width:14px; height:14px; color:#D98E2C;"></i>
               <span>RECOMMENDED APIS FOR LIVE DECCAN MARATHI SPEECH TRANSLATION</span>
             </div>
-            <span class="badge" style="background:#D98E2C; color:#000; font-size:12.5px; font-weight:700;">Deployment Ready</span>
+            <span class="badge">Deployment Ready</span>
           </div>
 
           <div class="api-provider-grid">
@@ -1510,7 +1510,7 @@
           <div class="transcript-card" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #7A1F1F; padding-bottom:4px;">
               <span style="color:#7A1F1F; font-weight:700;"> CITIZEN NATIVE SPEECH (मराठी / हिन्दी)</span>
-              <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:12.5px;" id="nativeTranscriptBadge">Live Audio Transcription</span>
+              <span class="badge" id="nativeTranscriptBadge">Live Audio Transcription</span>
             </div>
             <div id="nativeTranscriptSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
               <!-- Completed utterance segments -->
@@ -1524,7 +1524,7 @@
           <div class="transcript-card english" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
               <span style="color:#B07817; font-weight:700;"> AI NEURAL TRANSLATION (ENGLISH)</span>
-              <span class="badge" style="background:#D98E2C; color:#000; font-size:12.5px; font-weight:700;" id="englishTranslationBadge">IndicTrans-v2 Multi-lingual</span>
+              <span class="badge" id="englishTranslationBadge">IndicTrans-v2 Multi-lingual</span>
             </div>
             <div id="englishTranslationSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
               <!-- Completed translation segments -->
@@ -1604,7 +1604,7 @@
               <i data-lucide="scan-face" style="width:15px; height:15px;"></i>
               <span>AI CCTV CANDIDATE MATCHES DETECTED (सीटीव्ही कॅमेरा शोध निकाल)</span>
             </div>
-            <span class="badge" style="background:#9A2525; color:#FFF; font-size:13px;" id="cctvMatchesBadge">Matches Detected</span>
+            <span class="badge" id="cctvMatchesBadge">Matches Detected</span>
           </div>
 
           <div class="cctv-candidates-grid" id="cctvCandidatesGrid">

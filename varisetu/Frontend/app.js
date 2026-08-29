@@ -582,7 +582,7 @@ function initPublicRouteMap() {
 
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);"> SANT TUKARAM PALKHI</div>`,
+    html: `<div style="background:transparent; color:#2B2623; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);"> SANT TUKARAM PALKHI</div>`,
     iconSize: [140, 24],
     iconAnchor: [70, 12]
   });
@@ -591,7 +591,7 @@ function initPublicRouteMap() {
 
   const pandharpurIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:13.5px; font-weight:bold; border-radius:2px;">🛕 Pandharpur Shrine</div>`,
+    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:13.5px; font-weight:bold; border-radius:2px;"> Pandharpur Shrine</div>`,
     iconSize: [130, 24]
   });
   L.marker([17.6777, 75.3276], { icon: pandharpurIcon }).addTo(publicMap)
@@ -777,7 +777,7 @@ function initRouteMap() {
   // Palkhi Marker at Narayangaon (Km 84) - Clean text marker (No emojis)
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:3px 8px; font-weight:bold; font-size:13px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35);">PALKHI LEAD (Narayangaon Km 84)</div>`,
+    html: `<div style="background:transparent; color:#2B2623; border:2px solid #7A1F1F; padding:3px 8px; font-weight:bold; font-size:13px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35);">PALKHI LEAD (Narayangaon Km 84)</div>`,
     iconSize: [190, 24],
     iconAnchor: [95, 12]
   });
@@ -1983,7 +1983,7 @@ function openLostPersonCreateModal(isPublic = false) {
           
           <div id="lostPersonDropzone" style="border:2px dashed var(--border-main); padding:12px; text-align:center; background:var(--bg-subtle); cursor:pointer; border-radius:2px; transition:border-color 0.2s;">
             <div style="font-weight:600; font-size:14.5px; color:var(--maroon-primary); margin-bottom:2px;">
-              📁 Click to Upload 4-5 Photos (Frontal Face, Profile, Full Body)
+               Click to Upload 4-5 Photos (Frontal Face, Profile, Full Body)
             </div>
             <div style="font-size:13px; color:var(--text-muted);">
               PNG, JPG, JPEG accepted &bull; Max 5 images
@@ -3194,7 +3194,7 @@ function renderIncidentCommandQueue(incidents) {
   if (badge) {
     const critCount = incidents.filter(i => i.severity === 'CRITICAL').length;
     badge.textContent = `${critCount} Critical / ${incidents.length} Active`;
-    badge.style.background = critCount > 0 ? 'var(--status-red)' : 'var(--status-green)';
+    
   }
 
   if (!incidents || incidents.length === 0) {
@@ -3590,7 +3590,7 @@ function updateYatraMapMarker(yatra) {
 
   const palkhiHtml = `
     <div style="position:relative; display:flex; align-items:center; justify-content:center;">
-      <div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
+      <div style="background:transparent; color:#2B2623; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
         <span style="transform:rotate(${heading}deg); display:inline-block; font-size:15.5px;">➤</span>
         <span> ${escapeHtml(palkhiName)} (${speed} km/h)</span>
       </div>
@@ -4163,7 +4163,7 @@ function updateCallState(newState, detail = '') {
     'REQUESTING_MICROPHONE': '⏳ REQUESTING MIC PERMISSION',
     'CONNECTING': ' ESTABLISHING WEBSOCKET',
     'CONNECTED': ' CONNECTED (16kHz PCM16)',
-    'LISTENING': '👂 LISTENING FOR SPEECH',
+    'LISTENING': ' LISTENING FOR SPEECH',
     'SPEAKING': ' CITIZEN SPEAKING (सक्रिय भाषण)',
     'SILENCE_DETECTED': '⏳ SILENCE DETECTED',
     'PROCESSING_UTTERANCE': ' PROCESSING ASR SEGMENT',
@@ -4296,7 +4296,7 @@ function setupHelplineCallingInterface() {
   toggleSpeakerBtn?.addEventListener('click', () => {
     isSpeakerEnabled = !isSpeakerEnabled;
     const text = document.getElementById('speakerBtnText');
-    if (text) text.textContent = isSpeakerEnabled ? ' Speaker: ON' : '🔇 Speaker: OFF';
+    if (text) text.textContent = isSpeakerEnabled ? ' Speaker: ON' : ' Speaker: OFF';
     toggleSpeakerBtn.classList.toggle('active', isSpeakerEnabled);
   });
 
@@ -4402,7 +4402,7 @@ function switchIntakeMode(mode) {
       modeBanner.style.background = '#E8EAF6';
       modeBanner.style.borderColor = '#9FA8DA';
     }
-    if (modeIcon) modeIcon.textContent = '🧪';
+    if (modeIcon) modeIcon.textContent = '';
     if (modeText) modeText.textContent = 'DEMO CALL SIMULATION • Standard Pilgrimage Scenario Dataset';
 
     stopLiveMicRecording();
@@ -4663,7 +4663,7 @@ function handleIncomingNativeSegment(segment) {
     div.className = 'transcript-segment-card';
     div.innerHTML = `
       <div class="transcript-segment-meta">
-        <span>🗣️ Caller &bull; ${new Date().toLocaleTimeString()}</span>
+        <span>️ Caller &bull; ${new Date().toLocaleTimeString()}</span>
         <span>Confidence: ${Math.round((segment.confidence || segment.asr_confidence || 0.94) * 100)}%</span>
       </div>
       <div>${escapeHtml(text)}</div>
@@ -5067,7 +5067,7 @@ async function triggerScenarioCallSimulation(scenarioId) {
     const locEl = document.getElementById('callerDisplayLocation');
 
     if (nameEl) nameEl.textContent = `${res.caller_name || 'Citizen Pilgrim'} (${res.extracted_attributes?.name || 'Pilgrim'})`;
-    if (phoneEl) phoneEl.textContent = `📱 ${res.caller_phone || '+91 94220 88912'}`;
+    if (phoneEl) phoneEl.textContent = ` ${res.caller_phone || '+91 94220 88912'}`;
     if (locEl) locEl.textContent = ` ${res.extracted_attributes?.last_seen_location || 'Pandharpur Perimeter'}`;
 
     // Clear segments and populate streaming typing effect

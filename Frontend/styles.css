@@ -3317,3 +3317,64 @@ body {
 .collapsible-content.collapsed {
   display: none !important;
 }
+
+
+/* ==================== GLOBAL UN-HIGHLIGHT SYSTEM (CLEAN TEXT & MINIMAL BORDERS) ==================== */
+.badge,
+span.badge,
+div.badge {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-main) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 1px 6px !important;
+  border-radius: 2px !important;
+  font-family: var(--font-mono) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.nav-tab .badge {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+}
+
+.density-tag {
+  background: transparent !important;
+  border: 1px solid var(--border-main) !important;
+  color: var(--text-primary) !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  padding: 1px 6px !important;
+  border-radius: 2px !important;
+  font-family: var(--font-mono) !important;
+}
+
+.density-tag.green { border-color: #2E5B36 !important; color: #2E5B36 !important; }
+.density-tag.yellow { border-color: #B07817 !important; color: #B07817 !important; }
+.density-tag.orange { border-color: #B8551B !important; color: #B8551B !important; }
+.density-tag.red { border-color: #9A2525 !important; color: #9A2525 !important; }
+
+.modern-card-strip {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border-bottom: 1px solid var(--border-main) !important;
+}
+
+.strip-water,
+.strip-medical,
+.strip-police,
+.strip-volunteer,
+.strip-route,
+.strip-recs {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+.sla-timer-pill {
+  background: transparent !important;
+  border: 1px solid var(--border-main) !important;
+  color: var(--text-secondary) !important;
+}

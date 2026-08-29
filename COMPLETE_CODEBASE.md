@@ -851,12 +851,12 @@ if __name__ == "__main__":
       <button class="nav-tab" data-target="view-lost">
         <i data-lucide="search" style="width:14px; height:14px;"></i>
         <span>Lost & Found Desk</span>
-        <span class="badge" id="lostNavBadge" style="background:#B07817; color:#FFF;">3 Active</span>
+        <span class="badge" id="lostNavBadge">3 Active</span>
       </button>
       <button class="nav-tab" data-target="view-medical">
         <i data-lucide="heart-pulse" style="width:14px; height:14px;"></i>
         <span>Medical Alerts</span>
-        <span class="badge" id="medicalNavBadge" style="background:#9A2525; color:#FFF;">2 Alerts</span>
+        <span class="badge" id="medicalNavBadge">2 Alerts</span>
       </button>
       <button class="nav-tab" data-target="view-resources">
         <i data-lucide="truck" style="width:14px; height:14px;"></i>
@@ -1011,7 +1011,7 @@ if __name__ == "__main__":
                     <i data-lucide="megaphone" style="width:12px; height:12px;"></i>
                     <span>PUBLIC PA BROADCAST</span>
                   </div>
-                  <span class="badge" style="background:var(--status-green); color:#FFF; font-size:11.5px; padding:1px 4px;">MARATHI • ENG</span>
+                  <span class="badge">MARATHI • ENG</span>
                 </div>
                 <div style="font-size:13px; color:var(--text-secondary); margin-bottom:4px; line-height:1.2;">
                   Broadcast urgent crowd advisories across temple chowki loudspeakers.
@@ -1201,7 +1201,7 @@ if __name__ == "__main__":
                   <option value="MATCH_FOUND">Match Found (सापडला)</option>
                   <option value="REUNITED">Reunited (एकत्र आले)</option>
                 </select>
-                <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:13.5px;" id="lostTotalCountBadge">100 Cases</span>
+                <span class="badge" id="lostTotalCountBadge">100 Cases</span>
               </div>
             </div>
 
@@ -1373,7 +1373,7 @@ if __name__ == "__main__":
               <span style="font-weight:700; font-size:15.5px; letter-spacing:0.3px;">DISPATCH &amp; ROUTE RECOMMENDATIONS</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="recsQueueBadge">Active Queue</span>
+              <span class="badge" id="recsQueueBadge">Active Queue</span>
               <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
@@ -1392,7 +1392,7 @@ if __name__ == "__main__":
               <span style="font-weight:700; font-size:15.5px;">FIELD LOGISTICS &amp; FLEET UNITS</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;" id="fleetUnitsCountBadge">80 Units Managed</span>
+              <span class="badge" id="fleetUnitsCountBadge">80 Units Managed</span>
               <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
@@ -1411,7 +1411,7 @@ if __name__ == "__main__":
               <span style="font-weight:700; font-size:15.5px;">ROUTE STATUS &amp; CORRIDOR DIVERSION CONTROL</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;">NH-60 Corridor</span>
+              <span class="badge">NH-60 Corridor</span>
               <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
@@ -1430,7 +1430,7 @@ if __name__ == "__main__":
               <span style="font-weight:700; font-size:15.5px;">RESOURCE ALLOCATION &amp; DISPATCH HISTORY</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="activeAllocationsBadge">6 Active</span>
+              <span class="badge" id="activeAllocationsBadge">6 Active</span>
               <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
@@ -1862,7 +1862,7 @@ if __name__ == "__main__":
             <div style="font-size:17.5px; font-weight:700; display:flex; align-items:center; gap:8px; font-family:var(--font-serif); flex-wrap:wrap;">
               <span> EMERGENCY 112 CITIZEN HELPLINE INTAKE &bull; नागरीक मदत केंद्र</span>
               <span class="call-state-badge call-state-IDLE" id="callStateMachineBadge">IDLE</span>
-              <span class="badge" style="background:#00E676; color:#000; font-size:13px; font-weight:800;" id="callStatusBadge"> READY / STANDBY</span>
+              <span class="badge" id="callStatusBadge"> READY / STANDBY</span>
             </div>
             <div style="font-size:14px; color:#FFE082;">Dial-in Line: 1800-233-0099 (Wari Control Desk #04) &bull; 16kHz PCM16 Stream & Indic Neural Pipeline</div>
           </div>
@@ -1907,7 +1907,7 @@ if __name__ == "__main__":
               <i data-lucide="sparkles" style="width:14px; height:14px; color:#D98E2C;"></i>
               <span>RECOMMENDED APIS FOR LIVE DECCAN MARATHI SPEECH TRANSLATION</span>
             </div>
-            <span class="badge" style="background:#D98E2C; color:#000; font-size:12.5px; font-weight:700;">Deployment Ready</span>
+            <span class="badge">Deployment Ready</span>
           </div>
 
           <div class="api-provider-grid">
@@ -2066,7 +2066,7 @@ if __name__ == "__main__":
           <div class="transcript-card" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #7A1F1F; padding-bottom:4px;">
               <span style="color:#7A1F1F; font-weight:700;"> CITIZEN NATIVE SPEECH (मराठी / हिन्दी)</span>
-              <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:12.5px;" id="nativeTranscriptBadge">Live Audio Transcription</span>
+              <span class="badge" id="nativeTranscriptBadge">Live Audio Transcription</span>
             </div>
             <div id="nativeTranscriptSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
               <!-- Completed utterance segments -->
@@ -2080,7 +2080,7 @@ if __name__ == "__main__":
           <div class="transcript-card english" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
               <span style="color:#B07817; font-weight:700;"> AI NEURAL TRANSLATION (ENGLISH)</span>
-              <span class="badge" style="background:#D98E2C; color:#000; font-size:12.5px; font-weight:700;" id="englishTranslationBadge">IndicTrans-v2 Multi-lingual</span>
+              <span class="badge" id="englishTranslationBadge">IndicTrans-v2 Multi-lingual</span>
             </div>
             <div id="englishTranslationSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
               <!-- Completed translation segments -->
@@ -2160,7 +2160,7 @@ if __name__ == "__main__":
               <i data-lucide="scan-face" style="width:15px; height:15px;"></i>
               <span>AI CCTV CANDIDATE MATCHES DETECTED (सीटीव्ही कॅमेरा शोध निकाल)</span>
             </div>
-            <span class="badge" style="background:#9A2525; color:#FFF; font-size:13px;" id="cctvMatchesBadge">Matches Detected</span>
+            <span class="badge" id="cctvMatchesBadge">Matches Detected</span>
           </div>
 
           <div class="cctv-candidates-grid" id="cctvCandidatesGrid">
@@ -2183,7 +2183,7 @@ if __name__ == "__main__":
 ---
 
 ## 8. Frontend Styling Design System
-**File Path:** `Frontend/styles.css` | **Lines of Code:** 3319
+**File Path:** `Frontend/styles.css` | **Lines of Code:** 3380
 
 ```css
 /* WariSetu AI (v2 Light Theme - Grounded Government Portal Specification) */
@@ -5506,6 +5506,67 @@ body {
   display: none !important;
 }
 
+
+/* ==================== GLOBAL UN-HIGHLIGHT SYSTEM (CLEAN TEXT & MINIMAL BORDERS) ==================== */
+.badge,
+span.badge,
+div.badge {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-main) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 1px 6px !important;
+  border-radius: 2px !important;
+  font-family: var(--font-mono) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+.nav-tab .badge {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.30) !important;
+}
+
+.density-tag {
+  background: transparent !important;
+  border: 1px solid var(--border-main) !important;
+  color: var(--text-primary) !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  padding: 1px 6px !important;
+  border-radius: 2px !important;
+  font-family: var(--font-mono) !important;
+}
+
+.density-tag.green { border-color: #2E5B36 !important; color: #2E5B36 !important; }
+.density-tag.yellow { border-color: #B07817 !important; color: #B07817 !important; }
+.density-tag.orange { border-color: #B8551B !important; color: #B8551B !important; }
+.density-tag.red { border-color: #9A2525 !important; color: #9A2525 !important; }
+
+.modern-card-strip {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border-bottom: 1px solid var(--border-main) !important;
+}
+
+.strip-water,
+.strip-medical,
+.strip-police,
+.strip-volunteer,
+.strip-route,
+.strip-recs {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+.sla-timer-pill {
+  background: transparent !important;
+  border: 1px solid var(--border-main) !important;
+  color: var(--text-secondary) !important;
+}
+
 ```
 
 ---
@@ -6098,7 +6159,7 @@ function initPublicRouteMap() {
 
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);"> SANT TUKARAM PALKHI</div>`,
+    html: `<div style="background:transparent; color:#2B2623; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);"> SANT TUKARAM PALKHI</div>`,
     iconSize: [140, 24],
     iconAnchor: [70, 12]
   });
@@ -6107,7 +6168,7 @@ function initPublicRouteMap() {
 
   const pandharpurIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:13.5px; font-weight:bold; border-radius:2px;">🛕 Pandharpur Shrine</div>`,
+    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:13.5px; font-weight:bold; border-radius:2px;"> Pandharpur Shrine</div>`,
     iconSize: [130, 24]
   });
   L.marker([17.6777, 75.3276], { icon: pandharpurIcon }).addTo(publicMap)
@@ -6293,7 +6354,7 @@ function initRouteMap() {
   // Palkhi Marker at Narayangaon (Km 84) - Clean text marker (No emojis)
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:3px 8px; font-weight:bold; font-size:13px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35);">PALKHI LEAD (Narayangaon Km 84)</div>`,
+    html: `<div style="background:transparent; color:#2B2623; border:2px solid #7A1F1F; padding:3px 8px; font-weight:bold; font-size:13px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35);">PALKHI LEAD (Narayangaon Km 84)</div>`,
     iconSize: [190, 24],
     iconAnchor: [95, 12]
   });
@@ -7499,7 +7560,7 @@ function openLostPersonCreateModal(isPublic = false) {
           
           <div id="lostPersonDropzone" style="border:2px dashed var(--border-main); padding:12px; text-align:center; background:var(--bg-subtle); cursor:pointer; border-radius:2px; transition:border-color 0.2s;">
             <div style="font-weight:600; font-size:14.5px; color:var(--maroon-primary); margin-bottom:2px;">
-              📁 Click to Upload 4-5 Photos (Frontal Face, Profile, Full Body)
+               Click to Upload 4-5 Photos (Frontal Face, Profile, Full Body)
             </div>
             <div style="font-size:13px; color:var(--text-muted);">
               PNG, JPG, JPEG accepted &bull; Max 5 images
@@ -8710,7 +8771,7 @@ function renderIncidentCommandQueue(incidents) {
   if (badge) {
     const critCount = incidents.filter(i => i.severity === 'CRITICAL').length;
     badge.textContent = `${critCount} Critical / ${incidents.length} Active`;
-    badge.style.background = critCount > 0 ? 'var(--status-red)' : 'var(--status-green)';
+    
   }
 
   if (!incidents || incidents.length === 0) {
@@ -9106,7 +9167,7 @@ function updateYatraMapMarker(yatra) {
 
   const palkhiHtml = `
     <div style="position:relative; display:flex; align-items:center; justify-content:center;">
-      <div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
+      <div style="background:transparent; color:#2B2623; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
         <span style="transform:rotate(${heading}deg); display:inline-block; font-size:15.5px;">➤</span>
         <span> ${escapeHtml(palkhiName)} (${speed} km/h)</span>
       </div>
@@ -9679,7 +9740,7 @@ function updateCallState(newState, detail = '') {
     'REQUESTING_MICROPHONE': '⏳ REQUESTING MIC PERMISSION',
     'CONNECTING': ' ESTABLISHING WEBSOCKET',
     'CONNECTED': ' CONNECTED (16kHz PCM16)',
-    'LISTENING': '👂 LISTENING FOR SPEECH',
+    'LISTENING': ' LISTENING FOR SPEECH',
     'SPEAKING': ' CITIZEN SPEAKING (सक्रिय भाषण)',
     'SILENCE_DETECTED': '⏳ SILENCE DETECTED',
     'PROCESSING_UTTERANCE': ' PROCESSING ASR SEGMENT',
@@ -9812,7 +9873,7 @@ function setupHelplineCallingInterface() {
   toggleSpeakerBtn?.addEventListener('click', () => {
     isSpeakerEnabled = !isSpeakerEnabled;
     const text = document.getElementById('speakerBtnText');
-    if (text) text.textContent = isSpeakerEnabled ? ' Speaker: ON' : '🔇 Speaker: OFF';
+    if (text) text.textContent = isSpeakerEnabled ? ' Speaker: ON' : ' Speaker: OFF';
     toggleSpeakerBtn.classList.toggle('active', isSpeakerEnabled);
   });
 
@@ -9918,7 +9979,7 @@ function switchIntakeMode(mode) {
       modeBanner.style.background = '#E8EAF6';
       modeBanner.style.borderColor = '#9FA8DA';
     }
-    if (modeIcon) modeIcon.textContent = '🧪';
+    if (modeIcon) modeIcon.textContent = '';
     if (modeText) modeText.textContent = 'DEMO CALL SIMULATION • Standard Pilgrimage Scenario Dataset';
 
     stopLiveMicRecording();
@@ -10179,7 +10240,7 @@ function handleIncomingNativeSegment(segment) {
     div.className = 'transcript-segment-card';
     div.innerHTML = `
       <div class="transcript-segment-meta">
-        <span>🗣️ Caller &bull; ${new Date().toLocaleTimeString()}</span>
+        <span>️ Caller &bull; ${new Date().toLocaleTimeString()}</span>
         <span>Confidence: ${Math.round((segment.confidence || segment.asr_confidence || 0.94) * 100)}%</span>
       </div>
       <div>${escapeHtml(text)}</div>
@@ -10583,7 +10644,7 @@ async function triggerScenarioCallSimulation(scenarioId) {
     const locEl = document.getElementById('callerDisplayLocation');
 
     if (nameEl) nameEl.textContent = `${res.caller_name || 'Citizen Pilgrim'} (${res.extracted_attributes?.name || 'Pilgrim'})`;
-    if (phoneEl) phoneEl.textContent = `📱 ${res.caller_phone || '+91 94220 88912'}`;
+    if (phoneEl) phoneEl.textContent = ` ${res.caller_phone || '+91 94220 88912'}`;
     if (locEl) locEl.textContent = ` ${res.extracted_attributes?.last_seen_location || 'Pandharpur Perimeter'}`;
 
     // Clear segments and populate streaming typing effect
