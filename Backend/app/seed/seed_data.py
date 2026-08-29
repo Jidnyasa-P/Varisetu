@@ -310,9 +310,53 @@ async def seed_database():
         ]
         db.add_all(notifications)
 
+        logger.info("Seeding Yatra / Palkhi live state...")
+        from app.models.yatra import Yatra, YatraStatus, YatraTrack
+        from app.models.announcement import PublicAnnouncement, AnnouncementStatus
+
+        yatra = Yatra(
+            name="Sant Tukaram Maharaj Palkhi",
+            type="PALKHI",
+            status=YatraStatus.LIVE,
+            current_latitude=17.7280,
+            current_longitude=75.2950,
+            current_speed=2.8,
+            current_heading=145.0,
+            current_accuracy=5.0,
+            active_tracker_id="PALKHI-TUKARAM-01"
+        )
+        db.add(yatra)
+        await db.flush()
+
+        track_pts = [
+            YatraTrack(yatra_id=yatra.id, tracker_id="PALKHI-TUKARAM-01", latitude=18.0400, longitude=74.1900, speed_kmph=3.0, heading=140.0, source="GPS_DEVICE", sequence_number=1),
+            YatraTrack(yatra_id=yatra.id, tracker_id="PALKHI-TUKARAM-01", latitude=17.8900, longitude=75.0200, speed_kmph=2.9, heading=142.0, source="GPS_DEVICE", sequence_number=2),
+            YatraTrack(yatra_id=yatra.id, tracker_id="PALKHI-TUKARAM-01", latitude=17.7280, longitude=75.2950, speed_kmph=2.8, heading=145.0, source="GPS_DEVICE", sequence_number=3),
+        ]
+        db.add_all(track_pts)
+
+        logger.info("Seeding Public Announcements...")
+        announcements = [
+            PublicAnnouncement(
+                message_mr="सर्व वारकऱ्यांना नम्र विनंती: वाखरी फाटा येथे गर्दी जास्त असल्याने कृपया पर्यायी पायी मार्गाचा वापर करावा.",
+                message_en="All pilgrims are requested to use the designated pedestrian bypass route due to high crowd density at Wakhri Phata.",
+                priority="HIGH",
+                status=AnnouncementStatus.BROADCAST,
+                broadcast_at=datetime.now(timezone.utc)
+            ),
+            PublicAnnouncement(
+                message_mr="विनामूल्य ओआरएसएल (ORSL) आणि पाणी वाटप केंद्र क्र. ४ वर उपलब्ध आहे.",
+                message_en="Free ORSL rehydration sachets and drinking water available at Hub No. 4.",
+                priority="NORMAL",
+                status=AnnouncementStatus.APPROVED
+            )
+        ]
+        db.add_all(announcements)
+
         await db.commit()
         logger.info("Database seeding completed successfully!")
 
 
 if __name__ == "__main__":
     asyncio.run(seed_database())
+

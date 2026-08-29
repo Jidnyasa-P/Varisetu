@@ -13,6 +13,9 @@ from app.models.resource import Resource, ResourceAssignment, ResourceType, Reso
 from app.models.route import Route, RouteStatus
 from app.models.notification import Notification, NotificationType
 from app.models.audit import AuditLog
+from app.models.action import CommandAction, ActionType, ActionStatus
+from app.models.yatra import Yatra, YatraTrack, YatraStatus
+from app.models.announcement import PublicAnnouncement, AnnouncementStatus
 
 __all__ = [
     "Base",
@@ -48,4 +51,12 @@ __all__ = [
     "Notification",
     "NotificationType",
     "AuditLog",
+    "CommandAction",
+    "ActionType",
+    "ActionStatus",
+    "Yatra",
+    "YatraTrack",
+    "YatraStatus",
+    "PublicAnnouncement",
+    "AnnouncementStatus",
 ]

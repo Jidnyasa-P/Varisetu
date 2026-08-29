@@ -44,3 +44,11 @@ async def record_crowd_observation(obs_in: CrowdObservationCreate, db: AsyncSess
 async def get_crowd_forecast(db: AsyncSession = Depends(get_db)):
     """Retrieve 2-hour congestion prediction points for Wakhri Phata & Pandharpur Chowk."""
     return await forecast_service.get_2hour_forecast(db)
+
+
+@router.get("/heatmap", summary="Get normalized crowd heatmap points")
+async def get_crowd_heatmap(db: AsyncSession = Depends(get_db)):
+    """Retrieve normalized 0.0 - 1.0 weighted GPS points for Google Maps and Leaflet rendering."""
+    from app.services.heatmap_service import heatmap_service
+    return await heatmap_service.generate_heatmap_points(db)
+

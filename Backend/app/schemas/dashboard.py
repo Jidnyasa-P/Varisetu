@@ -1,6 +1,17 @@
 from datetime import datetime
-from typing import List, Optional
-from pydantic import BaseModel
+from typing import Any, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, Field
+
+from app.schemas.action import ActionOut
+from app.schemas.camera import CameraOut
+from app.schemas.incident import IncidentEventOut, IncidentOut
+from app.schemas.lost_person import FaceMatchOut, LostPersonCaseOut
+from app.schemas.medical import MedicalAlertOut
+from app.schemas.notification import NotificationOut
+from app.schemas.resource import ResourceOut
+from app.schemas.route import RouteOut
+from app.schemas.yatra import YatraLiveOut
+from app.schemas.zone import ZoneOut
 
 
 class DashboardSummary(BaseModel):
@@ -45,3 +56,80 @@ class CorridorRouteSegment(BaseModel):
     color_hex: str
     status_tag: str
     coordinates: List[List[float]]
+
+
+class DataFreshnessMetrics(BaseModel):
+    data_age_seconds: int = 2
+    camera_telemetry_age_seconds: int = 1
+    gps_age_seconds: int = 3
+    weather_age_seconds: int = 28
+    gis_provider: str = "GOOGLE_MAPS"
+    gis_provider_status: str = "LIVE"
+    last_sync_timestamp: str
+
+
+class ResourceRecommendationOut(BaseModel):
+    resource_id: str
+    resource_code: str
+    resource_type: str
+    name: str
+    distance_km: float
+    estimated_response_minutes: int
+    traffic_delay_minutes: int = 0
+    match_score: float
+    status: str
+    zone_name: Optional[str] = None
+    reason: str
+    incident_id: Optional[str] = None
+
+
+class RouteRecommendationOut(BaseModel):
+    affected_route_id: str
+    affected_route_name: str
+    trigger: str
+    crowd_density_percentage: float
+    reason: str
+    current_status: str
+    recommended_action: str  # DIVERT, CLOSE, RESTRICT_VEHICLES
+    alternative_route_name: str
+    alternative_route_id: Optional[str] = None
+    distance_increase_km: float
+    estimated_time_increase_minutes: int
+    operational_risk: str
+    requires_approval: bool = True
+    incident_id: Optional[str] = None
+
+
+class HeatmapPoint(BaseModel):
+    latitude: float
+    longitude: float
+    weight: float
+    density_percentage: float
+    estimated_count: int
+    source: str
+    zone_id: Optional[str] = None
+    timestamp: str
+    risk_level: str
+
+
+class CommandPictureOut(BaseModel):
+    generated_at: str
+    system_health: Dict[str, str]
+    summary: DashboardSummary
+    freshness: DataFreshnessMetrics
+    yatra: Optional[YatraLiveOut] = None
+    critical_incidents: List[IncidentOut] = []
+    active_incidents: List[IncidentOut] = []
+    active_medical_alerts: List[MedicalAlertOut] = []
+    active_lost_cases: List[LostPersonCaseOut] = []
+    face_match_candidates: List[FaceMatchOut] = []
+    deployed_resources: List[ResourceOut] = []
+    available_resources: List[ResourceOut] = []
+    routes: List[RouteOut] = []
+    corridor_segments: List[CorridorRouteSegment] = []
+    route_recommendations: List[RouteRecommendationOut] = []
+    resource_recommendations: List[ResourceRecommendationOut] = []
+    recent_actions: List[ActionOut] = []
+    incident_timeline: List[IncidentEventOut] = []
+    unread_notifications: List[NotificationOut] = []
+    heatmap_points: List[HeatmapPoint] = []

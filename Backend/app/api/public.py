@@ -99,3 +99,11 @@ async def public_report_lost_person(
         "case_number": case.case_number,
         "name": case.name
     }
+
+
+@public_router.get("/yatra/live", summary="Sanitized live Palkhi public tracking")
+async def get_public_yatra_live(db: AsyncSession = Depends(get_db)):
+    """Provides privacy-sanitized approximate Palkhi location, speed, and pilgrim advisories."""
+    from app.services.yatra_service import yatra_service
+    return await yatra_service.get_public_live(db)
+

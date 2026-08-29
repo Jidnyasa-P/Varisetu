@@ -6,6 +6,8 @@ from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
+from app.api.actions import router as actions_router
+from app.api.announcements import router as announcements_router
 from app.api.auth import router as auth_router
 from app.api.cameras import router as cameras_router
 from app.api.crowd import router as crowd_router
@@ -17,6 +19,7 @@ from app.api.notifications import audit_router, demo_router, health_router, noti
 from app.api.public import public_router
 from app.api.resources import router as resources_router
 from app.api.routes import router as routes_router
+from app.api.yatra import router as yatra_router
 from app.api.zones import router as zones_router
 from app.core.config import settings
 from app.core.database import init_db
@@ -85,9 +88,13 @@ app.mount("/uploads", StaticFiles(directory=settings.STORAGE_LOCAL_DIR), name="u
 
 # Register REST Routers
 app.include_router(health_router)
+app.include_router(health_router, prefix=settings.API_V1_STR)
 app.include_router(public_router, prefix=settings.API_V1_STR)
 app.include_router(auth_router, prefix=settings.API_V1_STR)
 app.include_router(dashboard_router, prefix=settings.API_V1_STR)
+app.include_router(actions_router, prefix=settings.API_V1_STR)
+app.include_router(yatra_router, prefix=settings.API_V1_STR)
+app.include_router(announcements_router, prefix=settings.API_V1_STR)
 app.include_router(cameras_router, prefix=settings.API_V1_STR)
 app.include_router(zones_router, prefix=settings.API_V1_STR)
 app.include_router(crowd_router, prefix=settings.API_V1_STR)

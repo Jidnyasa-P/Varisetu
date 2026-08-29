@@ -20,6 +20,13 @@ async def list_routes(db: AsyncSession = Depends(get_db)):
     return [RouteOut.model_validate(r) for r in routes]
 
 
+@router.get("/recommendations", summary="Get predictive route diversion recommendations")
+async def get_route_recommendations(db: AsyncSession = Depends(get_db)):
+    from app.services.recommendation_service import recommendation_service
+    return await recommendation_service.get_route_recommendations(db)
+
+
+
 @router.get("/{id}", response_model=RouteOut, summary="Get route details")
 async def get_route(id: str, db: AsyncSession = Depends(get_db)):
     route = (await db.execute(select(Route).where(Route.id == id))).scalar_one_or_none()

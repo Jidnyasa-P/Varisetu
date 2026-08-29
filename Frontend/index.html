@@ -21,6 +21,8 @@
   
   <!-- Leaflet Map JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <!-- deck.gl for GPU-accelerated WebGL Heatmap Rendering -->
+  <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>
   
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -242,6 +244,10 @@
           <span class="live-dot"></span>
           <span id="backendHealthText">LIVE</span>
         </div>
+        <div class="meta-pill" id="dataFreshnessPill" title="Real-time telemetry freshness">
+          <i data-lucide="radio" style="width:12px; height:12px; color:var(--status-green);"></i>
+          <span id="dataFreshnessText" style="font-family:var(--font-mono); font-size:10px; font-weight:600;">DATA: 2s OLD</span>
+        </div>
         <div class="meta-pill">
           <i data-lucide="clock" style="width:13px; height:13px;"></i>
           <span id="sysClock">28 JUL 2026 18:50:00 IST</span>
@@ -249,6 +255,11 @@
         <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
           <span>PILGRIM COUNT: ~8,45,000</span>
         </div>
+        <button class="govt-btn btn-outline" id="notifDrawerBtn" type="button" style="position:relative; font-size:10px; padding:4px 9px;" title="Operational Alerts & Outbox">
+          <i data-lucide="bell" style="width:12px; height:12px;"></i>
+          <span>Alerts</span>
+          <span class="notif-badge-count" id="notifBadgeCount">3</span>
+        </button>
         <div class="meta-pill" id="userProfileBadge" style="display:flex; align-items:center; border-color:var(--maroon-primary);">
           <i data-lucide="shield-check" style="width:13px; height:13px; color:var(--maroon-primary); margin-right:4px;"></i>
           <span id="userProfileText" style="font-weight:700; color:var(--maroon-primary); text-transform:uppercase;">COMMANDER</span>
@@ -372,12 +383,40 @@
             </div>
           </div>
 
-          <!-- Center: Interactive Route Map -->
+          <!-- Center: Interactive Route Map & Live GIS Common Operating Picture -->
           <div class="map-container">
+            <!-- Map Mode Selector & GIS Status Bar -->
+            <div class="map-top-toolbar">
+              <div class="map-modes-group">
+                <button type="button" class="map-mode-btn active" data-mode="OPERATIONAL">OPERATIONAL</button>
+                <button type="button" class="map-mode-btn" data-mode="TRAFFIC">TRAFFIC</button>
+                <button type="button" class="map-mode-btn" data-mode="YATRA">LIVE YATRA</button>
+                <button type="button" class="map-mode-btn" data-mode="HEATMAP">HEATMAP</button>
+                <button type="button" class="map-mode-btn" data-mode="RESOURCE">RESOURCES</button>
+                <button type="button" class="map-mode-btn" data-mode="INCIDENT">INCIDENTS</button>
+              </div>
+              <div class="gis-provider-pill" id="gisProviderPill" title="Primary: Google Maps + deck.gl GPU Layer; Fallback: Leaflet">
+                <span class="live-dot" style="width:6px; height:6px;"></span>
+                <span id="gisProviderName">GOOGLE MAPS / DECK.GL</span>
+              </div>
+            </div>
+
             <div id="routeMap"></div>
 
+            <!-- Layer Toggle Pills Bar -->
+            <div class="map-layer-pills-bar">
+              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleYatra"><span>Palkhi</span></label>
+              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleHeatmap"><span>Crowd Heatmap</span></label>
+              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleCctv"><span>CCTV</span></label>
+              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleIncidents"><span>Incidents</span></label>
+              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleMedical"><span>Ambulances</span></label>
+              <label class="layer-chip active"><input type="checkbox" checked id="layerTogglePolice"><span>Police</span></label>
+              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleTankers"><span>Tankers</span></label>
+              <label class="layer-chip active"><input type="checkbox" checked id="layerToggleRoutes"><span>Routes</span></label>
+            </div>
+
             <div class="map-controls-overlay">
-              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px;">ROUTE MAP LEGEND</div>
+              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px; font-size:10px;">ROUTE MAP LEGEND</div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#9A2525;"></div>
                 <span>Critical Congestion</span>
@@ -390,17 +429,17 @@
                 <div class="legend-color-box" style="background:#2E5B36;"></div>
                 <span>Clear Route</span>
               </div>
-              <div class="map-legend-item" style="margin-top:4px;">
-                <i data-lucide="droplet" style="width:12px; height:12px; color:#1D6F8A;"></i>
+              <div class="map-legend-item" style="margin-top:3px;">
+                <i data-lucide="navigation" style="width:11px; height:11px; color:#D98E2C;"></i>
+                <span>Live Palkhi GPS</span>
+              </div>
+              <div class="map-legend-item">
+                <i data-lucide="cross" style="width:11px; height:11px; color:#9A2525;"></i>
+                <span>Ambulance / Medical</span>
+              </div>
+              <div class="map-legend-item">
+                <i data-lucide="droplet" style="width:11px; height:11px; color:#1D6F8A;"></i>
                 <span>Water Tanker</span>
-              </div>
-              <div class="map-legend-item">
-                <i data-lucide="cross" style="width:12px; height:12px; color:#9A2525;"></i>
-                <span>Medical Van</span>
-              </div>
-              <div class="map-legend-item">
-                <i data-lucide="flag" style="width:12px; height:12px; color:#D98E2C;"></i>
-                <span>Palkhi Location</span>
               </div>
             </div>
           </div>
@@ -445,6 +484,99 @@
                     <span class="density-tag orange" style="font-size:9px; padding:1px 5px;">FLOW 92%</span>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operational Command Action Modules Grid -->
+        <div class="operational-command-grid">
+          
+          <!-- Column 1: Incident Command Queue & SLA Timers -->
+          <div class="panel-card" style="padding:0;">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <i data-lucide="shield-alert" style="width:13px; height:13px; color:var(--status-red);"></i>
+                <span>INCIDENT COMMAND QUEUE</span>
+              </div>
+              <span class="badge" style="background:var(--status-red); color:#FFF;" id="incidentQueueCountBadge">2 Critical</span>
+            </div>
+            <div class="command-action-queue-list" id="incidentCommandQueueList">
+              <!-- Populated dynamically from CommandPicture / API -->
+            </div>
+          </div>
+
+          <!-- Column 2: Candidate Face Matches & Missing Person Desk -->
+          <div class="panel-card" style="padding:0;">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <i data-lucide="scan-face" style="width:13px; height:13px; color:var(--saffron-gold);"></i>
+                <span>BIOMETRIC FACE MATCH QUEUE</span>
+              </div>
+              <span class="badge" style="background:var(--saffron-gold); color:#FFF;" id="faceMatchQueueBadge">1 Candidate</span>
+            </div>
+            <div class="command-action-queue-list" id="faceMatchQueueList">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Column 3: Emergency Dispatch & Route Recommendations -->
+          <div class="panel-card" style="padding:0;">
+            <div class="panel-header">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <i data-lucide="cpu" style="width:13px; height:13px; color:var(--maroon-primary);"></i>
+                <span>DISPATCH & ROUTE RECOMMENDATIONS</span>
+              </div>
+              <span class="badge" style="background:var(--maroon-primary); color:#FFF;" id="recsQueueBadge">AI Ranked</span>
+            </div>
+            <div class="command-action-queue-list" id="recommendationsQueueList">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Incident Timeline & Public Announcement Broadcast Strip -->
+        <div class="timeline-announcement-grid">
+          <!-- Left: Chronological Operational Timeline -->
+          <div class="panel-card" style="padding:0; flex:1;">
+            <div class="panel-header" style="justify-content:space-between;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <i data-lucide="activity" style="width:13px; height:13px; color:var(--maroon-primary);"></i>
+                <span>LIVE INCIDENT TIMELINE</span>
+              </div>
+              <div class="timeline-filter-group">
+                <button type="button" class="timeline-filter-btn active" data-filter="ALL">ALL</button>
+                <button type="button" class="timeline-filter-btn" data-filter="DISPATCH">DISPATCH</button>
+                <button type="button" class="timeline-filter-btn" data-filter="ROUTE">ROUTE</button>
+                <button type="button" class="timeline-filter-btn" data-filter="ANNOUNCEMENT">PA</button>
+                <button type="button" class="timeline-filter-btn" data-filter="MEDICAL">MEDICAL</button>
+              </div>
+            </div>
+            <div class="timeline-events-container" id="incidentTimelineStream">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <!-- Right: Public Announcement PA Bar -->
+          <div class="panel-card" style="padding:10px; width:340px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <div style="font-weight:700; font-size:12px; color:var(--maroon-primary); display:flex; align-items:center; gap:5px;">
+                <i data-lucide="megaphone" style="width:14px; height:14px;"></i>
+                <span>PUBLIC PA BROADCAST</span>
+              </div>
+              <span class="badge" style="background:var(--status-green); color:#FFF; font-size:9px;">MARATHI &bull; ENGLISH</span>
+            </div>
+            <p style="font-size:11px; color:var(--text-secondary); margin-bottom:8px;">
+              Broadcast urgent crowd advisories, route diversions, or lost person notices across temple chowki loudspeakers.
+            </p>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <button class="govt-btn" id="openAnnouncementModalBtn" type="button" style="width:100%; font-size:11px; padding:7px 10px;">
+                <i data-lucide="send" style="width:12px; height:12px;"></i>
+                <span>+ Queue New PA Announcement</span>
+              </button>
+              <div id="activeBroadcastTicker" style="background:var(--bg-subtle); border:1px solid var(--border-main); padding:6px 8px; font-size:10px; color:var(--text-primary); border-radius:2px;">
+                <strong style="color:var(--maroon-primary);">Active Broadcast:</strong> <span id="activeBroadcastText">वाखरी फाटा येथे पर्यायी पायी मार्गाचा वापर करावा.</span>
               </div>
             </div>
           </div>
@@ -725,6 +857,76 @@
           <button class="govt-btn btn-outline" id="modalCamCloseFooterBtn" type="button">Close Window</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Slide-Out Operational Notification Drawer -->
+  <div class="drawer-backdrop" id="notifDrawerBackdrop"></div>
+  <aside class="notification-drawer" id="notificationDrawer" aria-hidden="true">
+    <div class="drawer-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <i data-lucide="bell" style="width:16px; height:16px; color:var(--maroon-primary);"></i>
+        <span style="font-weight:700; font-family:var(--font-serif); font-size:15px; color:var(--maroon-primary);">Operational Alerts</span>
+      </div>
+      <button type="button" class="close-modal-btn" id="notifDrawerCloseBtn">&times;</button>
+    </div>
+    <div class="drawer-toolbar">
+      <span style="font-size:11px; color:var(--text-muted);" id="drawerUnreadCountText">3 Unread Alerts</span>
+      <button type="button" class="govt-btn btn-outline" id="markAllNotifsReadBtn" style="font-size:10px; padding:3px 8px;">Mark All Read</button>
+    </div>
+    <div class="drawer-content" id="drawerNotifsContainer">
+      <!-- Populated dynamically from CommandPicture / API -->
+    </div>
+  </aside>
+
+  <!-- Bilingual Public Announcement Modal -->
+  <div class="app-modal-backdrop" id="announcementModalBackdrop" aria-hidden="true">
+    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:520px;">
+      <div class="app-modal-header">
+        <div>
+          <div class="app-modal-kicker">PUBLIC ADDRESS SYSTEM</div>
+          <div class="app-modal-title">Queue Bilingual PA Announcement</div>
+        </div>
+        <button type="button" class="close-modal-btn" id="closeAnnouncementModalBtn">&times;</button>
+      </div>
+      <form id="announcementForm">
+        <div class="app-modal-body">
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11.5px; margin-bottom:4px;">Announcement Message (मराठी)</label>
+            <textarea id="annMsgMr" class="govt-input" rows="3" required placeholder="उदा. सर्व वारकऱ्यांना नम्र विनंती वाखरी फाटा येथे गर्दी नियंत्रणासाठी पर्यायी मार्गाचा वापर करावा..."></textarea>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:11.5px; margin-bottom:4px;">Announcement Message (English)</label>
+            <textarea id="annMsgEn" class="govt-input" rows="3" required placeholder="E.g. All pilgrims are requested to use the designated bypass route due to high crowd density..."></textarea>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div>
+              <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Category</label>
+              <select id="annCategory" class="govt-input">
+                <option value="CROWD_SAFETY">Crowd Safety & Advisory</option>
+                <option value="ROUTE_DIVERSION">Route Diversion Notice</option>
+                <option value="LOST_PERSON">Missing Pilgrim Announcement</option>
+                <option value="MEDICAL_ALERT">Medical Camp Alert</option>
+              </select>
+            </div>
+            <div>
+              <label style="display:block; font-weight:600; font-size:11px; margin-bottom:4px;">Priority</label>
+              <select id="annPriority" class="govt-input">
+                <option value="HIGH">High Priority</option>
+                <option value="CRITICAL">Critical Emergency</option>
+                <option value="NORMAL">Normal Advisory</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="app-modal-footer">
+          <button type="button" class="govt-btn btn-outline" id="cancelAnnouncementModalBtn">Cancel</button>
+          <button type="submit" class="govt-btn" id="submitAnnouncementBtn">
+            <i data-lucide="send" style="width:12px; height:12px;"></i>
+            <span>Submit for Commander Approval</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 

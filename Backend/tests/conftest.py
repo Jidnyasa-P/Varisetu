@@ -62,6 +62,13 @@ async def client(test_db):
         role=UserRole.ADMIN,
         is_active=True
     )
+    u_police = User(
+        name="Test Officer Patil",
+        email="test.police@mahapolice.gov.in",
+        password_hash=get_password_hash("varisetu2026"),
+        role=UserRole.POLICE,
+        is_active=True
+    )
     z = Zone(
         name="Pandharpur Chowk",
         latitude=17.6777,
@@ -70,6 +77,7 @@ async def client(test_db):
         risk_level=RiskLevel.LOW
     )
     test_db.add(u)
+    test_db.add(u_police)
     test_db.add(z)
     await test_db.commit()
 

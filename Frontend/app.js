@@ -841,8 +841,10 @@ async function initLiveBackend() {
     refreshLostPersons(),
     refreshResources(),
     refreshRoutes(),
-    fetchHeatRisk()
+    fetchHeatRisk(),
+    fetchCommandPicture()
   ]);
+  setupUnifiedCommandUIEventListeners();
 
   connectWebSocket();
 }
@@ -2268,6 +2270,32 @@ async function handleLiveEvent(msg) {
 
     case 'ROUTE_CHANGED':
       await refreshRoutes();
+      await fetchCommandPicture();
+      break;
+
+    case 'ACTION_REQUESTED':
+    case 'ACTION_APPROVED':
+    case 'ACTION_SUCCEEDED':
+    case 'ACTION_FAILED':
+      await fetchCommandPicture();
+      break;
+
+    case 'YATRA_POSITION_UPDATED':
+      if (msg.data) {
+        updateYatraMapMarker(msg.data);
+      }
+      break;
+
+    case 'HEATMAP_UPDATED':
+      await fetchCommandPicture();
+      break;
+
+    case 'ANNOUNCEMENT_BROADCAST':
+      if (msg.data?.message_mr) {
+        const ticker = document.getElementById('activeBroadcastText');
+        if (ticker) ticker.textContent = msg.data.message_mr;
+        appendTickerEvent(`[PA BROADCAST] ${msg.data.message_mr}`);
+      }
       break;
 
     default:
@@ -2285,4 +2313,629 @@ function appendTickerEvent(text) {
     return;
   }
   ticker.textContent = `${text} -- ${current}`;
+}
+
+
+/* ==================== UNIFIED COMMAND PICTURE & ACTION LAYER EXTENSION ==================== */
+
+AppState.commandPicture = null;
+AppState.activeMapMode = 'OPERATIONAL';
+AppState.activeLayers = {
+  yatra: true,
+  heatmap: true,
+  cctv: true,
+  incidents: true,
+  medical: true,
+  police: true,
+  tankers: true,
+  routes: true
+};
+AppState.timelineFilter = 'ALL';
+AppState.palkhiMarker = null;
+AppState.palkhiTrailPolyline = null;
+AppState.mapOverlays = {
+  incidents: [],
+  ambulances: [],
+  tankers: [],
+  police: [],
+  cctv: [],
+  heatmap: [],
+  routes: []
+};
+
+// Global Action Execution with Idempotency Key
+async function executeCommandAction(actionType, { incidentId = null, targetType = null, targetId = null, priority = 'HIGH', parameters = {}, buttonEl = null, onSuccess = null } = {}) {
+  const idempotencyKey = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'act-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9);
+  
+  if (buttonEl) {
+    buttonEl.disabled = true;
+    buttonEl.dataset.origText = buttonEl.innerHTML;
+    buttonEl.innerHTML = '<span class="spinner" style="display:inline-block; width:10px; height:10px; border:2px solid #FFF; border-top-color:transparent; border-radius:50%; animation:spin 0.6s linear infinite; margin-right:4px;"></span>Executing...';
+  }
+
+  try {
+    const payload = {
+      action_type: actionType,
+      incident_id: incidentId,
+      target_type: targetType,
+      target_id: targetId,
+      priority: priority,
+      parameters: parameters,
+      idempotency_key: idempotencyKey
+    };
+
+    const res = await apiRequest('/actions', {
+      method: 'POST',
+      body: payload
+    });
+
+    appendTickerEvent(`[ACTION] ${actionType.replace('_', ' ')} executed successfully (ID: ${res.id.substring(0,8)})`);
+    
+    // Refresh command picture & domain entities
+    await fetchCommandPicture();
+    
+    if (typeof onSuccess === 'function') {
+      onSuccess(res);
+    }
+    return res;
+  } catch (err) {
+    console.error('[Action Error]', err);
+    alert(`Action Failed: ${err.message || 'Server error'}`);
+  } finally {
+    if (buttonEl) {
+      buttonEl.disabled = false;
+      if (buttonEl.dataset.origText) buttonEl.innerHTML = buttonEl.dataset.origText;
+    }
+  }
+}
+
+// Fetch Full Common Operating Picture
+async function fetchCommandPicture() {
+  try {
+    const data = await apiRequest('/dashboard/command-picture');
+    AppState.commandPicture = data;
+    renderUnifiedCommandPicture(data);
+    return data;
+  } catch (err) {
+    console.debug('[VariSetu] Command picture fetch deferred.', err);
+    return null;
+  }
+}
+
+function renderUnifiedCommandPicture(data) {
+  if (!data) return;
+
+  // 1. Data Freshness Status
+  const freshEl = document.getElementById('dataFreshnessText');
+  const freshPill = document.getElementById('dataFreshnessPill');
+  if (freshEl && data.freshness) {
+    const age = data.freshness.data_age_seconds ?? 0;
+    freshEl.textContent = `DATA: ${age}s OLD`;
+    if (freshPill) {
+      freshPill.title = `GIS: ${data.freshness.gis_provider || 'GOOGLE MAPS'} | GPS: ${data.freshness.gps_telemetry_age_seconds}s | Cameras: ${data.freshness.cctv_telemetry_age_seconds}s`;
+    }
+  }
+
+  // 2. Incident Command Queue
+  renderIncidentCommandQueue(data.critical_incidents || data.active_incidents || []);
+
+  // 3. Face Match Queue
+  renderFaceMatchQueue(data.face_match_candidates || []);
+
+  // 4. Recommendations Queue (Resource + Route)
+  renderRecommendationsQueue(data.resource_recommendations || [], data.route_recommendations || []);
+
+  // 5. Incident Timeline
+  renderIncidentTimeline(data.incident_timeline || []);
+
+  // 6. Notifications Drawer Items
+  renderNotificationDrawerItems(data.recent_actions || []);
+
+  // 7. Update Live Yatra on Map
+  if (data.yatra) {
+    updateYatraMapMarker(data.yatra);
+  }
+
+  // 8. Update GIS Provider Pill
+  const gisPill = document.getElementById('gisProviderName');
+  if (gisPill && data.freshness?.gis_provider) {
+    gisPill.textContent = data.freshness.gis_provider === 'GOOGLE_MAPS' ? 'GOOGLE MAPS / DECK.GL' : 'LEAFLET FALLBACK';
+  }
+}
+
+function renderIncidentCommandQueue(incidents) {
+  const container = document.getElementById('incidentCommandQueueList');
+  const badge = document.getElementById('incidentQueueCountBadge');
+  if (!container) return;
+
+  if (badge) {
+    const critCount = incidents.filter(i => i.severity === 'CRITICAL').length;
+    badge.textContent = `${critCount} Critical / ${incidents.length} Active`;
+    badge.style.background = critCount > 0 ? 'var(--status-red)' : 'var(--status-green)';
+  }
+
+  if (!incidents || incidents.length === 0) {
+    container.innerHTML = '<div style="font-size:11px; color:var(--text-muted); padding:8px; text-align:center;">No critical incidents in queue. All sectors nominal.</div>';
+    return;
+  }
+
+  container.innerHTML = incidents.slice(0, 5).map(inc => {
+    const isCrit = inc.severity === 'CRITICAL';
+    const isAcknowledged = inc.status === 'IN_PROGRESS' || inc.status === 'INVESTIGATING' || inc.status === 'RESPONDING';
+    
+    return `
+      <div class="command-queue-card ${isCrit ? 'critical' : 'high'}" data-incident-id="${escapeHtml(inc.id)}">
+        <div class="command-card-top">
+          <span class="command-card-title">${escapeHtml(inc.title || inc.incident_number)}</span>
+          <span class="sla-timer-pill">${isCrit ? 'SLA 4m' : 'SLA 12m'}</span>
+        </div>
+        <div class="command-card-desc">${escapeHtml(inc.description || 'Congestion anomaly detected in sector corridor.')}</div>
+        <div class="command-card-actions">
+          ${!isAcknowledged ? `
+            <button type="button" class="cmd-btn cmd-btn-primary" onclick="handleAcknowledgeIncident('${escapeHtml(inc.id)}', this)">
+              <i data-lucide="check" style="width:10px; height:10px;"></i> Ack
+            </button>
+          ` : `
+            <span style="font-size:9.5px; color:var(--status-green); font-weight:bold; margin-right:4px;">ACKNOWLEDGED</span>
+          `}
+          <button type="button" class="cmd-btn" onclick="handleDispatchSquadForIncident('${escapeHtml(inc.id)}', this)">
+            <i data-lucide="send" style="width:10px; height:10px;"></i> Dispatch
+          </button>
+          <button type="button" class="cmd-btn" onclick="handleResolveIncident('${escapeHtml(inc.id)}', this)">
+            <i data-lucide="check-circle" style="width:10px; height:10px;"></i> Resolve
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function renderFaceMatchQueue(candidates) {
+  const container = document.getElementById('faceMatchQueueList');
+  const badge = document.getElementById('faceMatchQueueBadge');
+  if (!container) return;
+
+  if (badge) {
+    badge.textContent = `${candidates.length} Candidate${candidates.length === 1 ? '' : 's'}`;
+  }
+
+  if (!candidates || candidates.length === 0) {
+    container.innerHTML = '<div style="font-size:11px; color:var(--text-muted); padding:8px; text-align:center;">No pending candidate matches. Biometric scanner active.</div>';
+    return;
+  }
+
+  container.innerHTML = candidates.slice(0, 4).map(c => {
+    const scorePct = Math.round((c.confidence_score || c.similarity_score || 0.88) * 100);
+    return `
+      <div class="command-queue-card" style="border-left-color:var(--saffron-gold);">
+        <div class="command-card-top">
+          <span class="command-card-title">${escapeHtml(c.lost_person_name || 'Missing Pilgrim Candidate')}</span>
+          <span class="sla-timer-pill" style="background:var(--saffron-light); color:var(--saffron-gold);">${scorePct}% MATCH</span>
+        </div>
+        <div class="command-card-desc">Detected at <strong>${escapeHtml(c.camera_code || 'CAM-12 (Wakhri Junction)')}</strong></div>
+        <div class="command-card-actions">
+          <button type="button" class="cmd-btn cmd-btn-primary" onclick="handleVerifyFaceMatch('${escapeHtml(c.id || '')}', '${escapeHtml(c.case_id || '')}', this)">
+            <i data-lucide="check-check" style="width:10px; height:10px;"></i> Verify Match
+          </button>
+          <button type="button" class="cmd-btn" onclick="handleDispatchReuniteVolunteer('${escapeHtml(c.case_id || '')}', this)">
+            <i data-lucide="user-check" style="width:10px; height:10px;"></i> Send Volunteer
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function renderRecommendationsQueue(resourceRecs, routeRecs) {
+  const container = document.getElementById('recommendationsQueueList');
+  const badge = document.getElementById('recsQueueBadge');
+  if (!container) return;
+
+  const totalRecs = (resourceRecs?.length || 0) + (routeRecs?.length || 0);
+  if (badge) {
+    badge.textContent = `${totalRecs} Suggestion${totalRecs === 1 ? '' : 's'}`;
+  }
+
+  if (totalRecs === 0) {
+    container.innerHTML = '<div style="font-size:11px; color:var(--text-muted); padding:8px; text-align:center;">All resources and routes running on optimal configuration.</div>';
+    return;
+  }
+
+  let html = '';
+
+  // Route recommendations
+  if (routeRecs && routeRecs.length > 0) {
+    routeRecs.forEach(r => {
+      html += `
+        <div class="command-queue-card" style="border-left-color:var(--status-orange);">
+          <div class="command-card-top">
+            <span class="command-card-title">Route Diversion: ${escapeHtml(r.route_name)}</span>
+            <span class="sla-timer-pill" style="background:var(--status-orange-bg); color:var(--status-orange);">-${r.time_saving_minutes || 18}m Flow</span>
+          </div>
+          <div class="command-card-desc">${escapeHtml(r.reason || 'High congestion detected. Divert foot pilgrims to bypass.')}</div>
+          <div class="command-card-actions">
+            <button type="button" class="cmd-btn cmd-btn-primary" onclick="handleApproveRouteDiversion('${escapeHtml(r.route_id)}', '${escapeHtml(r.suggested_status)}', this)">
+              <i data-lucide="corner-up-right" style="width:10px; height:10px;"></i> Approve Diversion
+            </button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // Resource recommendations
+  if (resourceRecs && resourceRecs.length > 0) {
+    resourceRecs.forEach(res => {
+      html += `
+        <div class="command-queue-card" style="border-left-color:var(--maroon-primary);">
+          <div class="command-card-top">
+            <span class="command-card-title">Dispatch ${escapeHtml(res.resource_type)}</span>
+            <span class="sla-timer-pill" style="background:var(--maroon-bg); color:var(--maroon-primary);">ETA ${res.eta_minutes || 4} min</span>
+          </div>
+          <div class="command-card-desc">${escapeHtml(res.resource_name)} (${res.distance_km} km away from target)</div>
+          <div class="command-card-actions">
+            <button type="button" class="cmd-btn cmd-btn-primary" onclick="handleDispatchRecommendedResource('${escapeHtml(res.resource_id)}', '${escapeHtml(res.target_id || '')}', this)">
+              <i data-lucide="truck" style="width:10px; height:10px;"></i> Confirm Dispatch
+            </button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  container.innerHTML = html;
+  if (window.lucide) lucide.createIcons();
+}
+
+function renderIncidentTimeline(timelineEvents) {
+  const container = document.getElementById('incidentTimelineStream');
+  if (!container) return;
+
+  const filtered = (timelineEvents || []).filter(e => {
+    if (AppState.timelineFilter === 'ALL') return true;
+    const cat = String(e.category || e.event_type || '').toUpperCase();
+    return cat.includes(AppState.timelineFilter);
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="font-size:11px; color:var(--text-muted); padding:8px; text-align:center;">No timeline logs matching filter.</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.slice(0, 8).map(evt => {
+    const timeStr = evt.timestamp ? new Date(evt.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'LIVE';
+    let iconName = 'activity';
+    if (evt.category === 'DISPATCH' || evt.event_type?.includes('DISPATCH')) iconName = 'truck';
+    if (evt.category === 'ROUTE' || evt.event_type?.includes('ROUTE')) iconName = 'map-pin';
+    if (evt.category === 'ANNOUNCEMENT' || evt.event_type?.includes('ANNOUNCE')) iconName = 'megaphone';
+    if (evt.category === 'MEDICAL' || evt.event_type?.includes('MEDICAL')) iconName = 'cross';
+
+    return `
+      <div class="timeline-item">
+        <div class="timeline-icon-box">
+          <i data-lucide="${iconName}" style="width:11px; height:11px;"></i>
+        </div>
+        <div class="timeline-content-box">
+          <div class="timeline-meta-row">
+            <strong style="color:var(--text-primary); font-size:10.5px;">${escapeHtml(evt.title || evt.event_type || 'Operational Event')}</strong>
+            <span class="timeline-time">${timeStr}</span>
+          </div>
+          <div style="font-size:10.5px; color:var(--text-secondary);">${escapeHtml(evt.message || '')}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function renderNotificationDrawerItems(actions) {
+  const container = document.getElementById('drawerNotifsContainer');
+  const countBadge = document.getElementById('notifBadgeCount');
+  const countText = document.getElementById('drawerUnreadCountText');
+  if (!container) return;
+
+  const count = actions?.length || 0;
+  if (countBadge) countBadge.textContent = count > 0 ? count : '0';
+  if (countText) countText.textContent = `${count} Recent Operational Actions`;
+
+  if (!actions || actions.length === 0) {
+    container.innerHTML = '<div style="font-size:11px; color:var(--text-muted); padding:12px; text-align:center;">No recent command actions.</div>';
+    return;
+  }
+
+  container.innerHTML = actions.slice(0, 10).map(act => {
+    const timeStr = act.created_at ? new Date(act.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : 'Just now';
+    return `
+      <div class="drawer-notif-item">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
+          <strong style="color:var(--maroon-primary); font-size:11px;">${escapeHtml(act.action_type.replace('_', ' '))}</strong>
+          <span style="font-size:9.5px; font-family:var(--font-mono); color:var(--text-muted);">${timeStr}</span>
+        </div>
+        <div style="font-size:10.5px; color:var(--text-secondary);">${escapeHtml(act.target_type || 'COMMAND')}: ${escapeHtml(act.target_id || act.incident_id || 'Global')}</div>
+        <div style="font-size:9.5px; color:var(--status-green); font-weight:600; margin-top:2px;">STATUS: ${escapeHtml(act.status)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Live Yatra Map Marker & Trailing Breadcrumb on Leaflet Map
+function updateYatraMapMarker(yatra) {
+  if (!window.wariMap || !yatra) return;
+
+  const lat = yatra.latitude || yatra.current_latitude;
+  const lon = yatra.longitude || yatra.current_longitude;
+  const speed = yatra.speed_kmph || yatra.current_speed || 3.0;
+  const heading = yatra.heading || yatra.current_heading || 120.0;
+  const palkhiName = yatra.name || 'Sant Tukaram Maharaj Palkhi';
+
+  if (!lat || !lon) return;
+
+  const palkhiHtml = `
+    <div style="position:relative; display:flex; align-items:center; justify-content:center;">
+      <div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:10px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
+        <span style="transform:rotate(${heading}deg); display:inline-block; font-size:12px;">➤</span>
+        <span>🚩 ${escapeHtml(palkhiName)} (${speed} km/h)</span>
+      </div>
+    </div>
+  `;
+
+  const palkhiIcon = L.divIcon({
+    className: 'custom-palkhi-live-icon',
+    html: palkhiHtml,
+    iconSize: [220, 28],
+    iconAnchor: [110, 14]
+  });
+
+  if (AppState.palkhiMarker) {
+    AppState.palkhiMarker.setLatLng([lat, lon]);
+    AppState.palkhiMarker.setIcon(palkhiIcon);
+  } else {
+    AppState.palkhiMarker = L.marker([lat, lon], { icon: palkhiIcon, zIndexOffset: 1000 }).addTo(window.wariMap);
+    AppState.palkhiMarker.bindPopup(`
+      <div style="font-family:var(--font-sans); font-size:12px;">
+        <strong style="color:var(--maroon-primary); font-size:13px;">🚩 ${escapeHtml(palkhiName)}</strong><br>
+        <strong>Speed:</strong> ${speed} km/h | <strong>Heading:</strong> ${heading}°<br>
+        <strong>Checkpoint:</strong> ${escapeHtml(yatra.current_checkpoint || 'Wakhri Sector')}<br>
+        <strong>Next:</strong> ${escapeHtml(yatra.next_checkpoint || 'Pandharpur Temple')}<br>
+        <strong>ETA to Pandharpur:</strong> ${yatra.eta_to_pandharpur_minutes || 45} mins
+      </div>
+    `);
+  }
+
+  // Draw breadcrumbs trail
+  if (yatra.recent_track && yatra.recent_track.length > 0) {
+    const latLngs = yatra.recent_track.map(t => [t.latitude, t.longitude]);
+    if (AppState.palkhiTrailPolyline) {
+      AppState.palkhiTrailPolyline.setLatLngs(latLngs);
+    } else {
+      AppState.palkhiTrailPolyline = L.polyline(latLngs, {
+        color: '#D98E2C',
+        weight: 4,
+        opacity: 0.8,
+        dashArray: '5, 5'
+      }).addTo(window.wariMap);
+    }
+  }
+}
+
+// Action Handlers
+window.handleAcknowledgeIncident = async function(incidentId, btn) {
+  await executeCommandAction('ACKNOWLEDGE_INCIDENT', {
+    incidentId: incidentId,
+    targetType: 'INCIDENT',
+    targetId: incidentId,
+    buttonEl: btn
+  });
+};
+
+window.handleDispatchSquadForIncident = async function(incidentId, btn) {
+  await executeCommandAction('DISPATCH_POLICE', {
+    incidentId: incidentId,
+    targetType: 'INCIDENT',
+    targetId: incidentId,
+    parameters: { squad_code: 'SQUAD-QRT-01', sector: 'Sector 3' },
+    buttonEl: btn
+  });
+};
+
+window.handleResolveIncident = async function(incidentId, btn) {
+  await executeCommandAction('RESOLVE_INCIDENT', {
+    incidentId: incidentId,
+    targetType: 'INCIDENT',
+    targetId: incidentId,
+    buttonEl: btn
+  });
+};
+
+window.handleVerifyFaceMatch = async function(matchId, caseId, btn) {
+  await executeCommandAction('VERIFY_FACE_MATCH', {
+    incidentId: caseId,
+    targetType: 'LOST_PERSON_MATCH',
+    targetId: matchId || caseId,
+    parameters: { case_id: caseId, status: 'VERIFIED' },
+    buttonEl: btn
+  });
+};
+
+window.handleDispatchReuniteVolunteer = async function(caseId, btn) {
+  await executeCommandAction('DISPATCH_VOLUNTEER', {
+    incidentId: caseId,
+    targetType: 'LOST_PERSON_CASE',
+    targetId: caseId,
+    parameters: { purpose: 'REUNIFICATION', station: 'Wakhri Desk' },
+    buttonEl: btn
+  });
+};
+
+window.handleApproveRouteDiversion = async function(routeId, suggestedStatus, btn) {
+  await executeCommandAction('DIVERT_ROUTE', {
+    targetType: 'ROUTE',
+    targetId: routeId,
+    parameters: { new_status: suggestedStatus || 'DIVERTED_PEDESTRIAN_ONLY' },
+    buttonEl: btn
+  });
+};
+
+window.handleDispatchRecommendedResource = async function(resourceId, targetId, btn) {
+  await executeCommandAction('DISPATCH_AMBULANCE', {
+    targetType: 'RESOURCE',
+    targetId: resourceId,
+    parameters: { target_location: targetId || 'Wakhri Emergency Camp' },
+    buttonEl: btn
+  });
+};
+
+// UI Interaction Bindings (Drawer, Modals, Map Modes)
+function setupUnifiedCommandUIEventListeners() {
+  // Notification Drawer
+  const notifBtn = document.getElementById('notifDrawerBtn');
+  const drawer = document.getElementById('notificationDrawer');
+  const backdrop = document.getElementById('notifDrawerBackdrop');
+  const closeBtn = document.getElementById('notifDrawerCloseBtn');
+  const markReadBtn = document.getElementById('markAllNotifsReadBtn');
+
+  function openDrawer() {
+    drawer?.classList.add('active');
+    backdrop?.classList.add('active');
+  }
+
+  function closeDrawer() {
+    drawer?.classList.remove('active');
+    backdrop?.classList.remove('active');
+  }
+
+  notifBtn?.addEventListener('click', openDrawer);
+  closeBtn?.addEventListener('click', closeDrawer);
+  backdrop?.addEventListener('click', closeDrawer);
+  markReadBtn?.addEventListener('click', () => {
+    const countBadge = document.getElementById('notifBadgeCount');
+    if (countBadge) countBadge.textContent = '0';
+    document.querySelectorAll('.drawer-notif-item').forEach(el => el.classList.remove('unread'));
+  });
+
+  // Map Modes Group
+  document.querySelectorAll('.map-mode-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.map-mode-btn').forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      AppState.activeMapMode = e.currentTarget.dataset.mode;
+      handleMapModeChange(AppState.activeMapMode);
+    });
+  });
+
+  // Layer Toggles
+  const layerBindings = [
+    { id: 'layerToggleYatra', layer: 'yatra' },
+    { id: 'layerToggleHeatmap', layer: 'heatmap' },
+    { id: 'layerToggleCctv', layer: 'cctv' },
+    { id: 'layerToggleIncidents', layer: 'incidents' },
+    { id: 'layerToggleMedical', layer: 'medical' },
+    { id: 'layerTogglePolice', layer: 'police' },
+    { id: 'layerToggleTankers', layer: 'tankers' },
+    { id: 'layerToggleRoutes', layer: 'routes' }
+  ];
+
+  layerBindings.forEach(({ id, layer }) => {
+    const cb = document.getElementById(id);
+    cb?.addEventListener('change', (e) => {
+      AppState.activeLayers[layer] = e.target.checked;
+      e.target.parentElement.classList.toggle('active', e.target.checked);
+      refreshMapLayerVisibility();
+    });
+  });
+
+  // Timeline Filter Group
+  document.querySelectorAll('.timeline-filter-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      document.querySelectorAll('.timeline-filter-btn').forEach(b => b.classList.remove('active'));
+      e.currentTarget.classList.add('active');
+      AppState.timelineFilter = e.currentTarget.dataset.filter;
+      if (AppState.commandPicture) {
+        renderIncidentTimeline(AppState.commandPicture.incident_timeline || []);
+      }
+    });
+  });
+
+  // Public Announcement Modal
+  const openAnnBtn = document.getElementById('openAnnouncementModalBtn');
+  const annModal = document.getElementById('announcementModalBackdrop');
+  const closeAnnBtn = document.getElementById('closeAnnouncementModalBtn');
+  const cancelAnnBtn = document.getElementById('cancelAnnouncementModalBtn');
+  const annForm = document.getElementById('announcementForm');
+
+  openAnnBtn?.addEventListener('click', () => {
+    if (annModal) annModal.style.display = 'flex';
+  });
+
+  const closeAnnModal = () => {
+    if (annModal) annModal.style.display = 'none';
+  };
+
+  closeAnnBtn?.addEventListener('click', closeAnnModal);
+  cancelAnnBtn?.addEventListener('click', closeAnnModal);
+
+  annForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msgMr = document.getElementById('annMsgMr')?.value;
+    const msgEn = document.getElementById('annMsgEn')?.value;
+    const category = document.getElementById('annCategory')?.value || 'CROWD_SAFETY';
+    const priority = document.getElementById('annPriority')?.value || 'HIGH';
+
+    try {
+      const ann = await apiRequest('/announcements', {
+        method: 'POST',
+        body: {
+          message_mr: msgMr,
+          message_en: msgEn,
+          category: category,
+          priority: priority
+        }
+      });
+
+      // Automatically broadcast if admin/commander
+      await apiRequest(`/announcements/${ann.id}/broadcast`, { method: 'POST' });
+      
+      const ticker = document.getElementById('activeBroadcastText');
+      if (ticker) ticker.textContent = msgMr;
+
+      appendTickerEvent(`[PA BROADCAST] ${msgMr}`);
+      closeAnnModal();
+      annForm.reset();
+      alert('Announcement successfully queued & broadcast across temple loudspeakers and citizen portal!');
+    } catch (err) {
+      alert(`Announcement failed: ${err.message}`);
+    }
+  });
+}
+
+function handleMapModeChange(mode) {
+  if (!window.wariMap) return;
+  
+  if (mode === 'YATRA' && AppState.palkhiMarker) {
+    window.wariMap.setView(AppState.palkhiMarker.getLatLng(), 13);
+  } else if (mode === 'TRAFFIC' || mode === 'OPERATIONAL') {
+    window.wariMap.setView([17.7500, 75.2500], 10);
+  }
+}
+
+function refreshMapLayerVisibility() {
+  if (AppState.palkhiMarker) {
+    if (AppState.activeLayers.yatra) {
+      if (!window.wariMap.hasLayer(AppState.palkhiMarker)) AppState.palkhiMarker.addTo(window.wariMap);
+    } else {
+      if (window.wariMap.hasLayer(AppState.palkhiMarker)) window.wariMap.removeLayer(AppState.palkhiMarker);
+    }
+  }
+  if (AppState.palkhiTrailPolyline) {
+    if (AppState.activeLayers.yatra) {
+      if (!window.wariMap.hasLayer(AppState.palkhiTrailPolyline)) AppState.palkhiTrailPolyline.addTo(window.wariMap);
+    } else {
+      if (window.wariMap.hasLayer(AppState.palkhiTrailPolyline)) window.wariMap.removeLayer(AppState.palkhiTrailPolyline);
+    }
+  }
 }

@@ -5,10 +5,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.core.rbac import get_current_user
 from app.models.user import User
-from app.schemas.dashboard import CorridorRouteSegment, DashboardSummary, HeatRiskReadout, IncidentTickerItem
+from app.schemas.dashboard import CommandPictureOut, CorridorRouteSegment, DashboardSummary, HeatRiskReadout, IncidentTickerItem
 from app.services.dashboard_service import dashboard_service
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"], dependencies=[Depends(get_current_user)])
+
+
+@router.get("/command-picture", response_model=CommandPictureOut, summary="Get unified common operating picture")
+async def get_command_picture(db: AsyncSession = Depends(get_db)):
+    """
+    Returns full high-performance async aggregated command picture:
+    Summary statistics, live Yatra GPS telemetry, incident queue, medical alerts,
+    lost persons, candidate face matches, resource deployments, routes, recommendations,
+    incident timeline, notifications, and heatmap points.
+    """
+    return await dashboard_service.get_command_picture(db)
 
 
 @router.get("/summary", response_model=DashboardSummary, summary="Get real-time operational summary metrics")
