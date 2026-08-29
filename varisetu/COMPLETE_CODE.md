@@ -551,7 +551,7 @@ if __name__ == "__main__":
 ---
 
 ## 7. Frontend HTML Interface
-**File Path:** `Frontend/index.html` | **Lines of Code:** 1599
+**File Path:** `Frontend/index.html` | **Lines of Code:** 1610
 
 ```html
 <!DOCTYPE html>
@@ -882,54 +882,63 @@ if __name__ == "__main__":
 
 
         <div class="command-grid">
-          <!-- Left: CCTV surveillance tiles -->
-          <div class="cctv-column" id="cctvTilesContainer">
+          <!-- Left Column: NH-60 Corridor Map Legend & GIS Live Telemetry -->
+          <div class="map-legend-column">
             <div class="panel-header">
-              <span>CCTV FEEDS (SURVEILLANCE GRID)</span>
-              <span style="font-size:13.5px; color:var(--text-muted);"><span class="live-dot" style="display:inline-block; width:6px; height:6px; margin-right:4px;"></span>LIVE 60 FPS</span>
-            </div>
-
-            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-12" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
-              <canvas class="cctv-feed-canvas" id="canvas-CAM-12" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
-              <div class="cctv-overlay" style="z-index:3;">
-                <div class="cctv-top-info">
-                  <span class="cctv-cam-id">CAM-12</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
-                </div>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <i data-lucide="map" style="width:15px; height:15px; color:var(--maroon-primary);"></i>
+                <span>NH-60 CORRIDOR MAP LEGEND</span>
               </div>
             </div>
-
-            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-04" src="assets/videos/cctv_cam_04_pandharpur.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
-              <canvas class="cctv-feed-canvas" id="canvas-CAM-04" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
-              <div class="cctv-overlay" style="z-index:3;">
-                <div class="cctv-top-info">
-                  <span class="cctv-cam-id">CAM-04</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
-                </div>
+            <div class="map-legend-column-content">
+              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:2px; text-transform:uppercase; letter-spacing:0.4px;">
+                Route Sectors &amp; Crowd Density
               </div>
-            </div>
-
-            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-08" src="assets/videos/cctv_cam_08_saswad.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
-              <canvas class="cctv-feed-canvas" id="canvas-CAM-08" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
-              <div class="cctv-overlay" style="z-index:3;">
-                <div class="cctv-top-info">
-                  <span class="cctv-cam-id">CAM-08</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
-                </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#9A2525;"></div>
+                <span><strong>Sector 4:</strong> Sangamner ➔ Nashik (92%)</span>
               </div>
-            </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#B8551B;"></div>
+                <span><strong>Sector 3:</strong> Manchar ➔ Sangamner (82%)</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#D98E2C;"></div>
+                <span><strong>Sector 2:</strong> Bhosari ➔ Manchar (62%)</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#2E5B36;"></div>
+                <span><strong>Sector 1:</strong> Pune ➔ Bhosari (38%)</span>
+              </div>
 
-            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-01" src="assets/videos/cctv_cam_01_alandi.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
-              <canvas class="cctv-feed-canvas" id="canvas-CAM-01" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
-              <div class="cctv-overlay" style="z-index:3;">
-                <div class="cctv-top-info">
-                  <span class="cctv-cam-id">CAM-01</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
-                </div>
+              <div style="height:1px; background:var(--border-main); margin:6px 0;"></div>
+
+              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:2px; text-transform:uppercase; letter-spacing:0.4px;">
+                Live Procession &amp; Field Assets
+              </div>
+              <div class="map-legend-item">
+                <i data-lucide="navigation" style="width:14px; height:14px; color:#D98E2C;"></i>
+                <span><strong>Live Palkhi Lead:</strong> Km 84 Narayangaon</span>
+              </div>
+              <div class="map-legend-item">
+                <span style="font-size:16.5px;">🚩</span>
+                <span>वारकरी दिंडी पदयात्रा (Procession on Route)</span>
+              </div>
+              <div class="map-legend-item">
+                <span style="font-size:16.5px;">🚑</span>
+                <span>Mobile Medical Vans (MV-01/02/03)</span>
+              </div>
+              <div class="map-legend-item">
+                <span style="font-size:16.5px;">💧</span>
+                <span>Water Tankers (WT-09/04)</span>
+              </div>
+              <div class="map-legend-item">
+                <span style="font-size:16.5px;">🚓</span>
+                <span>MahaPolice Patrol Squad (PS-14)</span>
+              </div>
+              <div class="map-legend-item">
+                <span style="font-size:16.5px;">🍲</span>
+                <span>Annadanam Food Distribution Van</span>
               </div>
             </div>
           </div>
@@ -961,58 +970,13 @@ if __name__ == "__main__":
             </div>
 
             <div id="routeMap"></div>
-
-            <div class="map-controls-overlay">
-              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px; font-size:13.5px;">NH-60 CORRIDOR MAP LEGEND</div>
-              <div class="map-legend-item">
-                <div class="legend-color-box" style="background:#9A2525;"></div>
-                <span>Sector 4 (Sangamner ➔ Nashik 92%)</span>
-              </div>
-              <div class="map-legend-item">
-                <div class="legend-color-box" style="background:#B8551B;"></div>
-                <span>Sector 3 (Manchar ➔ Sangamner 82%)</span>
-              </div>
-              <div class="map-legend-item">
-                <div class="legend-color-box" style="background:#D98E2C;"></div>
-                <span>Sector 2 (Bhosari ➔ Manchar 62%)</span>
-              </div>
-              <div class="map-legend-item">
-                <div class="legend-color-box" style="background:#2E5B36;"></div>
-                <span>Sector 1 (Pune ➔ Bhosari 38%)</span>
-              </div>
-              <div class="map-legend-item" style="margin-top:3px;">
-                <i data-lucide="navigation" style="width:12px; height:12px; color:#D98E2C;"></i>
-                <span>Live Palkhi Lead (Km 84 Narayangaon)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚩</span>
-                <span>वारकरी दिंडी पदयात्रा (Procession on Route)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚑</span>
-                <span>Mobile Medical Vans (MV-01/02/03)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">💧</span>
-                <span>Water Tankers (WT-09/04)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚓</span>
-                <span>MahaPolice Patrol Squad (PS-14)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">🍲</span>
-                <span>Annadanam Food Distribution Van</span>
-              </div>
-            </div>
           </div>
-
 
           <!-- Right Column: Plain Stat Panels -->
           <div class="right-col-panel">
             <div class="stat-panel-group">
               <div class="govt-stat-box">
-                <div class="stat-label">Lost & Found Desk</div>
+                <div class="stat-label">Lost &amp; Found Desk</div>
                 <div class="stat-value" id="statLostCases">3 Active Cases</div>
                 <div class="stat-subtext">Automated facial matching engine active</div>
               </div>
@@ -1020,16 +984,16 @@ if __name__ == "__main__":
               <div class="govt-stat-box" style="border-left-color: var(--status-red);">
                 <div class="stat-label">Medical Emergencies</div>
                 <div class="stat-value" id="statMedicalAlerts" style="color:var(--status-red);">2 Active Alerts</div>
-                <div class="stat-subtext">Sector 3 (Wakhri) & Sector 5 (Pandharpur)</div>
+                <div class="stat-subtext">Sector 3 (Wakhri) &amp; Sector 5 (Pandharpur)</div>
               </div>
 
               <div class="govt-stat-box" style="border-left-color: var(--status-green);">
                 <div class="stat-label">Resource Deployment</div>
                 <div class="stat-value" id="statResources" style="color:var(--status-green);">3 / 7 Deployed</div>
-                <div class="stat-subtext">Tankers, Ambulances & Patrol Squads stationed</div>
+                <div class="stat-subtext">Tankers, Ambulances &amp; Patrol Squads stationed</div>
               </div>
 
-              <!-- Public PA Broadcast (Replaced Main Palkhi Status) -->
+              <!-- Public PA Broadcast -->
               <div class="govt-stat-box" style="border-left-color: var(--maroon-primary); padding: 8px 10px; display:flex; flex-direction:column; justify-content:space-between;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
                   <div style="font-weight:700; font-size:14.5px; color:var(--maroon-primary); display:flex; align-items:center; gap:4px;">
@@ -1050,26 +1014,73 @@ if __name__ == "__main__":
                     <strong style="color:var(--maroon-primary);">Active Broadcast:</strong> <span id="activeBroadcastText">वाखरी फाटा येथे पर्यायी पायी मार्गाचा वापर करावा.</span>
                   </div>
                 </div>
-                <div class="stat-subtext" style="font-size:12.5px; color:var(--text-muted);">Real-time crowd alert & route advisory system</div>
+                <div class="stat-subtext" style="font-size:12.5px; color:var(--text-muted);">Real-time crowd alert &amp; route advisory system</div>
               </div>
-
-              <!-- Photo Texture Box / Live Flow Video -->
-              <div class="panel-card" style="padding:8px;" id="pilgrimFieldCard" data-cam-code="PHOTO-01" title="Click for live HD stream & telemetry">
-                <div style="font-size:13.5px; font-weight:600; color:var(--text-muted); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
-                  <span>PILGRIM FLOW LIVE STREAM</span>
-                  <span style="color:#2E7D32; font-family:var(--font-mono); font-size:12.5px;"><span class="live-dot" style="display:inline-block; width:5px; height:5px; margin-right:3px;"></span>LIVE 60 FPS</span>
-                </div>
-                <div style="position:relative; width:100%; height:110px; overflow:hidden; border:1px solid var(--border-main); cursor:pointer;">
-                  <video class="cctv-feed-video" id="video-PHOTO-01" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
-                  <canvas class="cctv-feed-canvas" id="canvas-PHOTO-01" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
-
-                </div>
-              </div></div>
             </div>
           </div>
         </div>
 
+        <!-- Horizontal CCTV Surveillance Feeds (Below Map) -->
+        <div class="panel-card cctv-horizontal-panel" id="cctvTilesContainer">
+          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <i data-lucide="video" style="width:16px; height:16px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:15.5px;">LIVE CCTV SURVEILLANCE &amp; CHECKPOINT FEEDS (4 CHANNELS)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:13.5px; color:var(--text-muted);"><span class="live-dot" style="display:inline-block; width:6px; height:6px; margin-right:4px;"></span>LIVE 60 FPS • 1080p AI SURVEILLANCE</span>
+            </div>
+          </div>
+          <div class="cctv-horizontal-grid">
+            <!-- CAM-12 (Wakhri Phata Junction) -->
+            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for live HD stream & telemetry">
+              <video class="cctv-feed-video" id="video-CAM-12" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-12" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+              <div class="cctv-overlay" style="z-index:3;">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-12</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+              </div>
+            </div>
 
+            <!-- CAM-04 (Pandharpur Chowk) -->
+            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04" title="Click for live HD stream & telemetry">
+              <video class="cctv-feed-video" id="video-CAM-04" src="assets/videos/cctv_cam_04_pandharpur.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-04" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+              <div class="cctv-overlay" style="z-index:3;">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-04</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CAM-08 (Saswad Corridor) -->
+            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08" title="Click for live HD stream & telemetry">
+              <video class="cctv-feed-video" id="video-CAM-08" src="assets/videos/cctv_cam_08_saswad.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-08" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+              <div class="cctv-overlay" style="z-index:3;">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-08</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CAM-01 (Alandi Ghat Rd) -->
+            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01" title="Click for live HD stream & telemetry">
+              <video class="cctv-feed-video" id="video-CAM-01" src="assets/videos/cctv_cam_01_alandi.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-01" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+              <div class="cctv-overlay" style="z-index:3;">
+                <div class="cctv-top-info">
+                  <span class="cctv-cam-id">CAM-01</span>
+                  <span class="cctv-timestamp">LIVE STREAM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Bottom Strip: Incident Log Ticker -->
         <div class="incident-ticker-bar">
@@ -2159,7 +2170,7 @@ if __name__ == "__main__":
 ---
 
 ## 8. Frontend Styling Design System
-**File Path:** `Frontend/styles.css` | **Lines of Code:** 3042
+**File Path:** `Frontend/styles.css` | **Lines of Code:** 3109
 
 ```css
 /* WariSetu AI (v2 Light Theme - Grounded Government Portal Specification) */
@@ -5205,6 +5216,73 @@ body {
 
 
 
+
+/* Leaflet zoom controls positioning to prevent overlapping corridor HUD */
+.map-container .leaflet-top.leaflet-left {
+  top: 68px !important;
+  left: 10px !important;
+}
+
+.map-legend-column {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 220px);
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.map-legend-column .panel-header {
+  border-bottom: 1px solid var(--border-main);
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 15.5px;
+}
+
+.map-legend-column-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14.5px;
+  overflow-y: auto;
+}
+
+.cctv-horizontal-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.cctv-horizontal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.cctv-horizontal-grid .cctv-tile {
+  height: 150px;
+  border-radius: 2px;
+}
+
+@media (max-width: 1100px) {
+  .cctv-horizontal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .cctv-horizontal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 ```
 
 ---
@@ -7134,7 +7212,7 @@ function renderCrowdZones(zones) {
 
 /* ==================== LOST & FOUND MANAGEMENT ==================== */
 let lostPersonsCurrentPage = 1;
-const LOST_PERSONS_PER_PAGE = 15;
+const LOST_PERSONS_PER_PAGE = 5;
 let lostPersonsSearchQuery = '';
 let lostPersonsStatusFilter = 'ALL';
 let lostPersonsFilterInitialized = false;

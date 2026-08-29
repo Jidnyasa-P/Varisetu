@@ -3040,3 +3040,70 @@ body {
 }
 
 
+
+
+/* Leaflet zoom controls positioning to prevent overlapping corridor HUD */
+.map-container .leaflet-top.leaflet-left {
+  top: 68px !important;
+  left: 10px !important;
+}
+
+.map-legend-column {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 220px);
+  min-height: 520px;
+  overflow: hidden;
+}
+
+.map-legend-column .panel-header {
+  border-bottom: 1px solid var(--border-main);
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 15.5px;
+}
+
+.map-legend-column-content {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14.5px;
+  overflow-y: auto;
+}
+
+.cctv-horizontal-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.cctv-horizontal-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.cctv-horizontal-grid .cctv-tile {
+  height: 150px;
+  border-radius: 2px;
+}
+
+@media (max-width: 1100px) {
+  .cctv-horizontal-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .cctv-horizontal-grid {
+    grid-template-columns: 1fr;
+  }
+}

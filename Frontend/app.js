@@ -1919,7 +1919,7 @@ function renderCrowdZones(zones) {
 
 /* ==================== LOST & FOUND MANAGEMENT ==================== */
 let lostPersonsCurrentPage = 1;
-const LOST_PERSONS_PER_PAGE = 15;
+const LOST_PERSONS_PER_PAGE = 5;
 let lostPersonsSearchQuery = '';
 let lostPersonsStatusFilter = 'ALL';
 let lostPersonsFilterInitialized = false;
