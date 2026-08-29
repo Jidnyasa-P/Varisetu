@@ -17,3 +17,11 @@ venv/
 .DS_Store
 dist/
 *.log
+
+# Local environment secret keys
+.env
+.env.local
+
+# ML artifacts (still ignore these; HF or Docker will handle them)
+artifacts/
+VariSetu/
