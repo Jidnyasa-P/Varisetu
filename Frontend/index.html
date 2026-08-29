@@ -1058,7 +1058,7 @@
 
           <!-- Softphone Controls Bar -->
           <div class="softphone-controls-row">
-            <div style="display:flex; gap:8px; align-items:center;">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
               <button type="button" class="softphone-btn record-mic" id="toggleLiveMicBtn">
                 <i data-lucide="mic" style="width:13px; height:13px;"></i>
                 <span id="micBtnText">🎙️ Start Live Mic Voice</span>
@@ -1071,6 +1071,14 @@
                 <i data-lucide="pause" style="width:13px; height:13px;"></i>
                 <span id="holdBtnText">⏸️ Hold</span>
               </button>
+
+              <!-- Language Selector for Speech Recognition -->
+              <div class="speech-lang-pill-group" style="display:flex; align-items:center; gap:4px; margin-left:4px;" id="speechLangSelector">
+                <span style="font-size:10px; color:#5D4037; font-weight:700;">भाषा (Voice):</span>
+                <button type="button" class="speech-lang-btn active" data-lang="mr-IN" style="font-size:10px; padding:3px 8px; border-radius:12px; border:1px solid #D98E2C; background:#D98E2C; color:#FFF; font-weight:700; cursor:pointer;">मराठी</button>
+                <button type="button" class="speech-lang-btn" data-lang="hi-IN" style="font-size:10px; padding:3px 8px; border-radius:12px; border:1px solid #D8D1C5; background:#FFF; color:#5D4037; font-weight:700; cursor:pointer;">हिन्दी</button>
+                <button type="button" class="speech-lang-btn" data-lang="en-IN" style="font-size:10px; padding:3px 8px; border-radius:12px; border:1px solid #D8D1C5; background:#FFF; color:#5D4037; font-weight:700; cursor:pointer;">English</button>
+              </div>
             </div>
 
             <div style="display:flex; gap:8px; align-items:center;">

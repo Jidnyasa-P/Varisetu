@@ -24,7 +24,7 @@ router = APIRouter(prefix="/helpline", tags=["Helpline AI & Calling"], dependenc
 
 
 class CallSimulationRequest(BaseModel):
-    scenario_id: Optional[str] = "marathi_senior_wakhri"
+    scenario_id: Optional[str] = None
     custom_text: Optional[str] = None
     language: Optional[str] = "mr"
 

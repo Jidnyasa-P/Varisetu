@@ -3586,6 +3586,8 @@ function setupHelplineCallingInterface() {
 
   generateCaseBtn?.addEventListener('click', handleGenerateCaseFromCall);
   scanCCTVBtn?.addEventListener('click', handleScanCCTVFeeds);
+
+  setupHelplineLanguagePills();
 }
 
 function toggleApiSuggestions(show) {
@@ -3595,6 +3597,32 @@ function toggleApiSuggestions(show) {
   if (show) {
     section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
+}
+
+let liveFinalTranscript = '';
+let liveTranslateDebounceTimer = null;
+let lastTranslatedQuery = '';
+let activeVoiceLang = 'mr-IN';
+
+function setupHelplineLanguagePills() {
+  document.querySelectorAll('.speech-lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.speech-lang-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = '#FFF';
+        b.style.color = '#5D4037';
+        b.style.borderColor = '#D8D1C5';
+      });
+      btn.classList.add('active');
+      btn.style.background = '#D98E2C';
+      btn.style.color = '#FFF';
+      btn.style.borderColor = '#D98E2C';
+      activeVoiceLang = btn.dataset.lang || 'mr-IN';
+      if (speechRecognizer) {
+        speechRecognizer.lang = activeVoiceLang;
+      }
+    });
+  });
 }
 
 function switchIntakeMode(mode) {
@@ -3608,21 +3636,25 @@ function switchIntakeMode(mode) {
   const textWrapper = document.getElementById('customTextInputWrapper');
   const toggleLiveMicBtn = document.getElementById('toggleLiveMicBtn');
   const sourceLabel = document.getElementById('visualizerAudioSource');
+  const nativeBox = document.getElementById('nativeTranscriptBox');
+  const englishBox = document.getElementById('englishTranscriptBox');
 
   [modeLiveMicBtn, modeOneWayBtn, modeSimulationBtn, modeCustomTextBtn].forEach(b => b?.classList.remove('active'));
 
-  if (mode === 'mic') {
-    modeLiveMicBtn?.classList.add('active');
+  if (mode === 'mic' || mode === 'oneway') {
+    if (mode === 'mic') modeLiveMicBtn?.classList.add('active');
+    if (mode === 'oneway') modeOneWayBtn?.classList.add('active');
+
     if (simWrapper) simWrapper.style.display = 'none';
     if (textWrapper) textWrapper.style.display = 'none';
     if (toggleLiveMicBtn) toggleLiveMicBtn.style.display = 'inline-flex';
-    if (sourceLabel) sourceLabel.textContent = 'Live Microphone (Two-Way Voice)';
-  } else if (mode === 'oneway') {
-    modeOneWayBtn?.classList.add('active');
-    if (simWrapper) simWrapper.style.display = 'none';
-    if (textWrapper) textWrapper.style.display = 'none';
-    if (toggleLiveMicBtn) toggleLiveMicBtn.style.display = 'inline-flex';
-    if (sourceLabel) sourceLabel.textContent = 'Live 1-Way Distress Voice Call (Transcribing & Translating...)';
+    if (sourceLabel) sourceLabel.textContent = 'Live Microphone (Citizen Voice Intake)';
+
+    liveFinalTranscript = '';
+    lastTranslatedQuery = '';
+    if (nativeBox) nativeBox.innerHTML = `<em>🎙️ [Live Mic Active] Speak into microphone in Marathi, Hindi, or English...</em>`;
+    if (englishBox) englishBox.innerHTML = `<em>🤖 [AI Neural Translation] Real-time English translation will appear as you speak...</em>`;
+
     if (!isMicRecording) startLiveMicRecording();
   } else if (mode === 'sim') {
     modeSimulationBtn?.classList.add('active');
@@ -3696,38 +3728,70 @@ async function startLiveMicRecording() {
     // 2. Setup SpeechRecognition (Web Speech API)
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
+      if (speechRecognizer) {
+        try { speechRecognizer.stop(); } catch {}
+      }
+
       speechRecognizer = new SpeechRecognition();
       speechRecognizer.continuous = true;
       speechRecognizer.interimResults = true;
-      speechRecognizer.lang = 'mr-IN'; // Default to Marathi with Hindi fallback
+      speechRecognizer.lang = activeVoiceLang || 'mr-IN';
 
       speechRecognizer.onresult = (event) => {
-        let fullTranscript = '';
-        for (let i = 0; i < event.results.length; i++) {
-          fullTranscript += event.results[i][0].transcript + ' ';
+        let interim = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const piece = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            liveFinalTranscript += (liveFinalTranscript ? ' ' : '') + piece.trim();
+          } else {
+            interim += piece;
+          }
         }
 
-        const nativeBox = document.getElementById('nativeTranscriptBox');
-        if (nativeBox) {
-          nativeBox.innerHTML = `"${fullTranscript.trim()}"<span class="live-speech-typing-cursor"></span>`;
-        }
+        const currentSpeech = (liveFinalTranscript + (interim ? ' ' + interim : '')).trim();
 
-        // Live translate & extract
-        handleLiveVoiceTranslation(fullTranscript.trim(), 'mr');
+        if (currentSpeech) {
+          const nativeBox = document.getElementById('nativeTranscriptBox');
+          if (nativeBox) {
+            nativeBox.innerHTML = `"${escapeHtml(currentSpeech)}"<span class="live-speech-typing-cursor"></span>`;
+          }
+
+          // Debounce translation call to backend neural engine
+          if (currentSpeech !== lastTranslatedQuery && currentSpeech.length >= 2) {
+            if (liveTranslateDebounceTimer) clearTimeout(liveTranslateDebounceTimer);
+            liveTranslateDebounceTimer = setTimeout(() => {
+              lastTranslatedQuery = currentSpeech;
+              const langCode = activeVoiceLang.startsWith('hi') ? 'hi' : (activeVoiceLang.startsWith('en') ? 'en' : 'mr');
+              handleLiveVoiceTranslation(currentSpeech, langCode);
+            }, 260);
+          }
+        }
       };
 
       speechRecognizer.onerror = (err) => {
-        console.debug('[VariSetu] Speech recognition note:', err.error);
+        console.debug('[VariSetu] Speech recognition status:', err.error);
+        if (err.error === 'no-speech' && isMicRecording && speechRecognizer) {
+          try { speechRecognizer.start(); } catch {}
+        }
       };
 
-      speechRecognizer.start();
+      speechRecognizer.onend = () => {
+        if (isMicRecording && speechRecognizer) {
+          try { speechRecognizer.start(); } catch {}
+        }
+      };
+
+      try {
+        speechRecognizer.start();
+      } catch (err) {
+        console.debug('[VariSetu] SpeechRecognizer start notice:', err);
+      }
     } else {
       console.warn('[VariSetu] Web Speech Recognition not supported in this browser. Voice waveform active.');
     }
 
   } catch (err) {
-    alert(`Microphone permission needed: ${err.message}
-(Falling back to simulated call input)`);
+    alert(`Microphone permission needed: ${err.message}\n(Falling back to simulated call input)`);
     switchIntakeMode('sim');
   }
 }
@@ -3770,11 +3834,11 @@ function stopLiveMicRecording() {
 }
 
 async function handleLiveVoiceTranslation(text, lang = 'mr') {
-  if (!text || text.length < 3) return;
+  if (!text || text.length < 2) return;
 
   const englishBox = document.getElementById('englishTranscriptBox');
   if (englishBox) {
-    englishBox.innerHTML = `<em>Translating real-time voice speech...</em>`;
+    englishBox.innerHTML = `<em>Translating "${escapeHtml(text.slice(0, 30))}..."</em>`;
   }
 
   try {
@@ -3805,7 +3869,7 @@ async function handleLiveVoiceTranslation(text, lang = 'mr') {
     if (repAge && attrs.age) repAge.value = attrs.age;
     if (repGender && attrs.gender) repGender.value = attrs.gender;
     if (repLocation && attrs.last_seen_location) repLocation.value = attrs.last_seen_location;
-    if (repNotes) repNotes.value = `Live citizen voice intake: "${text}". Urgent CCTV scan alerted.`;
+    if (repNotes) repNotes.value = `Live citizen voice intake: "${text}". Real-time translation: "${res.english_translation || ''}"`;
 
   } catch (err) {
     console.debug('[VariSetu] Real-time translation fallback:', err);
@@ -3822,7 +3886,8 @@ async function handleCustomTextIntake() {
   const nativeBox = document.getElementById('nativeTranscriptBox');
   if (nativeBox) nativeBox.textContent = `"${input}"`;
 
-  await handleLiveVoiceTranslation(input, 'mr');
+  const langCode = activeVoiceLang.startsWith('hi') ? 'hi' : (activeVoiceLang.startsWith('en') ? 'en' : 'mr');
+  await handleLiveVoiceTranslation(input, langCode);
   alert('Citizen message successfully translated! The Operator Report form below has been populated.');
 }
 
