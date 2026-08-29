@@ -91,13 +91,15 @@ async def helpline_websocket_endpoint(websocket: WebSocket, session_id: str):
                 except Exception:
                     continue
 
-                action = payload.get("action", "")
+                action = payload.get("action") or payload.get("type", "")
 
                 if action == "start":
                     if session:
                         session.start_call()
                         await helpline_manager.broadcast_event(session_id, {
                             "event": "connection_state",
+                            "type": "state_change",
+                            "state": session.call_state.value,
                             "data": {"session_id": session_id, "call_state": session.call_state.value}
                         })
 
@@ -115,30 +117,51 @@ async def helpline_websocket_endpoint(websocket: WebSocket, session_id: str):
                             except Exception as e:
                                 logger.warning(f"[MEDIA] Error decoding base64 audio chunk: {e}")
 
-                elif action == "pause" or action == "hold":
+                elif action in ("pause_listening", "mute_listening"):
+                    if session:
+                        session.pause_listening()
+                        await helpline_manager.broadcast_event(session_id, {
+                            "event": "listening_paused",
+                            "data": {"session_id": session_id, "is_paused": True}
+                        })
+
+                elif action in ("resume_listening", "unmute_listening"):
+                    if session:
+                        session.resume_listening()
+                        await helpline_manager.broadcast_event(session_id, {
+                            "event": "listening_resumed",
+                            "data": {"session_id": session_id, "is_paused": False}
+                        })
+
+                elif action in ("pause", "hold"):
                     if session:
                         session.hold_call()
                         await helpline_manager.broadcast_event(session_id, {
                             "event": "connection_state",
+                            "type": "state_change",
+                            "state": session.call_state.value,
                             "data": {"session_id": session_id, "call_state": session.call_state.value}
                         })
 
-                elif action == "resume" or action == "unhold":
+                elif action in ("resume", "unhold"):
                     if session:
                         session.resume_call()
                         await helpline_manager.broadcast_event(session_id, {
                             "event": "connection_state",
+                            "type": "state_change",
+                            "state": session.call_state.value,
                             "data": {"session_id": session_id, "call_state": session.call_state.value}
                         })
 
                 elif action == "heartbeat":
                     await websocket.send_json({"event": "heartbeat_ack", "data": {"session_id": session_id, "server_time": datetime.now(timezone.utc).isoformat()}})
 
-                elif action == "end":
+                elif action in ("end", "end_call", "hangup"):
                     if session:
-                        session.end_call()
+                        await session.end_call()
                         await helpline_manager.broadcast_event(session_id, {
                             "event": "session_ended",
+                            "type": "session_ended",
                             "data": {"session_id": session_id, "call_state": session.call_state.value, "duration_seconds": session.duration_seconds}
                         })
                     break
@@ -291,9 +314,10 @@ async def end_call_session(
 ):
     session = await helpline_manager.get_session(session_id)
     if session:
-        session.end_call()
+        await session.end_call()
         await helpline_manager.broadcast_event(session_id, {
             "event": "session_ended",
+            "type": "session_ended",
             "data": {"session_id": session_id, "call_state": session.call_state.value, "duration_seconds": session.duration_seconds}
         })
 

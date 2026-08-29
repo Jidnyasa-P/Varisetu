@@ -5252,7 +5252,7 @@ body {
 ---
 
 ## 9. Frontend Application & CCTV Engine
-**File Path:** `Frontend/app.js` | **Lines of Code:** 5751
+**File Path:** `Frontend/app.js` | **Lines of Code:** 5668
 
 ```javascript
 /* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Private Command Center Logic & Realtime Client */
@@ -9608,6 +9608,7 @@ let callTimerInterval = null;
 let currentScenarioIndex = 0;
 let isSpeakerEnabled = true;
 let isCallHeld = false;
+let isListeningPaused = false;
 let streamingTypingTimer = null;
 
 // ==========================================================================
@@ -9626,10 +9627,6 @@ let micAnimFrameId = null;
 let isMicRecording = false;
 let currentIntakeMode = 'mic'; // 'mic' | 'sim' | 'text'
 let activeVoiceLang = 'mr-IN';
-let speechRecognizer = null;
-let speechRestartTimer = null;
-let speechKeepaliveInterval = null;
-let speechRestartAttempts = 0;
 
 let clientVAD = {
   noiseFloor: 0.01,
@@ -9854,14 +9851,7 @@ function setupHelplineLanguagePills() {
       btn.style.color = '#FFF';
       btn.style.borderColor = '#D98E2C';
       activeVoiceLang = btn.dataset.lang || 'mr-IN';
-
-      if (speechRecognizer) {
-        speechRecognizer.lang = activeVoiceLang;
-        if (isMicRecording) {
-          try { speechRecognizer.stop(); } catch {}
-          safeRestartSpeechRecognition();
-        }
-      }
+      console.log('[VariSetu Helpline] Active speech intake language set to:', activeVoiceLang);
     });
   });
 }
@@ -9952,7 +9942,7 @@ async function startLiveMicRecording() {
     if (nativeList) nativeList.innerHTML = '';
     if (englishList) englishList.innerHTML = '';
 
-    // Initialize Web Audio MediaStream
+    // Initialize Web Audio MediaStream (16kHz preferred, mono, echoCancellation)
     micMediaStream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
@@ -9971,46 +9961,72 @@ async function startLiveMicRecording() {
     micAnalyser.fftSize = 64;
     sourceNode.connect(micAnalyser);
 
-    // Setup ScriptProcessorNode for raw PCM16 extraction (buffer size 4096)
-    const bufferSize = 4096;
-    micProcessorNode = micAudioContext.createScriptProcessor(bufferSize, 1, 1);
-    sourceNode.connect(micProcessorNode);
-    micProcessorNode.connect(micAudioContext.destination);
-
     // Open Real-time WebSocket connection to backend
     connectHelplineWebSocket(callSessionId);
 
-    // Audio Processing callback: Downsample to 16kHz & convert Float32 -> PCM16
-    const inputSampleRate = micAudioContext.sampleRate;
-    const targetSampleRate = 16000;
+    // Setup AudioWorklet for 16kHz PCM16 extraction
+    let workletLoaded = false;
+    try {
+      if (micAudioContext.audioWorklet) {
+        await micAudioContext.audioWorklet.addModule('assets/pcm-worklet.js');
+        const pcmNode = new AudioWorkletNode(micAudioContext, 'pcm-processor');
+        sourceNode.connect(pcmNode);
+        pcmNode.connect(micAudioContext.destination);
 
-    micProcessorNode.onaudioprocess = (e) => {
-      if (!isMicRecording || isCallHeld) return;
-
-      const inputData = e.inputBuffer.getChannelData(0);
-
-      // Downsample to 16kHz PCM16
-      const pcm16Buffer = resampleAndConvertToPCM16(inputData, inputSampleRate, targetSampleRate);
-      if (!pcm16Buffer || pcm16Buffer.byteLength === 0) return;
-
-      // Compute client-side RMS Energy for VAD & Meter
-      const rms = calculateRMS(inputData);
-      updateClientVAD(rms);
-
-      // Stream binary PCM16 frame over WebSocket
-      if (callWebSocket && callWebSocket.readyState === WebSocket.OPEN) {
-        pcmSequenceNum++;
-        callWebSocket.send(pcm16Buffer);
+        pcmNode.port.onmessage = (event) => {
+          if (!isMicRecording || isCallHeld || isListeningPaused) return;
+          if (event.data && event.data.type === 'pcm16_chunk') {
+            const chunkBuffer = event.data.buffer;
+            if (callWebSocket && callWebSocket.readyState === WebSocket.OPEN) {
+              callWebSocket.send(chunkBuffer);
+            }
+          }
+        };
+        micProcessorNode = pcmNode;
+        workletLoaded = true;
+        console.log('[VariSetu Audio] Dedicated AudioWorklet (pcm-processor) registered and streaming.');
       }
-    };
+    } catch (workletErr) {
+      console.warn('[VariSetu Audio] AudioWorklet load failed, using ScriptProcessor fallback:', workletErr);
+    }
 
-    // Equalizer spectrum render loop
+    if (!workletLoaded) {
+      // ScriptProcessor fallback for older browsers
+      const bufferSize = 4096;
+      micProcessorNode = micAudioContext.createScriptProcessor(bufferSize, 1, 1);
+      sourceNode.connect(micProcessorNode);
+      micProcessorNode.connect(micAudioContext.destination);
+
+      const inputSampleRate = micAudioContext.sampleRate;
+      const targetSampleRate = 16000;
+
+      micProcessorNode.onaudioprocess = (e) => {
+        if (!isMicRecording || isCallHeld || isListeningPaused) return;
+        const inputData = e.inputBuffer.getChannelData(0);
+        const pcm16Buffer = resampleAndConvertToPCM16(inputData, inputSampleRate, targetSampleRate);
+        if (!pcm16Buffer || pcm16Buffer.byteLength === 0) return;
+
+        if (callWebSocket && callWebSocket.readyState === WebSocket.OPEN) {
+          pcmSequenceNum++;
+          callWebSocket.send(pcm16Buffer);
+        }
+      };
+    }
+
+    // Equalizer spectrum render loop & visualizer VAD metering
     const frequencyData = new Uint8Array(micAnalyser.frequencyBinCount);
     const container = document.getElementById('audioEqualizerBars');
+    const timeDomainData = new Float32Array(micAnalyser.fftSize);
 
     function renderLiveMicEqualizer() {
       if (!isMicRecording || !micAnalyser) return;
       micAnalyser.getByteFrequencyData(frequencyData);
+      micAnalyser.getFloatTimeDomainData(timeDomainData);
+
+      // Visual audio level meter
+      const rms = calculateRMS(timeDomainData);
+      updateClientVAD(rms);
+
       if (container) {
         const bars = container.querySelectorAll('.audio-bar');
         bars.forEach((bar, idx) => {
@@ -10027,13 +10043,9 @@ async function startLiveMicRecording() {
     if (micText) micText.textContent = '⏹️ Stop Live Mic';
     renderLiveMicEqualizer();
 
-    // Start Web Speech API as simultaneous client-side ASR assist
-    startWebSpeechAssist();
-
   } catch (err) {
     console.warn('[VariSetu] Live microphone error:', err);
-    alert(`Microphone access notice: ${err.message}
-Switching to Simulated Call scenario mode.`);
+    alert(`Microphone access notice: ${err.message}\nSwitching to Simulated Call scenario mode.`);
     switchIntakeMode('sim');
   }
 }
@@ -10063,30 +10075,33 @@ function connectHelplineWebSocket(sessionId) {
 
     callWebSocket.onerror = (err) => {
       console.warn('[VariSetu Helpline WS] Socket error:', err);
-      updateCallState('PROVIDER_DEGRADED', 'WebSocket degraded, using HTTP fallback');
+      updateCallState('PROVIDER_DEGRADED', 'WebSocket error');
     };
 
     callWebSocket.onclose = () => {
       console.log('[VariSetu Helpline WS] Connection closed.');
       if (isMicRecording) {
-        updateCallState('PROVIDER_DEGRADED', 'Reconnecting...');
+        updateCallState('PROVIDER_DEGRADED', 'Connection closed');
       }
     };
   } catch (wsErr) {
     console.warn('[VariSetu WS] WebSocket creation failed:', wsErr);
-    updateCallState('PROVIDER_DEGRADED', 'Using Web Speech fallback');
+    updateCallState('PROVIDER_DEGRADED', 'WebSocket unavailable');
   }
 }
 
 function handleWebSocketMessage(msg) {
   const msgType = msg.type || msg.event;
 
-  if (msgType === 'state_change') {
-    updateCallState(msg.state || msg.call_state);
-  } else if (msgType === 'vad_event') {
+  if (msgType === 'state_change' || msgType === 'connection_state') {
+    const newState = msg.state || (msg.data && msg.data.call_state);
+    if (newState) updateCallState(newState);
+
+  } else if (msgType === 'vad_event' || msgType === 'vad_started' || msgType === 'vad_stopped') {
     const vadFill = document.getElementById('vadMeterFill');
     const vadLabel = document.getElementById('vadStateLabel');
-    const isSpeaking = msg.is_speech || msg.vad_state === 'SPEAKING';
+    const isSpeaking = msg.is_speech || msgType === 'vad_started' || (msg.data && msg.data.call_state === 'SPEAKING');
+
     if (vadFill) vadFill.style.width = isSpeaking ? '85%' : '15%';
     if (vadLabel) {
       vadLabel.textContent = isSpeaking ? 'SPEAKING' : 'SILENCE';
@@ -10095,24 +10110,43 @@ function handleWebSocketMessage(msg) {
     if (isSpeaking && currentCallState !== 'OPERATOR_HOLD') {
       updateCallState('SPEAKING');
     }
-  } else if (msgType === 'interim_transcript') {
+
+  } else if (msgType === 'interim_transcript' || msgType === 'partial_transcript') {
     const nativeBox = document.getElementById('nativeTranscriptBox');
-    if (nativeBox && msg.transcript) {
-      nativeBox.innerHTML = `"${escapeHtml(msg.transcript)}"<span class="live-speech-typing-cursor"></span>`;
+    const text = msg.transcript || (msg.data && msg.data.transcript);
+    if (nativeBox && text) {
+      nativeBox.innerHTML = `"${escapeHtml(text)}"<span class="live-speech-typing-cursor"></span>`;
     }
-  } else if (msgType === 'final_segment') {
-    handleIncomingNativeSegment(msg.segment || msg);
-  } else if (msgType === 'translation_segment') {
-    handleIncomingTranslationSegment(msg.segment || msg);
+
+  } else if (msgType === 'final_segment' || msgType === 'transcript_final') {
+    const seg = msg.segment || (msg.data && msg.data.segment);
+    handleIncomingNativeSegment(seg);
+
+  } else if (msgType === 'translation_segment' || msgType === 'translation_final') {
+    const seg = msg.segment || (msg.data && msg.data.segment) || msg.data;
+    handleIncomingTranslationSegment(seg);
+
   } else if (msgType === 'attributes_updated') {
-    populateOperatorDossier(msg.attributes || {});
+    const attrs = msg.attributes || (msg.data && msg.data.extracted_attributes);
+    populateOperatorDossier(attrs);
+
+  } else if (msgType === 'provider_error') {
+    const errData = msg.data || msg;
+    console.warn('[VariSetu Speech Provider Error]:', errData);
+    if (errData.code === 'SPEECH_PROVIDER_UNCONFIGURED') {
+      alert('SPEECH PROVIDER NOT CONFIGURED: SARVAM_API_KEY is required for live streaming ASR. Switch to DEMO mode or Custom Text intake.');
+      updateCallState('PROVIDER_DEGRADED', 'SARVAM_API_KEY missing');
+    }
+
   } else if (msgType === 'session_ended') {
     updateCallState('CALL_ENDED');
   }
 }
 
 function handleIncomingNativeSegment(segment) {
-  if (!segment || !segment.text) return;
+  if (!segment) return;
+  const text = segment.text || segment.native_text;
+  if (!text) return;
 
   nativeSegments.push(segment);
   const list = document.getElementById('nativeTranscriptSegmentsList');
@@ -10124,21 +10158,23 @@ function handleIncomingNativeSegment(segment) {
     div.innerHTML = `
       <div class="transcript-segment-meta">
         <span>🗣️ Caller &bull; ${new Date().toLocaleTimeString()}</span>
-        <span>Confidence: ${Math.round((segment.confidence || 0.92) * 100)}%</span>
+        <span>Confidence: ${Math.round((segment.confidence || segment.asr_confidence || 0.94) * 100)}%</span>
       </div>
-      <div>${escapeHtml(segment.text)}</div>
+      <div>${escapeHtml(text)}</div>
     `;
     list.appendChild(div);
     list.scrollTop = list.scrollHeight;
   }
 
   if (nativeBox) {
-    nativeBox.innerHTML = `<em>"${escapeHtml(segment.text)}"</em>`;
+    nativeBox.innerHTML = `<em>"${escapeHtml(text)}"</em>`;
   }
 }
 
 function handleIncomingTranslationSegment(segment) {
-  if (!segment || !segment.english_text) return;
+  if (!segment) return;
+  const englishText = segment.english_text || segment.text;
+  const isUnavailable = !englishText || englishText === 'TRANSLATION TEMPORARILY UNAVAILABLE' || segment.status === 'UNAVAILABLE' || segment.status === 'ERROR';
 
   translationSegments.push(segment);
   const list = document.getElementById('englishTranslationSegmentsList');
@@ -10146,20 +10182,22 @@ function handleIncomingTranslationSegment(segment) {
 
   if (list) {
     const div = document.createElement('div');
-    div.className = 'transcript-segment-card english';
+    div.className = isUnavailable ? 'transcript-segment-card error' : 'transcript-segment-card english';
     div.innerHTML = `
       <div class="transcript-segment-meta">
         <span>🤖 AI Translation &bull; ${new Date().toLocaleTimeString()}</span>
-        <span>IndicTrans-v2</span>
+        <span>${isUnavailable ? '⚠️ Unavailable' : 'Sarvam Neural Translate'}</span>
       </div>
-      <div>${escapeHtml(segment.english_text)}</div>
+      <div style="${isUnavailable ? 'color: #C62828; font-style: italic;' : ''}">${escapeHtml(englishText || 'TRANSLATION TEMPORARILY UNAVAILABLE')}</div>
     `;
     list.appendChild(div);
     list.scrollTop = list.scrollHeight;
   }
 
   if (englishBox) {
-    englishBox.innerHTML = `"${escapeHtml(segment.english_text)}"`;
+    englishBox.innerHTML = isUnavailable
+      ? `<span style="color: #C62828; font-style: italic;">[Translation Temporarily Unavailable]</span>`
+      : `"${escapeHtml(englishText)}"`;
   }
 }
 
@@ -10227,133 +10265,13 @@ function calculateRMS(samples) {
 }
 
 function updateClientVAD(rms) {
-  clientVAD.energy = rms;
-  clientVAD.noiseFloor = clientVAD.noiseFloor * 0.95 + rms * 0.05;
-
-  const attackThreshold = Math.max(0.025, clientVAD.noiseFloor * 2.5);
-  const releaseThreshold = Math.max(0.015, clientVAD.noiseFloor * 1.5);
-
   const vadFill = document.getElementById('vadMeterFill');
-  const vadLabel = document.getElementById('vadStateLabel');
-
   const meterPct = Math.min(100, Math.round((rms / 0.15) * 100));
   if (vadFill) vadFill.style.width = `${meterPct}%`;
-
-  if (rms >= attackThreshold) {
-    clientVAD.speechFrames++;
-    clientVAD.silenceFrames = 0;
-    if (clientVAD.speechFrames >= 2 && !clientVAD.isSpeaking) {
-      clientVAD.isSpeaking = true;
-      if (vadLabel) {
-        vadLabel.textContent = 'SPEAKING';
-        vadLabel.style.color = '#D50000';
-      }
-      if (currentCallState !== 'OPERATOR_HOLD') {
-        updateCallState('SPEAKING');
-      }
-    }
-  } else if (rms <= releaseThreshold) {
-    clientVAD.silenceFrames++;
-    clientVAD.speechFrames = 0;
-    if (clientVAD.silenceFrames >= 4 && clientVAD.isSpeaking) {
-      clientVAD.isSpeaking = false;
-      if (vadLabel) {
-        vadLabel.textContent = 'SILENCE';
-        vadLabel.style.color = '#5D4037';
-      }
-      if (currentCallState === 'SPEAKING') {
-        updateCallState('SILENCE_DETECTED');
-      }
-    }
-  }
-}
-
-// --------------------------------------------------------------------------
-// Web Speech API Assistance (Client-side Dual ASR)
-// --------------------------------------------------------------------------
-function startWebSpeechAssist() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) return;
-
-  if (speechRecognizer) {
-    try { speechRecognizer.abort(); } catch {}
-  }
-
-  speechRecognizer = new SpeechRecognition();
-  speechRecognizer.continuous = true;
-  speechRecognizer.interimResults = true;
-  speechRecognizer.maxAlternatives = 1;
-  speechRecognizer.lang = activeVoiceLang || 'mr-IN';
-
-  let interimTranscriptAccumulator = '';
-
-  speechRecognizer.onresult = (event) => {
-    let interim = '';
-    let finalChunk = '';
-
-    for (let i = event.resultIndex; i < event.results.length; ++i) {
-      const piece = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalChunk += piece;
-      } else {
-        interim += piece;
-      }
-    }
-
-    if (interim) {
-      const nativeBox = document.getElementById('nativeTranscriptBox');
-      if (nativeBox) {
-        nativeBox.innerHTML = `"${escapeHtml(interim)}"<span class="live-speech-typing-cursor"></span>`;
-      }
-    }
-
-    if (finalChunk) {
-      const text = finalChunk.trim();
-      handleIncomingNativeSegment({
-        segment_id: 'seg-' + Date.now(),
-        text: text,
-        confidence: 0.94
-      });
-
-      // Dispatch neural translation request
-      const langCode = activeVoiceLang.startsWith('hi') ? 'hi' : (activeVoiceLang.startsWith('en') ? 'en' : 'mr');
-      handleLiveVoiceTranslation(text, langCode);
-    }
-  };
-
-  speechRecognizer.onerror = (err) => {
-    console.debug('[VariSetu SpeechRecognition] Error:', err.error);
-    if (isMicRecording) safeRestartSpeechRecognition();
-  };
-
-  speechRecognizer.onend = () => {
-    if (isMicRecording) safeRestartSpeechRecognition();
-  };
-
-  try {
-    speechRecognizer.start();
-  } catch (err) {
-    safeRestartSpeechRecognition();
-  }
-}
-
-function safeRestartSpeechRecognition() {
-  if (!isMicRecording) return;
-  if (speechRestartTimer) clearTimeout(speechRestartTimer);
-  speechRestartTimer = setTimeout(() => {
-    if (!isMicRecording || !speechRecognizer) return;
-    try {
-      speechRecognizer.start();
-    } catch {}
-  }, 100);
 }
 
 function stopLiveMicRecording() {
   isMicRecording = false;
-  if (speechRestartTimer) {
-    clearTimeout(speechRestartTimer);
-    speechRestartTimer = null;
-  }
   if (micAnimFrameId) {
     cancelAnimationFrame(micAnimFrameId);
     micAnimFrameId = null;
@@ -10372,12 +10290,11 @@ function stopLiveMicRecording() {
     micAudioContext.close();
     micAudioContext = null;
   }
-  if (speechRecognizer) {
-    try { speechRecognizer.stop(); } catch {}
-    speechRecognizer = null;
-  }
   if (callWebSocket && callWebSocket.readyState === WebSocket.OPEN) {
-    callWebSocket.close();
+    try {
+      callWebSocket.send(JSON.stringify({ type: 'end' }));
+      callWebSocket.close();
+    } catch {}
     callWebSocket = null;
   }
 
@@ -11384,7 +11301,7 @@ if __name__ == "__main__":
 ---
 
 ## 16. Backend Configuration & Settings
-**File Path:** `Backend/app/core/config.py` | **Lines of Code:** 97
+**File Path:** `Backend/app/core/config.py` | **Lines of Code:** 105
 
 ```python
 import os
@@ -11447,8 +11364,16 @@ class Settings(BaseSettings):
 
     SPEECH_PROVIDER: str = "mock"  # "sarvam", "groq", "mock"
     SARVAM_API_KEY: Optional[str] = None
-    SARVAM_MODEL: str = "saaras:v2"  # streaming realtime ASR
-    SARVAM_WS_URL: str = "wss://api.sarvam.ai/streaming"
+    SARVAM_MODEL: str = "saaras:v3"  # streaming realtime ASR
+    SARVAM_WS_URL: str = "wss://api.sarvam.ai/speech-to-text/ws"
+    SARVAM_SAMPLE_RATE: int = 16000
+    SARVAM_AUDIO_CODEC: str = "pcm_s16le"
+    SARVAM_VAD_SIGNALS: bool = True
+    SARVAM_HIGH_VAD_SENSITIVITY: bool = True
+    SARVAM_POSITIVE_SPEECH_THRESHOLD: Optional[float] = None
+    SARVAM_NEGATIVE_SPEECH_THRESHOLD: Optional[float] = None
+    SARVAM_MIN_SPEECH_FRAMES: Optional[int] = None
+    SARVAM_TRANSLATION_MODEL: str = "mayura:v1"
 
     GROQ_API_KEY: Optional[str] = None
     GROQ_TRANSLATION_MODEL: str = "whisper-large-v3"
@@ -14267,13 +14192,13 @@ class AnnouncementOut(AnnouncementBase):
 ---
 
 ## 56. Backend Helpline Call Manager & VAD
-**File Path:** `Backend/app/services/helpline_call_manager.py` | **Lines of Code:** 337
+**File Path:** `Backend/app/services/helpline_call_manager.py` | **Lines of Code:** 579
 
 ```python
 """
 Helpline Call Session Manager & Realtime Audio Ingestion Engine.
-Maintains authoritative server-side call state machine, VAD state, utterance segmentation,
-audio buffering with sequence validation, and WebSocket broadcasting.
+Maintains authoritative server-side call state machine, single authoritative ASR streaming
+with Sarvam Realtime WebSocket, VAD signal handling, natural pause resilience, and WebSocket broadcasting.
 """
 
 import asyncio
@@ -14294,6 +14219,15 @@ from app.core.config import settings
 from app.models.lost_person import CallState
 from app.schemas.helpline import TranscriptSegment
 from app.integrations.speech_adapter import speech_adapter
+from app.integrations.speech_provider import (
+    BaseSpeechProvider,
+    MockSpeechProvider,
+    SarvamRealtimeSpeechProvider,
+    SarvamStreamingSession,
+    SpeechProviderError,
+    SpeechProviderUnavailableError,
+    SpeechTranslationUnavailableError,
+)
 
 logger = logging.getLogger("varisetu.helpline.manager")
 
@@ -14301,7 +14235,14 @@ logger = logging.getLogger("varisetu.helpline.manager")
 class HelplineSession:
     """Stateful representation of an ongoing citizen helpline call session."""
 
-    def __init__(self, session_id: str, caller_name: str = "Citizen Caller", caller_phone: str = "+91-112", language: str = "mr", is_demo: bool = False):
+    def __init__(
+        self,
+        session_id: str,
+        caller_name: str = "Citizen Caller",
+        caller_phone: str = "+91-112",
+        language: str = "mr",
+        is_demo: bool = False
+    ):
         self.session_id = session_id
         self.caller_name = caller_name
         self.caller_phone = caller_phone
@@ -14317,6 +14258,7 @@ class HelplineSession:
         self.hold_duration_seconds = 0
         self._hold_start_time: Optional[float] = None
         self._call_start_time: Optional[float] = None
+        self.is_paused: bool = False
 
         # Audio Stream & VAD State
         self.audio_buffer: bytearray = bytearray()
@@ -14344,14 +14286,251 @@ class HelplineSession:
             "urgency": "HIGH", "confidence": {}
         }
 
+        # Streaming Provider Session
+        self.streaming_session: Optional[SarvamStreamingSession] = None
+        self._streaming_init_lock = asyncio.Lock()
+
         # Sockets attached to this session
         self.active_websockets: Set[WebSocket] = set()
+
+    async def init_streaming_provider(self):
+        """Initializes Sarvam Realtime streaming session if in LIVE mode."""
+        if self.is_demo:
+            logger.info(f"[CALL] Session {self.session_id}: Operating in DEMO SIMULATION mode.")
+            return
+
+        provider = speech_adapter.provider
+        if isinstance(provider, SarvamRealtimeSpeechProvider):
+            if not settings.SARVAM_API_KEY:
+                logger.warning(f"[CALL] Session {self.session_id}: SARVAM_API_KEY is unconfigured.")
+                self.call_state = CallState.PROVIDER_DEGRADED
+                await self.broadcast({
+                    "event": "provider_error",
+                    "data": {
+                        "session_id": self.session_id,
+                        "code": "SPEECH_PROVIDER_UNCONFIGURED",
+                        "message": "SPEECH PROVIDER NOT CONFIGURED. Please set SARVAM_API_KEY or use DEMO mode."
+                    }
+                })
+                return
+
+            async with self._streaming_init_lock:
+                if self.streaming_session and self.streaming_session.is_connected:
+                    return
+
+                try:
+                    self.streaming_session = provider.create_streaming_session(
+                        language=self.language,
+                        on_partial_transcript=self._on_provider_partial,
+                        on_final_transcript=self._on_provider_final,
+                        on_vad_event=self._on_provider_vad,
+                        on_error=self._on_provider_error
+                    )
+                    await self.streaming_session.connect()
+                    logger.info(f"[ASR] [SARVAM] Streaming WebSocket session ready for call {self.session_id}")
+                except Exception as e:
+                    logger.error(f"[ASR] [SARVAM] Failed to initialize streaming session: {e}")
+                    self.call_state = CallState.PROVIDER_DEGRADED
+                    await self.broadcast({
+                        "event": "provider_error",
+                        "data": {
+                            "session_id": self.session_id,
+                            "code": "PROVIDER_CONNECT_FAILED",
+                            "message": f"Realtime speech provider connect failed: {e}"
+                        }
+                    })
+
+    def _on_provider_partial(self, partial_text: str):
+        """Handles incoming partial transcript from Sarvam."""
+        self.current_partial_text = partial_text
+        asyncio.create_task(self.broadcast({
+            "event": "partial_transcript",
+            "type": "interim_transcript",
+            "data": {
+                "session_id": self.session_id,
+                "transcript": partial_text
+            },
+            "transcript": partial_text
+        }))
+
+    def _on_provider_final(self, final_text: str, confidence: float):
+        """Handles incoming authoritative final transcript segment from Sarvam."""
+        asyncio.create_task(self._handle_final_utterance(final_text, confidence))
+
+    def _on_provider_vad(self, signal: str, payload: Dict[str, Any]):
+        """Handles authoritative VAD events from Sarvam."""
+        if signal == "speech_start":
+            self.is_voice_active = True
+            if self.call_state not in (CallState.OPERATOR_HOLD, CallState.CALL_ENDED):
+                self.call_state = CallState.SPEAKING
+            asyncio.create_task(self.broadcast({
+                "event": "vad_started",
+                "type": "vad_event",
+                "is_speech": True,
+                "vad_state": "SPEAKING",
+                "data": {
+                    "session_id": self.session_id,
+                    "call_state": self.call_state.value
+                }
+            }))
+        elif signal == "speech_end":
+            self.is_voice_active = False
+            if self.call_state not in (CallState.OPERATOR_HOLD, CallState.CALL_ENDED):
+                self.call_state = CallState.SILENCE_DETECTED
+            asyncio.create_task(self.broadcast({
+                "event": "vad_stopped",
+                "type": "vad_event",
+                "is_speech": False,
+                "vad_state": "SILENCE_DETECTED",
+                "data": {
+                    "session_id": self.session_id,
+                    "call_state": self.call_state.value
+                }
+            }))
+            # Return to LISTENING state after natural pause
+            asyncio.create_task(self._return_to_listening_after_pause())
+
+    async def _return_to_listening_after_pause(self):
+        await asyncio.sleep(0.6)
+        if not self.is_voice_active and self.call_state == CallState.SILENCE_DETECTED:
+            self.call_state = CallState.LISTENING
+            await self.broadcast({
+                "event": "connection_state",
+                "type": "state_change",
+                "state": self.call_state.value,
+                "data": {
+                    "session_id": self.session_id,
+                    "call_state": self.call_state.value
+                }
+            })
+
+    def _on_provider_error(self, exc: Exception):
+        logger.warning(f"[ASR] [SARVAM] Provider error in session {self.session_id}: {exc}")
+        asyncio.create_task(self.broadcast({
+            "event": "provider_error",
+            "data": {
+                "session_id": self.session_id,
+                "error": str(exc),
+                "message": "Speech provider error"
+            }
+        }))
+
+    async def _handle_final_utterance(self, native_text: str, confidence: float) -> List[Dict[str, Any]]:
+        """Processes finalized native utterance segment, performs neural translation & entity extraction."""
+        events = []
+        if not native_text or not native_text.strip():
+            return events
+
+        seg_id = f"seg_{len(self.segments) + 1:03d}"
+        now_ms = int((time.time() - (self._call_start_time or time.time())) * 1000)
+
+        # Contextual Neural Translation
+        english_text = ""
+        translation_status = "OK"
+        try:
+            english_text = await speech_adapter.translate_text(native_text, source_lang=self.language, target_lang="en")
+        except SpeechTranslationUnavailableError:
+            logger.warning(f"[TRANSLATE] Translation unavailable for segment {seg_id}")
+            english_text = ""
+            translation_status = "UNAVAILABLE"
+        except Exception as te:
+            logger.warning(f"[TRANSLATE] Neural translation error for segment {seg_id}: {te}")
+            english_text = ""
+            translation_status = "ERROR"
+
+        # Construct single authoritative segment
+        seg = TranscriptSegment(
+            id=seg_id,
+            start_ms=max(0, now_ms - 2500),
+            end_ms=now_ms,
+            language=self.language,
+            native_text=native_text,
+            english_text=english_text,
+            is_final=True,
+            asr_confidence=confidence,
+            translation_confidence=0.94 if english_text else 0.0
+        )
+        self.segments.append(seg)
+        self.current_partial_text = ""
+
+        # Update cumulative transcript
+        self.native_transcript = " ".join(s.native_text for s in self.segments)
+        self.english_translation = " ".join(s.english_text for s in self.segments if s.english_text)
+
+        # Truthful incremental entity extraction
+        new_attrs = speech_adapter.extract_attributes(native_text, language=self.language)
+        for k, v in new_attrs.items():
+            if v is not None:
+                self.extracted_attributes[k] = v
+
+        logger.info(f"[EXTRACTION] Segment {seg_id} finalized. Attributes updated: {[k for k,v in new_attrs.items() if v is not None]}")
+
+        # Broadcast events
+        ev_transcript = {
+            "event": "transcript_final",
+            "type": "final_segment",
+            "segment": {
+                "segment_id": seg.id,
+                "text": seg.native_text,
+                "confidence": seg.asr_confidence,
+                "language": seg.language
+            },
+            "data": {
+                "session_id": self.session_id,
+                "segment": seg.model_dump(),
+                "native_transcript": self.native_transcript
+            }
+        }
+        events.append(ev_transcript)
+        await self.broadcast(ev_transcript)
+
+        if english_text or translation_status != "OK":
+            ev_translation = {
+                "event": "translation_final",
+                "type": "translation_segment",
+                "segment": {
+                    "segment_id": seg.id,
+                    "english_text": english_text if english_text else "TRANSLATION TEMPORARILY UNAVAILABLE",
+                    "status": translation_status
+                },
+                "data": {
+                    "session_id": self.session_id,
+                    "segment_id": seg.id,
+                    "english_text": english_text,
+                    "translation_status": translation_status,
+                    "english_translation": self.english_translation
+                }
+            }
+            events.append(ev_translation)
+            await self.broadcast(ev_translation)
+
+        ev_attrs = {
+            "event": "attributes_updated",
+            "type": "attributes_updated",
+            "attributes": self.extracted_attributes,
+            "data": {
+                "session_id": self.session_id,
+                "extracted_attributes": self.extracted_attributes
+            }
+        }
+        events.append(ev_attrs)
+        await self.broadcast(ev_attrs)
+
+        return events
 
     def start_call(self):
         self.call_state = CallState.LISTENING
         self.started_at = datetime.now(timezone.utc)
         self._call_start_time = time.time()
         logger.info(f"[CALL] Session {self.session_id} started: state -> LISTENING")
+
+    def pause_listening(self):
+        self.is_paused = True
+        logger.info(f"[CALL] Session {self.session_id}: AI listening paused.")
+
+    def resume_listening(self):
+        self.is_paused = False
+        logger.info(f"[CALL] Session {self.session_id}: AI listening resumed.")
 
     def hold_call(self):
         if self.call_state != CallState.CALL_ENDED:
@@ -14367,7 +14546,22 @@ class HelplineSession:
             self.call_state = CallState.LISTENING
             logger.info(f"[CALL] Session {self.session_id} resumed from hold -> LISTENING")
 
-    def end_call(self):
+    async def end_call(self):
+        self.call_state = CallState.CALL_ENDING
+        logger.info(f"[CALL] Session {self.session_id} ending call...")
+
+        if self.streaming_session and self.streaming_session.is_connected:
+            try:
+                await self.streaming_session.send_flush()
+                await asyncio.sleep(0.3)
+                await self.streaming_session.close()
+            except Exception as e:
+                logger.warning(f"[ASR] [SARVAM] Error during session flush/close: {e}")
+
+        # If offline/demo mode, finalize any remaining buffer
+        if self.is_demo and len(self.utterance_audio_buffer) >= 1600:
+            await self._finalize_mock_utterance()
+
         self.call_state = CallState.CALL_ENDED
         self.ended_at = datetime.now(timezone.utc)
         if self._call_start_time:
@@ -14390,7 +14584,7 @@ class HelplineSession:
     async def ingest_audio_frame(self, sequence: int, timestamp_ms: int, pcm16_bytes: bytes) -> List[Dict[str, Any]]:
         """
         Processes an incoming 16kHz PCM16 audio chunk with sequence checking,
-        VAD analysis, and utterance boundary detection. Returns list of events to broadcast.
+        VAD analysis, and streaming to Sarvam Realtime WebSocket.
         """
         events_to_broadcast = []
         now = time.time()
@@ -14404,67 +14598,69 @@ class HelplineSession:
         self.expected_sequence = sequence + 1
         self.last_audio_chunk_at = now
 
-        # When on hold, do not accumulate or process speech
-        if self.call_state == CallState.OPERATOR_HOLD:
+        # When on hold or listening is paused, do not accumulate or stream audio
+        if self.call_state == CallState.OPERATOR_HOLD or self.is_paused:
             return events_to_broadcast
 
-        # Buffer raw audio
+        # Buffer raw audio for session archive
         self.audio_buffer.extend(pcm16_bytes)
-        self.utterance_audio_buffer.extend(pcm16_bytes)
 
-        # Compute energy & update noise floor adaptively
-        energy = self.compute_frame_energy(pcm16_bytes)
-        self.noise_floor = 0.95 * self.noise_floor + 0.05 * min(energy, 0.05)
-        attack_thresh = max(0.025, self.noise_floor * 2.5)
-        release_thresh = max(0.015, self.noise_floor * 1.5)
+        # Stream directly to Sarvam Realtime WebSocket if connected
+        if self.streaming_session and self.streaming_session.is_connected:
+            await self.streaming_session.send_audio_chunk(pcm16_bytes)
+            return events_to_broadcast
 
-        # VAD Decision Logic
-        if energy >= attack_thresh:
-            self.last_speech_at = now
-            self._accumulated_silence_ms = 0.0
-            if not self.is_voice_active:
-                self.is_voice_active = True
-                self.call_state = CallState.SPEAKING
-                events_to_broadcast.append({
-                    "event": "vad_started",
-                    "data": {"session_id": self.session_id, "call_state": self.call_state.value, "energy": round(energy, 4)}
-                })
-        else:
-            # Silence detected
-            frame_ms = len(pcm16_bytes) / 32.0
-            self._accumulated_silence_ms += frame_ms
-            silence_ms = max((now - self.last_speech_at) * 1000.0 if self.last_speech_at > 0 else 0, self._accumulated_silence_ms)
-            if self.is_voice_active and silence_ms >= settings.VAD_MIN_SPEECH_MS:
-                self.is_voice_active = False
-                self.call_state = CallState.SILENCE_DETECTED
-                events_to_broadcast.append({
-                    "event": "vad_stopped",
-                    "data": {"session_id": self.session_id, "call_state": self.call_state.value, "silence_ms": int(silence_ms)}
-                })
+        # In offline / demo mode, operate with local VAD & mock utterance segmentation
+        if self.is_demo or isinstance(speech_adapter.provider, MockSpeechProvider):
+            self.utterance_audio_buffer.extend(pcm16_bytes)
+            energy = self.compute_frame_energy(pcm16_bytes)
+            self.noise_floor = 0.95 * self.noise_floor + 0.05 * min(energy, 0.05)
+            attack_thresh = max(0.025, self.noise_floor * 2.5)
 
-            # Check for utterance finalization boundary (e.g. 900ms silence after speech)
-            if silence_ms >= settings.VAD_UTTERANCE_END_SILENCE_MS and len(self.utterance_audio_buffer) >= 3200:  # >= 100ms
+            if energy >= attack_thresh:
+                self.last_speech_at = now
                 self._accumulated_silence_ms = 0.0
-                finalized_events = await self._finalize_current_utterance()
-                events_to_broadcast.extend(finalized_events)
+                if not self.is_voice_active:
+                    self.is_voice_active = True
+                    self.call_state = CallState.SPEAKING
+                    events_to_broadcast.append({
+                        "event": "vad_started",
+                        "type": "vad_event",
+                        "is_speech": True,
+                        "vad_state": "SPEAKING",
+                        "data": {"session_id": self.session_id, "call_state": self.call_state.value, "energy": round(energy, 4)}
+                    })
+            else:
+                frame_ms = len(pcm16_bytes) / 32.0
+                self._accumulated_silence_ms += frame_ms
+                silence_ms = max((now - self.last_speech_at) * 1000.0 if self.last_speech_at > 0 else 0, self._accumulated_silence_ms)
+
+                if self.is_voice_active and silence_ms >= settings.VAD_MIN_SPEECH_MS:
+                    self.is_voice_active = False
+                    self.call_state = CallState.SILENCE_DETECTED
+                    events_to_broadcast.append({
+                        "event": "vad_stopped",
+                        "type": "vad_event",
+                        "is_speech": False,
+                        "vad_state": "SILENCE_DETECTED",
+                        "data": {"session_id": self.session_id, "call_state": self.call_state.value, "silence_ms": int(silence_ms)}
+                    })
+
+                if silence_ms >= settings.VAD_UTTERANCE_END_SILENCE_MS and len(self.utterance_audio_buffer) >= 3200:
+                    self._accumulated_silence_ms = 0.0
+                    finalized_events = await self._finalize_mock_utterance()
+                    events_to_broadcast.extend(finalized_events)
 
         return events_to_broadcast
 
-    async def _finalize_current_utterance(self) -> List[Dict[str, Any]]:
-        """Finalizes accumulated utterance audio, runs ASR, translation, and incremental entity extraction."""
+    async def _finalize_mock_utterance(self) -> List[Dict[str, Any]]:
+        """Used exclusively in demo/offline mode for mock utterance finalization."""
         events = []
         if len(self.utterance_audio_buffer) < 1600:
             self.utterance_audio_buffer.clear()
             self.call_state = CallState.LISTENING
             return events
 
-        self.call_state = CallState.PROCESSING_UTTERANCE
-        events.append({
-            "event": "connection_state",
-            "data": {"session_id": self.session_id, "call_state": self.call_state.value}
-        })
-
-        # Convert PCM16 buffer to WAV bytes in memory
         wav_io = io.BytesIO()
         with wave.open(wav_io, "wb") as wf:
             wf.setnchannels(1)
@@ -14474,62 +14670,40 @@ class HelplineSession:
         wav_bytes = wav_io.getvalue()
         self.utterance_audio_buffer.clear()
 
-        # Run ASR via speech_adapter
         try:
             res = await speech_adapter.transcribe(audio_bytes=wav_bytes, language=self.language)
             native_text = res.get("native_transcript", "").strip()
-            english_text = res.get("english_translation", "").strip()
-
+            confidence = float(res.get("asr_confidence", 0.95))
             if native_text:
-                seg_id = f"seg_{len(self.segments) + 1:03d}"
-                seg = TranscriptSegment(
-                    id=seg_id,
-                    start_ms=max(0, int((time.time() - (self._call_start_time or time.time())) * 1000) - int(res.get("audio_duration_sec", 1.0) * 1000)),
-                    end_ms=int((time.time() - (self._call_start_time or time.time())) * 1000),
-                    language=self.language,
-                    native_text=native_text,
-                    english_text=english_text,
-                    is_final=True,
-                    asr_confidence=res.get("asr_confidence", 0.95),
-                    translation_confidence=res.get("translation_confidence", 0.92)
-                )
-                self.segments.append(seg)
-
-                # Update cumulative texts
-                self.native_transcript = " ".join(s.native_text for s in self.segments)
-                self.english_translation = " ".join(s.english_text for s in self.segments if s.english_text)
-
-                # Incremental entity extraction update
-                new_attrs = res.get("extracted_attributes", {})
-                for k, v in new_attrs.items():
-                    if v is not None:
-                        self.extracted_attributes[k] = v
-
-                events.append({
-                    "event": "transcript_final",
-                    "data": {"session_id": self.session_id, "segment": seg.model_dump(), "native_transcript": self.native_transcript}
-                })
-                events.append({
-                    "event": "translation_final",
-                    "data": {"session_id": self.session_id, "segment_id": seg.id, "english_text": english_text, "english_translation": self.english_translation}
-                })
-                events.append({
-                    "event": "attributes_updated",
-                    "data": {"session_id": self.session_id, "extracted_attributes": self.extracted_attributes}
-                })
+                sub_events = await self._handle_final_utterance(native_text, confidence)
+                events.extend(sub_events)
         except Exception as e:
-            logger.error(f"[ASR] Error transcribing utterance segment: {e}")
-            events.append({
-                "event": "provider_error",
-                "data": {"session_id": self.session_id, "error": str(e), "message": "Translation temporarily unavailable"}
-            })
+            logger.error(f"[ASR] [MOCK] Error finalizing utterance: {e}")
 
         self.call_state = CallState.LISTENING
         events.append({
             "event": "connection_state",
+            "type": "state_change",
+            "state": self.call_state.value,
             "data": {"session_id": self.session_id, "call_state": self.call_state.value}
         })
         return events
+
+    async def broadcast(self, event_data: Dict[str, Any]):
+        """Broadcasts event payload to all attached WebSockets for this session."""
+        if not self.active_websockets:
+            return
+
+        dead_sockets = set()
+        for ws in self.active_websockets:
+            try:
+                await ws.send_json(event_data)
+            except Exception as e:
+                logger.warning(f"[WS] Failed to send to socket in session {self.session_id}: {e}")
+                dead_sockets.add(ws)
+
+        for ws in dead_sockets:
+            self.active_websockets.discard(ws)
 
 
 class HelplineCallManager:
@@ -14569,9 +14743,13 @@ class HelplineCallManager:
         session.active_websockets.add(websocket)
         logger.info(f"[WS] Attached client socket to session {session_id} (Total: {len(session.active_websockets)})")
 
+        # Initialize streaming provider if not already running
+        asyncio.create_task(session.init_streaming_provider())
+
         # Send initial session state
         await websocket.send_json({
             "event": "session_started",
+            "type": "session_started",
             "data": {
                 "session_id": session.session_id,
                 "call_state": session.call_state.value,
@@ -14591,19 +14769,8 @@ class HelplineCallManager:
 
     async def broadcast_event(self, session_id: str, event_data: Dict[str, Any]):
         session = self._sessions.get(session_id)
-        if not session or not session.active_websockets:
-            return
-
-        dead_sockets = set()
-        for ws in session.active_websockets:
-            try:
-                await ws.send_json(event_data)
-            except Exception as e:
-                logger.warning(f"[WS] Failed to send event to socket in session {session_id}: {e}")
-                dead_sockets.add(ws)
-
-        for ws in dead_sockets:
-            session.active_websockets.discard(ws)
+        if session:
+            await session.broadcast(event_data)
 
 
 helpline_manager = HelplineCallManager()
@@ -17327,13 +17494,13 @@ demo_service = DemoService()
 ---
 
 ## 72. Backend Speech Provider Architecture (Sarvam/Groq/Mock)
-**File Path:** `Backend/app/integrations/speech_provider.py` | **Lines of Code:** 488
+**File Path:** `Backend/app/integrations/speech_provider.py` | **Lines of Code:** 716
 
 ```python
 """
 VariSetu Helpline Speech Provider Abstraction Layer.
-Supports Sarvam AI Realtime WebSocket ASR, Groq Whisper-large-v3 Audio Translation,
-and Deterministic Audio-Consuming Mock Provider for CI/Testing.
+Supports Sarvam AI Realtime Streaming WebSocket ASR, Sarvam Neural Translation,
+Groq Audio Translation, and Deterministic Audio-Consuming Mock Provider.
 """
 
 import abc
@@ -17341,13 +17508,19 @@ import asyncio
 import io
 import json
 import logging
+import math
 import re
 import struct
+import time
 import wave
 from datetime import datetime, timezone
-from typing import Any, AsyncGenerator, Dict, List, Optional
+from typing import Any, AsyncGenerator, Callable, Dict, List, Optional, Tuple
 
 import httpx
+try:
+    import websockets
+except ImportError:
+    websockets = None
 
 from app.core.config import settings
 
@@ -17361,6 +17534,11 @@ class SpeechProviderError(Exception):
 
 class SpeechProviderUnavailableError(SpeechProviderError):
     """Raised when the speech provider is unreachable or unconfigured."""
+    pass
+
+
+class SpeechTranslationUnavailableError(SpeechProviderError):
+    """Raised when neural translation is temporarily unavailable."""
     pass
 
 
@@ -17389,9 +17567,310 @@ class BaseSpeechProvider(abc.ABC):
         pass
 
 
+class SarvamStreamingSession:
+    """
+    Manages a persistent duplex streaming WebSocket session with Sarvam AI's Realtime ASR API.
+    Endpoint: wss://api.sarvam.ai/speech-to-text/ws
+    """
+
+    def __init__(
+        self,
+        api_key: str,
+        language_code: str = "mr-IN",
+        model: str = "saaras:v3",
+        sample_rate: int = 16000,
+        input_audio_codec: str = "pcm_s16le",
+        high_vad_sensitivity: bool = True,
+        vad_signals: bool = True,
+        on_partial_transcript: Optional[Callable[[str], Any]] = None,
+        on_final_transcript: Optional[Callable[[str, float], Any]] = None,
+        on_vad_event: Optional[Callable[[str, Dict[str, Any]], Any]] = None,
+        on_error: Optional[Callable[[Exception], Any]] = None,
+    ):
+        self.api_key = api_key
+        self.language_code = language_code
+        self.model = model
+        self.sample_rate = sample_rate
+        self.input_audio_codec = input_audio_codec
+        self.high_vad_sensitivity = high_vad_sensitivity
+        self.vad_signals = vad_signals
+
+        self.on_partial_transcript = on_partial_transcript
+        self.on_final_transcript = on_final_transcript
+        self.on_vad_event = on_vad_event
+        self.on_error = on_error
+
+        self.ws: Optional[Any] = None
+        self._receive_task: Optional[asyncio.Task] = None
+        self.is_connected = False
+        self._close_requested = False
+
+    async def connect(self):
+        """Establish persistent WebSocket connection to Sarvam Realtime ASR."""
+        if not self.api_key:
+            raise SpeechProviderUnavailableError("Sarvam API key is not configured.")
+
+        if websockets is None:
+            raise SpeechProviderError("websockets library is not available.")
+
+        ws_url = f"{settings.SARVAM_WS_URL}?api-subscription-key={self.api_key}"
+        headers = {"api-subscription-key": self.api_key}
+
+        logger.info(f"[ASR] [SARVAM] Connecting to realtime streaming WebSocket: {settings.SARVAM_WS_URL} (lang={self.language_code}, model={self.model})")
+
+        try:
+            self.ws = await websockets.connect(
+                ws_url,
+                extra_headers=headers,
+                ping_interval=20,
+                ping_timeout=10,
+                close_timeout=5
+            )
+            self.is_connected = True
+            self._close_requested = False
+
+            # Send initialization configuration payload
+            config_payload = {
+                "type": "config",
+                "language_code": self.language_code,
+                "model": self.model,
+                "sample_rate": self.sample_rate,
+                "input_audio_codec": self.input_audio_codec,
+                "mode": "transcribe",
+                "high_vad_sensitivity": self.high_vad_sensitivity,
+                "vad_signals": self.vad_signals
+            }
+            if settings.SARVAM_POSITIVE_SPEECH_THRESHOLD is not None:
+                config_payload["positive_speech_threshold"] = settings.SARVAM_POSITIVE_SPEECH_THRESHOLD
+            if settings.SARVAM_NEGATIVE_SPEECH_THRESHOLD is not None:
+                config_payload["negative_speech_threshold"] = settings.SARVAM_NEGATIVE_SPEECH_THRESHOLD
+            if settings.SARVAM_MIN_SPEECH_FRAMES is not None:
+                config_payload["min_speech_frames"] = settings.SARVAM_MIN_SPEECH_FRAMES
+
+            await self.ws.send(json.dumps(config_payload))
+            logger.info(f"[ASR] [SARVAM] Configuration acknowledged: {config_payload}")
+
+            # Start background message receiver task
+            self._receive_task = asyncio.create_task(self._receiver_loop())
+
+        except Exception as e:
+            self.is_connected = False
+            logger.error(f"[ASR] [SARVAM] Failed to connect to streaming WebSocket: {e}")
+            raise SpeechProviderUnavailableError(f"Failed to connect to Sarvam Realtime WebSocket: {e}")
+
+    async def send_audio_chunk(self, pcm16_bytes: bytes):
+        """Streams a raw PCM16 chunk to Sarvam."""
+        if not self.is_connected or not self.ws:
+            return
+        try:
+            await self.ws.send(pcm16_bytes)
+        except Exception as e:
+            logger.warning(f"[ASR] [SARVAM] Error streaming audio chunk: {e}")
+            if self.on_error:
+                self.on_error(e)
+
+    async def send_flush(self):
+        """Sends a flush signal to Sarvam to finalize any buffered utterance audio."""
+        if not self.is_connected or not self.ws:
+            return
+        try:
+            logger.info("[ASR] [SARVAM] Sending flush signal to provider.")
+            await self.ws.send(json.dumps({"type": "flush"}))
+        except Exception as e:
+            logger.warning(f"[ASR] [SARVAM] Error sending flush signal: {e}")
+
+    async def _receiver_loop(self):
+        """Asynchronously reads and dispatches incoming messages from Sarvam."""
+        try:
+            while self.is_connected and self.ws:
+                message = await self.ws.recv()
+                if isinstance(message, bytes):
+                    continue
+
+                try:
+                    payload = json.loads(message)
+                except Exception:
+                    continue
+
+                msg_type = payload.get("type", "").lower()
+
+                # VAD Events
+                if msg_type in ("speech_start", "vad_start") or (msg_type == "vad" and payload.get("signal") == "speech_start"):
+                    logger.info("[VAD] [SARVAM] Received SPEECH_START signal")
+                    if self.on_vad_event:
+                        self.on_vad_event("speech_start", payload)
+
+                elif msg_type in ("speech_end", "vad_end") or (msg_type == "vad" and payload.get("signal") == "speech_end"):
+                    logger.info("[VAD] [SARVAM] Received SPEECH_END signal")
+                    if self.on_vad_event:
+                        self.on_vad_event("speech_end", payload)
+
+                # Transcript Events
+                elif msg_type in ("transcript", "text", "recognition"):
+                    transcript_text = payload.get("transcript") or payload.get("text") or ""
+                    is_final = payload.get("is_final", False) or payload.get("type") == "final"
+                    confidence = float(payload.get("confidence", 0.94))
+
+                    if is_final and transcript_text.strip():
+                        logger.info(f"[ASR] [SARVAM] FINAL: '{transcript_text}' (conf={confidence:.2f})")
+                        if self.on_final_transcript:
+                            self.on_final_transcript(transcript_text.strip(), confidence)
+                    elif not is_final and transcript_text.strip():
+                        logger.debug(f"[ASR] [SARVAM] PARTIAL: '{transcript_text}'")
+                        if self.on_partial_transcript:
+                            self.on_partial_transcript(transcript_text.strip())
+
+        except websockets.exceptions.ConnectionClosed as e:
+            if not self._close_requested:
+                logger.warning(f"[ASR] [SARVAM] Streaming connection closed by remote: {e}")
+        except Exception as e:
+            if not self._close_requested:
+                logger.error(f"[ASR] [SARVAM] Error in receiver loop: {e}")
+                if self.on_error:
+                    self.on_error(e)
+        finally:
+            self.is_connected = False
+
+    async def close(self):
+        """Gracefully flushes and terminates the streaming session."""
+        self._close_requested = True
+        self.is_connected = False
+
+        if self._receive_task and not self._receive_task.done():
+            self._receive_task.cancel()
+
+        if self.ws:
+            try:
+                await self.ws.close()
+            except Exception:
+                pass
+            self.ws = None
+        logger.info("[ASR] [SARVAM] Streaming session terminated.")
+
+
+class SarvamRealtimeSpeechProvider(BaseSpeechProvider):
+    """
+    Production Speech Provider using Sarvam AI Realtime WebSocket ASR and Neural Translation.
+    Supports Marathi ('mr-IN'), Hindi ('hi-IN'), English ('en-IN').
+    """
+
+    def __init__(self):
+        self.api_key = settings.SARVAM_API_KEY
+        self.model = settings.SARVAM_MODEL
+        self.ws_url = settings.SARVAM_WS_URL
+        self._mock_fallback = MockSpeechProvider()
+
+    def create_streaming_session(
+        self,
+        language: str = "mr",
+        on_partial_transcript: Optional[Callable[[str], Any]] = None,
+        on_final_transcript: Optional[Callable[[str, float], Any]] = None,
+        on_vad_event: Optional[Callable[[str, Dict[str, Any]], Any]] = None,
+        on_error: Optional[Callable[[Exception], Any]] = None,
+    ) -> SarvamStreamingSession:
+        """Instantiates a dedicated persistent Sarvam WebSocket streaming session."""
+        lang_code = "mr-IN" if language == "mr" else ("hi-IN" if language == "hi" else "en-IN")
+        return SarvamStreamingSession(
+            api_key=self.api_key or "",
+            language_code=lang_code,
+            model=self.model,
+            sample_rate=settings.SARVAM_SAMPLE_RATE,
+            input_audio_codec=settings.SARVAM_AUDIO_CODEC,
+            high_vad_sensitivity=settings.SARVAM_HIGH_VAD_SENSITIVITY,
+            vad_signals=settings.SARVAM_VAD_SIGNALS,
+            on_partial_transcript=on_partial_transcript,
+            on_final_transcript=on_final_transcript,
+            on_vad_event=on_vad_event,
+            on_error=on_error,
+        )
+
+    async def transcribe_audio(self, audio_bytes: bytes, language: str = "mr") -> Dict[str, Any]:
+        """
+        File-based transcription (for recorded audio uploads / verification tests).
+        """
+        if not self.api_key:
+            raise SpeechProviderUnavailableError("SARVAM_API_KEY is not configured. Live speech transcription requires a valid API key.")
+
+        lang_code = "mr-IN" if language == "mr" else ("hi-IN" if language == "hi" else "en-IN")
+        headers = {"api-subscription-key": self.api_key}
+
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                files = {"file": ("audio.wav", audio_bytes, "audio/wav")}
+                data = {"model": self.model, "language_code": lang_code}
+                resp = await client.post("https://api.sarvam.ai/speech-to-text", headers=headers, files=files, data=data)
+
+                if resp.status_code != 200:
+                    raise SpeechProviderError(f"Sarvam API returned HTTP {resp.status_code}: {resp.text}")
+
+                res_json = resp.json()
+                native_text = res_json.get("transcript", "").strip()
+
+                try:
+                    english_text = await self.translate_text(native_text, source_lang=language, target_lang="en")
+                except Exception as te:
+                    logger.warning(f"[TRANSLATE] [SARVAM] Translation failed: {te}")
+                    english_text = ""
+
+                entities = self.extract_entities(native_text, language=language)
+
+                return {
+                    "native_transcript": native_text,
+                    "english_translation": english_text,
+                    "language": language,
+                    "asr_confidence": float(res_json.get("confidence", 0.95)),
+                    "translation_confidence": 0.93 if english_text else 0.0,
+                    "extracted_attributes": entities,
+                    "source": "SARVAM_SAARAS_V3",
+                }
+        except Exception as e:
+            logger.error(f"[ASR] [SARVAM] Request failed: {e}")
+            raise SpeechProviderUnavailableError(f"Sarvam speech service unavailable: {e}")
+
+    async def translate_text(self, text: str, source_lang: str = "mr", target_lang: str = "en") -> str:
+        """
+        Contextual Neural Translation using Sarvam mayura:v1 API.
+        Does NOT fall back to regex dictionaries in production.
+        """
+        if not text or not text.strip():
+            return ""
+
+        if not self.api_key:
+            raise SpeechTranslationUnavailableError("SARVAM_API_KEY is not configured for neural translation.")
+
+        src_code = "mr-IN" if source_lang == "mr" else ("hi-IN" if source_lang == "hi" else "en-IN")
+        tgt_code = "en-IN" if target_lang == "en" else ("mr-IN" if target_lang == "mr" else "hi-IN")
+        headers = {"api-subscription-key": self.api_key, "Content-Type": "application/json"}
+
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                payload = {
+                    "input": text,
+                    "source_language_code": src_code,
+                    "target_language_code": tgt_code,
+                    "mode": "formal",
+                    "model": settings.SARVAM_TRANSLATION_MODEL
+                }
+                resp = await client.post("https://api.sarvam.ai/translate", headers=headers, json=payload)
+                if resp.status_code == 200:
+                    translated = resp.json().get("translated_text", "").strip()
+                    if translated:
+                        return translated
+                raise SpeechTranslationUnavailableError(f"Sarvam translate returned HTTP {resp.status_code}: {resp.text}")
+        except Exception as e:
+            logger.error(f"[TRANSLATE] [SARVAM] Neural translation failed: {e}")
+            raise SpeechTranslationUnavailableError(f"Translation service temporarily unavailable: {e}")
+
+    def extract_entities(self, text: str, language: str = "mr") -> Dict[str, Any]:
+        """
+        Strict truthful entity extraction: unknown fields remain None (never fabricated defaults).
+        """
+        return self._mock_fallback.extract_entities(text, language=language)
+
+
 class MockSpeechProvider(BaseSpeechProvider):
     """
-    Deterministic mock provider for CI testing and offline mode.
+    Deterministic mock provider for CI testing and offline demonstration mode.
     Explicitly parses and consumes audio_bytes to ensure realistic audio pipeline testing.
     """
 
@@ -17438,14 +17917,14 @@ class MockSpeechProvider(BaseSpeechProvider):
             "translation_confidence": 0.94,
             "extracted_attributes": entities,
             "audio_duration_sec": info["duration_sec"],
-            "source": "MOCK",
+            "source": "MOCK_DETERMINISTIC",
         }
 
     async def translate_text(self, text: str, source_lang: str = "mr", target_lang: str = "en") -> str:
+        """Deterministic translation fixture used for unit tests & demo mode."""
         if not text:
             return ""
 
-        # Map known high-frequency Marathi/Hindi emergency terms contextually
         replacements = [
             (r"हॅलो|नमस्ते|नमस्कार", "Hello"),
             (r"कंट्रोल\s*रूम|मदत\s*कक्ष", "Control Room"),
@@ -17565,7 +18044,7 @@ class MockSpeechProvider(BaseSpeechProvider):
 
     def extract_entities(self, text: str, language: str = "mr") -> Dict[str, Any]:
         """
-        Truthful entity extraction: unknown fields remain None (never fabricated defaults).
+        Truthful entity extraction: unknown fields strictly remain None.
         """
         if not text:
             return {
@@ -17679,90 +18158,9 @@ class MockSpeechProvider(BaseSpeechProvider):
         }
 
 
-class SarvamRealtimeSpeechProvider(BaseSpeechProvider):
-    """
-    Production Realtime Streaming Speech Provider using Sarvam AI WebSocket API.
-    Supports Marathi ('mr-IN'), Hindi ('hi-IN'), English ('en-IN').
-    """
-
-    def __init__(self):
-        self.api_key = settings.SARVAM_API_KEY
-        self.model = settings.SARVAM_MODEL
-        self.ws_url = settings.SARVAM_WS_URL
-        self._mock_fallback = MockSpeechProvider()
-
-    async def transcribe_audio(self, audio_bytes: bytes, language: str = "mr") -> Dict[str, Any]:
-        if not self.api_key:
-            logger.warning("[ASR] [SARVAM] No SARVAM_API_KEY configured; operating in deterministic fallback mode.")
-            res = await self._mock_fallback.transcribe_audio(audio_bytes, language=language)
-            res["source"] = "SARVAM_UNCONFIGURED_FALLBACK"
-            return res
-
-        lang_code = "mr-IN" if language == "mr" else ("hi-IN" if language == "hi" else "en-IN")
-        headers = {"api-subscription-key": self.api_key}
-
-        try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                files = {"file": ("audio.wav", audio_bytes, "audio/wav")}
-                data = {"model": self.model, "language_code": lang_code}
-                resp = await client.post("https://api.sarvam.ai/speech-to-text", headers=headers, files=files, data=data)
-
-                if resp.status_code != 200:
-                    raise SpeechProviderError(f"Sarvam API returned HTTP {resp.status_code}: {resp.text}")
-
-                res_json = resp.json()
-                native_text = res_json.get("transcript", "")
-                english_text = await self.translate_text(native_text, source_lang=language, target_lang="en")
-                entities = self.extract_entities(native_text, language=language)
-
-                return {
-                    "native_transcript": native_text,
-                    "english_translation": english_text,
-                    "language": language,
-                    "asr_confidence": res_json.get("confidence", 0.95),
-                    "translation_confidence": 0.93,
-                    "extracted_attributes": entities,
-                    "source": "SARVAM",
-                }
-        except Exception as e:
-            logger.error(f"[ASR] [SARVAM] Request failed: {e}")
-            raise SpeechProviderUnavailableError(f"Sarvam speech service unavailable: {e}")
-
-    async def translate_text(self, text: str, source_lang: str = "mr", target_lang: str = "en") -> str:
-        if not text:
-            return ""
-        if not self.api_key:
-            return await self._mock_fallback.translate_text(text, source_lang, target_lang)
-
-        src_code = "mr-IN" if source_lang == "mr" else ("hi-IN" if source_lang == "hi" else "en-IN")
-        tgt_code = "en-IN" if target_lang == "en" else ("mr-IN" if target_lang == "mr" else "hi-IN")
-        headers = {"api-subscription-key": self.api_key, "Content-Type": "application/json"}
-
-        try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                payload = {
-                    "input": text,
-                    "source_language_code": src_code,
-                    "target_language_code": tgt_code,
-                    "mode": "formal",
-                    "model": "mayura:v1"
-                }
-                resp = await client.post("https://api.sarvam.ai/translate", headers=headers, json=payload)
-                if resp.status_code == 200:
-                    return resp.json().get("translated_text", "")
-        except Exception as e:
-            logger.warning(f"[TRANSLATE] [SARVAM] Remote translate failed: {e}; falling back to contextual translation.")
-
-        return await self._mock_fallback.translate_text(text, source_lang, target_lang)
-
-    def extract_entities(self, text: str, language: str = "mr") -> Dict[str, Any]:
-        return self._mock_fallback.extract_entities(text, language=language)
-
-
 class GroqSpeechProvider(BaseSpeechProvider):
     """
     Groq Whisper-large-v3 Audio Translation Provider.
-    Consumes actual audio bytes and translates non-English audio directly to English.
     """
 
     def __init__(self):
@@ -17772,10 +18170,7 @@ class GroqSpeechProvider(BaseSpeechProvider):
 
     async def transcribe_audio(self, audio_bytes: bytes, language: str = "mr") -> Dict[str, Any]:
         if not self.api_key:
-            logger.warning("[ASR] [GROQ] No GROQ_API_KEY configured; operating in deterministic fallback mode.")
-            res = await self._mock_fallback.transcribe_audio(audio_bytes, language=language)
-            res["source"] = "GROQ_UNCONFIGURED_FALLBACK"
-            return res
+            raise SpeechProviderUnavailableError("GROQ_API_KEY is not configured.")
 
         headers = {"Authorization": f"Bearer {self.api_key}"}
         try:
@@ -17787,7 +18182,7 @@ class GroqSpeechProvider(BaseSpeechProvider):
                 if resp.status_code != 200:
                     raise SpeechProviderError(f"Groq API returned HTTP {resp.status_code}: {resp.text}")
 
-                english_text = resp.json().get("text", "")
+                english_text = resp.json().get("text", "").strip()
                 entities = self.extract_entities(english_text, language="en")
 
                 return {
@@ -17811,7 +18206,7 @@ class GroqSpeechProvider(BaseSpeechProvider):
 
 
 def get_speech_provider() -> BaseSpeechProvider:
-    """Factory function resolving the active speech provider based on config."""
+    """Factory resolving the active speech provider based on config."""
     prov = (settings.SPEECH_PROVIDER or "mock").lower()
     if prov == "sarvam":
         return SarvamRealtimeSpeechProvider()
@@ -19050,7 +19445,7 @@ FastAPI REST routers package
 ---
 
 ## 83. Backend Helpline & Audio Stream Endpoints
-**File Path:** `Backend/app/api/helpline.py` | **Lines of Code:** 586
+**File Path:** `Backend/app/api/helpline.py` | **Lines of Code:** 610
 
 ```python
 """
@@ -19146,13 +19541,15 @@ async def helpline_websocket_endpoint(websocket: WebSocket, session_id: str):
                 except Exception:
                     continue
 
-                action = payload.get("action", "")
+                action = payload.get("action") or payload.get("type", "")
 
                 if action == "start":
                     if session:
                         session.start_call()
                         await helpline_manager.broadcast_event(session_id, {
                             "event": "connection_state",
+                            "type": "state_change",
+                            "state": session.call_state.value,
                             "data": {"session_id": session_id, "call_state": session.call_state.value}
                         })
 
@@ -19170,30 +19567,51 @@ async def helpline_websocket_endpoint(websocket: WebSocket, session_id: str):
                             except Exception as e:
                                 logger.warning(f"[MEDIA] Error decoding base64 audio chunk: {e}")
 
-                elif action == "pause" or action == "hold":
+                elif action in ("pause_listening", "mute_listening"):
+                    if session:
+                        session.pause_listening()
+                        await helpline_manager.broadcast_event(session_id, {
+                            "event": "listening_paused",
+                            "data": {"session_id": session_id, "is_paused": True}
+                        })
+
+                elif action in ("resume_listening", "unmute_listening"):
+                    if session:
+                        session.resume_listening()
+                        await helpline_manager.broadcast_event(session_id, {
+                            "event": "listening_resumed",
+                            "data": {"session_id": session_id, "is_paused": False}
+                        })
+
+                elif action in ("pause", "hold"):
                     if session:
                         session.hold_call()
                         await helpline_manager.broadcast_event(session_id, {
                             "event": "connection_state",
+                            "type": "state_change",
+                            "state": session.call_state.value,
                             "data": {"session_id": session_id, "call_state": session.call_state.value}
                         })
 
-                elif action == "resume" or action == "unhold":
+                elif action in ("resume", "unhold"):
                     if session:
                         session.resume_call()
                         await helpline_manager.broadcast_event(session_id, {
                             "event": "connection_state",
+                            "type": "state_change",
+                            "state": session.call_state.value,
                             "data": {"session_id": session_id, "call_state": session.call_state.value}
                         })
 
                 elif action == "heartbeat":
                     await websocket.send_json({"event": "heartbeat_ack", "data": {"session_id": session_id, "server_time": datetime.now(timezone.utc).isoformat()}})
 
-                elif action == "end":
+                elif action in ("end", "end_call", "hangup"):
                     if session:
-                        session.end_call()
+                        await session.end_call()
                         await helpline_manager.broadcast_event(session_id, {
                             "event": "session_ended",
+                            "type": "session_ended",
                             "data": {"session_id": session_id, "call_state": session.call_state.value, "duration_seconds": session.duration_seconds}
                         })
                     break
@@ -19346,9 +19764,10 @@ async def end_call_session(
 ):
     session = await helpline_manager.get_session(session_id)
     if session:
-        session.end_call()
+        await session.end_call()
         await helpline_manager.broadcast_event(session_id, {
             "event": "session_ended",
+            "type": "session_ended",
             "data": {"session_id": session_id, "call_state": session.call_state.value, "duration_seconds": session.duration_seconds}
         })
 

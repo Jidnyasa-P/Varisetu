@@ -1,7 +1,7 @@
 """
 VariSetu Helpline Speech Provider Abstraction Layer.
-Supports Sarvam AI Realtime WebSocket ASR, Groq Whisper-large-v3 Audio Translation,
-and Deterministic Audio-Consuming Mock Provider for CI/Testing.
+Supports Sarvam AI Realtime Streaming WebSocket ASR, Sarvam Neural Translation,
+Groq Audio Translation, and Deterministic Audio-Consuming Mock Provider.
 """
 
 import abc
@@ -9,13 +9,19 @@ import asyncio
 import io
 import json
 import logging
+import math
 import re
 import struct
+import time
 import wave
 from datetime import datetime, timezone
-from typing import Any, AsyncGenerator, Dict, List, Optional
+from typing import Any, AsyncGenerator, Callable, Dict, List, Optional, Tuple
 
 import httpx
+try:
+    import websockets
+except ImportError:
+    websockets = None
 
 from app.core.config import settings
 
@@ -29,6 +35,11 @@ class SpeechProviderError(Exception):
 
 class SpeechProviderUnavailableError(SpeechProviderError):
     """Raised when the speech provider is unreachable or unconfigured."""
+    pass
+
+
+class SpeechTranslationUnavailableError(SpeechProviderError):
+    """Raised when neural translation is temporarily unavailable."""
     pass
 
 
@@ -57,9 +68,310 @@ class BaseSpeechProvider(abc.ABC):
         pass
 
 
+class SarvamStreamingSession:
+    """
+    Manages a persistent duplex streaming WebSocket session with Sarvam AI's Realtime ASR API.
+    Endpoint: wss://api.sarvam.ai/speech-to-text/ws
+    """
+
+    def __init__(
+        self,
+        api_key: str,
+        language_code: str = "mr-IN",
+        model: str = "saaras:v3",
+        sample_rate: int = 16000,
+        input_audio_codec: str = "pcm_s16le",
+        high_vad_sensitivity: bool = True,
+        vad_signals: bool = True,
+        on_partial_transcript: Optional[Callable[[str], Any]] = None,
+        on_final_transcript: Optional[Callable[[str, float], Any]] = None,
+        on_vad_event: Optional[Callable[[str, Dict[str, Any]], Any]] = None,
+        on_error: Optional[Callable[[Exception], Any]] = None,
+    ):
+        self.api_key = api_key
+        self.language_code = language_code
+        self.model = model
+        self.sample_rate = sample_rate
+        self.input_audio_codec = input_audio_codec
+        self.high_vad_sensitivity = high_vad_sensitivity
+        self.vad_signals = vad_signals
+
+        self.on_partial_transcript = on_partial_transcript
+        self.on_final_transcript = on_final_transcript
+        self.on_vad_event = on_vad_event
+        self.on_error = on_error
+
+        self.ws: Optional[Any] = None
+        self._receive_task: Optional[asyncio.Task] = None
+        self.is_connected = False
+        self._close_requested = False
+
+    async def connect(self):
+        """Establish persistent WebSocket connection to Sarvam Realtime ASR."""
+        if not self.api_key:
+            raise SpeechProviderUnavailableError("Sarvam API key is not configured.")
+
+        if websockets is None:
+            raise SpeechProviderError("websockets library is not available.")
+
+        ws_url = f"{settings.SARVAM_WS_URL}?api-subscription-key={self.api_key}"
+        headers = {"api-subscription-key": self.api_key}
+
+        logger.info(f"[ASR] [SARVAM] Connecting to realtime streaming WebSocket: {settings.SARVAM_WS_URL} (lang={self.language_code}, model={self.model})")
+
+        try:
+            self.ws = await websockets.connect(
+                ws_url,
+                extra_headers=headers,
+                ping_interval=20,
+                ping_timeout=10,
+                close_timeout=5
+            )
+            self.is_connected = True
+            self._close_requested = False
+
+            # Send initialization configuration payload
+            config_payload = {
+                "type": "config",
+                "language_code": self.language_code,
+                "model": self.model,
+                "sample_rate": self.sample_rate,
+                "input_audio_codec": self.input_audio_codec,
+                "mode": "transcribe",
+                "high_vad_sensitivity": self.high_vad_sensitivity,
+                "vad_signals": self.vad_signals
+            }
+            if settings.SARVAM_POSITIVE_SPEECH_THRESHOLD is not None:
+                config_payload["positive_speech_threshold"] = settings.SARVAM_POSITIVE_SPEECH_THRESHOLD
+            if settings.SARVAM_NEGATIVE_SPEECH_THRESHOLD is not None:
+                config_payload["negative_speech_threshold"] = settings.SARVAM_NEGATIVE_SPEECH_THRESHOLD
+            if settings.SARVAM_MIN_SPEECH_FRAMES is not None:
+                config_payload["min_speech_frames"] = settings.SARVAM_MIN_SPEECH_FRAMES
+
+            await self.ws.send(json.dumps(config_payload))
+            logger.info(f"[ASR] [SARVAM] Configuration acknowledged: {config_payload}")
+
+            # Start background message receiver task
+            self._receive_task = asyncio.create_task(self._receiver_loop())
+
+        except Exception as e:
+            self.is_connected = False
+            logger.error(f"[ASR] [SARVAM] Failed to connect to streaming WebSocket: {e}")
+            raise SpeechProviderUnavailableError(f"Failed to connect to Sarvam Realtime WebSocket: {e}")
+
+    async def send_audio_chunk(self, pcm16_bytes: bytes):
+        """Streams a raw PCM16 chunk to Sarvam."""
+        if not self.is_connected or not self.ws:
+            return
+        try:
+            await self.ws.send(pcm16_bytes)
+        except Exception as e:
+            logger.warning(f"[ASR] [SARVAM] Error streaming audio chunk: {e}")
+            if self.on_error:
+                self.on_error(e)
+
+    async def send_flush(self):
+        """Sends a flush signal to Sarvam to finalize any buffered utterance audio."""
+        if not self.is_connected or not self.ws:
+            return
+        try:
+            logger.info("[ASR] [SARVAM] Sending flush signal to provider.")
+            await self.ws.send(json.dumps({"type": "flush"}))
+        except Exception as e:
+            logger.warning(f"[ASR] [SARVAM] Error sending flush signal: {e}")
+
+    async def _receiver_loop(self):
+        """Asynchronously reads and dispatches incoming messages from Sarvam."""
+        try:
+            while self.is_connected and self.ws:
+                message = await self.ws.recv()
+                if isinstance(message, bytes):
+                    continue
+
+                try:
+                    payload = json.loads(message)
+                except Exception:
+                    continue
+
+                msg_type = payload.get("type", "").lower()
+
+                # VAD Events
+                if msg_type in ("speech_start", "vad_start") or (msg_type == "vad" and payload.get("signal") == "speech_start"):
+                    logger.info("[VAD] [SARVAM] Received SPEECH_START signal")
+                    if self.on_vad_event:
+                        self.on_vad_event("speech_start", payload)
+
+                elif msg_type in ("speech_end", "vad_end") or (msg_type == "vad" and payload.get("signal") == "speech_end"):
+                    logger.info("[VAD] [SARVAM] Received SPEECH_END signal")
+                    if self.on_vad_event:
+                        self.on_vad_event("speech_end", payload)
+
+                # Transcript Events
+                elif msg_type in ("transcript", "text", "recognition"):
+                    transcript_text = payload.get("transcript") or payload.get("text") or ""
+                    is_final = payload.get("is_final", False) or payload.get("type") == "final"
+                    confidence = float(payload.get("confidence", 0.94))
+
+                    if is_final and transcript_text.strip():
+                        logger.info(f"[ASR] [SARVAM] FINAL: '{transcript_text}' (conf={confidence:.2f})")
+                        if self.on_final_transcript:
+                            self.on_final_transcript(transcript_text.strip(), confidence)
+                    elif not is_final and transcript_text.strip():
+                        logger.debug(f"[ASR] [SARVAM] PARTIAL: '{transcript_text}'")
+                        if self.on_partial_transcript:
+                            self.on_partial_transcript(transcript_text.strip())
+
+        except websockets.exceptions.ConnectionClosed as e:
+            if not self._close_requested:
+                logger.warning(f"[ASR] [SARVAM] Streaming connection closed by remote: {e}")
+        except Exception as e:
+            if not self._close_requested:
+                logger.error(f"[ASR] [SARVAM] Error in receiver loop: {e}")
+                if self.on_error:
+                    self.on_error(e)
+        finally:
+            self.is_connected = False
+
+    async def close(self):
+        """Gracefully flushes and terminates the streaming session."""
+        self._close_requested = True
+        self.is_connected = False
+
+        if self._receive_task and not self._receive_task.done():
+            self._receive_task.cancel()
+
+        if self.ws:
+            try:
+                await self.ws.close()
+            except Exception:
+                pass
+            self.ws = None
+        logger.info("[ASR] [SARVAM] Streaming session terminated.")
+
+
+class SarvamRealtimeSpeechProvider(BaseSpeechProvider):
+    """
+    Production Speech Provider using Sarvam AI Realtime WebSocket ASR and Neural Translation.
+    Supports Marathi ('mr-IN'), Hindi ('hi-IN'), English ('en-IN').
+    """
+
+    def __init__(self):
+        self.api_key = settings.SARVAM_API_KEY
+        self.model = settings.SARVAM_MODEL
+        self.ws_url = settings.SARVAM_WS_URL
+        self._mock_fallback = MockSpeechProvider()
+
+    def create_streaming_session(
+        self,
+        language: str = "mr",
+        on_partial_transcript: Optional[Callable[[str], Any]] = None,
+        on_final_transcript: Optional[Callable[[str, float], Any]] = None,
+        on_vad_event: Optional[Callable[[str, Dict[str, Any]], Any]] = None,
+        on_error: Optional[Callable[[Exception], Any]] = None,
+    ) -> SarvamStreamingSession:
+        """Instantiates a dedicated persistent Sarvam WebSocket streaming session."""
+        lang_code = "mr-IN" if language == "mr" else ("hi-IN" if language == "hi" else "en-IN")
+        return SarvamStreamingSession(
+            api_key=self.api_key or "",
+            language_code=lang_code,
+            model=self.model,
+            sample_rate=settings.SARVAM_SAMPLE_RATE,
+            input_audio_codec=settings.SARVAM_AUDIO_CODEC,
+            high_vad_sensitivity=settings.SARVAM_HIGH_VAD_SENSITIVITY,
+            vad_signals=settings.SARVAM_VAD_SIGNALS,
+            on_partial_transcript=on_partial_transcript,
+            on_final_transcript=on_final_transcript,
+            on_vad_event=on_vad_event,
+            on_error=on_error,
+        )
+
+    async def transcribe_audio(self, audio_bytes: bytes, language: str = "mr") -> Dict[str, Any]:
+        """
+        File-based transcription (for recorded audio uploads / verification tests).
+        """
+        if not self.api_key:
+            raise SpeechProviderUnavailableError("SARVAM_API_KEY is not configured. Live speech transcription requires a valid API key.")
+
+        lang_code = "mr-IN" if language == "mr" else ("hi-IN" if language == "hi" else "en-IN")
+        headers = {"api-subscription-key": self.api_key}
+
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                files = {"file": ("audio.wav", audio_bytes, "audio/wav")}
+                data = {"model": self.model, "language_code": lang_code}
+                resp = await client.post("https://api.sarvam.ai/speech-to-text", headers=headers, files=files, data=data)
+
+                if resp.status_code != 200:
+                    raise SpeechProviderError(f"Sarvam API returned HTTP {resp.status_code}: {resp.text}")
+
+                res_json = resp.json()
+                native_text = res_json.get("transcript", "").strip()
+
+                try:
+                    english_text = await self.translate_text(native_text, source_lang=language, target_lang="en")
+                except Exception as te:
+                    logger.warning(f"[TRANSLATE] [SARVAM] Translation failed: {te}")
+                    english_text = ""
+
+                entities = self.extract_entities(native_text, language=language)
+
+                return {
+                    "native_transcript": native_text,
+                    "english_translation": english_text,
+                    "language": language,
+                    "asr_confidence": float(res_json.get("confidence", 0.95)),
+                    "translation_confidence": 0.93 if english_text else 0.0,
+                    "extracted_attributes": entities,
+                    "source": "SARVAM_SAARAS_V3",
+                }
+        except Exception as e:
+            logger.error(f"[ASR] [SARVAM] Request failed: {e}")
+            raise SpeechProviderUnavailableError(f"Sarvam speech service unavailable: {e}")
+
+    async def translate_text(self, text: str, source_lang: str = "mr", target_lang: str = "en") -> str:
+        """
+        Contextual Neural Translation using Sarvam mayura:v1 API.
+        Does NOT fall back to regex dictionaries in production.
+        """
+        if not text or not text.strip():
+            return ""
+
+        if not self.api_key:
+            raise SpeechTranslationUnavailableError("SARVAM_API_KEY is not configured for neural translation.")
+
+        src_code = "mr-IN" if source_lang == "mr" else ("hi-IN" if source_lang == "hi" else "en-IN")
+        tgt_code = "en-IN" if target_lang == "en" else ("mr-IN" if target_lang == "mr" else "hi-IN")
+        headers = {"api-subscription-key": self.api_key, "Content-Type": "application/json"}
+
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                payload = {
+                    "input": text,
+                    "source_language_code": src_code,
+                    "target_language_code": tgt_code,
+                    "mode": "formal",
+                    "model": settings.SARVAM_TRANSLATION_MODEL
+                }
+                resp = await client.post("https://api.sarvam.ai/translate", headers=headers, json=payload)
+                if resp.status_code == 200:
+                    translated = resp.json().get("translated_text", "").strip()
+                    if translated:
+                        return translated
+                raise SpeechTranslationUnavailableError(f"Sarvam translate returned HTTP {resp.status_code}: {resp.text}")
+        except Exception as e:
+            logger.error(f"[TRANSLATE] [SARVAM] Neural translation failed: {e}")
+            raise SpeechTranslationUnavailableError(f"Translation service temporarily unavailable: {e}")
+
+    def extract_entities(self, text: str, language: str = "mr") -> Dict[str, Any]:
+        """
+        Strict truthful entity extraction: unknown fields remain None (never fabricated defaults).
+        """
+        return self._mock_fallback.extract_entities(text, language=language)
+
+
 class MockSpeechProvider(BaseSpeechProvider):
     """
-    Deterministic mock provider for CI testing and offline mode.
+    Deterministic mock provider for CI testing and offline demonstration mode.
     Explicitly parses and consumes audio_bytes to ensure realistic audio pipeline testing.
     """
 
@@ -106,14 +418,14 @@ class MockSpeechProvider(BaseSpeechProvider):
             "translation_confidence": 0.94,
             "extracted_attributes": entities,
             "audio_duration_sec": info["duration_sec"],
-            "source": "MOCK",
+            "source": "MOCK_DETERMINISTIC",
         }
 
     async def translate_text(self, text: str, source_lang: str = "mr", target_lang: str = "en") -> str:
+        """Deterministic translation fixture used for unit tests & demo mode."""
         if not text:
             return ""
 
-        # Map known high-frequency Marathi/Hindi emergency terms contextually
         replacements = [
             (r"हॅलो|नमस्ते|नमस्कार", "Hello"),
             (r"कंट्रोल\s*रूम|मदत\s*कक्ष", "Control Room"),
@@ -233,7 +545,7 @@ class MockSpeechProvider(BaseSpeechProvider):
 
     def extract_entities(self, text: str, language: str = "mr") -> Dict[str, Any]:
         """
-        Truthful entity extraction: unknown fields remain None (never fabricated defaults).
+        Truthful entity extraction: unknown fields strictly remain None.
         """
         if not text:
             return {
@@ -347,90 +659,9 @@ class MockSpeechProvider(BaseSpeechProvider):
         }
 
 
-class SarvamRealtimeSpeechProvider(BaseSpeechProvider):
-    """
-    Production Realtime Streaming Speech Provider using Sarvam AI WebSocket API.
-    Supports Marathi ('mr-IN'), Hindi ('hi-IN'), English ('en-IN').
-    """
-
-    def __init__(self):
-        self.api_key = settings.SARVAM_API_KEY
-        self.model = settings.SARVAM_MODEL
-        self.ws_url = settings.SARVAM_WS_URL
-        self._mock_fallback = MockSpeechProvider()
-
-    async def transcribe_audio(self, audio_bytes: bytes, language: str = "mr") -> Dict[str, Any]:
-        if not self.api_key:
-            logger.warning("[ASR] [SARVAM] No SARVAM_API_KEY configured; operating in deterministic fallback mode.")
-            res = await self._mock_fallback.transcribe_audio(audio_bytes, language=language)
-            res["source"] = "SARVAM_UNCONFIGURED_FALLBACK"
-            return res
-
-        lang_code = "mr-IN" if language == "mr" else ("hi-IN" if language == "hi" else "en-IN")
-        headers = {"api-subscription-key": self.api_key}
-
-        try:
-            async with httpx.AsyncClient(timeout=15.0) as client:
-                files = {"file": ("audio.wav", audio_bytes, "audio/wav")}
-                data = {"model": self.model, "language_code": lang_code}
-                resp = await client.post("https://api.sarvam.ai/speech-to-text", headers=headers, files=files, data=data)
-
-                if resp.status_code != 200:
-                    raise SpeechProviderError(f"Sarvam API returned HTTP {resp.status_code}: {resp.text}")
-
-                res_json = resp.json()
-                native_text = res_json.get("transcript", "")
-                english_text = await self.translate_text(native_text, source_lang=language, target_lang="en")
-                entities = self.extract_entities(native_text, language=language)
-
-                return {
-                    "native_transcript": native_text,
-                    "english_translation": english_text,
-                    "language": language,
-                    "asr_confidence": res_json.get("confidence", 0.95),
-                    "translation_confidence": 0.93,
-                    "extracted_attributes": entities,
-                    "source": "SARVAM",
-                }
-        except Exception as e:
-            logger.error(f"[ASR] [SARVAM] Request failed: {e}")
-            raise SpeechProviderUnavailableError(f"Sarvam speech service unavailable: {e}")
-
-    async def translate_text(self, text: str, source_lang: str = "mr", target_lang: str = "en") -> str:
-        if not text:
-            return ""
-        if not self.api_key:
-            return await self._mock_fallback.translate_text(text, source_lang, target_lang)
-
-        src_code = "mr-IN" if source_lang == "mr" else ("hi-IN" if source_lang == "hi" else "en-IN")
-        tgt_code = "en-IN" if target_lang == "en" else ("mr-IN" if target_lang == "mr" else "hi-IN")
-        headers = {"api-subscription-key": self.api_key, "Content-Type": "application/json"}
-
-        try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                payload = {
-                    "input": text,
-                    "source_language_code": src_code,
-                    "target_language_code": tgt_code,
-                    "mode": "formal",
-                    "model": "mayura:v1"
-                }
-                resp = await client.post("https://api.sarvam.ai/translate", headers=headers, json=payload)
-                if resp.status_code == 200:
-                    return resp.json().get("translated_text", "")
-        except Exception as e:
-            logger.warning(f"[TRANSLATE] [SARVAM] Remote translate failed: {e}; falling back to contextual translation.")
-
-        return await self._mock_fallback.translate_text(text, source_lang, target_lang)
-
-    def extract_entities(self, text: str, language: str = "mr") -> Dict[str, Any]:
-        return self._mock_fallback.extract_entities(text, language=language)
-
-
 class GroqSpeechProvider(BaseSpeechProvider):
     """
     Groq Whisper-large-v3 Audio Translation Provider.
-    Consumes actual audio bytes and translates non-English audio directly to English.
     """
 
     def __init__(self):
@@ -440,10 +671,7 @@ class GroqSpeechProvider(BaseSpeechProvider):
 
     async def transcribe_audio(self, audio_bytes: bytes, language: str = "mr") -> Dict[str, Any]:
         if not self.api_key:
-            logger.warning("[ASR] [GROQ] No GROQ_API_KEY configured; operating in deterministic fallback mode.")
-            res = await self._mock_fallback.transcribe_audio(audio_bytes, language=language)
-            res["source"] = "GROQ_UNCONFIGURED_FALLBACK"
-            return res
+            raise SpeechProviderUnavailableError("GROQ_API_KEY is not configured.")
 
         headers = {"Authorization": f"Bearer {self.api_key}"}
         try:
@@ -455,7 +683,7 @@ class GroqSpeechProvider(BaseSpeechProvider):
                 if resp.status_code != 200:
                     raise SpeechProviderError(f"Groq API returned HTTP {resp.status_code}: {resp.text}")
 
-                english_text = resp.json().get("text", "")
+                english_text = resp.json().get("text", "").strip()
                 entities = self.extract_entities(english_text, language="en")
 
                 return {
@@ -479,7 +707,7 @@ class GroqSpeechProvider(BaseSpeechProvider):
 
 
 def get_speech_provider() -> BaseSpeechProvider:
-    """Factory function resolving the active speech provider based on config."""
+    """Factory resolving the active speech provider based on config."""
     prov = (settings.SPEECH_PROVIDER or "mock").lower()
     if prov == "sarvam":
         return SarvamRealtimeSpeechProvider()

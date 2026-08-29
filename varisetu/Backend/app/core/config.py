@@ -58,8 +58,16 @@ class Settings(BaseSettings):
 
     SPEECH_PROVIDER: str = "mock"  # "sarvam", "groq", "mock"
     SARVAM_API_KEY: Optional[str] = None
-    SARVAM_MODEL: str = "saaras:v2"  # streaming realtime ASR
-    SARVAM_WS_URL: str = "wss://api.sarvam.ai/streaming"
+    SARVAM_MODEL: str = "saaras:v3"  # streaming realtime ASR
+    SARVAM_WS_URL: str = "wss://api.sarvam.ai/speech-to-text/ws"
+    SARVAM_SAMPLE_RATE: int = 16000
+    SARVAM_AUDIO_CODEC: str = "pcm_s16le"
+    SARVAM_VAD_SIGNALS: bool = True
+    SARVAM_HIGH_VAD_SENSITIVITY: bool = True
+    SARVAM_POSITIVE_SPEECH_THRESHOLD: Optional[float] = None
+    SARVAM_NEGATIVE_SPEECH_THRESHOLD: Optional[float] = None
+    SARVAM_MIN_SPEECH_FRAMES: Optional[int] = None
+    SARVAM_TRANSLATION_MODEL: str = "mayura:v1"
 
     GROQ_API_KEY: Optional[str] = None
     GROQ_TRANSLATION_MODEL: str = "whisper-large-v3"

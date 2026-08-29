@@ -4351,6 +4351,7 @@ let callTimerInterval = null;
 let currentScenarioIndex = 0;
 let isSpeakerEnabled = true;
 let isCallHeld = false;
+let isListeningPaused = false;
 let streamingTypingTimer = null;
 
 // ==========================================================================
@@ -4369,10 +4370,6 @@ let micAnimFrameId = null;
 let isMicRecording = false;
 let currentIntakeMode = 'mic'; // 'mic' | 'sim' | 'text'
 let activeVoiceLang = 'mr-IN';
-let speechRecognizer = null;
-let speechRestartTimer = null;
-let speechKeepaliveInterval = null;
-let speechRestartAttempts = 0;
 
 let clientVAD = {
   noiseFloor: 0.01,
@@ -4597,14 +4594,7 @@ function setupHelplineLanguagePills() {
       btn.style.color = '#FFF';
       btn.style.borderColor = '#D98E2C';
       activeVoiceLang = btn.dataset.lang || 'mr-IN';
-
-      if (speechRecognizer) {
-        speechRecognizer.lang = activeVoiceLang;
-        if (isMicRecording) {
-          try { speechRecognizer.stop(); } catch {}
-          safeRestartSpeechRecognition();
-        }
-      }
+      console.log('[VariSetu Helpline] Active speech intake language set to:', activeVoiceLang);
     });
   });
 }
@@ -4695,7 +4685,7 @@ async function startLiveMicRecording() {
     if (nativeList) nativeList.innerHTML = '';
     if (englishList) englishList.innerHTML = '';
 
-    // Initialize Web Audio MediaStream
+    // Initialize Web Audio MediaStream (16kHz preferred, mono, echoCancellation)
     micMediaStream = await navigator.mediaDevices.getUserMedia({
       audio: {
         channelCount: 1,
@@ -4714,46 +4704,72 @@ async function startLiveMicRecording() {
     micAnalyser.fftSize = 64;
     sourceNode.connect(micAnalyser);
 
-    // Setup ScriptProcessorNode for raw PCM16 extraction (buffer size 4096)
-    const bufferSize = 4096;
-    micProcessorNode = micAudioContext.createScriptProcessor(bufferSize, 1, 1);
-    sourceNode.connect(micProcessorNode);
-    micProcessorNode.connect(micAudioContext.destination);
-
     // Open Real-time WebSocket connection to backend
     connectHelplineWebSocket(callSessionId);
 
-    // Audio Processing callback: Downsample to 16kHz & convert Float32 -> PCM16
-    const inputSampleRate = micAudioContext.sampleRate;
-    const targetSampleRate = 16000;
+    // Setup AudioWorklet for 16kHz PCM16 extraction
+    let workletLoaded = false;
+    try {
+      if (micAudioContext.audioWorklet) {
+        await micAudioContext.audioWorklet.addModule('assets/pcm-worklet.js');
+        const pcmNode = new AudioWorkletNode(micAudioContext, 'pcm-processor');
+        sourceNode.connect(pcmNode);
+        pcmNode.connect(micAudioContext.destination);
 
-    micProcessorNode.onaudioprocess = (e) => {
-      if (!isMicRecording || isCallHeld) return;
-
-      const inputData = e.inputBuffer.getChannelData(0);
-
-      // Downsample to 16kHz PCM16
-      const pcm16Buffer = resampleAndConvertToPCM16(inputData, inputSampleRate, targetSampleRate);
-      if (!pcm16Buffer || pcm16Buffer.byteLength === 0) return;
-
-      // Compute client-side RMS Energy for VAD & Meter
-      const rms = calculateRMS(inputData);
-      updateClientVAD(rms);
-
-      // Stream binary PCM16 frame over WebSocket
-      if (callWebSocket && callWebSocket.readyState === WebSocket.OPEN) {
-        pcmSequenceNum++;
-        callWebSocket.send(pcm16Buffer);
+        pcmNode.port.onmessage = (event) => {
+          if (!isMicRecording || isCallHeld || isListeningPaused) return;
+          if (event.data && event.data.type === 'pcm16_chunk') {
+            const chunkBuffer = event.data.buffer;
+            if (callWebSocket && callWebSocket.readyState === WebSocket.OPEN) {
+              callWebSocket.send(chunkBuffer);
+            }
+          }
+        };
+        micProcessorNode = pcmNode;
+        workletLoaded = true;
+        console.log('[VariSetu Audio] Dedicated AudioWorklet (pcm-processor) registered and streaming.');
       }
-    };
+    } catch (workletErr) {
+      console.warn('[VariSetu Audio] AudioWorklet load failed, using ScriptProcessor fallback:', workletErr);
+    }
 
-    // Equalizer spectrum render loop
+    if (!workletLoaded) {
+      // ScriptProcessor fallback for older browsers
+      const bufferSize = 4096;
+      micProcessorNode = micAudioContext.createScriptProcessor(bufferSize, 1, 1);
+      sourceNode.connect(micProcessorNode);
+      micProcessorNode.connect(micAudioContext.destination);
+
+      const inputSampleRate = micAudioContext.sampleRate;
+      const targetSampleRate = 16000;
+
+      micProcessorNode.onaudioprocess = (e) => {
+        if (!isMicRecording || isCallHeld || isListeningPaused) return;
+        const inputData = e.inputBuffer.getChannelData(0);
+        const pcm16Buffer = resampleAndConvertToPCM16(inputData, inputSampleRate, targetSampleRate);
+        if (!pcm16Buffer || pcm16Buffer.byteLength === 0) return;
+
+        if (callWebSocket && callWebSocket.readyState === WebSocket.OPEN) {
+          pcmSequenceNum++;
+          callWebSocket.send(pcm16Buffer);
+        }
+      };
+    }
+
+    // Equalizer spectrum render loop & visualizer VAD metering
     const frequencyData = new Uint8Array(micAnalyser.frequencyBinCount);
     const container = document.getElementById('audioEqualizerBars');
+    const timeDomainData = new Float32Array(micAnalyser.fftSize);
 
     function renderLiveMicEqualizer() {
       if (!isMicRecording || !micAnalyser) return;
       micAnalyser.getByteFrequencyData(frequencyData);
+      micAnalyser.getFloatTimeDomainData(timeDomainData);
+
+      // Visual audio level meter
+      const rms = calculateRMS(timeDomainData);
+      updateClientVAD(rms);
+
       if (container) {
         const bars = container.querySelectorAll('.audio-bar');
         bars.forEach((bar, idx) => {
@@ -4770,13 +4786,9 @@ async function startLiveMicRecording() {
     if (micText) micText.textContent = '⏹️ Stop Live Mic';
     renderLiveMicEqualizer();
 
-    // Start Web Speech API as simultaneous client-side ASR assist
-    startWebSpeechAssist();
-
   } catch (err) {
     console.warn('[VariSetu] Live microphone error:', err);
-    alert(`Microphone access notice: ${err.message}
-Switching to Simulated Call scenario mode.`);
+    alert(`Microphone access notice: ${err.message}\nSwitching to Simulated Call scenario mode.`);
     switchIntakeMode('sim');
   }
 }
@@ -4806,30 +4818,33 @@ function connectHelplineWebSocket(sessionId) {
 
     callWebSocket.onerror = (err) => {
       console.warn('[VariSetu Helpline WS] Socket error:', err);
-      updateCallState('PROVIDER_DEGRADED', 'WebSocket degraded, using HTTP fallback');
+      updateCallState('PROVIDER_DEGRADED', 'WebSocket error');
     };
 
     callWebSocket.onclose = () => {
       console.log('[VariSetu Helpline WS] Connection closed.');
       if (isMicRecording) {
-        updateCallState('PROVIDER_DEGRADED', 'Reconnecting...');
+        updateCallState('PROVIDER_DEGRADED', 'Connection closed');
       }
     };
   } catch (wsErr) {
     console.warn('[VariSetu WS] WebSocket creation failed:', wsErr);
-    updateCallState('PROVIDER_DEGRADED', 'Using Web Speech fallback');
+    updateCallState('PROVIDER_DEGRADED', 'WebSocket unavailable');
   }
 }
 
 function handleWebSocketMessage(msg) {
   const msgType = msg.type || msg.event;
 
-  if (msgType === 'state_change') {
-    updateCallState(msg.state || msg.call_state);
-  } else if (msgType === 'vad_event') {
+  if (msgType === 'state_change' || msgType === 'connection_state') {
+    const newState = msg.state || (msg.data && msg.data.call_state);
+    if (newState) updateCallState(newState);
+
+  } else if (msgType === 'vad_event' || msgType === 'vad_started' || msgType === 'vad_stopped') {
     const vadFill = document.getElementById('vadMeterFill');
     const vadLabel = document.getElementById('vadStateLabel');
-    const isSpeaking = msg.is_speech || msg.vad_state === 'SPEAKING';
+    const isSpeaking = msg.is_speech || msgType === 'vad_started' || (msg.data && msg.data.call_state === 'SPEAKING');
+
     if (vadFill) vadFill.style.width = isSpeaking ? '85%' : '15%';
     if (vadLabel) {
       vadLabel.textContent = isSpeaking ? 'SPEAKING' : 'SILENCE';
@@ -4838,24 +4853,43 @@ function handleWebSocketMessage(msg) {
     if (isSpeaking && currentCallState !== 'OPERATOR_HOLD') {
       updateCallState('SPEAKING');
     }
-  } else if (msgType === 'interim_transcript') {
+
+  } else if (msgType === 'interim_transcript' || msgType === 'partial_transcript') {
     const nativeBox = document.getElementById('nativeTranscriptBox');
-    if (nativeBox && msg.transcript) {
-      nativeBox.innerHTML = `"${escapeHtml(msg.transcript)}"<span class="live-speech-typing-cursor"></span>`;
+    const text = msg.transcript || (msg.data && msg.data.transcript);
+    if (nativeBox && text) {
+      nativeBox.innerHTML = `"${escapeHtml(text)}"<span class="live-speech-typing-cursor"></span>`;
     }
-  } else if (msgType === 'final_segment') {
-    handleIncomingNativeSegment(msg.segment || msg);
-  } else if (msgType === 'translation_segment') {
-    handleIncomingTranslationSegment(msg.segment || msg);
+
+  } else if (msgType === 'final_segment' || msgType === 'transcript_final') {
+    const seg = msg.segment || (msg.data && msg.data.segment);
+    handleIncomingNativeSegment(seg);
+
+  } else if (msgType === 'translation_segment' || msgType === 'translation_final') {
+    const seg = msg.segment || (msg.data && msg.data.segment) || msg.data;
+    handleIncomingTranslationSegment(seg);
+
   } else if (msgType === 'attributes_updated') {
-    populateOperatorDossier(msg.attributes || {});
+    const attrs = msg.attributes || (msg.data && msg.data.extracted_attributes);
+    populateOperatorDossier(attrs);
+
+  } else if (msgType === 'provider_error') {
+    const errData = msg.data || msg;
+    console.warn('[VariSetu Speech Provider Error]:', errData);
+    if (errData.code === 'SPEECH_PROVIDER_UNCONFIGURED') {
+      alert('SPEECH PROVIDER NOT CONFIGURED: SARVAM_API_KEY is required for live streaming ASR. Switch to DEMO mode or Custom Text intake.');
+      updateCallState('PROVIDER_DEGRADED', 'SARVAM_API_KEY missing');
+    }
+
   } else if (msgType === 'session_ended') {
     updateCallState('CALL_ENDED');
   }
 }
 
 function handleIncomingNativeSegment(segment) {
-  if (!segment || !segment.text) return;
+  if (!segment) return;
+  const text = segment.text || segment.native_text;
+  if (!text) return;
 
   nativeSegments.push(segment);
   const list = document.getElementById('nativeTranscriptSegmentsList');
@@ -4867,21 +4901,23 @@ function handleIncomingNativeSegment(segment) {
     div.innerHTML = `
       <div class="transcript-segment-meta">
         <span>🗣️ Caller &bull; ${new Date().toLocaleTimeString()}</span>
-        <span>Confidence: ${Math.round((segment.confidence || 0.92) * 100)}%</span>
+        <span>Confidence: ${Math.round((segment.confidence || segment.asr_confidence || 0.94) * 100)}%</span>
       </div>
-      <div>${escapeHtml(segment.text)}</div>
+      <div>${escapeHtml(text)}</div>
     `;
     list.appendChild(div);
     list.scrollTop = list.scrollHeight;
   }
 
   if (nativeBox) {
-    nativeBox.innerHTML = `<em>"${escapeHtml(segment.text)}"</em>`;
+    nativeBox.innerHTML = `<em>"${escapeHtml(text)}"</em>`;
   }
 }
 
 function handleIncomingTranslationSegment(segment) {
-  if (!segment || !segment.english_text) return;
+  if (!segment) return;
+  const englishText = segment.english_text || segment.text;
+  const isUnavailable = !englishText || englishText === 'TRANSLATION TEMPORARILY UNAVAILABLE' || segment.status === 'UNAVAILABLE' || segment.status === 'ERROR';
 
   translationSegments.push(segment);
   const list = document.getElementById('englishTranslationSegmentsList');
@@ -4889,20 +4925,22 @@ function handleIncomingTranslationSegment(segment) {
 
   if (list) {
     const div = document.createElement('div');
-    div.className = 'transcript-segment-card english';
+    div.className = isUnavailable ? 'transcript-segment-card error' : 'transcript-segment-card english';
     div.innerHTML = `
       <div class="transcript-segment-meta">
         <span>🤖 AI Translation &bull; ${new Date().toLocaleTimeString()}</span>
-        <span>IndicTrans-v2</span>
+        <span>${isUnavailable ? '⚠️ Unavailable' : 'Sarvam Neural Translate'}</span>
       </div>
-      <div>${escapeHtml(segment.english_text)}</div>
+      <div style="${isUnavailable ? 'color: #C62828; font-style: italic;' : ''}">${escapeHtml(englishText || 'TRANSLATION TEMPORARILY UNAVAILABLE')}</div>
     `;
     list.appendChild(div);
     list.scrollTop = list.scrollHeight;
   }
 
   if (englishBox) {
-    englishBox.innerHTML = `"${escapeHtml(segment.english_text)}"`;
+    englishBox.innerHTML = isUnavailable
+      ? `<span style="color: #C62828; font-style: italic;">[Translation Temporarily Unavailable]</span>`
+      : `"${escapeHtml(englishText)}"`;
   }
 }
 
@@ -4970,133 +5008,13 @@ function calculateRMS(samples) {
 }
 
 function updateClientVAD(rms) {
-  clientVAD.energy = rms;
-  clientVAD.noiseFloor = clientVAD.noiseFloor * 0.95 + rms * 0.05;
-
-  const attackThreshold = Math.max(0.025, clientVAD.noiseFloor * 2.5);
-  const releaseThreshold = Math.max(0.015, clientVAD.noiseFloor * 1.5);
-
   const vadFill = document.getElementById('vadMeterFill');
-  const vadLabel = document.getElementById('vadStateLabel');
-
   const meterPct = Math.min(100, Math.round((rms / 0.15) * 100));
   if (vadFill) vadFill.style.width = `${meterPct}%`;
-
-  if (rms >= attackThreshold) {
-    clientVAD.speechFrames++;
-    clientVAD.silenceFrames = 0;
-    if (clientVAD.speechFrames >= 2 && !clientVAD.isSpeaking) {
-      clientVAD.isSpeaking = true;
-      if (vadLabel) {
-        vadLabel.textContent = 'SPEAKING';
-        vadLabel.style.color = '#D50000';
-      }
-      if (currentCallState !== 'OPERATOR_HOLD') {
-        updateCallState('SPEAKING');
-      }
-    }
-  } else if (rms <= releaseThreshold) {
-    clientVAD.silenceFrames++;
-    clientVAD.speechFrames = 0;
-    if (clientVAD.silenceFrames >= 4 && clientVAD.isSpeaking) {
-      clientVAD.isSpeaking = false;
-      if (vadLabel) {
-        vadLabel.textContent = 'SILENCE';
-        vadLabel.style.color = '#5D4037';
-      }
-      if (currentCallState === 'SPEAKING') {
-        updateCallState('SILENCE_DETECTED');
-      }
-    }
-  }
-}
-
-// --------------------------------------------------------------------------
-// Web Speech API Assistance (Client-side Dual ASR)
-// --------------------------------------------------------------------------
-function startWebSpeechAssist() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) return;
-
-  if (speechRecognizer) {
-    try { speechRecognizer.abort(); } catch {}
-  }
-
-  speechRecognizer = new SpeechRecognition();
-  speechRecognizer.continuous = true;
-  speechRecognizer.interimResults = true;
-  speechRecognizer.maxAlternatives = 1;
-  speechRecognizer.lang = activeVoiceLang || 'mr-IN';
-
-  let interimTranscriptAccumulator = '';
-
-  speechRecognizer.onresult = (event) => {
-    let interim = '';
-    let finalChunk = '';
-
-    for (let i = event.resultIndex; i < event.results.length; ++i) {
-      const piece = event.results[i][0].transcript;
-      if (event.results[i].isFinal) {
-        finalChunk += piece;
-      } else {
-        interim += piece;
-      }
-    }
-
-    if (interim) {
-      const nativeBox = document.getElementById('nativeTranscriptBox');
-      if (nativeBox) {
-        nativeBox.innerHTML = `"${escapeHtml(interim)}"<span class="live-speech-typing-cursor"></span>`;
-      }
-    }
-
-    if (finalChunk) {
-      const text = finalChunk.trim();
-      handleIncomingNativeSegment({
-        segment_id: 'seg-' + Date.now(),
-        text: text,
-        confidence: 0.94
-      });
-
-      // Dispatch neural translation request
-      const langCode = activeVoiceLang.startsWith('hi') ? 'hi' : (activeVoiceLang.startsWith('en') ? 'en' : 'mr');
-      handleLiveVoiceTranslation(text, langCode);
-    }
-  };
-
-  speechRecognizer.onerror = (err) => {
-    console.debug('[VariSetu SpeechRecognition] Error:', err.error);
-    if (isMicRecording) safeRestartSpeechRecognition();
-  };
-
-  speechRecognizer.onend = () => {
-    if (isMicRecording) safeRestartSpeechRecognition();
-  };
-
-  try {
-    speechRecognizer.start();
-  } catch (err) {
-    safeRestartSpeechRecognition();
-  }
-}
-
-function safeRestartSpeechRecognition() {
-  if (!isMicRecording) return;
-  if (speechRestartTimer) clearTimeout(speechRestartTimer);
-  speechRestartTimer = setTimeout(() => {
-    if (!isMicRecording || !speechRecognizer) return;
-    try {
-      speechRecognizer.start();
-    } catch {}
-  }, 100);
 }
 
 function stopLiveMicRecording() {
   isMicRecording = false;
-  if (speechRestartTimer) {
-    clearTimeout(speechRestartTimer);
-    speechRestartTimer = null;
-  }
   if (micAnimFrameId) {
     cancelAnimationFrame(micAnimFrameId);
     micAnimFrameId = null;
@@ -5115,12 +5033,11 @@ function stopLiveMicRecording() {
     micAudioContext.close();
     micAudioContext = null;
   }
-  if (speechRecognizer) {
-    try { speechRecognizer.stop(); } catch {}
-    speechRecognizer = null;
-  }
   if (callWebSocket && callWebSocket.readyState === WebSocket.OPEN) {
-    callWebSocket.close();
+    try {
+      callWebSocket.send(JSON.stringify({ type: 'end' }));
+      callWebSocket.close();
+    } catch {}
     callWebSocket = null;
   }
 
