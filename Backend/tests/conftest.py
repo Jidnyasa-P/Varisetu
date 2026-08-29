@@ -48,6 +48,8 @@ async def client(test_db):
         yield test_db
 
     app.dependency_overrides[get_db] = override_get_db
+    from app.core.config import settings
+    settings.AUTH_REQUIRED = True
 
     # Seed the test in-memory database
     from app.core.rbac import UserRole

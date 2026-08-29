@@ -9,7 +9,7 @@
 
 - [Project README (`README.md`)](#readmemd) — `174` lines
 - [Docker Compose Config (`docker-compose.yml`)](#docker-composeyml) — `50` lines
-- [Git Ignore Config (`.gitignore`)](#gitignore) — `1` lines
+- [Git Ignore Config (`.gitignore`)](#gitignore) — `24` lines
 - [Frontend HTML Interface (`Frontend/index.html`)](#frontendindexhtml) — `886` lines
 - [Frontend Styling Design System (`Frontend/styles.css`)](#frontendstylescss) — `1743` lines
 - [Frontend Application & CCTV Engine (`Frontend/app.js`)](#frontendappjs) — `2941` lines
@@ -96,11 +96,11 @@
 - [API Router: Routes & Traffic Diversions (`Backend/app/api/routes.py`)](#backendappapiroutespy) — `83` lines
 - [API Router: Notifications & Health Checks (`Backend/app/api/notifications.py`)](#backendappapinotificationspy) — `123` lines
 - [API Router: Public Portal & Citizen SOS (`Backend/app/api/public.py`)](#backendappapipublicpy) — `109` lines
-- [Backend Pytest Test Fixtures (`Backend/tests/conftest.py`)](#backendtestsconftestpy) — `90` lines
+- [Backend Pytest Test Fixtures (`Backend/tests/conftest.py`)](#backendtestsconftestpy) — `92` lines
 - [Backend API Unit Test Suite (`Backend/tests/test_api.py`)](#backendteststest-apipy) — `322` lines
 - [Backend Unified Command & Action Test Suite (`Backend/tests/test_unified_command.py`)](#backendteststest-unified-commandpy) — `217` lines
 
-**Total Tracked Code Files:** `88` | **Total Source Lines:** `13,111`
+**Total Tracked Code Files:** `88` | **Total Source Lines:** `13,136`
 
 ---
 
@@ -350,7 +350,30 @@ volumes:
 ## Git Ignore Config (`.gitignore`)
 
 ```text
+# Dependencies & Environments
 node_modules/
+__pycache__/
+*.py[cod]
+*.class
+.pytest_cache/
+.venv/
+env/
+venv/
+
+# Environment Variables & Databases
+.env
+.env.local
+*.db
+*.sqlite3
+
+# OS & Logs
+.DS_Store
+dist/
+*.log
+
+# ML artifacts
+artifacts/
+
 
 ```
 
@@ -7876,7 +7899,7 @@ class UserOut(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: str
-    created_at: datetime
+    created_at: Optional[datetime] = None
     last_login: Optional[datetime] = None
 
 
@@ -13433,6 +13456,8 @@ async def client(test_db):
         yield test_db
 
     app.dependency_overrides[get_db] = override_get_db
+    from app.core.config import settings
+    settings.AUTH_REQUIRED = True
 
     # Seed the test in-memory database
     from app.core.rbac import UserRole
