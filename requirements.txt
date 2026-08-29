@@ -1,0 +1,21 @@
+# CPU-only torch/torchvision wheels — much smaller/faster to install on the
+# free CPU-basic Space than the default CUDA wheels, and we don't have a GPU
+# here anyway.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.4.1
+torchvision==0.19.1
+
+numpy>=1.24,<2.0
+Pillow>=10.0
+opencv-python-headless>=4.10.0
+mediapipe>=0.10.14
+huggingface_hub>=0.24.0
+
+# Face recognition (pretrained InsightFace buffalo_l)
+insightface>=0.7.3
+onnxruntime>=1.18.0
+
+# NOTE: gradio itself is intentionally NOT listed here — on a Gradio-SDK
+# Space, the platform installs the Gradio version you set in README.md's
+# `sdk_version` field. Listing a different gradio version here can create a
+# version conflict at build time.

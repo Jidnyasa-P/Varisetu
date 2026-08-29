@@ -1,0 +1,46 @@
+{
+  "model_name": "CSRNet",
+  "trained_on": "UCF-QNRF",
+  "input_channels": 3,
+  "output_stride": 8,
+  "preprocessing": {
+    "max_dimension": 1024,
+    "normalize_mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "normalize_std": [
+      0.229,
+      0.224,
+      0.225
+    ]
+  },
+  "density_alert_thresholds": {
+    "moderate_count": 150,
+    "critical_count": 400
+  },
+  "training": {
+    "epochs_run": 60,
+    "batch_size": 8,
+    "learning_rate": 1e-05,
+    "crop_size": 384,
+    "best_val_mae": 348.34027054730586
+  },
+  "test_set_metrics": {
+    "MAE": 302.20745508982037,
+    "MSE": 223034.95244580836,
+    "RMSE": 472.26576463449936,
+    "MAPE_percent": 63.99882640975033
+  },
+  "test_set_game_metrics": {
+    "GAME_0": 301.41400146484375,
+    "GAME_1": 87.78199768066406,
+    "GAME_2": 24.347999572753906,
+    "GAME_3": 6.605000019073486
+  },
+  "notes": [
+    "density_alert_thresholds are starting defaults for the Pandharpur command-centre dashboard, tunable per choke-point -- NOT derived from training data (no ground-truth crush-threshold labels exist in UCF-QNRF). Recalibrate against real corridor footage before using these numbers for actual crush-risk alerting.",
+    "Trained on UCF-QNRF, not Wari-corridor CCTV footage -- expect a fine-tuning pass on real corridor footage before production use (same caveat as the Re-ID component)."
+  ]
+}
