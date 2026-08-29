@@ -1745,11 +1745,11 @@ body {
 /* ==================== CORRIDOR WAYPOINT HUD BAR ==================== */
 .map-corridor-hud {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 8px;
+  left: 58px;
   right: 10px;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   border: 1px solid var(--border-strong);
   border-left: 4px solid var(--maroon-primary);
   border-radius: 3px;
@@ -3044,8 +3044,8 @@ body {
 
 /* Leaflet zoom controls positioning to prevent overlapping corridor HUD */
 .map-container .leaflet-top.leaflet-left {
-  top: 68px !important;
-  left: 10px !important;
+  top: 8px !important;
+  left: 8px !important;
 }
 
 .map-legend-column {
@@ -3106,4 +3106,214 @@ body {
   .cctv-horizontal-grid {
     grid-template-columns: 1fr;
   }
+}
+
+
+/* ==================== STANDARDIZED RESOURCE TOOLBAR & MODERN CARDS ==================== */
+.resource-standard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.resource-search-box {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.resource-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.resource-search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  font-size: 15px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 3px;
+  background: #FFFFFF;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.resource-search-input:focus {
+  border-color: var(--maroon-primary);
+  box-shadow: 0 0 0 2px rgba(122, 31, 31, 0.15);
+}
+
+.resource-filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.resource-dropdown-select {
+  padding: 8px 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 3px;
+  background: #FFFFFF;
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+}
+
+.resource-dropdown-select:focus {
+  border-color: var(--maroon-primary);
+}
+
+/* Modern Structured Card Component (Matching Reference UI) */
+.modern-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 14px;
+  padding: 12px;
+}
+
+.modern-resource-card {
+  background: #FFFFFF;
+  border: 1.5px solid #2B2623;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modern-resource-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 4px 0px rgba(0, 0, 0, 0.20);
+}
+
+/* Category Top Strips (Tints matching reference UI) */
+.modern-card-strip {
+  padding: 5px 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.strip-water {
+  background: #E4EFE7;
+  color: #1B4D3E;
+}
+
+.strip-medical {
+  background: #FBEAE8;
+  color: #7A1F1F;
+}
+
+.strip-police {
+  background: #E8EEF8;
+  color: #1A365D;
+}
+
+.strip-volunteer {
+  background: #F4EFE6;
+  color: #5C4328;
+}
+
+.strip-route {
+  background: #FDF2E7;
+  color: #8C4400;
+}
+
+.strip-recs {
+  background: #EFECE6;
+  color: #3D352E;
+}
+
+.modern-card-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.modern-card-title {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: #2B2623;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.modern-card-desc {
+  font-size: 14px;
+  color: #5D524B;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+.modern-card-divider {
+  border-top: 1px dashed #D8D1C5;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.modern-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+.modern-card-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.modern-card-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Collapsible Panel Headings */
+.collapsible-header {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.collapsible-header:hover {
+  background: #F8F5EE;
+}
+
+.collapsible-chevron {
+  transition: transform 0.2s ease;
+}
+
+.collapsible-header.collapsed .collapsible-chevron {
+  transform: rotate(-90deg);
+}
+
+.collapsible-content.collapsed {
+  display: none !important;
 }

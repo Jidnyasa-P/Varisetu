@@ -91,7 +91,7 @@
       <div style="margin-top: 14px; text-align: center; border-top: 1px dashed var(--border-main); padding-top: 12px;">
         <button type="button" id="openPublicPortalBtn" class="govt-btn btn-outline" style="width: 100%; padding: 8px 12px; font-size: 14.5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
           <i data-lucide="users" style="width: 14px; height: 14px;"></i>
-          <span>👥 Public Pilgrim Portal & Helplines (नागरिक माहिती)</span>
+          <span> Public Pilgrim Portal & Helplines (नागरिक माहिती)</span>
         </button>
       </div>
 
@@ -119,7 +119,7 @@
 
       <div class="header-meta">
         <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:700;">
-          <span>🚩 PALKHI: APPROACHING WAKHRI</span>
+          <span> PALKHI: APPROACHING WAKHRI</span>
         </div>
         <button id="backToLoginBtn" type="button" class="govt-btn" style="font-size:13.5px; padding:4px 10px; display:flex; align-items:center; gap:4px;">
           <i data-lucide="lock" style="width:12px; height:12px;"></i>
@@ -170,7 +170,7 @@
           <!-- Emergency Numbers -->
           <div class="panel-card" style="padding: 12px; border-left: 4px solid var(--maroon-primary);">
             <div class="panel-header" style="margin-bottom: 10px;">
-              <span>🚨 EMERGENCY & HELPLINE NUMBERS</span>
+              <span> EMERGENCY & HELPLINE NUMBERS</span>
               <span style="font-size: 13.5px; color: var(--status-green);">24x7 ACTIVE</span>
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -211,7 +211,7 @@
           <!-- Public Report Missing Person -->
           <div class="panel-card" style="padding: 12px; background: var(--bg-subtle);">
             <div class="panel-header" style="margin-bottom: 6px;">
-              <span>🔍 REPORT MISSING FAMILY MEMBER</span>
+              <span> REPORT MISSING FAMILY MEMBER</span>
             </div>
             <div style="font-size: 15px; color: var(--text-secondary); margin-bottom: 8px;">
               Separated from your family or group in the crowd? Submit details and photos directly for instant AI matching across state CCTV cameras.
@@ -261,7 +261,7 @@
         </button>
         <button class="govt-btn" id="openHelplineCallBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:13.5px; padding:4px 9px; display:flex; align-items:center; gap:5px; border-color:var(--saffron-gold); box-shadow:0 0 6px rgba(217,142,44,0.35);" title="Citizen SOS Emergency Helpline Intake & AI Translation">
           <i data-lucide="phone-call" style="width:12px; height:12px; color:#FFE082;"></i>
-          <span>📞 SOS Helpline (नागरीक मदत)</span>
+          <span> SOS Helpline (नागरीक मदत)</span>
         </button>
         <button class="govt-btn btn-outline" id="notifDrawerBtn" type="button" style="position:relative; font-size:13.5px; padding:4px 9px;" title="Operational Alerts & Outbox">
           <i data-lucide="bell" style="width:12px; height:12px;"></i>
@@ -304,7 +304,7 @@
       </button>
       <button class="nav-tab" data-target="view-resources">
         <i data-lucide="truck" style="width:14px; height:14px;"></i>
-        <span>Resource Management</span>
+        <span>Resources</span>
       </button>
     </nav>
 
@@ -603,7 +603,7 @@
           <div style="display:flex; gap:8px;">
             <button class="govt-btn" id="lostFoundCallIntakeBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:14.5px; padding:4px 10px; display:flex; align-items:center; gap:6px; border-color:var(--border-main);">
               <i data-lucide="phone-call" style="width:13px; height:13px;"></i>
-              <span>📞 Citizen Helpline Call (नागरीक मदत)</span>
+              <span> Citizen Helpline Call (नागरीक मदत)</span>
             </button>
             <button class="govt-btn" id="registerLostPersonBtn" type="button">
               <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
@@ -772,153 +772,159 @@
         <div class="section-bar">
           <div class="section-title">
             <i data-lucide="layers" style="width:16px; height:16px;"></i>
-            <span>Resource Deployment & Route Diversion Control</span>
+            <span>Resource Fleet &amp; Logistics</span>
           </div>
           <div class="section-sub">
-            Police Forces, Water Tankers, Food Vans & Medical Units Logistics
+            Corridor Fleet Units, Automated Recommendations &amp; Action Timeline
           </div>
         </div>
 
-        <!-- Elongated Emergency Dispatch & Route Recommendations Action Panel (Full Width) -->
-        <div class="panel-card elongated-dispatch-panel" style="padding:0; margin-top:10px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+        <!-- Standardized Search & Filter Bar (Matching Reference Design) -->
+        <div class="resource-standard-toolbar">
+          <div class="resource-search-box">
+            <i data-lucide="search" class="resource-search-icon"></i>
+            <input type="text" id="resourceGlobalSearch" class="resource-search-input" placeholder="Search resources, units, drivers, sectors, routes..." />
+          </div>
+          <div class="resource-filter-controls">
+            <select id="resourceTopicSelect" class="resource-dropdown-select">
+              <option value="ALL">All Logistics Modules</option>
+              <option value="recsModule">Dispatch &amp; Route Recommendations</option>
+              <option value="fleetModule">Field Fleet Inventory</option>
+              <option value="routesModule">Route Status &amp; Diversions</option>
+              <option value="historyModule">Dispatch History</option>
+              <option value="timelineModule">Logistics Action Timeline</option>
+            </select>
+            <select id="resourceCategorySelect" class="resource-dropdown-select">
+              <option value="ALL">All Categories</option>
+              <option value="WATER_TANKER">Water Tankers</option>
+              <option value="MEDICAL_VAN">Medical Units</option>
+              <option value="POLICE_SQUAD">Police Patrols</option>
+              <option value="VOLUNTEER_TEAM">Volunteer Teams</option>
+            </select>
+            <select id="resourceStatusSelect" class="resource-dropdown-select">
+              <option value="ALL">All Statuses</option>
+              <option value="AVAILABLE">Available</option>
+              <option value="DISPATCHED">Dispatched</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- MODULE 1: DISPATCH & ROUTE RECOMMENDATIONS (COLLAPSIBLE DROPDOWN TOPIC) -->
+        <div class="panel-card resource-module-block" id="recsModule" style="padding:0; margin-top:10px;">
+          <div class="panel-header collapsible-header" data-toggle="recsContent" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <i data-lucide="cpu" style="width:15px; height:15px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px; letter-spacing:0.3px;">DISPATCH & ROUTE RECOMMENDATIONS (AI OPTIMIZATION LAYER)</span>
+              <span style="font-weight:700; font-size:15.5px; letter-spacing:0.3px;">DISPATCH &amp; ROUTE RECOMMENDATIONS</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:14px; color:var(--text-muted);">Corridor Logistics & Nearest Squad Matching</span>
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="recsQueueBadge">AI Ranked</span>
+              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="recsQueueBadge">Active Queue</span>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
-          <div class="command-action-queue-list elongated-recs-grid" id="recommendationsQueueList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:10px; padding:12px; max-height:none; overflow:visible;">
-            <!-- Populated dynamically with dispatch & route diversion recommendations -->
-          </div>
-        </div>
-
-        <div class="resource-grid">
-          <!-- Left: Resource Summary Table (Limit: 20 per type) -->
-          <div class="govt-table-container">
-            <div class="panel-header" style="margin-bottom:6px; justify-content:space-between;">
-              <span>DEPLOYMENT SUMMARY METRICS (LIMIT: 20 PER RESOURCE TYPE)</span>
-              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="totalFleetQuotaBadge">80 Total Fleet Units</span>
-            </div>
-            <table class="govt-table">
-              <thead>
-                <tr>
-                  <th>Resource Category &amp; Role</th>
-                  <th>Fleet Inventory (Limit: 20)</th>
-                  <th>Active Deployment Sectors</th>
-                  <th>Reserve Standby Depots</th>
-                  <th>Operational Readiness</th>
-                </tr>
-              </thead>
-              <tbody id="resourcesTableBody">
-                <!-- Populated dynamically from /api/resources -->
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Right: Route Status Simple List & Diversion Control -->
-          <div>
-            <div class="panel-header" style="margin-bottom:8px; justify-content:space-between;">
-              <span>ROUTE STATUS & CORRIDOR DIVERSION CONTROL</span>
-            </div>
-
-            <div id="routesContainer">
-              <!-- Populated dynamically from /api/routes -->
+          <div class="collapsible-content" id="recsContent">
+            <div class="modern-cards-grid" id="recommendationsQueueList">
+              <!-- Populated dynamically with modern cards -->
             </div>
           </div>
         </div>
 
-        <!-- Field Logistics Fleet Cards Grid (20 Per Resource Type) -->
-        <div class="panel-card" style="padding:0; margin-top:14px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
+        <!-- MODULE 2: FIELD FLEET INVENTORY (CARDS GRID) -->
+        <div class="panel-card resource-module-block" id="fleetModule" style="padding:0; margin-top:12px;">
+          <div class="panel-header collapsible-header" data-toggle="fleetContent" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="truck" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px;">FIELD LOGISTICS &amp; FLEET UNITS INVENTORY (20 PER TYPE)</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-              <button type="button" class="timeline-filter-btn active fleet-filter-btn" data-fleet-filter="ALL">All (80)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="WATER_TANKER">Water (20)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="MEDICAL_VAN">Medical (20)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="POLICE_SQUAD">Police (20)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="VOLUNTEER_TEAM">Volunteers (20)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="DISPATCHED" style="border-color:#B8551B; font-weight:700;">⚡ Dispatched (38)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="AVAILABLE" style="border-color:#2E5B36; font-weight:700;">🟢 Available (42)</button>
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="fleetUnitsCountBadge">80 Units Managed</span>
-            </div>
-          </div>
-          <div class="field-logistics-grid" id="resourceCardsContainer" style="padding:10px; max-height:460px; overflow-y:auto;">
-            <!-- Populated dynamically with full 80 units (20 per type) with dispatched vs available indicators -->
-          </div>
-        </div>
-
-
-        <!-- Resource Allocation & Sector Dispatch History Log -->
-        <div class="panel-card" style="padding:0; margin-top:14px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <i data-lucide="history" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px;">RESOURCE ALLOCATION &amp; SECTOR DISPATCH HISTORY</span>
+              <span style="font-weight:700; font-size:15.5px;">FIELD LOGISTICS &amp; FLEET UNITS</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <select id="allocationSectorFilter" class="govt-input" style="padding:2px 8px; font-size:13.5px; height:24px;">
-                <option value="ALL">All Corridor Sectors</option>
-                <option value="Sector 1">Sector 1 (Pune ➔ Bhosari)</option>
-                <option value="Sector 2">Sector 2 (Bhosari ➔ Manchar)</option>
-                <option value="Sector 3">Sector 3 (Manchar ➔ Sangamner)</option>
-                <option value="Sector 4">Sector 4 (Sangamner ➔ Nashik)</option>
-              </select>
-              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="activeAllocationsBadge">6 Active</span>
-              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;" id="totalAllocationsBadge">8 Dispatches</span>
+              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;" id="fleetUnitsCountBadge">80 Units Managed</span>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
-          <div class="govt-table-container" style="margin:0; border:none; max-height:280px; overflow-y:auto;">
-            <table class="govt-table">
-              <thead>
-                <tr>
-                  <th>Timestamp (IST)</th>
-                  <th>Resource Unit</th>
-                  <th>Allocated Capacity</th>
-                  <th>Corridor Sector</th>
-                  <th>Stationed Checkpoint</th>
-                  <th>Operational Mission</th>
-                  <th>Authorized Officer</th>
-                  <th>Dispatch Status</th>
-                </tr>
-              </thead>
-              <tbody id="resourceAllocationHistoryBody">
-                <!-- Populated dynamically from /api/resources/allocations/history -->
-              </tbody>
-            </table>
+          <div class="collapsible-content" id="fleetContent">
+            <div class="modern-cards-grid" id="resourceCardsContainer" style="max-height:560px; overflow-y:auto;">
+              <!-- Populated dynamically with modern structured cards -->
+            </div>
           </div>
         </div>
 
+        <!-- MODULE 3: ROUTE STATUS & CORRIDOR DIVERSION CONTROL (CARDS) -->
+        <div class="panel-card resource-module-block" id="routesModule" style="padding:0; margin-top:12px;">
+          <div class="panel-header collapsible-header" data-toggle="routesContent" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="map" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:15.5px;">ROUTE STATUS &amp; CORRIDOR DIVERSION CONTROL</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;">NH-60 Corridor</span>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
+            </div>
+          </div>
+          <div class="collapsible-content" id="routesContent">
+            <div class="modern-cards-grid" id="routesContainer">
+              <!-- Populated dynamically with route cards -->
+            </div>
+          </div>
+        </div>
 
-        <!-- Live Incident & Logistics Action Timeline Stream -->
-        <div class="panel-card" style="padding:0; margin-top:14px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+        <!-- MODULE 4: RESOURCE ALLOCATION & DISPATCH HISTORY -->
+        <div class="panel-card resource-module-block" id="historyModule" style="padding:0; margin-top:12px;">
+          <div class="panel-header collapsible-header" data-toggle="historyContent" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="history" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:15.5px;">RESOURCE ALLOCATION &amp; DISPATCH HISTORY</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="activeAllocationsBadge">6 Active</span>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
+            </div>
+          </div>
+          <div class="collapsible-content" id="historyContent">
+            <div class="govt-table-container" style="margin:0; border:none; max-height:260px; overflow-y:auto;">
+              <table class="govt-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Resource Unit</th>
+                    <th>Capacity</th>
+                    <th>Corridor Sector</th>
+                    <th>Stationed Checkpoint</th>
+                    <th>Mission</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="resourceAllocationHistoryBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODULE 5: LOGISTICS ACTION TIMELINE (COLLAPSIBLE CARDS) -->
+        <div class="panel-card resource-module-block" id="timelineModule" style="padding:0; margin-top:12px; margin-bottom:20px;">
+          <div class="panel-header collapsible-header" data-toggle="timelineContent" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="activity" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px;">LIVE INCIDENT & LOGISTICS ACTION TIMELINE</span>
+              <span style="font-weight:700; font-size:15.5px;">LOGISTICS ACTION TIMELINE</span>
             </div>
-            <div class="timeline-filter-group">
-              <button type="button" class="timeline-filter-btn active" data-filter="ALL">ALL</button>
-              <button type="button" class="timeline-filter-btn" data-filter="DISPATCH">DISPATCH</button>
-              <button type="button" class="timeline-filter-btn" data-filter="ROUTE">ROUTE</button>
-              <button type="button" class="timeline-filter-btn" data-filter="ANNOUNCEMENT">PA</button>
-              <button type="button" class="timeline-filter-btn" data-filter="MEDICAL">MEDICAL</button>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="timeline-filter-group" style="margin:0;">
+                <button type="button" class="timeline-filter-btn active" data-filter="ALL">ALL</button>
+                <button type="button" class="timeline-filter-btn" data-filter="DISPATCH">DISPATCH</button>
+                <button type="button" class="timeline-filter-btn" data-filter="ROUTE">ROUTE</button>
+                <button type="button" class="timeline-filter-btn" data-filter="ANNOUNCEMENT">PA</button>
+                <button type="button" class="timeline-filter-btn" data-filter="MEDICAL">MEDICAL</button>
+              </div>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
-          <div class="timeline-events-container" id="incidentTimelineStream" style="max-height:280px; overflow-y:auto; padding:10px;">
-            <!-- Populated dynamically -->
+          <div class="collapsible-content" id="timelineContent">
+            <div class="modern-cards-grid" id="incidentTimelineStream" style="max-height:360px; overflow-y:auto;">
+              <!-- Populated dynamically with timeline cards -->
+            </div>
           </div>
         </div>
-      </section>
-
-
-    </main>
+      </section></main>
 
   </div> <!-- End #dashboardView -->
 
@@ -1298,9 +1304,9 @@
           <div class="call-pulse-ring" style="background:#00E676; width:12px; height:12px;"></div>
           <div>
             <div style="font-size:17.5px; font-weight:700; display:flex; align-items:center; gap:8px; font-family:var(--font-serif); flex-wrap:wrap;">
-              <span>📞 EMERGENCY 112 CITIZEN HELPLINE INTAKE &bull; नागरीक मदत केंद्र</span>
+              <span> EMERGENCY 112 CITIZEN HELPLINE INTAKE &bull; नागरीक मदत केंद्र</span>
               <span class="call-state-badge call-state-IDLE" id="callStateMachineBadge">IDLE</span>
-              <span class="badge" style="background:#00E676; color:#000; font-size:13px; font-weight:800;" id="callStatusBadge">🔴 READY / STANDBY</span>
+              <span class="badge" style="background:#00E676; color:#000; font-size:13px; font-weight:800;" id="callStatusBadge"> READY / STANDBY</span>
             </div>
             <div style="font-size:14px; color:#FFE082;">Dial-in Line: 1800-233-0099 (Wari Control Desk #04) &bull; 16kHz PCM16 Stream & Indic Neural Pipeline</div>
           </div>
@@ -1313,11 +1319,11 @@
         <div class="intake-mode-tab-bar">
           <button type="button" class="intake-mode-btn active" id="modeLiveMicBtn">
             <i data-lucide="mic" style="width:14px; height:14px; color:#D32F2F;"></i>
-            <span>🎙️ 1-Way Live Voice Call (थेट आवाज कॉल)</span>
+            <span> 1-Way Live Voice Call (थेट आवाज कॉल)</span>
           </button>
           <button type="button" class="intake-mode-btn" id="modeSimulationBtn">
             <i data-lucide="phone-call" style="width:14px; height:14px; color:#7A1F1F;"></i>
-            <span>📞 Preset Call Simulation (नमुना कॉल)</span>
+            <span> Preset Call Simulation (नमुना कॉल)</span>
           </button>
           <button type="button" class="intake-mode-btn" id="modeCustomTextBtn">
             <i data-lucide="edit-3" style="width:14px; height:14px; color:#B07817;"></i>
@@ -1332,7 +1338,7 @@
         <!-- Mode Indicator Banner -->
         <div id="callModeBanner" style="background:#FFF9C4; border:1px solid #FBC02D; border-radius:4px; padding:6px 12px; font-size:14.5px; display:flex; align-items:center; justify-content:space-between;">
           <div style="font-weight:700; color:#E65100; display:flex; align-items:center; gap:6px;">
-            <span id="callModeIcon">🔴</span>
+            <span id="callModeIcon"></span>
             <span id="callModeText">LIVE BROWSER AUDIO &bull; Real Microphone Streaming (16kHz Mono PCM16)</span>
           </div>
           <span style="font-size:13.5px; color:#795548; font-family:var(--font-mono);" id="callSessionIdTag">Session: Initializing...</span>
@@ -1361,7 +1367,7 @@
 
             <div class="api-provider-item">
               <div class="api-provider-title">
-                <span>⚡ Sarvam AI (Saaras Indic Speech)</span>
+                <span> Sarvam AI (Saaras Indic Speech)</span>
               </div>
               <div class="api-provider-desc">
                 High-performance Indian voice model suite (Saaras ASR & Bulbul TTS). Ultra-low latency Marathi/Hindi speech transcription with streaming WebSocket support.
@@ -1371,7 +1377,7 @@
 
             <div class="api-provider-item">
               <div class="api-provider-title">
-                <span>🤖 OpenAI Whisper-Large-v3 + GPT-4o</span>
+                <span> OpenAI Whisper-Large-v3 + GPT-4o</span>
               </div>
               <div class="api-provider-desc">
                 State-of-the-art multilingual ASR with zero-shot Devanagari translation and automated JSON entity extraction for clothing, age, gender, and landmark tags.
@@ -1395,13 +1401,13 @@
         <div class="softphone-card">
           <div class="softphone-top-bar">
             <div class="caller-identity-box">
-              <div class="caller-avatar-circle" id="callerAvatarCircle">👤</div>
+              <div class="caller-avatar-circle" id="callerAvatarCircle"></div>
               <div class="caller-details-text">
                 <div class="caller-name" id="callerDisplayName">Citizen Caller (नागरिक कॉलर)</div>
                 <div class="caller-sub">
                   <span id="callerDisplayPhone">📱 Helpline Direct Line</span>
                   <span>&bull;</span>
-                  <span id="callerDisplayLocation">📍 Pandharpur Wari Sector</span>
+                  <span id="callerDisplayLocation"> Pandharpur Wari Sector</span>
                   <span>&bull;</span>
                   <span style="color:#2E7D32; font-weight:700;">📶 16kHz Web Audio</span>
                 </div>
@@ -1444,11 +1450,11 @@
             <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
               <button type="button" class="softphone-btn record-mic" id="toggleLiveMicBtn">
                 <i data-lucide="mic" style="width:13px; height:13px;"></i>
-                <span id="micBtnText">🎙️ Start Live Mic Voice</span>
+                <span id="micBtnText"> Start Live Mic Voice</span>
               </button>
               <button type="button" class="softphone-btn" id="toggleSpeakerBtn" title="Speak out audio using Speech Synthesis">
                 <i data-lucide="volume-2" style="width:13px; height:13px;"></i>
-                <span id="speakerBtnText">🔊 Speaker: ON</span>
+                <span id="speakerBtnText"> Speaker: ON</span>
               </button>
               <button type="button" class="softphone-btn" id="toggleHoldBtn">
                 <i data-lucide="pause" style="width:13px; height:13px;"></i>
@@ -1503,7 +1509,7 @@
           <!-- Left: Marathi / Hindi Native Speech Transcript -->
           <div class="transcript-card" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #7A1F1F; padding-bottom:4px;">
-              <span style="color:#7A1F1F; font-weight:700;">🎙️ CITIZEN NATIVE SPEECH (मराठी / हिन्दी)</span>
+              <span style="color:#7A1F1F; font-weight:700;"> CITIZEN NATIVE SPEECH (मराठी / हिन्दी)</span>
               <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:12.5px;" id="nativeTranscriptBadge">Live Audio Transcription</span>
             </div>
             <div id="nativeTranscriptSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
@@ -1517,7 +1523,7 @@
           <!-- Right: AI Neural Translation -->
           <div class="transcript-card english" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
-              <span style="color:#B07817; font-weight:700;">🤖 AI NEURAL TRANSLATION (ENGLISH)</span>
+              <span style="color:#B07817; font-weight:700;"> AI NEURAL TRANSLATION (ENGLISH)</span>
               <span class="badge" style="background:#D98E2C; color:#000; font-size:12.5px; font-weight:700;" id="englishTranslationBadge">IndicTrans-v2 Multi-lingual</span>
             </div>
             <div id="englishTranslationSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">

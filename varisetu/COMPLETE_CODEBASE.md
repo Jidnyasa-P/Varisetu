@@ -551,7 +551,7 @@ if __name__ == "__main__":
 ---
 
 ## 7. Frontend HTML Interface
-**File Path:** `Frontend/index.html` | **Lines of Code:** 1617
+**File Path:** `Frontend/index.html` | **Lines of Code:** 1623
 
 ```html
 <!DOCTYPE html>
@@ -647,7 +647,7 @@ if __name__ == "__main__":
       <div style="margin-top: 14px; text-align: center; border-top: 1px dashed var(--border-main); padding-top: 12px;">
         <button type="button" id="openPublicPortalBtn" class="govt-btn btn-outline" style="width: 100%; padding: 8px 12px; font-size: 14.5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
           <i data-lucide="users" style="width: 14px; height: 14px;"></i>
-          <span>👥 Public Pilgrim Portal & Helplines (नागरिक माहिती)</span>
+          <span> Public Pilgrim Portal & Helplines (नागरिक माहिती)</span>
         </button>
       </div>
 
@@ -675,7 +675,7 @@ if __name__ == "__main__":
 
       <div class="header-meta">
         <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:700;">
-          <span>🚩 PALKHI: APPROACHING WAKHRI</span>
+          <span> PALKHI: APPROACHING WAKHRI</span>
         </div>
         <button id="backToLoginBtn" type="button" class="govt-btn" style="font-size:13.5px; padding:4px 10px; display:flex; align-items:center; gap:4px;">
           <i data-lucide="lock" style="width:12px; height:12px;"></i>
@@ -726,7 +726,7 @@ if __name__ == "__main__":
           <!-- Emergency Numbers -->
           <div class="panel-card" style="padding: 12px; border-left: 4px solid var(--maroon-primary);">
             <div class="panel-header" style="margin-bottom: 10px;">
-              <span>🚨 EMERGENCY & HELPLINE NUMBERS</span>
+              <span> EMERGENCY & HELPLINE NUMBERS</span>
               <span style="font-size: 13.5px; color: var(--status-green);">24x7 ACTIVE</span>
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px;">
@@ -767,7 +767,7 @@ if __name__ == "__main__":
           <!-- Public Report Missing Person -->
           <div class="panel-card" style="padding: 12px; background: var(--bg-subtle);">
             <div class="panel-header" style="margin-bottom: 6px;">
-              <span>🔍 REPORT MISSING FAMILY MEMBER</span>
+              <span> REPORT MISSING FAMILY MEMBER</span>
             </div>
             <div style="font-size: 15px; color: var(--text-secondary); margin-bottom: 8px;">
               Separated from your family or group in the crowd? Submit details and photos directly for instant AI matching across state CCTV cameras.
@@ -817,7 +817,7 @@ if __name__ == "__main__":
         </button>
         <button class="govt-btn" id="openHelplineCallBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:13.5px; padding:4px 9px; display:flex; align-items:center; gap:5px; border-color:var(--saffron-gold); box-shadow:0 0 6px rgba(217,142,44,0.35);" title="Citizen SOS Emergency Helpline Intake & AI Translation">
           <i data-lucide="phone-call" style="width:12px; height:12px; color:#FFE082;"></i>
-          <span>📞 SOS Helpline (नागरीक मदत)</span>
+          <span> SOS Helpline (नागरीक मदत)</span>
         </button>
         <button class="govt-btn btn-outline" id="notifDrawerBtn" type="button" style="position:relative; font-size:13.5px; padding:4px 9px;" title="Operational Alerts & Outbox">
           <i data-lucide="bell" style="width:12px; height:12px;"></i>
@@ -860,7 +860,7 @@ if __name__ == "__main__":
       </button>
       <button class="nav-tab" data-target="view-resources">
         <i data-lucide="truck" style="width:14px; height:14px;"></i>
-        <span>Resource Management</span>
+        <span>Resources</span>
       </button>
     </nav>
 
@@ -1159,7 +1159,7 @@ if __name__ == "__main__":
           <div style="display:flex; gap:8px;">
             <button class="govt-btn" id="lostFoundCallIntakeBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:14.5px; padding:4px 10px; display:flex; align-items:center; gap:6px; border-color:var(--border-main);">
               <i data-lucide="phone-call" style="width:13px; height:13px;"></i>
-              <span>📞 Citizen Helpline Call (नागरीक मदत)</span>
+              <span> Citizen Helpline Call (नागरीक मदत)</span>
             </button>
             <button class="govt-btn" id="registerLostPersonBtn" type="button">
               <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
@@ -1328,153 +1328,159 @@ if __name__ == "__main__":
         <div class="section-bar">
           <div class="section-title">
             <i data-lucide="layers" style="width:16px; height:16px;"></i>
-            <span>Resource Deployment & Route Diversion Control</span>
+            <span>Resource Fleet &amp; Logistics</span>
           </div>
           <div class="section-sub">
-            Police Forces, Water Tankers, Food Vans & Medical Units Logistics
+            Corridor Fleet Units, Automated Recommendations &amp; Action Timeline
           </div>
         </div>
 
-        <!-- Elongated Emergency Dispatch & Route Recommendations Action Panel (Full Width) -->
-        <div class="panel-card elongated-dispatch-panel" style="padding:0; margin-top:10px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+        <!-- Standardized Search & Filter Bar (Matching Reference Design) -->
+        <div class="resource-standard-toolbar">
+          <div class="resource-search-box">
+            <i data-lucide="search" class="resource-search-icon"></i>
+            <input type="text" id="resourceGlobalSearch" class="resource-search-input" placeholder="Search resources, units, drivers, sectors, routes..." />
+          </div>
+          <div class="resource-filter-controls">
+            <select id="resourceTopicSelect" class="resource-dropdown-select">
+              <option value="ALL">All Logistics Modules</option>
+              <option value="recsModule">Dispatch &amp; Route Recommendations</option>
+              <option value="fleetModule">Field Fleet Inventory</option>
+              <option value="routesModule">Route Status &amp; Diversions</option>
+              <option value="historyModule">Dispatch History</option>
+              <option value="timelineModule">Logistics Action Timeline</option>
+            </select>
+            <select id="resourceCategorySelect" class="resource-dropdown-select">
+              <option value="ALL">All Categories</option>
+              <option value="WATER_TANKER">Water Tankers</option>
+              <option value="MEDICAL_VAN">Medical Units</option>
+              <option value="POLICE_SQUAD">Police Patrols</option>
+              <option value="VOLUNTEER_TEAM">Volunteer Teams</option>
+            </select>
+            <select id="resourceStatusSelect" class="resource-dropdown-select">
+              <option value="ALL">All Statuses</option>
+              <option value="AVAILABLE">Available</option>
+              <option value="DISPATCHED">Dispatched</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- MODULE 1: DISPATCH & ROUTE RECOMMENDATIONS (COLLAPSIBLE DROPDOWN TOPIC) -->
+        <div class="panel-card resource-module-block" id="recsModule" style="padding:0; margin-top:10px;">
+          <div class="panel-header collapsible-header" data-toggle="recsContent" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <i data-lucide="cpu" style="width:15px; height:15px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px; letter-spacing:0.3px;">DISPATCH & ROUTE RECOMMENDATIONS (AI OPTIMIZATION LAYER)</span>
+              <span style="font-weight:700; font-size:15.5px; letter-spacing:0.3px;">DISPATCH &amp; ROUTE RECOMMENDATIONS</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:14px; color:var(--text-muted);">Corridor Logistics & Nearest Squad Matching</span>
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="recsQueueBadge">AI Ranked</span>
+              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="recsQueueBadge">Active Queue</span>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
-          <div class="command-action-queue-list elongated-recs-grid" id="recommendationsQueueList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:10px; padding:12px; max-height:none; overflow:visible;">
-            <!-- Populated dynamically with dispatch & route diversion recommendations -->
-          </div>
-        </div>
-
-        <div class="resource-grid">
-          <!-- Left: Resource Summary Table (Limit: 20 per type) -->
-          <div class="govt-table-container">
-            <div class="panel-header" style="margin-bottom:6px; justify-content:space-between;">
-              <span>DEPLOYMENT SUMMARY METRICS (LIMIT: 20 PER RESOURCE TYPE)</span>
-              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="totalFleetQuotaBadge">80 Total Fleet Units</span>
-            </div>
-            <table class="govt-table">
-              <thead>
-                <tr>
-                  <th>Resource Category &amp; Role</th>
-                  <th>Fleet Inventory (Limit: 20)</th>
-                  <th>Active Deployment Sectors</th>
-                  <th>Reserve Standby Depots</th>
-                  <th>Operational Readiness</th>
-                </tr>
-              </thead>
-              <tbody id="resourcesTableBody">
-                <!-- Populated dynamically from /api/resources -->
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Right: Route Status Simple List & Diversion Control -->
-          <div>
-            <div class="panel-header" style="margin-bottom:8px; justify-content:space-between;">
-              <span>ROUTE STATUS & CORRIDOR DIVERSION CONTROL</span>
-            </div>
-
-            <div id="routesContainer">
-              <!-- Populated dynamically from /api/routes -->
+          <div class="collapsible-content" id="recsContent">
+            <div class="modern-cards-grid" id="recommendationsQueueList">
+              <!-- Populated dynamically with modern cards -->
             </div>
           </div>
         </div>
 
-        <!-- Field Logistics Fleet Cards Grid (20 Per Resource Type) -->
-        <div class="panel-card" style="padding:0; margin-top:14px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
+        <!-- MODULE 2: FIELD FLEET INVENTORY (CARDS GRID) -->
+        <div class="panel-card resource-module-block" id="fleetModule" style="padding:0; margin-top:12px;">
+          <div class="panel-header collapsible-header" data-toggle="fleetContent" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="truck" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px;">FIELD LOGISTICS &amp; FLEET UNITS INVENTORY (20 PER TYPE)</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-              <button type="button" class="timeline-filter-btn active fleet-filter-btn" data-fleet-filter="ALL">All (80)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="WATER_TANKER">Water (20)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="MEDICAL_VAN">Medical (20)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="POLICE_SQUAD">Police (20)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="VOLUNTEER_TEAM">Volunteers (20)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="DISPATCHED" style="border-color:#B8551B; font-weight:700;">⚡ Dispatched (38)</button>
-              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="AVAILABLE" style="border-color:#2E5B36; font-weight:700;">🟢 Available (42)</button>
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="fleetUnitsCountBadge">80 Units Managed</span>
-            </div>
-          </div>
-          <div class="field-logistics-grid" id="resourceCardsContainer" style="padding:10px; max-height:460px; overflow-y:auto;">
-            <!-- Populated dynamically with full 80 units (20 per type) with dispatched vs available indicators -->
-          </div>
-        </div>
-
-
-        <!-- Resource Allocation & Sector Dispatch History Log -->
-        <div class="panel-card" style="padding:0; margin-top:14px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <i data-lucide="history" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px;">RESOURCE ALLOCATION &amp; SECTOR DISPATCH HISTORY</span>
+              <span style="font-weight:700; font-size:15.5px;">FIELD LOGISTICS &amp; FLEET UNITS</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <select id="allocationSectorFilter" class="govt-input" style="padding:2px 8px; font-size:13.5px; height:24px;">
-                <option value="ALL">All Corridor Sectors</option>
-                <option value="Sector 1">Sector 1 (Pune ➔ Bhosari)</option>
-                <option value="Sector 2">Sector 2 (Bhosari ➔ Manchar)</option>
-                <option value="Sector 3">Sector 3 (Manchar ➔ Sangamner)</option>
-                <option value="Sector 4">Sector 4 (Sangamner ➔ Nashik)</option>
-              </select>
-              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="activeAllocationsBadge">6 Active</span>
-              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;" id="totalAllocationsBadge">8 Dispatches</span>
+              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;" id="fleetUnitsCountBadge">80 Units Managed</span>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
-          <div class="govt-table-container" style="margin:0; border:none; max-height:280px; overflow-y:auto;">
-            <table class="govt-table">
-              <thead>
-                <tr>
-                  <th>Timestamp (IST)</th>
-                  <th>Resource Unit</th>
-                  <th>Allocated Capacity</th>
-                  <th>Corridor Sector</th>
-                  <th>Stationed Checkpoint</th>
-                  <th>Operational Mission</th>
-                  <th>Authorized Officer</th>
-                  <th>Dispatch Status</th>
-                </tr>
-              </thead>
-              <tbody id="resourceAllocationHistoryBody">
-                <!-- Populated dynamically from /api/resources/allocations/history -->
-              </tbody>
-            </table>
+          <div class="collapsible-content" id="fleetContent">
+            <div class="modern-cards-grid" id="resourceCardsContainer" style="max-height:560px; overflow-y:auto;">
+              <!-- Populated dynamically with modern structured cards -->
+            </div>
           </div>
         </div>
 
+        <!-- MODULE 3: ROUTE STATUS & CORRIDOR DIVERSION CONTROL (CARDS) -->
+        <div class="panel-card resource-module-block" id="routesModule" style="padding:0; margin-top:12px;">
+          <div class="panel-header collapsible-header" data-toggle="routesContent" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="map" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:15.5px;">ROUTE STATUS &amp; CORRIDOR DIVERSION CONTROL</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;">NH-60 Corridor</span>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
+            </div>
+          </div>
+          <div class="collapsible-content" id="routesContent">
+            <div class="modern-cards-grid" id="routesContainer">
+              <!-- Populated dynamically with route cards -->
+            </div>
+          </div>
+        </div>
 
-        <!-- Live Incident & Logistics Action Timeline Stream -->
-        <div class="panel-card" style="padding:0; margin-top:14px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+        <!-- MODULE 4: RESOURCE ALLOCATION & DISPATCH HISTORY -->
+        <div class="panel-card resource-module-block" id="historyModule" style="padding:0; margin-top:12px;">
+          <div class="panel-header collapsible-header" data-toggle="historyContent" style="justify-content:space-between; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="history" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:15.5px;">RESOURCE ALLOCATION &amp; DISPATCH HISTORY</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="activeAllocationsBadge">6 Active</span>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
+            </div>
+          </div>
+          <div class="collapsible-content" id="historyContent">
+            <div class="govt-table-container" style="margin:0; border:none; max-height:260px; overflow-y:auto;">
+              <table class="govt-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Resource Unit</th>
+                    <th>Capacity</th>
+                    <th>Corridor Sector</th>
+                    <th>Stationed Checkpoint</th>
+                    <th>Mission</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="resourceAllocationHistoryBody">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODULE 5: LOGISTICS ACTION TIMELINE (COLLAPSIBLE CARDS) -->
+        <div class="panel-card resource-module-block" id="timelineModule" style="padding:0; margin-top:12px; margin-bottom:20px;">
+          <div class="panel-header collapsible-header" data-toggle="timelineContent" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="activity" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px;">LIVE INCIDENT & LOGISTICS ACTION TIMELINE</span>
+              <span style="font-weight:700; font-size:15.5px;">LOGISTICS ACTION TIMELINE</span>
             </div>
-            <div class="timeline-filter-group">
-              <button type="button" class="timeline-filter-btn active" data-filter="ALL">ALL</button>
-              <button type="button" class="timeline-filter-btn" data-filter="DISPATCH">DISPATCH</button>
-              <button type="button" class="timeline-filter-btn" data-filter="ROUTE">ROUTE</button>
-              <button type="button" class="timeline-filter-btn" data-filter="ANNOUNCEMENT">PA</button>
-              <button type="button" class="timeline-filter-btn" data-filter="MEDICAL">MEDICAL</button>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="timeline-filter-group" style="margin:0;">
+                <button type="button" class="timeline-filter-btn active" data-filter="ALL">ALL</button>
+                <button type="button" class="timeline-filter-btn" data-filter="DISPATCH">DISPATCH</button>
+                <button type="button" class="timeline-filter-btn" data-filter="ROUTE">ROUTE</button>
+                <button type="button" class="timeline-filter-btn" data-filter="ANNOUNCEMENT">PA</button>
+                <button type="button" class="timeline-filter-btn" data-filter="MEDICAL">MEDICAL</button>
+              </div>
+              <i data-lucide="chevron-down" class="collapsible-chevron" style="width:16px; height:16px;"></i>
             </div>
           </div>
-          <div class="timeline-events-container" id="incidentTimelineStream" style="max-height:280px; overflow-y:auto; padding:10px;">
-            <!-- Populated dynamically -->
+          <div class="collapsible-content" id="timelineContent">
+            <div class="modern-cards-grid" id="incidentTimelineStream" style="max-height:360px; overflow-y:auto;">
+              <!-- Populated dynamically with timeline cards -->
+            </div>
           </div>
         </div>
-      </section>
-
-
-    </main>
+      </section></main>
 
   </div> <!-- End #dashboardView -->
 
@@ -1854,9 +1860,9 @@ if __name__ == "__main__":
           <div class="call-pulse-ring" style="background:#00E676; width:12px; height:12px;"></div>
           <div>
             <div style="font-size:17.5px; font-weight:700; display:flex; align-items:center; gap:8px; font-family:var(--font-serif); flex-wrap:wrap;">
-              <span>📞 EMERGENCY 112 CITIZEN HELPLINE INTAKE &bull; नागरीक मदत केंद्र</span>
+              <span> EMERGENCY 112 CITIZEN HELPLINE INTAKE &bull; नागरीक मदत केंद्र</span>
               <span class="call-state-badge call-state-IDLE" id="callStateMachineBadge">IDLE</span>
-              <span class="badge" style="background:#00E676; color:#000; font-size:13px; font-weight:800;" id="callStatusBadge">🔴 READY / STANDBY</span>
+              <span class="badge" style="background:#00E676; color:#000; font-size:13px; font-weight:800;" id="callStatusBadge"> READY / STANDBY</span>
             </div>
             <div style="font-size:14px; color:#FFE082;">Dial-in Line: 1800-233-0099 (Wari Control Desk #04) &bull; 16kHz PCM16 Stream & Indic Neural Pipeline</div>
           </div>
@@ -1869,11 +1875,11 @@ if __name__ == "__main__":
         <div class="intake-mode-tab-bar">
           <button type="button" class="intake-mode-btn active" id="modeLiveMicBtn">
             <i data-lucide="mic" style="width:14px; height:14px; color:#D32F2F;"></i>
-            <span>🎙️ 1-Way Live Voice Call (थेट आवाज कॉल)</span>
+            <span> 1-Way Live Voice Call (थेट आवाज कॉल)</span>
           </button>
           <button type="button" class="intake-mode-btn" id="modeSimulationBtn">
             <i data-lucide="phone-call" style="width:14px; height:14px; color:#7A1F1F;"></i>
-            <span>📞 Preset Call Simulation (नमुना कॉल)</span>
+            <span> Preset Call Simulation (नमुना कॉल)</span>
           </button>
           <button type="button" class="intake-mode-btn" id="modeCustomTextBtn">
             <i data-lucide="edit-3" style="width:14px; height:14px; color:#B07817;"></i>
@@ -1888,7 +1894,7 @@ if __name__ == "__main__":
         <!-- Mode Indicator Banner -->
         <div id="callModeBanner" style="background:#FFF9C4; border:1px solid #FBC02D; border-radius:4px; padding:6px 12px; font-size:14.5px; display:flex; align-items:center; justify-content:space-between;">
           <div style="font-weight:700; color:#E65100; display:flex; align-items:center; gap:6px;">
-            <span id="callModeIcon">🔴</span>
+            <span id="callModeIcon"></span>
             <span id="callModeText">LIVE BROWSER AUDIO &bull; Real Microphone Streaming (16kHz Mono PCM16)</span>
           </div>
           <span style="font-size:13.5px; color:#795548; font-family:var(--font-mono);" id="callSessionIdTag">Session: Initializing...</span>
@@ -1917,7 +1923,7 @@ if __name__ == "__main__":
 
             <div class="api-provider-item">
               <div class="api-provider-title">
-                <span>⚡ Sarvam AI (Saaras Indic Speech)</span>
+                <span> Sarvam AI (Saaras Indic Speech)</span>
               </div>
               <div class="api-provider-desc">
                 High-performance Indian voice model suite (Saaras ASR & Bulbul TTS). Ultra-low latency Marathi/Hindi speech transcription with streaming WebSocket support.
@@ -1927,7 +1933,7 @@ if __name__ == "__main__":
 
             <div class="api-provider-item">
               <div class="api-provider-title">
-                <span>🤖 OpenAI Whisper-Large-v3 + GPT-4o</span>
+                <span> OpenAI Whisper-Large-v3 + GPT-4o</span>
               </div>
               <div class="api-provider-desc">
                 State-of-the-art multilingual ASR with zero-shot Devanagari translation and automated JSON entity extraction for clothing, age, gender, and landmark tags.
@@ -1951,13 +1957,13 @@ if __name__ == "__main__":
         <div class="softphone-card">
           <div class="softphone-top-bar">
             <div class="caller-identity-box">
-              <div class="caller-avatar-circle" id="callerAvatarCircle">👤</div>
+              <div class="caller-avatar-circle" id="callerAvatarCircle"></div>
               <div class="caller-details-text">
                 <div class="caller-name" id="callerDisplayName">Citizen Caller (नागरिक कॉलर)</div>
                 <div class="caller-sub">
                   <span id="callerDisplayPhone">📱 Helpline Direct Line</span>
                   <span>&bull;</span>
-                  <span id="callerDisplayLocation">📍 Pandharpur Wari Sector</span>
+                  <span id="callerDisplayLocation"> Pandharpur Wari Sector</span>
                   <span>&bull;</span>
                   <span style="color:#2E7D32; font-weight:700;">📶 16kHz Web Audio</span>
                 </div>
@@ -2000,11 +2006,11 @@ if __name__ == "__main__":
             <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
               <button type="button" class="softphone-btn record-mic" id="toggleLiveMicBtn">
                 <i data-lucide="mic" style="width:13px; height:13px;"></i>
-                <span id="micBtnText">🎙️ Start Live Mic Voice</span>
+                <span id="micBtnText"> Start Live Mic Voice</span>
               </button>
               <button type="button" class="softphone-btn" id="toggleSpeakerBtn" title="Speak out audio using Speech Synthesis">
                 <i data-lucide="volume-2" style="width:13px; height:13px;"></i>
-                <span id="speakerBtnText">🔊 Speaker: ON</span>
+                <span id="speakerBtnText"> Speaker: ON</span>
               </button>
               <button type="button" class="softphone-btn" id="toggleHoldBtn">
                 <i data-lucide="pause" style="width:13px; height:13px;"></i>
@@ -2059,7 +2065,7 @@ if __name__ == "__main__":
           <!-- Left: Marathi / Hindi Native Speech Transcript -->
           <div class="transcript-card" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #7A1F1F; padding-bottom:4px;">
-              <span style="color:#7A1F1F; font-weight:700;">🎙️ CITIZEN NATIVE SPEECH (मराठी / हिन्दी)</span>
+              <span style="color:#7A1F1F; font-weight:700;"> CITIZEN NATIVE SPEECH (मराठी / हिन्दी)</span>
               <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:12.5px;" id="nativeTranscriptBadge">Live Audio Transcription</span>
             </div>
             <div id="nativeTranscriptSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
@@ -2073,7 +2079,7 @@ if __name__ == "__main__":
           <!-- Right: AI Neural Translation -->
           <div class="transcript-card english" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
-              <span style="color:#B07817; font-weight:700;">🤖 AI NEURAL TRANSLATION (ENGLISH)</span>
+              <span style="color:#B07817; font-weight:700;"> AI NEURAL TRANSLATION (ENGLISH)</span>
               <span class="badge" style="background:#D98E2C; color:#000; font-size:12.5px; font-weight:700;" id="englishTranslationBadge">IndicTrans-v2 Multi-lingual</span>
             </div>
             <div id="englishTranslationSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
@@ -2177,7 +2183,7 @@ if __name__ == "__main__":
 ---
 
 ## 8. Frontend Styling Design System
-**File Path:** `Frontend/styles.css` | **Lines of Code:** 3109
+**File Path:** `Frontend/styles.css` | **Lines of Code:** 3319
 
 ```css
 /* WariSetu AI (v2 Light Theme - Grounded Government Portal Specification) */
@@ -3927,11 +3933,11 @@ body {
 /* ==================== CORRIDOR WAYPOINT HUD BAR ==================== */
 .map-corridor-hud {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 8px;
+  left: 58px;
   right: 10px;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   border: 1px solid var(--border-strong);
   border-left: 4px solid var(--maroon-primary);
   border-radius: 3px;
@@ -5226,8 +5232,8 @@ body {
 
 /* Leaflet zoom controls positioning to prevent overlapping corridor HUD */
 .map-container .leaflet-top.leaflet-left {
-  top: 68px !important;
-  left: 10px !important;
+  top: 8px !important;
+  left: 8px !important;
 }
 
 .map-legend-column {
@@ -5290,12 +5296,222 @@ body {
   }
 }
 
+
+/* ==================== STANDARDIZED RESOURCE TOOLBAR & MODERN CARDS ==================== */
+.resource-standard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.resource-search-box {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.resource-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.resource-search-input {
+  width: 100%;
+  padding: 8px 12px 8px 36px;
+  font-size: 15px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 3px;
+  background: #FFFFFF;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.resource-search-input:focus {
+  border-color: var(--maroon-primary);
+  box-shadow: 0 0 0 2px rgba(122, 31, 31, 0.15);
+}
+
+.resource-filter-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.resource-dropdown-select {
+  padding: 8px 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 3px;
+  background: #FFFFFF;
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+}
+
+.resource-dropdown-select:focus {
+  border-color: var(--maroon-primary);
+}
+
+/* Modern Structured Card Component (Matching Reference UI) */
+.modern-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 14px;
+  padding: 12px;
+}
+
+.modern-resource-card {
+  background: #FFFFFF;
+  border: 1.5px solid #2B2623;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modern-resource-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 3px 4px 0px rgba(0, 0, 0, 0.20);
+}
+
+/* Category Top Strips (Tints matching reference UI) */
+.modern-card-strip {
+  padding: 5px 10px;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.strip-water {
+  background: #E4EFE7;
+  color: #1B4D3E;
+}
+
+.strip-medical {
+  background: #FBEAE8;
+  color: #7A1F1F;
+}
+
+.strip-police {
+  background: #E8EEF8;
+  color: #1A365D;
+}
+
+.strip-volunteer {
+  background: #F4EFE6;
+  color: #5C4328;
+}
+
+.strip-route {
+  background: #FDF2E7;
+  color: #8C4400;
+}
+
+.strip-recs {
+  background: #EFECE6;
+  color: #3D352E;
+}
+
+.modern-card-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.modern-card-title {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: #2B2623;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.modern-card-desc {
+  font-size: 14px;
+  color: #5D524B;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  flex: 1;
+}
+
+.modern-card-divider {
+  border-top: 1px dashed #D8D1C5;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.modern-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+.modern-card-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.modern-card-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Collapsible Panel Headings */
+.collapsible-header {
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.collapsible-header:hover {
+  background: #F8F5EE;
+}
+
+.collapsible-chevron {
+  transition: transform 0.2s ease;
+}
+
+.collapsible-header.collapsed .collapsible-chevron {
+  transform: rotate(-90deg);
+}
+
+.collapsible-content.collapsed {
+  display: none !important;
+}
+
 ```
 
 ---
 
 ## 9. Frontend Application & CCTV Engine
-**File Path:** `Frontend/app.js` | **Lines of Code:** 5446
+**File Path:** `Frontend/app.js` | **Lines of Code:** 5520
 
 ```javascript
 /* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Private Command Center Logic & Realtime Client */
@@ -5882,7 +6098,7 @@ function initPublicRouteMap() {
 
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 SANT TUKARAM PALKHI</div>`,
+    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);"> SANT TUKARAM PALKHI</div>`,
     iconSize: [140, 24],
     iconAnchor: [70, 12]
   });
@@ -5959,6 +6175,7 @@ async function initializeDashboardAfterAuth(user) {
     setupLostFoundButtons();
     setupMedicalEmergencyButtons();
     setupHelplineCallingInterface();
+    setupResourceViewInteractivity();
     dashboardInitialized = true;
   }
 
@@ -6005,6 +6222,12 @@ function setupNavigation() {
       }
       if (targetId === 'view-crowd' && window.forecastChartInstance) {
         setTimeout(() => window.forecastChartInstance.resize(), 150);
+      }
+      if (targetId === 'view-resources') {
+        renderFieldLogisticsGrid(getAllManagedFleetUnits());
+        renderRecommendationsQueue(AppState.commandPicture?.resource_recommendations || [], AppState.commandPicture?.route_recommendations || []);
+        renderIncidentTimeline(AppState.commandPicture?.incident_timeline || []);
+        if (window.lucide) lucide.createIcons();
       }
     });
   });
@@ -7148,7 +7371,7 @@ function openLostPersonDetails(item) {
           `).join('')}
         </div>
         <div style="margin-top:6px; font-size:13.5px; color:#2E5B36; font-family:var(--font-mono); display:flex; align-items:center; gap:4px;">
-          <span>✨ <strong>AI Face Recognition Active:</strong> 512-D embedding feature vectors extracted across 4 CCTV live streams.</span>
+          <span> <strong>AI Face Recognition Active:</strong> 512-D embedding feature vectors extracted across 4 CCTV live streams.</span>
         </div>
       </div>
     `,
@@ -7286,7 +7509,7 @@ function openLostPersonCreateModal(isPublic = false) {
           <div id="selectedPhotosPreviewContainer" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
 
           <div id="aiEmbeddingBadge" style="margin-top:6px; font-size:13.5px; color:#2E5B36; font-family:var(--font-mono); background:#E8F5E9; border:1px solid #A5D6A7; padding:6px 8px; border-radius:2px; display:none;">
-            ✨ <strong>AI Face Recognition Model Slot Ready:</strong> Feature embeddings (512-D vectors) will be indexed for instant multi-camera CCTV matching.
+             <strong>AI Face Recognition Model Slot Ready:</strong> Feature embeddings (512-D vectors) will be indexed for instant multi-camera CCTV matching.
           </div>
         </div>
       </form>
@@ -7390,7 +7613,7 @@ function openLostPersonCreateModal(isPublic = false) {
           kicker: 'AI FACIAL SEARCH ACTIVATED',
           bodyHtml: `
             <div style="text-align:center; padding:12px 0;">
-              <div style="font-size:32px; margin-bottom:8px;">✅</div>
+              <div style="font-size:32px; margin-bottom:8px;"></div>
               <div style="font-weight:700; font-size:17.5px; color:var(--maroon-primary); margin-bottom:6px;">
                 Case Reference: ${escapeHtml(resp.case_number || '#LF-NEW')}
               </div>
@@ -7680,85 +7903,7 @@ async function refreshResources() {
 
 
 function renderResources(resources) {
-  const tbody = document.getElementById('resourcesTableBody');
-  const quotaBadge = document.getElementById('totalFleetQuotaBadge');
-  if (quotaBadge) quotaBadge.textContent = '80 Total Fleet Units (20 Per Type)';
-  if (!tbody) return;
-
   const allUnits = getAllManagedFleetUnits();
-
-  // 4 Resource Categories with strict limit of 20 per type
-  const categories = [
-    {
-      type: 'WATER_TANKER',
-      name: 'Water Tankers (10,000L)',
-      role: 'Potable Drinking Water & Mist Sprayer Supply',
-      limit: 20,
-      dispatched: allUnits.filter(u => u.type === 'WATER_TANKER' && u.isDispatched).length,
-      available: allUnits.filter(u => u.type === 'WATER_TANKER' && !u.isDispatched).length,
-      activeSectors: 'Sector 3 (Narayangaon Km 84), Sector 3 (Sangamner), Sector 2 (Manchar), Sector 1 (Alandi)',
-      standbyDepots: 'Kothrud Central Depot, Bhosari Base Depot, Manchar Transit Depot'
-    },
-    {
-      type: 'MEDICAL_VAN',
-      name: 'Mobile Medical Vans & Ambulances',
-      role: 'Emergency Medical Triage & Mobile ICU Resuscitation',
-      limit: 20,
-      dispatched: allUnits.filter(u => u.type === 'MEDICAL_VAN' && u.isDispatched).length,
-      available: allUnits.filter(u => u.type === 'MEDICAL_VAN' && !u.isDispatched).length,
-      activeSectors: 'Sector 3 (Narayangaon ICU Camp), Sector 1 (Bhosari Base), Sector 3 (Sangamner Hospital), Sector 4 (Nashik)',
-      standbyDepots: 'Pune Civil Hospital, Manchar Sub-District Clinic, Nashik District Hospital'
-    },
-    {
-      type: 'POLICE_SQUAD',
-      name: 'Police Patrol Squads',
-      role: 'Perimeter Security, Crowd Chokepoint & Quick Response',
-      limit: 20,
-      dispatched: allUnits.filter(u => u.type === 'POLICE_SQUAD' && u.isDispatched).length,
-      available: allUnits.filter(u => u.type === 'POLICE_SQUAD' && !u.isDispatched).length,
-      activeSectors: 'Sector 4 (Nashik Terminal Security), Sector 3 (Narayangaon Chokepoint), Sector 2 (Manchar Chowk)',
-      standbyDepots: 'District Police HQ Reserve, Chakan Outpost, Pimpri-Chinchwad HQ'
-    },
-    {
-      type: 'VOLUNTEER_TEAM',
-      name: 'Volunteer Dindi Stewards',
-      role: 'Pilgrim Queue Marshalling, Hydration & Lost Person Help',
-      limit: 20,
-      dispatched: allUnits.filter(u => u.type === 'VOLUNTEER_TEAM' && u.isDispatched).length,
-      available: allUnits.filter(u => u.type === 'VOLUNTEER_TEAM' && !u.isDispatched).length,
-      activeSectors: 'Sector 2 (Manchar Bypass Queue), Sector 3 (Hydration Lanes), Sector 1 (Departure Ghats)',
-      standbyDepots: 'Alandi Volunteer Base Camp, Narayangaon Base, Nashik Govind Nagar Camp'
-    }
-  ];
-
-  tbody.innerHTML = categories.map(cat => {
-    const statusClass = cat.dispatched >= 10 ? 'orange' : (cat.dispatched >= 6 ? 'yellow' : 'green');
-    const percent = Math.round((cat.dispatched / cat.limit) * 100);
-    return `
-      <tr>
-        <td>
-          <div style="font-weight:700; font-size:15.5px; color:var(--maroon-primary);">${escapeHtml(cat.name)}</div>
-          <div style="font-size:13.5px; color:var(--text-muted);">${escapeHtml(cat.role)}</div>
-        </td>
-        <td style="font-family:var(--font-mono); font-size:15px;">
-          <div><strong style="color:#B8551B;">⚡ ${cat.dispatched} Dispatched</strong> &bull; <strong style="color:#2E5B36;">🟢 ${cat.available} Standby</strong></div>
-          <div style="font-size:13.5px; color:var(--text-muted);">Quota Limit: ${cat.limit} Total Units</div>
-        </td>
-        <td style="font-size:14.5px; color:var(--text-primary); max-width:240px;">
-          ${escapeHtml(cat.activeSectors)}
-        </td>
-        <td style="font-size:14px; color:var(--text-secondary); max-width:220px;">
-          ${escapeHtml(cat.standbyDepots)}
-        </td>
-        <td>
-          <span class="density-tag ${statusClass}">
-            ${percent}% DEPLOYED (${cat.available} RESERVE)
-          </span>
-        </td>
-      </tr>
-    `;
-  }).join('');
-
   renderFieldLogisticsGrid(allUnits);
 }
 
@@ -7782,69 +7927,80 @@ function renderFieldLogisticsGrid(units, filterOverride) {
     filtered = fleet.filter(u => !u.isDispatched);
   }
 
+  // Global search filtering
+  const searchInput = document.getElementById('resourceGlobalSearch');
+  const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+  if (searchTerm) {
+    filtered = filtered.filter(u => 
+      (u.name || '').toLowerCase().includes(searchTerm) ||
+      (u.code || '').toLowerCase().includes(searchTerm) ||
+      (u.sector || '').toLowerCase().includes(searchTerm) ||
+      (u.task || '').toLowerCase().includes(searchTerm) ||
+      (u.phone || '').toLowerCase().includes(searchTerm)
+    );
+  }
+
   if (badge) {
     const dispCount = fleet.filter(u => u.isDispatched).length;
     const availCount = fleet.filter(u => !u.isDispatched).length;
     badge.textContent = `${filtered.length} Showing (${dispCount} Dispatched • ${availCount} Available / 80 Total)`;
   }
 
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:20px; text-align:center; grid-column:1/-1;">No fleet resources found matching the specified filter criteria.</div>';
+    return;
+  }
+
   container.innerHTML = filtered.map(f => {
     const isDispatched = f.isDispatched;
-    const statusTagClass = isDispatched ? 'yellow' : 'green';
-    const statusLabel = isDispatched ? `⚡ DISPATCHED (${f.status})` : '🟢 AVAILABLE (STANDBY RESERVE)';
-    const cardBorderLeft = isDispatched ? 'var(--status-orange)' : 'var(--status-green)';
+    let stripClass = 'strip-water';
+    let catLabel = 'Water Tanker';
+
+    if (f.type === 'MEDICAL_VAN') {
+      stripClass = 'strip-medical';
+      catLabel = 'Medical Unit';
+    } else if (f.type === 'POLICE_SQUAD') {
+      stripClass = 'strip-police';
+      catLabel = 'Police Patrol';
+    } else if (f.type === 'VOLUNTEER_TEAM') {
+      stripClass = 'strip-volunteer';
+      catLabel = 'Volunteer Seva';
+    }
 
     return `
-      <div class="fleet-card" data-resource-id="${escapeHtml(f.id)}" style="border-left: 4px solid ${cardBorderLeft};">
-        <div class="fleet-card-header">
-          <div>
-            <span class="fleet-card-code">${escapeHtml(f.code)}</span>
-            <div style="font-weight:600; font-size:15px; color:var(--text-primary); margin-top:1px;">${escapeHtml(f.name)}</div>
-          </div>
-          <span class="density-tag ${statusTagClass}">
-            ${escapeHtml(statusLabel)}
+      <div class="modern-resource-card" data-resource-id="${escapeHtml(f.id)}" data-type="${escapeHtml(f.type)}" data-status="${isDispatched ? 'DISPATCHED' : 'AVAILABLE'}">
+        <div class="modern-card-strip ${stripClass}">
+          <span>${catLabel} • ${escapeHtml(f.code)}</span>
+          <span style="font-family:var(--font-mono); font-size:11.5px; font-weight:700; color:${isDispatched ? 'var(--status-orange)' : 'var(--status-green)'};">
+            ${isDispatched ? 'DISPATCHED' : 'AVAILABLE'}
           </span>
         </div>
-        <div class="fleet-card-meta">
-          <div>
-            <div class="fleet-meta-label">Allocated Capacity</div>
-            <div class="fleet-meta-val" style="color:var(--maroon-primary);">${escapeHtml(f.capacity)}</div>
-          </div>
-          <div>
-            <div class="fleet-meta-label">Operator Contact</div>
-            <div class="fleet-meta-val">${escapeHtml(f.phone)}</div>
-          </div>
-          <div style="grid-column: span 2;">
-            <div class="fleet-meta-label">${isDispatched ? 'Deployed Target Sector & Location' : 'Current Standby Station Depot'}</div>
-            <div class="fleet-meta-val" style="color:var(--text-primary); font-weight:600;">${escapeHtml(f.sector)}</div>
-          </div>
-          <div style="grid-column: span 2; font-size:14px; color:var(--text-secondary); background:var(--bg-subtle); padding:4px 6px; border-radius:2px;">
+        <div class="modern-card-body">
+          <div class="modern-card-title">${escapeHtml(f.name)}</div>
+          <div class="modern-card-desc">
+            <strong>Capacity:</strong> ${escapeHtml(f.capacity)}<br>
+            <strong>Contact:</strong> ${escapeHtml(f.phone)}<br>
             <strong>Mission:</strong> ${escapeHtml(f.task)}
           </div>
-        </div>
-        <div class="fleet-card-actions">
-          <button type="button" class="govt-btn" style="flex:1; font-size:13.5px; padding:4px 8px; ${isDispatched ? '' : 'background:#2E5B36;'}" onclick="openReassignSectorModal('${escapeHtml(f.id)}', '${escapeHtml(f.name)}')">
-            <i data-lucide="${isDispatched ? 'refresh-cw' : 'send'}" style="width:10px; height:10px;"></i>
-            <span>${isDispatched ? '🔄 Reassign Sector' : '🚀 Dispatch to Sector'}</span>
-          </button>
+          <div class="modern-card-divider"></div>
+          <div class="modern-card-footer">
+            <div class="modern-card-meta-left">
+              <i data-lucide="map-pin" style="width:13px; height:13px;"></i>
+              <span title="${escapeHtml(f.sector)}">${escapeHtml(f.sector.length > 22 ? f.sector.substring(0, 22) + '...' : f.sector)}</span>
+            </div>
+            <div class="modern-card-meta-right">
+              <button type="button" class="govt-btn" style="padding:3px 10px; font-size:13px; ${isDispatched ? '' : 'background:#2E5B36;'}" onclick="openReassignSectorModal('${escapeHtml(f.id)}', '${escapeHtml(f.name)}')">
+                ${isDispatched ? 'Reassign' : 'Dispatch'}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     `;
   }).join('');
 
-  // Wire filter button clicks
-  document.querySelectorAll('.fleet-filter-btn').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll('.fleet-filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      activeFleetFilter = btn.getAttribute('data-fleet-filter') || 'ALL';
-      renderFieldLogisticsGrid(fleet, activeFleetFilter);
-    };
-  });
-
   if (window.lucide) lucide.createIcons();
 }
-
 function getAllManagedFleetUnits() {
   const units = [];
 
@@ -8239,7 +8395,7 @@ function renderRoutes(routes) {
           ${escapeHtml(route.status?.replace('_', ' '))}
         </span>
         <button type="button" class="govt-btn btn-outline" style="font-size:13px; padding:3px 7px;" onclick="openRouteManageModal('${escapeHtml(route.id)}', '${escapeHtml(route.name)}', '${escapeHtml(route.status)}')">
-          <span>🔄 Manage / Divert</span>
+          <span> Manage / Divert</span>
         </button>
       </div>
     </div>
@@ -8750,101 +8906,155 @@ function renderBiometricCandidates(candidates) {
   if (window.lucide) lucide.createIcons();
 }
 function renderRecommendationsQueue(resourceRecs, routeRecs) {
-
   const container = document.getElementById('recommendationsQueueList');
   const badge = document.getElementById('recsQueueBadge');
   if (!container) return;
 
   const totalRecs = (resourceRecs?.length || 0) + (routeRecs?.length || 0);
   if (badge) {
-    badge.textContent = `${totalRecs} Suggestion${totalRecs === 1 ? '' : 's'}`;
+    badge.textContent = `${totalRecs} AI Recommendation${totalRecs === 1 ? '' : 's'}`;
   }
 
   if (totalRecs === 0) {
-    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">All resources and routes running on optimal configuration.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:16px; text-align:center; grid-column:1/-1;">All pilgrimage corridor resources and transit routes running on optimal configuration.</div>';
     return;
   }
 
-  let html = '';
+  let cardsHtml = '';
 
-  // Route recommendations
+  // Route recommendations as modern cards
   if (routeRecs && routeRecs.length > 0) {
     routeRecs.forEach(r => {
-      html += `
-        <div class="command-queue-card" style="border-left-color:var(--status-orange);">
-          <div class="command-card-top">
-            <span class="command-card-title">Route Diversion: ${escapeHtml(r.route_name)}</span>
-            <span class="sla-timer-pill" style="background:var(--status-orange-bg); color:var(--status-orange);">-${r.time_saving_minutes || 18}m Flow</span>
+      cardsHtml += `
+        <div class="modern-resource-card" data-category="ROUTE">
+          <div class="modern-card-strip strip-route">
+            <span>Route Diversion</span>
+            <span style="font-family:var(--font-mono); font-size:11.5px;">-${r.time_saving_minutes || 18}m Delay</span>
           </div>
-          <div class="command-card-desc">${escapeHtml(r.reason || 'High congestion detected. Divert foot pilgrims to bypass.')}</div>
-          <div class="command-card-actions">
-            <button type="button" class="cmd-btn cmd-btn-primary" onclick="handleApproveRouteDiversion('${escapeHtml(r.route_id)}', '${escapeHtml(r.suggested_status)}', this)">
-              <i data-lucide="corner-up-right" style="width:10px; height:10px;"></i> Approve Diversion
-            </button>
+          <div class="modern-card-body">
+            <div class="modern-card-title">${escapeHtml(r.route_name)}</div>
+            <div class="modern-card-desc">${escapeHtml(r.reason || 'High congestion detected along main pilgrimage spine. Divert foot pilgrims to designated bypass corridor.')}</div>
+            <div class="modern-card-divider"></div>
+            <div class="modern-card-footer">
+              <div class="modern-card-meta-left">
+                <i data-lucide="map-pin" style="width:13px; height:13px;"></i>
+                <span>Sector 3 • Bypass</span>
+              </div>
+              <div class="modern-card-meta-right">
+                <button type="button" class="govt-btn" style="padding:3px 10px; font-size:13px;" onclick="handleApproveRouteDiversion('${escapeHtml(r.route_id)}', '${escapeHtml(r.suggested_status)}', this)">
+                  Approve Diversion
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       `;
     });
   }
 
-  // Resource recommendations
+  // Resource recommendations as modern cards
   if (resourceRecs && resourceRecs.length > 0) {
     resourceRecs.forEach(res => {
-      html += `
-        <div class="command-queue-card" style="border-left-color:var(--maroon-primary);">
-          <div class="command-card-top">
-            <span class="command-card-title">Dispatch ${escapeHtml(res.resource_type)}</span>
-            <span class="sla-timer-pill" style="background:var(--maroon-bg); color:var(--maroon-primary);">ETA ${res.eta_minutes || 4} min</span>
+      const isMed = (res.resource_type || '').includes('MED') || (res.resource_name || '').includes('Ambulance');
+      const isWater = (res.resource_type || '').includes('WATER') || (res.resource_name || '').includes('Tanker');
+      const stripClass = isMed ? 'strip-medical' : (isWater ? 'strip-water' : 'strip-police');
+      const catLabel = isMed ? 'Medical Dispatch' : (isWater ? 'Water Logistics' : 'Patrol Squad');
+
+      cardsHtml += `
+        <div class="modern-resource-card" data-category="${isMed ? 'MEDICAL_VAN' : (isWater ? 'WATER_TANKER' : 'POLICE_SQUAD')}">
+          <div class="modern-card-strip ${stripClass}">
+            <span>${catLabel}</span>
+            <span style="font-family:var(--font-mono); font-size:11.5px;">ETA ${res.eta_minutes || 4} min</span>
           </div>
-          <div class="command-card-desc">${escapeHtml(res.resource_name)} (${res.distance_km} km away from target)</div>
-          <div class="command-card-actions">
-            <button type="button" class="cmd-btn cmd-btn-primary" onclick="handleDispatchRecommendedResource('${escapeHtml(res.resource_id)}', '${escapeHtml(res.target_id || '')}', this)">
-              <i data-lucide="truck" style="width:10px; height:10px;"></i> Confirm Dispatch
-            </button>
+          <div class="modern-card-body">
+            <div class="modern-card-title">${escapeHtml(res.resource_name)}</div>
+            <div class="modern-card-desc">Target: ${escapeHtml(res.target_name || 'Congestion Junction')} (${res.distance_km || 1.2} km away). Automated AI proximity dispatch match.</div>
+            <div class="modern-card-divider"></div>
+            <div class="modern-card-footer">
+              <div class="modern-card-meta-left">
+                <i data-lucide="navigation" style="width:13px; height:13px;"></i>
+                <span>${escapeHtml(res.sector || 'Active Corridor')}</span>
+              </div>
+              <div class="modern-card-meta-right">
+                <button type="button" class="govt-btn" style="padding:3px 10px; font-size:13px;" onclick="handleDispatchRecommendedResource('${escapeHtml(res.resource_id)}', '${escapeHtml(res.target_id || '')}', this)">
+                  Confirm Dispatch
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       `;
     });
   }
 
-  container.innerHTML = html;
+  container.innerHTML = cardsHtml;
   if (window.lucide) lucide.createIcons();
 }
+const DEFAULT_LOGISTICS_TIMELINE = [
+  { category: 'DISPATCH', event_type: 'DISPATCH_CONFIRMED', title: 'Water Tanker #WT-09 Deployed', message: 'Tanker WT-09 (10,000L capacity) stationed at Wakhri Phata Junction approach for continuous pilgrim hydration.', timestamp: new Date(Date.now() - 3 * 60000).toISOString(), sector: 'Sector 3 (Wakhri)' },
+  { category: 'ROUTE', event_type: 'ROUTE_DIVERSION', title: 'Bypass Road Diversion Activated', message: 'Corridor diversion active via Narayangaon bypass to relieve 82% density congestion.', timestamp: new Date(Date.now() - 8 * 60000).toISOString(), sector: 'Sector 3 (Narayangaon)' },
+  { category: 'MEDICAL', event_type: 'MEDICAL_SUPPORT', title: 'Mobile ICU #MV-02 Standby', message: 'Advanced Life Support Ambulance MV-02 deployed with paramedic squad at Mandir North Gate.', timestamp: new Date(Date.now() - 14 * 60000).toISOString(), sector: 'Sector 4 (Mandir Gate)' },
+  { category: 'ANNOUNCEMENT', event_type: 'PA_BROADCAST', title: 'Automated Crowd Regulation PA Broadcast', message: 'Multilingual crowd flow advisory broadcast across Saswad Ghat loudspeaker arrays.', timestamp: new Date(Date.now() - 21 * 60000).toISOString(), sector: 'Sector 2 (Saswad)' },
+  { category: 'DISPATCH', event_type: 'POLICE_PATROL', title: 'Police Squad #PS-03 Checkpoint', message: 'MahaPolice Highway Interceptor Squad PS-03 operational on NH-60 perimeter patrol.', timestamp: new Date(Date.now() - 32 * 60000).toISOString(), sector: 'Sector 1 (Pune / Bhosari)' },
+  { category: 'MEDICAL', event_type: 'HEAT_STATION', title: 'ORSL Distribution Counter #04 Open', message: '1,400 hydration sachets delivered to Bhalwani Camp medical relief station.', timestamp: new Date(Date.now() - 45 * 60000).toISOString(), sector: 'Sector 3 (Bhalwani)' }
+];
 
 function renderIncidentTimeline(timelineEvents) {
   const container = document.getElementById('incidentTimelineStream');
   if (!container) return;
 
-  const filtered = (timelineEvents || []).filter(e => {
-    if (AppState.timelineFilter === 'ALL') return true;
+  const rawEvents = (timelineEvents && timelineEvents.length > 0) ? timelineEvents : DEFAULT_LOGISTICS_TIMELINE;
+
+  const filtered = rawEvents.filter(e => {
+    if (!AppState.timelineFilter || AppState.timelineFilter === 'ALL') return true;
     const cat = String(e.category || e.event_type || '').toUpperCase();
-    return cat.includes(AppState.timelineFilter);
+    return cat.includes(AppState.timelineFilter.toUpperCase());
   });
 
   if (filtered.length === 0) {
-    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">No timeline logs matching filter.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:16px; text-align:center; grid-column:1/-1;">No logistics action logs matching active filter.</div>';
     return;
   }
 
-  container.innerHTML = filtered.slice(0, 8).map(evt => {
-    const timeStr = evt.timestamp ? new Date(evt.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'LIVE';
-    let iconName = 'activity';
-    if (evt.category === 'DISPATCH' || evt.event_type?.includes('DISPATCH')) iconName = 'truck';
-    if (evt.category === 'ROUTE' || evt.event_type?.includes('ROUTE')) iconName = 'map-pin';
-    if (evt.category === 'ANNOUNCEMENT' || evt.event_type?.includes('ANNOUNCE')) iconName = 'megaphone';
-    if (evt.category === 'MEDICAL' || evt.event_type?.includes('MEDICAL')) iconName = 'cross';
+  container.innerHTML = filtered.map(evt => {
+    const timeStr = evt.timestamp ? new Date(evt.timestamp).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : 'Just Now';
+    const cat = String(evt.category || evt.event_type || 'LOGISTICS').toUpperCase();
+    let stripClass = 'strip-recs';
+    let catLabel = 'Logistics Action';
+
+    if (cat.includes('DISPATCH')) {
+      stripClass = 'strip-water';
+      catLabel = 'Unit Dispatch';
+    } else if (cat.includes('ROUTE')) {
+      stripClass = 'strip-route';
+      catLabel = 'Route Advisory';
+    } else if (cat.includes('MED')) {
+      stripClass = 'strip-medical';
+      catLabel = 'Medical Support';
+    } else if (cat.includes('ANNOUNCE') || cat.includes('PA')) {
+      stripClass = 'strip-volunteer';
+      catLabel = 'Public Announcement';
+    }
 
     return `
-      <div class="timeline-item">
-        <div class="timeline-icon-box">
-          <i data-lucide="${iconName}" style="width:11px; height:11px;"></i>
+      <div class="modern-resource-card">
+        <div class="modern-card-strip ${stripClass}">
+          <span>${catLabel}</span>
+          <span style="font-family:var(--font-mono); font-size:11.5px;">${timeStr} IST</span>
         </div>
-        <div class="timeline-content-box">
-          <div class="timeline-meta-row">
-            <strong style="color:var(--text-primary); font-size:14px;">${escapeHtml(evt.title || evt.event_type || 'Operational Event')}</strong>
-            <span class="timeline-time">${timeStr}</span>
+        <div class="modern-card-body">
+          <div class="modern-card-title">${escapeHtml(evt.title || evt.event_type || 'Action Log')}</div>
+          <div class="modern-card-desc">${escapeHtml(evt.message || 'Operational command event processed by VariSetu engine.')}</div>
+          <div class="modern-card-divider"></div>
+          <div class="modern-card-footer">
+            <div class="modern-card-meta-left">
+              <i data-lucide="map-pin" style="width:13px; height:13px;"></i>
+              <span>${escapeHtml(evt.sector || 'NH-60 Corridor')}</span>
+            </div>
+            <div class="modern-card-meta-right">
+              <span style="font-size:12px; font-weight:700; color:var(--status-green);">LOGGED</span>
+            </div>
           </div>
-          <div style="font-size:14px; color:var(--text-secondary);">${escapeHtml(evt.message || '')}</div>
         </div>
       </div>
     `;
@@ -8852,7 +9062,6 @@ function renderIncidentTimeline(timelineEvents) {
 
   if (window.lucide) lucide.createIcons();
 }
-
 function renderNotificationDrawerItems(actions) {
   const container = document.getElementById('drawerNotifsContainer');
   const countBadge = document.getElementById('notifBadgeCount');
@@ -8899,7 +9108,7 @@ function updateYatraMapMarker(yatra) {
     <div style="position:relative; display:flex; align-items:center; justify-content:center;">
       <div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
         <span style="transform:rotate(${heading}deg); display:inline-block; font-size:15.5px;">➤</span>
-        <span>🚩 ${escapeHtml(palkhiName)} (${speed} km/h)</span>
+        <span> ${escapeHtml(palkhiName)} (${speed} km/h)</span>
       </div>
     </div>
   `;
@@ -8918,7 +9127,7 @@ function updateYatraMapMarker(yatra) {
     AppState.palkhiMarker = L.marker([lat, lon], { icon: palkhiIcon, zIndexOffset: 1000 }).addTo(window.wariMap);
     AppState.palkhiMarker.bindPopup(`
       <div style="font-family:var(--font-sans); font-size:15.5px;">
-        <strong style="color:var(--maroon-primary); font-size:16.5px;">🚩 ${escapeHtml(palkhiName)}</strong><br>
+        <strong style="color:var(--maroon-primary); font-size:16.5px;"> ${escapeHtml(palkhiName)}</strong><br>
         <strong>Speed:</strong> ${speed} km/h | <strong>Heading:</strong> ${heading}°<br>
         <strong>Checkpoint:</strong> ${escapeHtml(yatra.current_checkpoint || 'Wakhri Sector')}<br>
         <strong>Next:</strong> ${escapeHtml(yatra.next_checkpoint || 'Pandharpur Temple')}<br>
@@ -8959,7 +9168,7 @@ window.handleVerifyAndDispatchSquad14 = async function(matchId, caseId, btn) {
   } catch (err) {
     alert(`Verification failed: ${err.message}`);
   } finally {
-    if (btn) setButtonLoading(btn, false, '✅ Verify & Dispatch Squad #14 (Inspector Vikram Jadhav)');
+    if (btn) setButtonLoading(btn, false, ' Verify & Dispatch Squad #14 (Inspector Vikram Jadhav)');
   }
 };
 
@@ -9468,19 +9677,19 @@ function updateCallState(newState, detail = '') {
   const stateLabels = {
     'IDLE': '⚪ STANDBY / READY',
     'REQUESTING_MICROPHONE': '⏳ REQUESTING MIC PERMISSION',
-    'CONNECTING': '🔄 ESTABLISHING WEBSOCKET',
-    'CONNECTED': '🟢 CONNECTED (16kHz PCM16)',
+    'CONNECTING': ' ESTABLISHING WEBSOCKET',
+    'CONNECTED': ' CONNECTED (16kHz PCM16)',
     'LISTENING': '👂 LISTENING FOR SPEECH',
-    'SPEAKING': '🎙️ CITIZEN SPEAKING (सक्रिय भाषण)',
+    'SPEAKING': ' CITIZEN SPEAKING (सक्रिय भाषण)',
     'SILENCE_DETECTED': '⏳ SILENCE DETECTED',
-    'PROCESSING_UTTERANCE': '⚡ PROCESSING ASR SEGMENT',
-    'TRANSLATING': '🤖 NEURAL TRANSLATING',
+    'PROCESSING_UTTERANCE': ' PROCESSING ASR SEGMENT',
+    'TRANSLATING': ' NEURAL TRANSLATING',
     'OPERATOR_HOLD': '⏸️ CALL ON OPERATOR HOLD',
-    'RECONNECTING': '🔄 RECONNECTING CALL...',
-    'PROVIDER_DEGRADED': '⚠️ PROVIDER DEGRADED (FALLBACK ACTIVE)',
+    'RECONNECTING': ' RECONNECTING CALL...',
+    'PROVIDER_DEGRADED': ' PROVIDER DEGRADED (FALLBACK ACTIVE)',
     'CALL_ENDING': '⏹️ ENDING CALL SESSION...',
     'CALL_ENDED': '⏹️ CALL ENDED & LOGGED',
-    'ERROR': '❌ CALL ERROR'
+    'ERROR': ' CALL ERROR'
   };
 
   if (statusBadge) {
@@ -9603,7 +9812,7 @@ function setupHelplineCallingInterface() {
   toggleSpeakerBtn?.addEventListener('click', () => {
     isSpeakerEnabled = !isSpeakerEnabled;
     const text = document.getElementById('speakerBtnText');
-    if (text) text.textContent = isSpeakerEnabled ? '🔊 Speaker: ON' : '🔇 Speaker: OFF';
+    if (text) text.textContent = isSpeakerEnabled ? ' Speaker: ON' : '🔇 Speaker: OFF';
     toggleSpeakerBtn.classList.toggle('active', isSpeakerEnabled);
   });
 
@@ -9695,7 +9904,7 @@ function switchIntakeMode(mode) {
       modeBanner.style.background = '#FFF9C4';
       modeBanner.style.borderColor = '#FBC02D';
     }
-    if (modeIcon) modeIcon.textContent = '🔴';
+    if (modeIcon) modeIcon.textContent = '';
     if (modeText) modeText.textContent = 'LIVE BROWSER AUDIO • Real Microphone Streaming (16kHz Mono PCM16)';
 
     if (!isMicRecording) startLiveMicRecording();
@@ -9998,8 +10207,8 @@ function handleIncomingTranslationSegment(segment) {
     div.className = isUnavailable ? 'transcript-segment-card error' : 'transcript-segment-card english';
     div.innerHTML = `
       <div class="transcript-segment-meta">
-        <span>🤖 AI Translation &bull; ${new Date().toLocaleTimeString()}</span>
-        <span>${isUnavailable ? '⚠️ Unavailable' : 'Sarvam Neural Translate'}</span>
+        <span> AI Translation &bull; ${new Date().toLocaleTimeString()}</span>
+        <span>${isUnavailable ? ' Unavailable' : 'Sarvam Neural Translate'}</span>
       </div>
       <div style="${isUnavailable ? 'color: #C62828; font-style: italic;' : ''}">${escapeHtml(englishText || 'TRANSLATION TEMPORARILY UNAVAILABLE')}</div>
     `;
@@ -10093,7 +10302,7 @@ function stopLiveMicRecording() {
   const micBtn = document.getElementById('toggleLiveMicBtn');
   const micText = document.getElementById('micBtnText');
   micBtn?.classList.remove('recording');
-  if (micText) micText.textContent = '🎙️ Start Live Mic Voice';
+  if (micText) micText.textContent = ' Start Live Mic Voice';
 
   if (micMediaStream) {
     micMediaStream.getTracks().forEach(t => t.stop());
@@ -10375,7 +10584,7 @@ async function triggerScenarioCallSimulation(scenarioId) {
 
     if (nameEl) nameEl.textContent = `${res.caller_name || 'Citizen Pilgrim'} (${res.extracted_attributes?.name || 'Pilgrim'})`;
     if (phoneEl) phoneEl.textContent = `📱 ${res.caller_phone || '+91 94220 88912'}`;
-    if (locEl) locEl.textContent = `📍 ${res.extracted_attributes?.last_seen_location || 'Pandharpur Perimeter'}`;
+    if (locEl) locEl.textContent = ` ${res.extracted_attributes?.last_seen_location || 'Pandharpur Perimeter'}`;
 
     // Clear segments and populate streaming typing effect
     nativeSegments = [];
@@ -10604,14 +10813,14 @@ function renderCCTVCandidates(matches, caseObj) {
         <div class="cctv-action-btn-group" id="verifyActions-${matchId}">
           ${!isVerified && !isRejected ? `
             <button type="button" class="btn-verify-match" onclick="verifyCCTVCandidate('${caseId}', '${matchId}', true, '${escapeHtml(caseObj?.name || 'Missing Pilgrim')}')">
-              <span>✅ Confirm Match (मान्यता द्या)</span>
+              <span> Confirm Match (मान्यता द्या)</span>
             </button>
             <button type="button" class="btn-reject-match" onclick="verifyCCTVCandidate('${caseId}', '${matchId}', false, '${escapeHtml(caseObj?.name || 'Missing Pilgrim')}')">
-              <span>❌ Reject (नाकारा)</span>
+              <span> Reject (नाकारा)</span>
             </button>
           ` : `
             <div style="font-size:14.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
-              ${isVerified ? '✅ Confirmed by Human Operator' : '❌ Rejected by Human Operator'}
+              ${isVerified ? ' Confirmed by Human Operator' : ' Rejected by Human Operator'}
             </div>
           `}
         </div>
@@ -10619,10 +10828,10 @@ function renderCCTVCandidates(matches, caseObj) {
         <div style="display:flex; gap:6px; margin-top:4px;">
           <button type="button" class="govt-btn" style="flex:1; font-size:13.5px; padding:4px 6px;" onclick="highlightCCTVOnMap('${m.camera_code || 'CAM-04'}', ${m.latitude || 17.6777}, ${m.longitude || 75.3276})">
             <i data-lucide="map-pin" style="width:10px; height:10px;"></i>
-            <span>📍 Show on Map</span>
+            <span> Show on Map</span>
           </button>
           <button type="button" class="govt-btn btn-outline" style="font-size:13.5px; padding:4px 6px;" onclick="dispatchPatrolToCCTV('${m.camera_code || 'CAM-04'}', '${escapeHtml(caseObj?.name || 'Missing Pilgrim')}')">
-            <span>🚓 Dispatch</span>
+            <span> Dispatch</span>
           </button>
         </div>
       </div>
@@ -10672,7 +10881,7 @@ window.verifyCCTVCandidate = async function(caseId, matchId, isVerified, personN
     if (actionsGroup) {
       actionsGroup.innerHTML = `
         <div style="font-size:14.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
-          ${isVerified ? '✅ Confirmed by Human Operator' : '❌ Rejected by Human Operator'}
+          ${isVerified ? ' Confirmed by Human Operator' : ' Rejected by Human Operator'}
         </div>
       `;
     }
@@ -10719,7 +10928,7 @@ window.highlightCCTVOnMap = function(camId, lat, lng) {
     const popupContent = `
       <div style="font-family:var(--font-sans, sans-serif); min-width:180px;">
         <div style="font-weight:700; color:#7A1F1F; font-size:15.5px; border-bottom:1px solid #D8D1C5; padding-bottom:3px;">
-          📹 AI RE-ID DETECTION: ${camId}
+           AI RE-ID DETECTION: ${camId}
         </div>
         <div style="font-size:14.5px; margin-top:5px; color:#2B2623;">
           Target matched on live CCTV feed.<br>
@@ -10744,6 +10953,87 @@ window.addEventListener('click', () => {
     if (v.paused) v.play().catch(() => {});
   });
 }, { once: true });
+
+
+/* ==================== STANDARDIZED RESOURCE FILTERS & COLLAPSIBLE MODULES ==================== */
+function setupResourceViewInteractivity() {
+  // 1. Collapsible module headers
+  document.querySelectorAll('.collapsible-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const targetId = header.dataset.toggle;
+      const targetContent = document.getElementById(targetId);
+      if (targetContent) {
+        header.classList.toggle('collapsed');
+        targetContent.classList.toggle('collapsed');
+      }
+    });
+  });
+
+  // 2. Module Topic dropdown selector
+  const topicSelect = document.getElementById('resourceTopicSelect');
+  if (topicSelect) {
+    topicSelect.addEventListener('change', (e) => {
+      const selected = e.target.value;
+      const modules = ['recsModule', 'fleetModule', 'routesModule', 'historyModule', 'timelineModule'];
+      modules.forEach(modId => {
+        const el = document.getElementById(modId);
+        if (el) {
+          if (selected === 'ALL' || selected === modId) {
+            el.style.display = 'block';
+            const content = el.querySelector('.collapsible-content');
+            const header = el.querySelector('.collapsible-header');
+            if (content) content.classList.remove('collapsed');
+            if (header) header.classList.remove('collapsed');
+          } else {
+            el.style.display = 'none';
+          }
+        }
+      });
+    });
+  }
+
+  // 3. Category & Status dropdown filters
+  const catSelect = document.getElementById('resourceCategorySelect');
+  const statusSelect = document.getElementById('resourceStatusSelect');
+  const searchInput = document.getElementById('resourceGlobalSearch');
+
+  const applyAllResourceFilters = () => {
+    const cat = catSelect ? catSelect.value : 'ALL';
+    const stat = statusSelect ? statusSelect.value : 'ALL';
+
+    let filterKey = cat;
+    if (stat !== 'ALL') {
+      filterKey = stat; // DISPATCHED or AVAILABLE
+    }
+
+    renderFieldLogisticsGrid(getAllManagedFleetUnits(), filterKey);
+  };
+
+  if (catSelect) catSelect.addEventListener('change', applyAllResourceFilters);
+  if (statusSelect) statusSelect.addEventListener('change', applyAllResourceFilters);
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      renderFieldLogisticsGrid(getAllManagedFleetUnits());
+    });
+  }
+
+  // 4. Timeline Category buttons
+  document.querySelectorAll('.timeline-filter-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const parent = btn.closest('.timeline-filter-group');
+      if (parent) {
+        parent.querySelectorAll('.timeline-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        AppState.timelineFilter = btn.dataset.filter || 'ALL';
+        renderIncidentTimeline(AppState.commandPicture?.incident_timeline || []);
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setupResourceViewInteractivity();
+});
 
 ```
 
