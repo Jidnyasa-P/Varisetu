@@ -4,7 +4,6 @@ import logging
 from typing import Dict, Set
 from fastapi import WebSocket
 
-# from app.core.redis import redis_client             not used since we are not using redis
 from app.websocket.events import WebSocketEventType, WebSocketMessage
 
 logger = logging.getLogger("varisetu.websocket")
@@ -41,9 +40,6 @@ class ConnectionManager:
         """Broadcast typed JSON event to connected clients on the given channel."""
         message = WebSocketMessage(event=event_type, data=data)
         payload = message.model_dump_json()
-
-        # Publish to Redis if connected
-        await redis_client.publish(f"varisetu:ws:{channel}", message.model_dump())
 
         # Direct local broadcast to connected clients
         targets = self.channels.get(channel, set()) | self.channels.get("all", set())

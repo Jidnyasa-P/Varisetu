@@ -5,7 +5,6 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from app.core.exceptions import NotFoundException, StateTransitionException
-# from app.integrations.qdrant_adapter import qdrant_adapter
 from app.integrations.speech_adapter import speech_adapter
 from app.integrations.vision_adapter import vision_adapter
 from app.models.face_match import FaceMatchResult, FaceMatchStatus
@@ -249,7 +248,7 @@ class LostPersonService:
         Privacy requirement: permanently purge temporary biometric vectors,
         face match frames, and audio references for a case while keeping the operational case record.
         """
-        deleted_count = await qdrant_adapter.delete_case_embeddings(case_id)
+        deleted_count = 0
 
         case = (await db.execute(select(LostPersonCase).where(LostPersonCase.id == case_id))).scalar_one_or_none()
         if case:
