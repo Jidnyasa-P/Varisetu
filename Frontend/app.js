@@ -3603,6 +3603,7 @@ let liveFinalTranscript = '';
 let liveTranslateDebounceTimer = null;
 let lastTranslatedQuery = '';
 let activeVoiceLang = 'mr-IN';
+let speechRestartTimer = null;
 
 function setupHelplineLanguagePills() {
   document.querySelectorAll('.speech-lang-btn').forEach(btn => {
@@ -3620,9 +3621,31 @@ function setupHelplineLanguagePills() {
       activeVoiceLang = btn.dataset.lang || 'mr-IN';
       if (speechRecognizer) {
         speechRecognizer.lang = activeVoiceLang;
+        // Restart with new language if currently recording
+        if (isMicRecording) {
+          try { speechRecognizer.stop(); } catch {}
+          safeRestartSpeechRecognition();
+        }
       }
     });
   });
+}
+
+function safeRestartSpeechRecognition() {
+  if (!isMicRecording) return;
+  if (speechRestartTimer) clearTimeout(speechRestartTimer);
+  speechRestartTimer = setTimeout(() => {
+    if (!isMicRecording || !speechRecognizer) return;
+    try {
+      speechRecognizer.start();
+      console.debug('[VariSetu] Speech recognition continuously active in background.');
+    } catch (err) {
+      // If recognition is already started or restarting, retry shortly
+      if (isMicRecording) {
+        speechRestartTimer = setTimeout(safeRestartSpeechRecognition, 200);
+      }
+    }
+  }, 60);
 }
 
 function switchIntakeMode(mode) {
@@ -3648,12 +3671,12 @@ function switchIntakeMode(mode) {
     if (simWrapper) simWrapper.style.display = 'none';
     if (textWrapper) textWrapper.style.display = 'none';
     if (toggleLiveMicBtn) toggleLiveMicBtn.style.display = 'inline-flex';
-    if (sourceLabel) sourceLabel.textContent = 'Live Microphone (Citizen Voice Intake)';
+    if (sourceLabel) sourceLabel.textContent = 'Live Microphone (Continuous Citizen Voice Stream)';
 
     liveFinalTranscript = '';
     lastTranslatedQuery = '';
-    if (nativeBox) nativeBox.innerHTML = `<em>🎙️ [Live Mic Active] Speak into microphone in Marathi, Hindi, or English...</em>`;
-    if (englishBox) englishBox.innerHTML = `<em>🤖 [AI Neural Translation] Real-time English translation will appear as you speak...</em>`;
+    if (nativeBox) nativeBox.innerHTML = `<em>🎙️ [Continuous Live Mic Active] Speak freely in Marathi, Hindi, or English — recording will stay ON until you stop it...</em>`;
+    if (englishBox) englishBox.innerHTML = `<em>🤖 [AI Neural Translation] Real-time English translation will stream dynamically as you speak...</em>`;
 
     if (!isMicRecording) startLiveMicRecording();
   } else if (mode === 'sim') {
@@ -3717,24 +3740,25 @@ async function startLiveMicRecording() {
     micBtn?.classList.add('recording');
     if (micText) micText.textContent = '⏹️ Stop Live Mic';
     if (statusBadge) {
-      statusBadge.textContent = '🎙️ LISTENING TO MIC (मराठी/हिन्दी)';
+      statusBadge.textContent = '🎙️ CONTINUOUS RECORDING (मराठी/हिन्दी)';
       statusBadge.style.background = '#FF1744';
       statusBadge.style.color = '#FFF';
     }
-    if (liveStatus) liveStatus.textContent = 'Speaking: Real-time Audio Active';
+    if (liveStatus) liveStatus.textContent = 'Speaking: Continuous Audio Stream Active (Never Stops Until Ended)';
 
     renderLiveMicEqualizer();
 
-    // 2. Setup SpeechRecognition (Web Speech API)
+    // 2. Setup SpeechRecognition (Web Speech API with Non-Stop Continuous Auto-Resume)
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       if (speechRecognizer) {
-        try { speechRecognizer.stop(); } catch {}
+        try { speechRecognizer.abort(); } catch {}
       }
 
       speechRecognizer = new SpeechRecognition();
       speechRecognizer.continuous = true;
       speechRecognizer.interimResults = true;
+      speechRecognizer.maxAlternatives = 1;
       speechRecognizer.lang = activeVoiceLang || 'mr-IN';
 
       speechRecognizer.onresult = (event) => {
@@ -3763,28 +3787,31 @@ async function startLiveMicRecording() {
               lastTranslatedQuery = currentSpeech;
               const langCode = activeVoiceLang.startsWith('hi') ? 'hi' : (activeVoiceLang.startsWith('en') ? 'en' : 'mr');
               handleLiveVoiceTranslation(currentSpeech, langCode);
-            }, 260);
+            }, 240);
           }
         }
       };
 
+      // Non-stop auto-resume on silence timeouts or non-fatal browser events
       speechRecognizer.onerror = (err) => {
-        console.debug('[VariSetu] Speech recognition status:', err.error);
-        if (err.error === 'no-speech' && isMicRecording && speechRecognizer) {
-          try { speechRecognizer.start(); } catch {}
+        console.debug('[VariSetu] Speech recognition event:', err.error);
+        if (isMicRecording) {
+          safeRestartSpeechRecognition();
         }
       };
 
+      // Browser naturally ends recognition after silence — auto-restart immediately!
       speechRecognizer.onend = () => {
-        if (isMicRecording && speechRecognizer) {
-          try { speechRecognizer.start(); } catch {}
+        if (isMicRecording) {
+          safeRestartSpeechRecognition();
         }
       };
 
       try {
         speechRecognizer.start();
       } catch (err) {
-        console.debug('[VariSetu] SpeechRecognizer start notice:', err);
+        console.debug('[VariSetu] SpeechRecognizer initial start:', err);
+        safeRestartSpeechRecognition();
       }
     } else {
       console.warn('[VariSetu] Web Speech Recognition not supported in this browser. Voice waveform active.');
@@ -3798,6 +3825,11 @@ async function startLiveMicRecording() {
 
 function stopLiveMicRecording() {
   isMicRecording = false;
+  if (speechRestartTimer) {
+    clearTimeout(speechRestartTimer);
+    speechRestartTimer = null;
+  }
+
   const micBtn = document.getElementById('toggleLiveMicBtn');
   const micText = document.getElementById('micBtnText');
   const statusBadge = document.getElementById('callStatusBadge');
@@ -3806,11 +3838,11 @@ function stopLiveMicRecording() {
   micBtn?.classList.remove('recording');
   if (micText) micText.textContent = '🎙️ Start Live Mic Voice';
   if (statusBadge) {
-    statusBadge.textContent = '🔴 READY / LISTENING';
+    statusBadge.textContent = '🔴 READY / STANDBY';
     statusBadge.style.background = '#00E676';
     statusBadge.style.color = '#000';
   }
-  if (liveStatus) liveStatus.textContent = 'Status: Standby';
+  if (liveStatus) liveStatus.textContent = 'Status: Standby (Mic Stopped)';
 
   if (micAnimFrameId) cancelAnimationFrame(micAnimFrameId);
   if (micMediaStream) {
