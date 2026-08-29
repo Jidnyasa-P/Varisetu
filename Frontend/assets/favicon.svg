@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Rounded maroon badge (VariSetu brand) -->
+  <rect x="3" y="3" width="58" height="58" rx="13" fill="#7A1F1F"/>
+  <rect x="3" y="3" width="58" height="58" rx="13" fill="none" stroke="#D98E2C" stroke-width="2"/>
+
+  <!-- Saffron temple body -->
+  <g fill="#D98E2C" stroke="#FFFFFF" stroke-width="1.1" stroke-linejoin="round">
+    <!-- base platform -->
+    <rect x="12" y="47" width="40" height="8" rx="1.5"/>
+    <!-- pillars -->
+    <rect x="16" y="31" width="5" height="16"/>
+    <rect x="29.5" y="31" width="5" height="16"/>
+    <rect x="43" y="31" width="5" height="16"/>
+    <!-- architrave -->
+    <rect x="13" y="27" width="38" height="5" rx="1.5"/>
+    <!-- shikhara (curvilinear spire) -->
+    <path d="M32 9 C25 16 22.5 22 22.5 27 L41.5 27 C41.5 22 39 16 32 9 Z"/>
+  </g>
+
+  <!-- Kalash (finial) -->
+  <circle cx="32" cy="8.5" r="2.1" fill="#FFFFFF"/>
+
+  <!-- Saffron flag -->
+  <line x1="32" y1="8.5" x2="32" y2="2.5" stroke="#FFFFFF" stroke-width="1.2"/>
+  <path d="M32 3 L45 5 L32 7 Z" fill="#FF9933"/>
+</svg>
