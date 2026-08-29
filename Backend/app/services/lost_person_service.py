@@ -5,7 +5,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import selectinload
 
 from app.core.exceptions import NotFoundException, StateTransitionException
-from app.integrations.qdrant_adapter import qdrant_adapter
+# from app.integrations.qdrant_adapter import qdrant_adapter
 from app.integrations.speech_adapter import speech_adapter
 from app.integrations.vision_adapter import vision_adapter
 from app.models.face_match import FaceMatchResult, FaceMatchStatus
