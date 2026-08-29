@@ -152,7 +152,7 @@ function handleSessionExpiration() {
     title: 'SESSION EXPIRED',
     kicker: 'SECURITY PROTOCOL',
     bodyHtml: `
-      <div style="font-size:14.5px; line-height:1.6; color:var(--text-primary);">
+      <div style="font-size:15.5px; line-height:1.6; color:var(--text-primary);">
         Your command-center authorization session has expired or is invalid. Please sign in again to resume monitoring.
       </div>
     `,
@@ -229,7 +229,7 @@ function openConfirmModal({
   openAppModal({
     title,
     bodyHtml: `
-      <div style="font-size:14.5px; line-height:1.6; color:var(--text-primary);">
+      <div style="font-size:15.5px; line-height:1.6; color:var(--text-primary);">
         ${escapeHtml(message)}
       </div>
     `,
@@ -469,10 +469,10 @@ function openAddOfficerModal() {
             </div>
             <div class="app-modal-detail-item">
               <div class="app-modal-detail-label">Password</div>
-              <div class="app-modal-detail-value" style="font-family:var(--font-mono); font-size:13.5px;">${escapeHtml(password)}</div>
+              <div class="app-modal-detail-value" style="font-family:var(--font-mono); font-size:14.5px;">${escapeHtml(password)}</div>
             </div>
           </div>
-          <div style="margin-top:12px; font-size:13.5px; color:var(--text-secondary);">
+          <div style="margin-top:12px; font-size:14.5px; color:var(--text-secondary);">
             The officer can now immediately log in with these credentials.
           </div>
         `,
@@ -582,7 +582,7 @@ function initPublicRouteMap() {
 
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:12.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 SANT TUKARAM PALKHI</div>`,
+    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 SANT TUKARAM PALKHI</div>`,
     iconSize: [140, 24],
     iconAnchor: [70, 12]
   });
@@ -591,7 +591,7 @@ function initPublicRouteMap() {
 
   const pandharpurIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:12.5px; font-weight:bold; border-radius:2px;">🛕 Pandharpur Shrine</div>`,
+    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:13.5px; font-weight:bold; border-radius:2px;">🛕 Pandharpur Shrine</div>`,
     iconSize: [130, 24]
   });
   L.marker([17.6777, 75.3276], { icon: pandharpurIcon }).addTo(publicMap)
@@ -770,7 +770,7 @@ function initRouteMap() {
   // Animated Palkhi Marker at Narayangaon (Km 84)
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); animation:pulse 2s infinite;">🚩 PALKHI (Narayangaon Km 84)</div>`,
+    html: `<div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:14px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); animation:pulse 2s infinite;">🚩 PALKHI (Narayangaon Km 84)</div>`,
     iconSize: [180, 26],
     iconAnchor: [90, 13]
   });
@@ -780,7 +780,7 @@ function initRouteMap() {
   // Water Tankers: WT-09 (Narayangaon), WT-04 (Sangamner)
   const tankerIcon9 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-09</div>`,
+    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-09</div>`,
     iconSize: [95, 20]
   });
   L.marker([19.1200, 73.9700], { icon: tankerIcon9 }).addTo(wariMap)
@@ -788,7 +788,7 @@ function initRouteMap() {
 
   const tankerIcon4 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-04</div>`,
+    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-04</div>`,
     iconSize: [95, 20]
   });
   L.marker([19.5700, 74.2100], { icon: tankerIcon4 }).addTo(wariMap)
@@ -797,7 +797,7 @@ function initRouteMap() {
   // Medical Ambulances: MV-01 (Bhosari), MV-02 (Narayangaon), MV-03 (Sangamner)
   const medIcon1 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-01</div>`,
+    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-01</div>`,
     iconSize: [95, 20]
   });
   L.marker([18.6270, 73.8470], { icon: medIcon1 }).addTo(wariMap)
@@ -805,7 +805,7 @@ function initRouteMap() {
 
   const medIcon2 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-02</div>`,
+    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-02</div>`,
     iconSize: [95, 20]
   });
   L.marker([19.1240, 73.9780], { icon: medIcon2 }).addTo(wariMap)
@@ -813,7 +813,7 @@ function initRouteMap() {
 
   const medIcon3 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-03</div>`,
+    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-03</div>`,
     iconSize: [95, 20]
   });
   L.marker([19.5760, 74.2120], { icon: medIcon3 }).addTo(wariMap)
@@ -822,7 +822,7 @@ function initRouteMap() {
   // Surveillance CCTVs: CAM-01, CAM-08, CAM-12, CAM-04
   const cctvIcon = (code) => L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#2B2623; color:#FFF; border:1px solid var(--saffron-gold); padding:2px 5px; font-size:11px; font-weight:bold; border-radius:2px;">📹 ${code}</div>`,
+    html: `<div style="background:#2B2623; color:#FFF; border:1px solid var(--saffron-gold); padding:2px 5px; font-size:12px; font-weight:bold; border-radius:2px;">📹 ${code}</div>`,
     iconSize: [60, 18]
   });
   L.marker([18.5200, 73.8500], { icon: cctvIcon('CAM-01') }).addTo(wariMap).bindPopup('<b>CAM-01 (Pune / Bhosari)</b> - 60 FPS HD Stream');
@@ -1152,12 +1152,12 @@ function renderDynamicWarkariClusters(zones) {
       const popupHtml = `
         <div style="font-family:var(--font-sans, sans-serif); min-width:220px; padding:4px;">
           <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
-            <strong style="color:#7A1F1F; font-size:14.5px;">🚩 वारकरी दिंडी पथक #${dindiNum}</strong>
-            <span class="badge" style="background:${isHigh ? '#9A2525' : '#B8551B'}; color:#FFF; font-size:12px; font-weight:700;">
+            <strong style="color:#7A1F1F; font-size:15.5px;">🚩 वारकरी दिंडी पथक #${dindiNum}</strong>
+            <span class="badge" style="background:${isHigh ? '#9A2525' : '#B8551B'}; color:#FFF; font-size:13px; font-weight:700;">
               ${segmentDensity}% Density
             </span>
           </div>
-          <div style="font-size:13.5px; margin-top:6px; color:#2B2623; line-height:1.5;">
+          <div style="font-size:14.5px; margin-top:6px; color:#2B2623; line-height:1.5;">
             <strong>पथक प्रकार:</strong> ${dindiType}<br>
             <strong>Highway Corridor:</strong> ${escapeHtml(p1.name)} ➔ ${escapeHtml(p2.name)}<br>
             <strong>Palkhi March Pace:</strong> 3.2 km/h (भजन/हरिपाठ गती)<br>
@@ -1227,15 +1227,15 @@ function renderResourceMapMarkers(resources) {
     const popupHtml = `
       <div style="font-family:var(--font-sans, sans-serif); min-width:200px; padding:4px;">
         <div style="border-bottom:1.5px solid #7A1F1F; padding-bottom:3px;">
-          <strong style="color:#7A1F1F; font-size:14.5px;">${escapeHtml(res.name)}</strong>
+          <strong style="color:#7A1F1F; font-size:15.5px;">${escapeHtml(res.name)}</strong>
         </div>
-        <div style="font-size:13.5px; margin-top:5px; color:#2B2623; line-height:1.4;">
+        <div style="font-size:14.5px; margin-top:5px; color:#2B2623; line-height:1.4;">
           <strong>Unit Code:</strong> ${escapeHtml(res.code)}<br>
           ${res.doctor ? `<strong>On-Duty Doctor:</strong> ${escapeHtml(res.doctor)}<br>` : ''}
           ${res.driver ? `<strong>Driver:</strong> ${escapeHtml(res.driver)}<br>` : ''}
           ${res.incharge ? `<strong>Incharge:</strong> ${escapeHtml(res.incharge)}<br>` : ''}
           <strong>Emergency Contact:</strong> ${escapeHtml(res.contact)}<br>
-          <span class="badge" style="background:#2E5B36; color:#FFF; font-size:11.5px; margin-top:4px;">🟢 Operational & Deployed</span>
+          <span class="badge" style="background:#2E5B36; color:#FFF; font-size:12.5px; margin-top:4px;">🟢 Operational & Deployed</span>
         </div>
       </div>
     `;
@@ -1776,7 +1776,7 @@ function openCameraDetails(camera) {
         <canvas id="modalLargeCctvCanvas" width="800" height="320" class="modal-cctv-canvas"></canvas>
         <div class="modal-cctv-toolbar">
           <div class="cctv-tool-group">
-            <span style="font-size:12px; font-weight:700; color:var(--text-muted); margin-right:4px;">PTZ:</span>
+            <span style="font-size:13px; font-weight:700; color:var(--text-muted); margin-right:4px;">PTZ:</span>
             <button type="button" class="cctv-ctrl-btn" id="ptzPanLeft" title="Pan Left">&larr; Left</button>
             <button type="button" class="cctv-ctrl-btn" id="ptzPanRight" title="Pan Right">Right &rarr;</button>
             <button type="button" class="cctv-ctrl-btn" id="ptzTiltUp" title="Tilt Up">&uarr; Up</button>
@@ -1795,8 +1795,8 @@ function openCameraDetails(camera) {
     footerHtml: `
       <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
         <div style="display:flex; gap:6px;">
-          <button type="button" class="govt-btn btn-outline" id="dispatchQrtBtn" style="font-size:13.5px;">🚨 Deploy QRT Squad</button>
-          <button type="button" class="govt-btn btn-outline" id="triggerPaBtn" style="font-size:13.5px;">📢 Trigger PA Alert</button>
+          <button type="button" class="govt-btn btn-outline" id="dispatchQrtBtn" style="font-size:14.5px;">🚨 Deploy QRT Squad</button>
+          <button type="button" class="govt-btn btn-outline" id="triggerPaBtn" style="font-size:14.5px;">📢 Trigger PA Alert</button>
         </div>
         <button type="button" class="govt-btn" id="cameraModalClose">Close Surveillance</button>
       </div>
@@ -2044,18 +2044,18 @@ function renderLostPersons(cases) {
           <i data-lucide="user" style="width:14px; height:14px;"></i>
         </div>
       </td>
-      <td><strong style="color:var(--maroon-primary); font-size:14px;">${escapeHtml(item.case_number)}</strong></td>
+      <td><strong style="color:var(--maroon-primary); font-size:15px;">${escapeHtml(item.case_number)}</strong></td>
       <td><strong>${escapeHtml(item.name || 'Unknown')}</strong></td>
       <td>${escapeHtml(item.age || '-')} / ${escapeHtml(item.gender || '-')}</td>
-      <td style="max-width:220px; font-size:13.5px; color:#443E3B;" title="${escapeHtml(item.clothing_description || '')}">${escapeHtml(item.clothing_description || '-')}</td>
-      <td style="font-size:13.5px;">${escapeHtml(item.last_seen_location || item.last_seen_camera_id || '-')}</td>
+      <td style="max-width:220px; font-size:14.5px; color:#443E3B;" title="${escapeHtml(item.clothing_description || '')}">${escapeHtml(item.clothing_description || '-')}</td>
+      <td style="font-size:14.5px;">${escapeHtml(item.last_seen_location || item.last_seen_camera_id || '-')}</td>
       <td>
         <span class="density-tag ${getStatusClass(item.status)}">
           ${escapeHtml(item.status)}
         </span>
       </td>
       <td>
-        <button class="govt-btn btn-outline" style="font-size:13.5px; padding:3px 8px;" type="button" data-lost-id="${escapeHtml(item.id)}" data-action="view-lost-case">
+        <button class="govt-btn btn-outline" style="font-size:14.5px; padding:3px 8px;" type="button" data-lost-id="${escapeHtml(item.id)}" data-action="view-lost-case">
           <span>View</span>
         </button>
       </td>
@@ -2139,7 +2139,7 @@ function openLostPersonDetails(item) {
         </div>
       </div>
       
-      <div style="margin-top:10px; background:var(--bg-subtle); padding:9px; border:1px solid var(--border-main); font-size:13.5px;">
+      <div style="margin-top:10px; background:var(--bg-subtle); padding:9px; border:1px solid var(--border-main); font-size:14.5px;">
         <strong>Attire Description:</strong> ${escapeHtml(item.clothing_description)}
       </div>
 
@@ -2150,11 +2150,11 @@ function openLostPersonDetails(item) {
           ${photos.map((url, idx) => `
             <div class="photo-upload-thumbnail" style="width:72px; height:72px; position:relative; border:1px solid var(--border-main); background:#000; border-radius:2px; overflow:hidden;">
               <img src="${url}" style="width:100%; height:100%; object-fit:cover;" alt="Photo ${idx + 1}">
-              <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.75); color:#00FF66; font-size:10px; font-family:var(--font-mono); text-align:center; padding:1px 0;">FACE #${idx + 1}</div>
+              <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.75); color:#00FF66; font-size:11px; font-family:var(--font-mono); text-align:center; padding:1px 0;">FACE #${idx + 1}</div>
             </div>
           `).join('')}
         </div>
-        <div style="margin-top:6px; font-size:12.5px; color:#2E5B36; font-family:var(--font-mono); display:flex; align-items:center; gap:4px;">
+        <div style="margin-top:6px; font-size:13.5px; color:#2E5B36; font-family:var(--font-mono); display:flex; align-items:center; gap:4px;">
           <span>✨ <strong>AI Face Recognition Active:</strong> 512-D embedding feature vectors extracted across 4 CCTV live streams.</span>
         </div>
       </div>
@@ -2282,17 +2282,17 @@ function openLostPersonCreateModal(isPublic = false) {
           <input type="file" id="lostPersonPhotoInput" multiple accept="image/*" style="display:none;">
           
           <div id="lostPersonDropzone" style="border:2px dashed var(--border-main); padding:12px; text-align:center; background:var(--bg-subtle); cursor:pointer; border-radius:2px; transition:border-color 0.2s;">
-            <div style="font-weight:600; font-size:13.5px; color:var(--maroon-primary); margin-bottom:2px;">
+            <div style="font-weight:600; font-size:14.5px; color:var(--maroon-primary); margin-bottom:2px;">
               📁 Click to Upload 4-5 Photos (Frontal Face, Profile, Full Body)
             </div>
-            <div style="font-size:12px; color:var(--text-muted);">
+            <div style="font-size:13px; color:var(--text-muted);">
               PNG, JPG, JPEG accepted &bull; Max 5 images
             </div>
           </div>
 
           <div id="selectedPhotosPreviewContainer" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
 
-          <div id="aiEmbeddingBadge" style="margin-top:6px; font-size:12.5px; color:#2E5B36; font-family:var(--font-mono); background:#E8F5E9; border:1px solid #A5D6A7; padding:6px 8px; border-radius:2px; display:none;">
+          <div id="aiEmbeddingBadge" style="margin-top:6px; font-size:13.5px; color:#2E5B36; font-family:var(--font-mono); background:#E8F5E9; border:1px solid #A5D6A7; padding:6px 8px; border-radius:2px; display:none;">
             ✨ <strong>AI Face Recognition Model Slot Ready:</strong> Feature embeddings (512-D vectors) will be indexed for instant multi-camera CCTV matching.
           </div>
         </div>
@@ -2322,7 +2322,7 @@ function openLostPersonCreateModal(isPublic = false) {
       thumb.innerHTML = `
         <img src="${dataUrl}" alt="Face ${idx + 1}">
         <button type="button" class="photo-upload-remove-btn" title="Remove" data-idx="${idx}">×</button>
-        <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:#00FF66; font-size:9.5px; font-family:var(--font-mono); text-align:center;">#${idx + 1}</div>
+        <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:#00FF66; font-size:10.5px; font-family:var(--font-mono); text-align:center;">#${idx + 1}</div>
       `;
       thumb.querySelector('.photo-upload-remove-btn')?.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -2397,11 +2397,11 @@ function openLostPersonCreateModal(isPublic = false) {
           kicker: 'AI FACIAL SEARCH ACTIVATED',
           bodyHtml: `
             <div style="text-align:center; padding:12px 0;">
-              <div style="font-size:31px; margin-bottom:8px;">✅</div>
-              <div style="font-weight:700; font-size:16.5px; color:var(--maroon-primary); margin-bottom:6px;">
+              <div style="font-size:32px; margin-bottom:8px;">✅</div>
+              <div style="font-weight:700; font-size:17.5px; color:var(--maroon-primary); margin-bottom:6px;">
                 Case Reference: ${escapeHtml(resp.case_number || '#LF-NEW')}
               </div>
-              <div style="font-size:14.5px; color:var(--text-primary); line-height:1.5;">
+              <div style="font-size:15.5px; color:var(--text-primary); line-height:1.5;">
                 Your report for <strong>${escapeHtml(name)}</strong> has been registered with the Police Command Center.<br>
                 ${uploadedPhotos.length} photo(s) submitted for biometric recognition across all CCTV checkpoints.
               </div>
@@ -2583,13 +2583,13 @@ function renderMedicalAlerts(alerts) {
   container.innerHTML = alerts.map(alert => `
     <div class="alert-card-item ${alert.status === 'RESOLVED' ? 'acknowledged' : ''}" data-medical-id="${escapeHtml(alert.id)}">
       <div>
-        <div style="font-weight:700; color:var(--status-red); font-size:15.5px;">
+        <div style="font-weight:700; color:var(--status-red); font-size:16.5px;">
           ${escapeHtml(alert.type?.replace('_', ' ') || 'MEDICAL EMERGENCY')}
         </div>
-        <div style="font-size:13.5px; color:var(--text-secondary); margin:2px 0;">
+        <div style="font-size:14.5px; color:var(--text-secondary); margin:2px 0;">
           ${escapeHtml(alert.description || 'Medical incident reported')}
         </div>
-        <div style="font-size:13.5px; color:var(--text-muted);">
+        <div style="font-size:14.5px; color:var(--text-muted);">
           Assigned Volunteer / Unit: ${escapeHtml(alert.assigned_volunteer_name || 'Standby')}
         </div>
       </div>
@@ -2744,17 +2744,17 @@ function renderResources(resources) {
     return `
       <tr>
         <td>
-          <div style="font-weight:700; font-size:14.5px; color:var(--maroon-primary);">${escapeHtml(cat.name)}</div>
-          <div style="font-size:12.5px; color:var(--text-muted);">${escapeHtml(cat.role)}</div>
+          <div style="font-weight:700; font-size:15.5px; color:var(--maroon-primary);">${escapeHtml(cat.name)}</div>
+          <div style="font-size:13.5px; color:var(--text-muted);">${escapeHtml(cat.role)}</div>
         </td>
-        <td style="font-family:var(--font-mono); font-size:14px;">
+        <td style="font-family:var(--font-mono); font-size:15px;">
           <div><strong style="color:#B8551B;">⚡ ${cat.dispatched} Dispatched</strong> &bull; <strong style="color:#2E5B36;">🟢 ${cat.available} Standby</strong></div>
-          <div style="font-size:12.5px; color:var(--text-muted);">Quota Limit: ${cat.limit} Total Units</div>
+          <div style="font-size:13.5px; color:var(--text-muted);">Quota Limit: ${cat.limit} Total Units</div>
         </td>
-        <td style="font-size:13.5px; color:var(--text-primary); max-width:240px;">
+        <td style="font-size:14.5px; color:var(--text-primary); max-width:240px;">
           ${escapeHtml(cat.activeSectors)}
         </td>
-        <td style="font-size:13px; color:var(--text-secondary); max-width:220px;">
+        <td style="font-size:14px; color:var(--text-secondary); max-width:220px;">
           ${escapeHtml(cat.standbyDepots)}
         </td>
         <td>
@@ -2806,7 +2806,7 @@ function renderFieldLogisticsGrid(units, filterOverride) {
         <div class="fleet-card-header">
           <div>
             <span class="fleet-card-code">${escapeHtml(f.code)}</span>
-            <div style="font-weight:600; font-size:14px; color:var(--text-primary); margin-top:1px;">${escapeHtml(f.name)}</div>
+            <div style="font-weight:600; font-size:15px; color:var(--text-primary); margin-top:1px;">${escapeHtml(f.name)}</div>
           </div>
           <span class="density-tag ${statusTagClass}">
             ${escapeHtml(statusLabel)}
@@ -2825,12 +2825,12 @@ function renderFieldLogisticsGrid(units, filterOverride) {
             <div class="fleet-meta-label">${isDispatched ? 'Deployed Target Sector & Location' : 'Current Standby Station Depot'}</div>
             <div class="fleet-meta-val" style="color:var(--text-primary); font-weight:600;">${escapeHtml(f.sector)}</div>
           </div>
-          <div style="grid-column: span 2; font-size:13px; color:var(--text-secondary); background:var(--bg-subtle); padding:4px 6px; border-radius:2px;">
+          <div style="grid-column: span 2; font-size:14px; color:var(--text-secondary); background:var(--bg-subtle); padding:4px 6px; border-radius:2px;">
             <strong>Mission:</strong> ${escapeHtml(f.task)}
           </div>
         </div>
         <div class="fleet-card-actions">
-          <button type="button" class="govt-btn" style="flex:1; font-size:12.5px; padding:4px 8px; ${isDispatched ? '' : 'background:#2E5B36;'}" onclick="openReassignSectorModal('${escapeHtml(f.id)}', '${escapeHtml(f.name)}')">
+          <button type="button" class="govt-btn" style="flex:1; font-size:13.5px; padding:4px 8px; ${isDispatched ? '' : 'background:#2E5B36;'}" onclick="openReassignSectorModal('${escapeHtml(f.id)}', '${escapeHtml(f.name)}')">
             <i data-lucide="${isDispatched ? 'refresh-cw' : 'send'}" style="width:10px; height:10px;"></i>
             <span>${isDispatched ? '🔄 Reassign Sector' : '🚀 Dispatch to Sector'}</span>
           </button>
@@ -3183,28 +3183,28 @@ function renderResourceAllocationHistory(items) {
 
     return `
       <tr>
-        <td style="font-family:var(--font-mono); font-size:13.5px; white-space:nowrap; color:var(--text-muted);">
+        <td style="font-family:var(--font-mono); font-size:14.5px; white-space:nowrap; color:var(--text-muted);">
           ${timeStr}
         </td>
         <td>
-          <div style="font-weight:700; font-family:var(--font-mono); color:var(--maroon-primary); font-size:14px;">
+          <div style="font-weight:700; font-family:var(--font-mono); color:var(--maroon-primary); font-size:15px;">
             ${escapeHtml(item.resource_code)}
           </div>
-          <div style="font-size:12.5px; color:var(--text-secondary);">${escapeHtml(item.resource_name || '')}</div>
+          <div style="font-size:13.5px; color:var(--text-secondary);">${escapeHtml(item.resource_name || '')}</div>
         </td>
-        <td style="font-weight:600; font-size:13.5px; color:var(--maroon-primary); white-space:nowrap;">
+        <td style="font-weight:600; font-size:14.5px; color:var(--maroon-primary); white-space:nowrap;">
           ${escapeHtml(item.allocated_capacity)}
         </td>
-        <td style="font-weight:600; font-size:13.5px; color:var(--text-primary); white-space:nowrap;">
+        <td style="font-weight:600; font-size:14.5px; color:var(--text-primary); white-space:nowrap;">
           ${escapeHtml(item.target_sector)}
         </td>
-        <td style="font-size:13px; color:var(--text-secondary); max-width:200px;">
+        <td style="font-size:14px; color:var(--text-secondary); max-width:200px;">
           ${escapeHtml(item.target_location)}
         </td>
-        <td style="font-size:13.5px; color:var(--text-secondary); max-width:240px;">
+        <td style="font-size:14.5px; color:var(--text-secondary); max-width:240px;">
           ${escapeHtml(item.purpose)}
         </td>
-        <td style="font-size:13.5px; font-weight:600; color:var(--text-primary); white-space:nowrap;">
+        <td style="font-size:14.5px; font-weight:600; color:var(--text-primary); white-space:nowrap;">
           ${escapeHtml(item.authorized_by)}
         </td>
         <td>
@@ -3238,14 +3238,14 @@ function renderRoutes(routes) {
   container.innerHTML = routes.map(route => `
     <div class="route-status-item" data-route-id="${escapeHtml(route.id)}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border:1px solid var(--border-main); margin-bottom:6px; border-radius:2px; background:var(--bg-card);">
       <div>
-        <div style="font-weight:600; font-size:14.5px;">${escapeHtml(route.name)}</div>
-        <div style="font-size:12.5px; color:var(--text-secondary);">${escapeHtml(route.description || 'Corridor transit artery')}</div>
+        <div style="font-weight:600; font-size:15.5px;">${escapeHtml(route.name)}</div>
+        <div style="font-size:13.5px; color:var(--text-secondary);">${escapeHtml(route.description || 'Corridor transit artery')}</div>
       </div>
       <div style="display:flex; align-items:center; gap:8px;">
         <span class="status-pill ${getRouteClass(route.status)}">
           ${escapeHtml(route.status?.replace('_', ' '))}
         </span>
-        <button type="button" class="govt-btn btn-outline" style="font-size:12px; padding:3px 7px;" onclick="openRouteManageModal('${escapeHtml(route.id)}', '${escapeHtml(route.name)}', '${escapeHtml(route.status)}')">
+        <button type="button" class="govt-btn btn-outline" style="font-size:13px; padding:3px 7px;" onclick="openRouteManageModal('${escapeHtml(route.id)}', '${escapeHtml(route.name)}', '${escapeHtml(route.status)}')">
           <span>🔄 Manage / Divert</span>
         </button>
       </div>
@@ -3565,7 +3565,7 @@ function renderIncidentCommandQueue(incidents) {
   }
 
   if (!incidents || incidents.length === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:8px; text-align:center;">No critical incidents in queue. All sectors nominal.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">No critical incidents in queue. All sectors nominal.</div>';
     return;
   }
 
@@ -3586,7 +3586,7 @@ function renderIncidentCommandQueue(incidents) {
               <i data-lucide="check" style="width:10px; height:10px;"></i> Ack
             </button>
           ` : `
-            <span style="font-size:12px; color:var(--status-green); font-weight:bold; margin-right:4px;">ACKNOWLEDGED</span>
+            <span style="font-size:13px; color:var(--status-green); font-weight:bold; margin-right:4px;">ACKNOWLEDGED</span>
           `}
           <button type="button" class="cmd-btn" onclick="handleDispatchSquadForIncident('${escapeHtml(inc.id)}', this)">
             <i data-lucide="send" style="width:10px; height:10px;"></i> Dispatch
@@ -3612,7 +3612,7 @@ function renderFaceMatchQueue(candidates) {
   }
 
   if (!candidates || candidates.length === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:8px; text-align:center;">No pending candidate matches. Biometric scanner active.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">No pending candidate matches. Biometric scanner active.</div>';
     return;
   }
 
@@ -3721,32 +3721,32 @@ function renderBiometricCandidates(candidates) {
       <div class="biometric-candidate-card" data-match-id="${escapeHtml(c.id || '')}" style="border:1px solid var(--border-main); background:var(--bg-card); padding:10px; border-radius:3px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <div>
-            <strong style="color:var(--text-primary); font-size:15px;">${escapeHtml(c.lost_person_name || 'Lost Person Candidate')}</strong>
-            <span style="font-size:12.5px; color:var(--text-muted); margin-left:4px;">${escapeHtml(c.case_number || '#LF-CASE')}</span>
+            <strong style="color:var(--text-primary); font-size:16px;">${escapeHtml(c.lost_person_name || 'Lost Person Candidate')}</strong>
+            <span style="font-size:13.5px; color:var(--text-muted); margin-left:4px;">${escapeHtml(c.case_number || '#LF-CASE')}</span>
           </div>
-          <span style="font-size:12.5px; color:var(--text-muted); font-family:var(--font-mono);">${escapeHtml(c.camera_code || 'CAM-04')}</span>
+          <span style="font-size:13.5px; color:var(--text-muted); font-family:var(--font-mono);">${escapeHtml(c.camera_code || 'CAM-04')}</span>
         </div>
 
         <div class="biometric-split-view" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
           <div class="split-photo-box" style="border:1px solid var(--border-main); border-radius:2px; overflow:hidden; position:relative;">
             <img src="assets/palkhi_procession_hd.jpg" alt="Registered Dossier Photo" style="width:100%; height:110px; object-fit:cover; display:block;">
-            <div class="split-photo-label" style="padding:3px 6px; font-size:12px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
+            <div class="split-photo-label" style="padding:3px 6px; font-size:13px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
               <span>Registered Dossier</span>
             </div>
           </div>
           <div class="split-photo-box" style="border:1px solid var(--border-main); border-radius:2px; overflow:hidden; position:relative;">
             <img src="assets/cctv_wakhri_phata_1785244836537.jpg" alt="Live CCTV Detected Frame" style="width:100%; height:110px; object-fit:cover; display:block;">
-            <div class="split-photo-label" style="padding:3px 6px; font-size:12px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
+            <div class="split-photo-label" style="padding:3px 6px; font-size:13px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
               <span>Live CCTV Match</span>
             </div>
           </div>
         </div>
 
         <div style="display:flex; gap:6px;">
-          <button type="button" class="govt-btn" style="flex:1; font-size:12.5px; padding:5px 8px; background:var(--maroon-primary); color:#FFF;" onclick="handleVerifyAndDispatchSquad14('${escapeHtml(c.id || '')}', '${escapeHtml(c.case_id || '')}', this)">
+          <button type="button" class="govt-btn" style="flex:1; font-size:13.5px; padding:5px 8px; background:var(--maroon-primary); color:#FFF;" onclick="handleVerifyAndDispatchSquad14('${escapeHtml(c.id || '')}', '${escapeHtml(c.case_id || '')}', this)">
             <span>Verify &amp; Dispatch Squad #14</span>
           </button>
-          <button type="button" class="govt-btn btn-outline" style="font-size:12.5px; padding:5px 10px; border-color:var(--border-main); color:var(--text-primary);" onclick="handleRejectFaceMatch('${escapeHtml(c.id || '')}', this)">
+          <button type="button" class="govt-btn btn-outline" style="font-size:13.5px; padding:5px 10px; border-color:var(--border-main); color:var(--text-primary);" onclick="handleRejectFaceMatch('${escapeHtml(c.id || '')}', this)">
             <span>Reject</span>
           </button>
         </div>
@@ -3768,7 +3768,7 @@ function renderRecommendationsQueue(resourceRecs, routeRecs) {
   }
 
   if (totalRecs === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:8px; text-align:center;">All resources and routes running on optimal configuration.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">All resources and routes running on optimal configuration.</div>';
     return;
   }
 
@@ -3829,7 +3829,7 @@ function renderIncidentTimeline(timelineEvents) {
   });
 
   if (filtered.length === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:8px; text-align:center;">No timeline logs matching filter.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">No timeline logs matching filter.</div>';
     return;
   }
 
@@ -3848,10 +3848,10 @@ function renderIncidentTimeline(timelineEvents) {
         </div>
         <div class="timeline-content-box">
           <div class="timeline-meta-row">
-            <strong style="color:var(--text-primary); font-size:13px;">${escapeHtml(evt.title || evt.event_type || 'Operational Event')}</strong>
+            <strong style="color:var(--text-primary); font-size:14px;">${escapeHtml(evt.title || evt.event_type || 'Operational Event')}</strong>
             <span class="timeline-time">${timeStr}</span>
           </div>
-          <div style="font-size:13px; color:var(--text-secondary);">${escapeHtml(evt.message || '')}</div>
+          <div style="font-size:14px; color:var(--text-secondary);">${escapeHtml(evt.message || '')}</div>
         </div>
       </div>
     `;
@@ -3871,7 +3871,7 @@ function renderNotificationDrawerItems(actions) {
   if (countText) countText.textContent = `${count} Recent Operational Actions`;
 
   if (!actions || actions.length === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:12px; text-align:center;">No recent command actions.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:12px; text-align:center;">No recent command actions.</div>';
     return;
   }
 
@@ -3880,11 +3880,11 @@ function renderNotificationDrawerItems(actions) {
     return `
       <div class="drawer-notif-item">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-          <strong style="color:var(--maroon-primary); font-size:13.5px;">${escapeHtml(act.action_type.replace('_', ' '))}</strong>
-          <span style="font-size:12px; font-family:var(--font-mono); color:var(--text-muted);">${timeStr}</span>
+          <strong style="color:var(--maroon-primary); font-size:14.5px;">${escapeHtml(act.action_type.replace('_', ' '))}</strong>
+          <span style="font-size:13px; font-family:var(--font-mono); color:var(--text-muted);">${timeStr}</span>
         </div>
-        <div style="font-size:13px; color:var(--text-secondary);">${escapeHtml(act.target_type || 'COMMAND')}: ${escapeHtml(act.target_id || act.incident_id || 'Global')}</div>
-        <div style="font-size:12px; color:var(--status-green); font-weight:600; margin-top:2px;">STATUS: ${escapeHtml(act.status)}</div>
+        <div style="font-size:14px; color:var(--text-secondary);">${escapeHtml(act.target_type || 'COMMAND')}: ${escapeHtml(act.target_id || act.incident_id || 'Global')}</div>
+        <div style="font-size:13px; color:var(--status-green); font-weight:600; margin-top:2px;">STATUS: ${escapeHtml(act.status)}</div>
       </div>
     `;
   }).join('');
@@ -3904,8 +3904,8 @@ function updateYatraMapMarker(yatra) {
 
   const palkhiHtml = `
     <div style="position:relative; display:flex; align-items:center; justify-content:center;">
-      <div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:12.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
-        <span style="transform:rotate(${heading}deg); display:inline-block; font-size:14.5px;">➤</span>
+      <div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
+        <span style="transform:rotate(${heading}deg); display:inline-block; font-size:15.5px;">➤</span>
         <span>🚩 ${escapeHtml(palkhiName)} (${speed} km/h)</span>
       </div>
     </div>
@@ -3924,8 +3924,8 @@ function updateYatraMapMarker(yatra) {
   } else {
     AppState.palkhiMarker = L.marker([lat, lon], { icon: palkhiIcon, zIndexOffset: 1000 }).addTo(window.wariMap);
     AppState.palkhiMarker.bindPopup(`
-      <div style="font-family:var(--font-sans); font-size:14.5px;">
-        <strong style="color:var(--maroon-primary); font-size:15.5px;">🚩 ${escapeHtml(palkhiName)}</strong><br>
+      <div style="font-family:var(--font-sans); font-size:15.5px;">
+        <strong style="color:var(--maroon-primary); font-size:16.5px;">🚩 ${escapeHtml(palkhiName)}</strong><br>
         <strong>Speed:</strong> ${speed} km/h | <strong>Heading:</strong> ${heading}°<br>
         <strong>Checkpoint:</strong> ${escapeHtml(yatra.current_checkpoint || 'Wakhri Sector')}<br>
         <strong>Next:</strong> ${escapeHtml(yatra.next_checkpoint || 'Pandharpur Temple')}<br>
@@ -4028,9 +4028,9 @@ window.fetchAndRenderAuditTrail = async function() {
     const t = evt.created_at ? new Date(evt.created_at).toLocaleTimeString('en-IN') : 'LIVE';
     return `
       <tr>
-        <td style="font-family:var(--font-mono); font-size:13.5px;">${t}</td>
-        <td><span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:11.5px;">${escapeHtml(evt.event_type || 'EVENT')}</span></td>
-        <td style="font-size:13.5px; color:var(--text-primary);">${escapeHtml(evt.message || '')}</td>
+        <td style="font-family:var(--font-mono); font-size:14.5px;">${t}</td>
+        <td><span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:12.5px;">${escapeHtml(evt.event_type || 'EVENT')}</span></td>
+        <td style="font-size:14.5px; color:var(--text-primary);">${escapeHtml(evt.message || '')}</td>
       </tr>
     `;
   }).join('');
@@ -5272,7 +5272,7 @@ async function loadHelplineScenarios() {
     container.innerHTML = scenarios.map((sc, idx) => `
       <button type="button" class="scenario-chip-btn ${idx === 0 ? 'active' : ''}" data-scenario-id="${escapeHtml(sc.id)}" data-index="${idx}">
         <span>${escapeHtml(sc.title)}</span>
-        <span class="badge" style="font-size:11px; padding:1px 4px; background:#FAF0E1; color:#7A1F1F;">${sc.language === 'mr' ? 'मराठी' : 'हिन्दी'}</span>
+        <span class="badge" style="font-size:12px; padding:1px 4px; background:#FAF0E1; color:#7A1F1F;">${sc.language === 'mr' ? 'मराठी' : 'हिन्दी'}</span>
       </button>
     `).join('');
 
@@ -5568,7 +5568,7 @@ function renderCCTVCandidates(matches, caseObj) {
   if (badge) badge.textContent = `${matches.length} Candidates Identified`;
 
   if (!matches || matches.length === 0) {
-    grid.innerHTML = '<div style="font-size:14px; color:var(--text-secondary); padding:10px;">No CCTV matches found within the spatial-temporal search perimeter.</div>';
+    grid.innerHTML = '<div style="font-size:15px; color:var(--text-secondary); padding:10px;">No CCTV matches found within the spatial-temporal search perimeter.</div>';
     return;
   }
 
@@ -5582,7 +5582,7 @@ function renderCCTVCandidates(matches, caseObj) {
     return `
       <div class="cctv-candidate-card ${isVerified ? 'is-verified' : ''} ${isRejected ? 'is-rejected' : ''}" id="candCard-${matchId}">
         <div class="cctv-cand-header">
-          <div style="font-weight:700; font-size:14px; color:var(--maroon-primary); display:flex; align-items:center; gap:4px;">
+          <div style="font-weight:700; font-size:15px; color:var(--maroon-primary); display:flex; align-items:center; gap:4px;">
             <i data-lucide="camera" style="width:12px; height:12px;"></i>
             <span>${escapeHtml(m.camera_code || 'CAM-04')} &bull; ${escapeHtml(m.location_name || m.camera_name || 'Temple Chowk')}</span>
           </div>
@@ -5617,18 +5617,18 @@ function renderCCTVCandidates(matches, caseObj) {
               <span>❌ Reject (नाकारा)</span>
             </button>
           ` : `
-            <div style="font-size:13.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
+            <div style="font-size:14.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
               ${isVerified ? '✅ Confirmed by Human Operator' : '❌ Rejected by Human Operator'}
             </div>
           `}
         </div>
 
         <div style="display:flex; gap:6px; margin-top:4px;">
-          <button type="button" class="govt-btn" style="flex:1; font-size:12.5px; padding:4px 6px;" onclick="highlightCCTVOnMap('${m.camera_code || 'CAM-04'}', ${m.latitude || 17.6777}, ${m.longitude || 75.3276})">
+          <button type="button" class="govt-btn" style="flex:1; font-size:13.5px; padding:4px 6px;" onclick="highlightCCTVOnMap('${m.camera_code || 'CAM-04'}', ${m.latitude || 17.6777}, ${m.longitude || 75.3276})">
             <i data-lucide="map-pin" style="width:10px; height:10px;"></i>
             <span>📍 Show on Map</span>
           </button>
-          <button type="button" class="govt-btn btn-outline" style="font-size:12.5px; padding:4px 6px;" onclick="dispatchPatrolToCCTV('${m.camera_code || 'CAM-04'}', '${escapeHtml(caseObj?.name || 'Missing Pilgrim')}')">
+          <button type="button" class="govt-btn btn-outline" style="font-size:13.5px; padding:4px 6px;" onclick="dispatchPatrolToCCTV('${m.camera_code || 'CAM-04'}', '${escapeHtml(caseObj?.name || 'Missing Pilgrim')}')">
             <span>🚓 Dispatch</span>
           </button>
         </div>
@@ -5649,7 +5649,7 @@ window.verifyCCTVCandidate = async function(caseId, matchId, isVerified, personN
     const actionsGroup = document.getElementById(`verifyActions-${matchId}`);
 
     if (actionsGroup) {
-      actionsGroup.innerHTML = '<span style="font-size:13px; color:#5D4037;">⏳ Recording human verification...</span>';
+      actionsGroup.innerHTML = '<span style="font-size:14px; color:#5D4037;">⏳ Recording human verification...</span>';
     }
 
     const payload = {
@@ -5678,7 +5678,7 @@ window.verifyCCTVCandidate = async function(caseId, matchId, isVerified, personN
 
     if (actionsGroup) {
       actionsGroup.innerHTML = `
-        <div style="font-size:13.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
+        <div style="font-size:14.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
           ${isVerified ? '✅ Confirmed by Human Operator' : '❌ Rejected by Human Operator'}
         </div>
       `;
@@ -5725,10 +5725,10 @@ window.highlightCCTVOnMap = function(camId, lat, lng) {
 
     const popupContent = `
       <div style="font-family:var(--font-sans, sans-serif); min-width:180px;">
-        <div style="font-weight:700; color:#7A1F1F; font-size:14.5px; border-bottom:1px solid #D8D1C5; padding-bottom:3px;">
+        <div style="font-weight:700; color:#7A1F1F; font-size:15.5px; border-bottom:1px solid #D8D1C5; padding-bottom:3px;">
           📹 AI RE-ID DETECTION: ${camId}
         </div>
-        <div style="font-size:13.5px; margin-top:5px; color:#2B2623;">
+        <div style="font-size:14.5px; margin-top:5px; color:#2B2623;">
           Target matched on live CCTV feed.<br>
           Patrol squad alerted for physical verification.
         </div>

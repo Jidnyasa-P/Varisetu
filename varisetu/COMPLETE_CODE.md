@@ -597,8 +597,8 @@ if __name__ == "__main__":
           <img src="assets/varisetu_logo.png" alt="VariSetu Logo" style="height: 68px; width: auto; object-fit: contain;">
           <img src="assets/maharashtra_gov_seal.png" alt="Maharashtra Government Seal" class="mh-gov-seal-img" style="height: 58px; width: 58px;">
         </div>
-        <div class="login-marathi" style="font-family: var(--font-serif); font-size: 27px; font-weight: 700; color: var(--maroon-primary); line-height: 1.1;">वारी सेतु</div>
-        <div class="login-english" style="font-size: 12.5px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.3px;">महाराष्ट्र शासन &bull; पंढरपूर आषाढी वारी नियंत्रण कक्ष</div>
+        <div class="login-marathi" style="font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: var(--maroon-primary); line-height: 1.1;">वारी सेतु</div>
+        <div class="login-english" style="font-size: 13.5px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.3px;">महाराष्ट्र शासन &bull; पंढरपूर आषाढी वारी नियंत्रण कक्ष</div>
       </div>
 
       <div class="login-divider"></div>
@@ -645,7 +645,7 @@ if __name__ == "__main__":
       </form>
 
       <div style="margin-top: 14px; text-align: center; border-top: 1px dashed var(--border-main); padding-top: 12px;">
-        <button type="button" id="openPublicPortalBtn" class="govt-btn btn-outline" style="width: 100%; padding: 8px 12px; font-size: 13.5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        <button type="button" id="openPublicPortalBtn" class="govt-btn btn-outline" style="width: 100%; padding: 8px 12px; font-size: 14.5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
           <i data-lucide="users" style="width: 14px; height: 14px;"></i>
           <span>👥 Public Pilgrim Portal & Helplines (नागरिक माहिती)</span>
         </button>
@@ -668,8 +668,8 @@ if __name__ == "__main__":
         <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img" style="height: 52px; width: auto;">
         <img src="assets/maharashtra_gov_seal.png" alt="Maharashtra Government Seal" class="mh-gov-seal-img" style="height: 44px; width: 44px;">
         <div class="brand-titles">
-          <h1 class="brand-marathi" style="font-size: 18.5px; font-weight: 700; color: var(--maroon-primary); margin: 0; line-height: 1.1;">वारी सेतु &bull; सार्वजनिक वारकरी सेवा पोर्टल</h1>
-          <span class="brand-english" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">महाराष्ट्र शासन &bull; श्री क्षेत्र पंढरपूर आषाढी वारी सोहळा</span>
+          <h1 class="brand-marathi" style="font-size: 19.5px; font-weight: 700; color: var(--maroon-primary); margin: 0; line-height: 1.1;">वारी सेतु &bull; सार्वजनिक वारकरी सेवा पोर्टल</h1>
+          <span class="brand-english" style="font-size: 13px; color: var(--text-muted); font-weight: 600;">महाराष्ट्र शासन &bull; श्री क्षेत्र पंढरपूर आषाढी वारी सोहळा</span>
         </div>
       </div>
 
@@ -677,7 +677,7 @@ if __name__ == "__main__":
         <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:700;">
           <span>🚩 PALKHI: APPROACHING WAKHRI</span>
         </div>
-        <button id="backToLoginBtn" type="button" class="govt-btn" style="font-size:12.5px; padding:4px 10px; display:flex; align-items:center; gap:4px;">
+        <button id="backToLoginBtn" type="button" class="govt-btn" style="font-size:13.5px; padding:4px 10px; display:flex; align-items:center; gap:4px;">
           <i data-lucide="lock" style="width:12px; height:12px;"></i>
           <span>Officer Login</span>
         </button>
@@ -688,12 +688,12 @@ if __name__ == "__main__":
       <!-- Hero Banner -->
       <div style="background: linear-gradient(135deg, var(--maroon-primary), #5C1515); color: #FFF; padding: 16px 20px; border-radius: 3px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 3px 10px rgba(0,0,0,0.15);">
         <div>
-          <div style="font-family: var(--font-serif); font-size: 23px; font-weight: 700; color: #F5D38A;">संत तुकाराम महाराज व संत ज्ञानेश्वर महाराज पालखी सोहळा २०२६</div>
-          <div style="font-size: 14.5px; color: #EFECE6; margin-top: 4px;">Live Location: Wakhri Phata Junction (Km 184) &bull; Moving smoothly towards Pandharpur Shrine</div>
+          <div style="font-family: var(--font-serif); font-size: 24px; font-weight: 700; color: #F5D38A;">संत तुकाराम महाराज व संत ज्ञानेश्वर महाराज पालखी सोहळा २०२६</div>
+          <div style="font-size: 15.5px; color: #EFECE6; margin-top: 4px;">Live Location: Wakhri Phata Junction (Km 184) &bull; Moving smoothly towards Pandharpur Shrine</div>
         </div>
         <div style="text-align: right;">
-          <div style="font-family: var(--font-mono); font-size: 20.5px; font-weight: 700; color: #00FF66;">~8,45,000</div>
-          <div style="font-size: 12.5px; color: #DDD;">Estimated Pilgrim Count</div>
+          <div style="font-family: var(--font-mono); font-size: 21.5px; font-weight: 700; color: #00FF66;">~8,45,000</div>
+          <div style="font-size: 13.5px; color: #DDD;">Estimated Pilgrim Count</div>
         </div>
       </div>
 
@@ -704,7 +704,7 @@ if __name__ == "__main__":
           <div class="panel-card" style="padding: 12px; margin-bottom: 12px;">
             <div class="panel-header" style="margin-bottom: 8px;">
               <span>PILGRIMAGE ROUTE & HALT STATIONS MAP</span>
-              <span style="font-size: 12.5px; color: var(--text-muted);">Alandi &rarr; Saswad &rarr; Lonand &rarr; Wakhri &rarr; Pandharpur</span>
+              <span style="font-size: 13.5px; color: var(--text-muted);">Alandi &rarr; Saswad &rarr; Lonand &rarr; Wakhri &rarr; Pandharpur</span>
             </div>
             <div id="publicRouteMap" style="height: 320px; width: 100%; border: 1px solid var(--border-main); border-radius: 2px;"></div>
           </div>
@@ -715,7 +715,7 @@ if __name__ == "__main__":
               <span>☀️ PILGRIM HEALTH & HYDRATION ADVISORY</span>
               <span class="density-tag yellow">34°C MODERATE HEAT</span>
             </div>
-            <div style="font-size: 14.5px; color: var(--text-primary); line-height: 1.5;">
+            <div style="font-size: 15.5px; color: var(--text-primary); line-height: 1.5;">
               <strong>Advisory:</strong> Drink plenty of water. Free ORSL salt sachets & medical assistance are available at all 24 water points and 16 medical tents stationed along the highway.
             </div>
           </div>
@@ -727,7 +727,7 @@ if __name__ == "__main__":
           <div class="panel-card" style="padding: 12px; border-left: 4px solid var(--maroon-primary);">
             <div class="panel-header" style="margin-bottom: 10px;">
               <span>🚨 EMERGENCY & HELPLINE NUMBERS</span>
-              <span style="font-size: 12.5px; color: var(--status-green);">24x7 ACTIVE</span>
+              <span style="font-size: 13.5px; color: var(--status-green);">24x7 ACTIVE</span>
             </div>
             <div style="display: flex; flex-direction: column; gap: 8px;">
               <a href="tel:112" class="public-helpline-card">
@@ -735,7 +735,7 @@ if __name__ == "__main__":
                   <div class="public-helpline-title">Police Control Room (महाराष्ट्र पोलीस)</div>
                   <div class="public-helpline-num">112 / 02186-223344</div>
                 </div>
-                <span class="govt-btn" style="padding: 3px 8px; font-size: 12.5px;">CALL NOW</span>
+                <span class="govt-btn" style="padding: 3px 8px; font-size: 13.5px;">CALL NOW</span>
               </a>
 
               <a href="tel:108" class="public-helpline-card">
@@ -743,7 +743,7 @@ if __name__ == "__main__":
                   <div class="public-helpline-title">Ambulance & Medical Emergency</div>
                   <div class="public-helpline-num">108 / 102</div>
                 </div>
-                <span class="govt-btn" style="padding: 3px 8px; font-size: 12.5px; background: var(--status-red);">CALL NOW</span>
+                <span class="govt-btn" style="padding: 3px 8px; font-size: 13.5px; background: var(--status-red);">CALL NOW</span>
               </a>
 
               <a href="tel:18002330099" class="public-helpline-card">
@@ -751,7 +751,7 @@ if __name__ == "__main__":
                   <div class="public-helpline-title">Lost & Found Pilgrim Assistance Booth</div>
                   <div class="public-helpline-num">1800-233-0099 (Toll Free)</div>
                 </div>
-                <span class="govt-btn btn-outline" style="padding: 3px 8px; font-size: 12.5px;">CALL NOW</span>
+                <span class="govt-btn btn-outline" style="padding: 3px 8px; font-size: 13.5px;">CALL NOW</span>
               </a>
 
               <a href="tel:02186223550" class="public-helpline-card">
@@ -759,7 +759,7 @@ if __name__ == "__main__":
                   <div class="public-helpline-title">Shri Vitthal Mandir Samiti Control Desk</div>
                   <div class="public-helpline-num">02186-223550</div>
                 </div>
-                <span class="govt-btn btn-outline" style="padding: 3px 8px; font-size: 12.5px;">CALL NOW</span>
+                <span class="govt-btn btn-outline" style="padding: 3px 8px; font-size: 13.5px;">CALL NOW</span>
               </a>
             </div>
           </div>
@@ -769,10 +769,10 @@ if __name__ == "__main__":
             <div class="panel-header" style="margin-bottom: 6px;">
               <span>🔍 REPORT MISSING FAMILY MEMBER</span>
             </div>
-            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">
+            <div style="font-size: 15px; color: var(--text-secondary); margin-bottom: 8px;">
               Separated from your family or group in the crowd? Submit details and photos directly for instant AI matching across state CCTV cameras.
             </div>
-            <button type="button" class="govt-btn" id="publicReportMissingBtn" style="width: 100%; padding: 8px 12px; font-size: 13.5px; display:flex; align-items:center; justify-content:center; gap:6px;">
+            <button type="button" class="govt-btn" id="publicReportMissingBtn" style="width: 100%; padding: 8px 12px; font-size: 14.5px; display:flex; align-items:center; justify-content:center; gap:6px;">
               <i data-lucide="user-plus" style="width: 13px; height: 13px;"></i>
               <span>Submit Missing Person Report (तक्रार नोंदवा)</span>
             </button>
@@ -794,8 +794,8 @@ if __name__ == "__main__":
         <img src="assets/varisetu_logo.png" alt="VariSetu Logo" class="brand-logo-img" style="height: 52px; width: auto;">
         <img src="assets/maharashtra_gov_seal.png" alt="Maharashtra Government Seal" class="mh-gov-seal-img" style="height: 44px; width: 44px;">
         <div class="brand-titles">
-          <h1 class="brand-marathi" style="font-size: 20.5px; font-weight: 700; color: var(--maroon-primary); margin: 0; line-height: 1.1;">वारी सेतु</h1>
-          <span class="brand-english" style="font-size: 12px; color: var(--text-muted); font-weight: 600;">महाराष्ट्र शासन &bull; महाराष्ट्र पोलीस नियंत्रण कक्ष</span>
+          <h1 class="brand-marathi" style="font-size: 21.5px; font-weight: 700; color: var(--maroon-primary); margin: 0; line-height: 1.1;">वारी सेतु</h1>
+          <span class="brand-english" style="font-size: 13px; color: var(--text-muted); font-weight: 600;">महाराष्ट्र शासन &bull; महाराष्ट्र पोलीस नियंत्रण कक्ष</span>
         </div>
       </div>
 
@@ -807,31 +807,31 @@ if __name__ == "__main__":
         <div class="meta-pill" style="border-color: var(--maroon-primary); color: var(--maroon-primary); font-weight:600;">
           <span>PILGRIM COUNT: ~8,45,000</span>
         </div>
-        <button class="govt-btn btn-outline" id="configGoogleMapsKeyBtn" type="button" style="font-size:12.5px; padding:4px 9px;" title="Configure Google Maps API Key & Vector Map Engine">
+        <button class="govt-btn btn-outline" id="configGoogleMapsKeyBtn" type="button" style="font-size:13.5px; padding:4px 9px;" title="Configure Google Maps API Key & Vector Map Engine">
           <i data-lucide="map" style="width:11px; height:11px;"></i>
           <span>GIS Engine</span>
         </button>
-        <button class="govt-btn btn-outline" id="openAuditTrailBtn" type="button" style="font-size:12.5px; padding:4px 9px;" title="Operational Incident Audit Trail & Report Exporter">
+        <button class="govt-btn btn-outline" id="openAuditTrailBtn" type="button" style="font-size:13.5px; padding:4px 9px;" title="Operational Incident Audit Trail & Report Exporter">
           <i data-lucide="file-text" style="width:11px; height:11px;"></i>
           <span>Audit Trail</span>
         </button>
-        <button class="govt-btn" id="openHelplineCallBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:12.5px; padding:4px 9px; display:flex; align-items:center; gap:5px; border-color:var(--saffron-gold); box-shadow:0 0 6px rgba(217,142,44,0.35);" title="Citizen SOS Emergency Helpline Intake & AI Translation">
+        <button class="govt-btn" id="openHelplineCallBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:13.5px; padding:4px 9px; display:flex; align-items:center; gap:5px; border-color:var(--saffron-gold); box-shadow:0 0 6px rgba(217,142,44,0.35);" title="Citizen SOS Emergency Helpline Intake & AI Translation">
           <i data-lucide="phone-call" style="width:12px; height:12px; color:#FFE082;"></i>
           <span>📞 SOS Helpline (नागरीक मदत)</span>
         </button>
-        <button class="govt-btn btn-outline" id="notifDrawerBtn" type="button" style="position:relative; font-size:12.5px; padding:4px 9px;" title="Operational Alerts & Outbox">
+        <button class="govt-btn btn-outline" id="notifDrawerBtn" type="button" style="position:relative; font-size:13.5px; padding:4px 9px;" title="Operational Alerts & Outbox">
           <i data-lucide="bell" style="width:12px; height:12px;"></i>
           <span>Alerts</span>
           <span class="notif-badge-count" id="notifBadgeCount">3</span>
         </button>
-        <button class="govt-btn btn-outline" id="addOfficerBtn" type="button" style="display:none; font-size:12.5px; padding:4px 9px;">
+        <button class="govt-btn btn-outline" id="addOfficerBtn" type="button" style="display:none; font-size:13.5px; padding:4px 9px;">
           <i data-lucide="user-plus" style="width:11px; height:11px;"></i>
           <span>+ Add Officer</span>
         </button>
         <div class="meta-pill" id="userProfileBadge" style="display:flex; align-items:center; border-color:var(--border-main); margin-left:auto;">
           <i data-lucide="shield-check" style="width:13px; height:13px; color:var(--text-primary); margin-right:4px;"></i>
           <span id="userProfileText" style="font-weight:700; color:var(--text-primary); text-transform:uppercase;">COMMANDER</span>
-          <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:11.5px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
+          <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:12.5px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
         </div>
       </div>
     </header>
@@ -886,7 +886,7 @@ if __name__ == "__main__":
           <div class="cctv-column" id="cctvTilesContainer">
             <div class="panel-header">
               <span>CCTV FEEDS (SURVEILLANCE GRID)</span>
-              <span style="font-size:12.5px; color:var(--text-muted);"><span class="live-dot" style="display:inline-block; width:6px; height:6px; margin-right:4px;"></span>LIVE 60 FPS</span>
+              <span style="font-size:13.5px; color:var(--text-muted);"><span class="live-dot" style="display:inline-block; width:6px; height:6px; margin-right:4px;"></span>LIVE 60 FPS</span>
             </div>
 
             <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for live HD stream & telemetry">
@@ -953,7 +953,7 @@ if __name__ == "__main__":
                 <span class="hud-value" style="color: #9A2525;" id="hudSectorStatus">S4 Nashik Surge (92%)</span>
               </div>
               <div class="hud-actions" style="display:flex; gap:6px; margin-left:auto;">
-                <button type="button" class="govt-btn" id="changeCorridorEndpointsBtn" style="font-size:12px; padding:3px 8px;">
+                <button type="button" class="govt-btn" id="changeCorridorEndpointsBtn" style="font-size:13px; padding:3px 8px;">
                   <i data-lucide="map-pin" style="width:10px; height:10px;"></i>
                   <span>Change Origin / Destination</span>
                 </button>
@@ -963,7 +963,7 @@ if __name__ == "__main__":
             <div id="routeMap"></div>
 
             <div class="map-controls-overlay">
-              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px; font-size:12.5px;">NH-60 CORRIDOR MAP LEGEND</div>
+              <div style="font-weight:700; border-bottom:1px solid var(--border-main); padding-bottom:3px; font-size:13.5px;">NH-60 CORRIDOR MAP LEGEND</div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#9A2525;"></div>
                 <span>Sector 4 (Sangamner ➔ Nashik 92%)</span>
@@ -985,23 +985,23 @@ if __name__ == "__main__":
                 <span>Live Palkhi Lead (Km 84 Narayangaon)</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:15.5px;">🚩</span>
+                <span style="font-size:16.5px;">🚩</span>
                 <span>वारकरी दिंडी पदयात्रा (Procession on Route)</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:15.5px;">🚑</span>
+                <span style="font-size:16.5px;">🚑</span>
                 <span>Mobile Medical Vans (MV-01/02/03)</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:15.5px;">💧</span>
+                <span style="font-size:16.5px;">💧</span>
                 <span>Water Tankers (WT-09/04)</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:15.5px;">🚓</span>
+                <span style="font-size:16.5px;">🚓</span>
                 <span>MahaPolice Patrol Squad (PS-14)</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:15.5px;">🍲</span>
+                <span style="font-size:16.5px;">🍲</span>
                 <span>Annadanam Food Distribution Van</span>
               </div>
             </div>
@@ -1032,32 +1032,32 @@ if __name__ == "__main__":
               <!-- Public PA Broadcast (Replaced Main Palkhi Status) -->
               <div class="govt-stat-box" style="border-left-color: var(--maroon-primary); padding: 8px 10px; display:flex; flex-direction:column; justify-content:space-between;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-                  <div style="font-weight:700; font-size:13.5px; color:var(--maroon-primary); display:flex; align-items:center; gap:4px;">
+                  <div style="font-weight:700; font-size:14.5px; color:var(--maroon-primary); display:flex; align-items:center; gap:4px;">
                     <i data-lucide="megaphone" style="width:12px; height:12px;"></i>
                     <span>PUBLIC PA BROADCAST</span>
                   </div>
-                  <span class="badge" style="background:var(--status-green); color:#FFF; font-size:10.5px; padding:1px 4px;">MARATHI • ENG</span>
+                  <span class="badge" style="background:var(--status-green); color:#FFF; font-size:11.5px; padding:1px 4px;">MARATHI • ENG</span>
                 </div>
-                <div style="font-size:12px; color:var(--text-secondary); margin-bottom:4px; line-height:1.2;">
+                <div style="font-size:13px; color:var(--text-secondary); margin-bottom:4px; line-height:1.2;">
                   Broadcast urgent crowd advisories across temple chowki loudspeakers.
                 </div>
                 <div style="display:flex; gap:5px; align-items:center; margin-bottom:3px;">
-                  <button class="govt-btn" id="openAnnouncementModalBtn" type="button" style="font-size:11.5px; padding:3px 7px; flex-shrink:0;">
+                  <button class="govt-btn" id="openAnnouncementModalBtn" type="button" style="font-size:12.5px; padding:3px 7px; flex-shrink:0;">
                     <i data-lucide="send" style="width:9px; height:9px;"></i>
                     <span>+ Queue PA</span>
                   </button>
-                  <div id="activeBroadcastTicker" style="background:var(--bg-subtle); border:1px solid var(--border-main); padding:3px 6px; font-size:11.5px; color:var(--text-primary); border-radius:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
+                  <div id="activeBroadcastTicker" style="background:var(--bg-subtle); border:1px solid var(--border-main); padding:3px 6px; font-size:12.5px; color:var(--text-primary); border-radius:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
                     <strong style="color:var(--maroon-primary);">Active Broadcast:</strong> <span id="activeBroadcastText">वाखरी फाटा येथे पर्यायी पायी मार्गाचा वापर करावा.</span>
                   </div>
                 </div>
-                <div class="stat-subtext" style="font-size:11.5px; color:var(--text-muted);">Real-time crowd alert & route advisory system</div>
+                <div class="stat-subtext" style="font-size:12.5px; color:var(--text-muted);">Real-time crowd alert & route advisory system</div>
               </div>
 
               <!-- Photo Texture Box / Live Flow Video -->
               <div class="panel-card" style="padding:8px;" id="pilgrimFieldCard" data-cam-code="PHOTO-01" title="Click for live HD stream & telemetry">
-                <div style="font-size:12.5px; font-weight:600; color:var(--text-muted); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-size:13.5px; font-weight:600; color:var(--text-muted); margin-bottom:4px; display:flex; justify-content:space-between; align-items:center;">
                   <span>PILGRIM FLOW LIVE STREAM</span>
-                  <span style="color:#2E7D32; font-family:var(--font-mono); font-size:11.5px;"><span class="live-dot" style="display:inline-block; width:5px; height:5px; margin-right:3px;"></span>LIVE 60 FPS</span>
+                  <span style="color:#2E7D32; font-family:var(--font-mono); font-size:12.5px;"><span class="live-dot" style="display:inline-block; width:5px; height:5px; margin-right:3px;"></span>LIVE 60 FPS</span>
                 </div>
                 <div style="position:relative; width:100%; height:110px; overflow:hidden; border:1px solid var(--border-main); cursor:pointer;">
                   <video class="cctv-feed-video" id="video-PHOTO-01" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
@@ -1074,11 +1074,11 @@ if __name__ == "__main__":
           <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <i data-lucide="cpu" style="width:15px; height:15px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:14.5px; letter-spacing:0.3px;">DISPATCH & ROUTE RECOMMENDATIONS (AI OPTIMIZATION LAYER)</span>
+              <span style="font-weight:700; font-size:15.5px; letter-spacing:0.3px;">DISPATCH & ROUTE RECOMMENDATIONS (AI OPTIMIZATION LAYER)</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:13px; color:var(--text-muted);">Corridor Logistics & Nearest Squad Matching</span>
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:12px;" id="recsQueueBadge">AI Ranked</span>
+              <span style="font-size:14px; color:var(--text-muted);">Corridor Logistics & Nearest Squad Matching</span>
+              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="recsQueueBadge">AI Ranked</span>
             </div>
           </div>
           <div class="command-action-queue-list elongated-recs-grid" id="recommendationsQueueList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:10px; padding:12px; max-height:none; overflow:visible;">
@@ -1136,7 +1136,7 @@ if __name__ == "__main__":
           <!-- Right: Congestion Forecast Chart -->
           <div class="chart-card">
             <div class="chart-title">2-HOUR CONGESTION FORECAST MODEL</div>
-            <div style="font-size:13.5px; color:var(--text-secondary); margin-bottom:12px;">
+            <div style="font-size:14.5px; color:var(--text-secondary); margin-bottom:12px;">
               Predicted crowd accumulation at Wakhri Phata & Pandharpur Chowk (19:00 - 21:00 IST)
             </div>
             <div style="height: 300px; position: relative;">
@@ -1154,7 +1154,7 @@ if __name__ == "__main__":
             <span>Lost & Found Incident Desk</span>
           </div>
           <div style="display:flex; gap:8px;">
-            <button class="govt-btn" id="lostFoundCallIntakeBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:13.5px; padding:4px 10px; display:flex; align-items:center; gap:6px; border-color:var(--border-main);">
+            <button class="govt-btn" id="lostFoundCallIntakeBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:14.5px; padding:4px 10px; display:flex; align-items:center; gap:6px; border-color:var(--border-main);">
               <i data-lucide="phone-call" style="width:13px; height:13px;"></i>
               <span>📞 Citizen Helpline Call (नागरीक मदत)</span>
             </button>
@@ -1169,12 +1169,12 @@ if __name__ == "__main__":
           <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="scan-face" style="width:14px; height:14px;"></i>
-              <span style="font-weight:700; font-size:14.5px;">AI FACE MATCH CANDIDATES</span>
+              <span style="font-weight:700; font-size:15.5px;">AI FACE MATCH CANDIDATES</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span id="faceMatchPaginationInfo" style="font-size:12.5px; color:var(--text-muted);">Page 1 of 1</span>
-              <button type="button" class="pagination-btn" id="faceMatchPrevBtn" style="padding:2px 7px; font-size:12.5px;" disabled>&laquo; Prev</button>
-              <button type="button" class="pagination-btn" id="faceMatchNextBtn" style="padding:2px 7px; font-size:12.5px;" disabled>Next &raquo;</button>
+              <span id="faceMatchPaginationInfo" style="font-size:13.5px; color:var(--text-muted);">Page 1 of 1</span>
+              <button type="button" class="pagination-btn" id="faceMatchPrevBtn" style="padding:2px 7px; font-size:13.5px;" disabled>&laquo; Prev</button>
+              <button type="button" class="pagination-btn" id="faceMatchNextBtn" style="padding:2px 7px; font-size:13.5px;" disabled>Next &raquo;</button>
             </div>
           </div>
           <div id="biometricCandidatesContainer" style="padding:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:10px;">
@@ -1198,7 +1198,7 @@ if __name__ == "__main__":
                   <option value="MATCH_FOUND">Match Found (सापडला)</option>
                   <option value="REUNITED">Reunited (एकत्र आले)</option>
                 </select>
-                <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:12.5px;" id="lostTotalCountBadge">100 Cases</span>
+                <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:13.5px;" id="lostTotalCountBadge">100 Cases</span>
               </div>
             </div>
 
@@ -1232,10 +1232,10 @@ if __name__ == "__main__":
 
           <!-- Right Column: Devanagari Transcript Snippet -->
           <div class="transcript-panel">
-            <div style="font-weight:700; color:var(--maroon-primary); font-size:15.5px; margin-bottom:4px;">
+            <div style="font-weight:700; color:var(--maroon-primary); font-size:16.5px; margin-bottom:4px;">
               CALL-TO-CASE PIPELINE TRANSCRIPT
             </div>
-            <div style="font-size:13.5px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;" id="transcriptHeaderSub">
+            <div style="font-size:14.5px; color:var(--text-secondary); border-bottom:1px solid var(--border-main); padding-bottom:6px;" id="transcriptHeaderSub">
               Helpline 112 Audio Recording Snippet (Deccan Dialect) &bull; Select a case
             </div>
 
@@ -1267,7 +1267,7 @@ if __name__ == "__main__":
               Active Field Ambulances & Emergency Medical Response Hubs
             </div>
           </div>
-          <button class="govt-btn" id="addMedicalAlertBtn" type="button" style="font-size:13.5px; padding:5px 12px; display:flex; align-items:center; gap:5px; background:var(--status-red);">
+          <button class="govt-btn" id="addMedicalAlertBtn" type="button" style="font-size:14.5px; padding:5px 12px; display:flex; align-items:center; gap:5px; background:var(--status-red);">
             <i data-lucide="plus-circle" style="width:13px; height:13px;"></i>
             <span>+ Report Medical Emergency</span>
           </button>
@@ -1288,7 +1288,7 @@ if __name__ == "__main__":
 
           <!-- Right: Heat-Risk Readout Box -->
           <div class="heat-risk-box">
-            <div style="font-weight:700; font-family:var(--font-serif); font-size:16.5px; color:var(--maroon-primary); margin-bottom:8px; border-bottom:1px solid var(--border-main); padding-bottom:4px;">
+            <div style="font-weight:700; font-family:var(--font-serif); font-size:17.5px; color:var(--maroon-primary); margin-bottom:8px; border-bottom:1px solid var(--border-main); padding-bottom:4px;">
               HEAT-RISK COMPUTED READOUT
             </div>
 
@@ -1313,7 +1313,7 @@ if __name__ == "__main__":
               <span class="metric-val" id="heatOrslSupplies">14,200 Packets Available</span>
             </div>
 
-            <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:13.5px; color:var(--text-secondary);" id="heatAdvisoryText">
+            <div style="margin-top:14px; background:var(--bg-subtle); padding:8px; border:1px solid var(--border-main); font-size:14.5px; color:var(--text-secondary);" id="heatAdvisoryText">
               <strong>Advisory Action:</strong> Trigger mist sprayer vans at Wakhri Junction & increase water distribution post deployment by 20%.
             </div>
           </div>
@@ -1337,7 +1337,7 @@ if __name__ == "__main__":
           <div class="govt-table-container">
             <div class="panel-header" style="margin-bottom:6px; justify-content:space-between;">
               <span>DEPLOYMENT SUMMARY METRICS (LIMIT: 20 PER RESOURCE TYPE)</span>
-              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:12px;" id="totalFleetQuotaBadge">80 Total Fleet Units</span>
+              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="totalFleetQuotaBadge">80 Total Fleet Units</span>
             </div>
             <table class="govt-table">
               <thead>
@@ -1372,7 +1372,7 @@ if __name__ == "__main__":
           <div class="panel-header" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="truck" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:14.5px;">FIELD LOGISTICS &amp; FLEET UNITS INVENTORY (20 PER TYPE)</span>
+              <span style="font-weight:700; font-size:15.5px;">FIELD LOGISTICS &amp; FLEET UNITS INVENTORY (20 PER TYPE)</span>
             </div>
             <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
               <button type="button" class="timeline-filter-btn active fleet-filter-btn" data-fleet-filter="ALL">All (80)</button>
@@ -1382,7 +1382,7 @@ if __name__ == "__main__":
               <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="VOLUNTEER_TEAM">Volunteers (20)</button>
               <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="DISPATCHED" style="border-color:#B8551B; font-weight:700;">⚡ Dispatched (38)</button>
               <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="AVAILABLE" style="border-color:#2E5B36; font-weight:700;">🟢 Available (42)</button>
-              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:12px;" id="fleetUnitsCountBadge">80 Units Managed</span>
+              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:13px;" id="fleetUnitsCountBadge">80 Units Managed</span>
             </div>
           </div>
           <div class="field-logistics-grid" id="resourceCardsContainer" style="padding:10px; max-height:460px; overflow-y:auto;">
@@ -1396,18 +1396,18 @@ if __name__ == "__main__":
           <div class="panel-header" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="history" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:14.5px;">RESOURCE ALLOCATION &amp; SECTOR DISPATCH HISTORY</span>
+              <span style="font-weight:700; font-size:15.5px;">RESOURCE ALLOCATION &amp; SECTOR DISPATCH HISTORY</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <select id="allocationSectorFilter" class="govt-input" style="padding:2px 8px; font-size:12.5px; height:24px;">
+              <select id="allocationSectorFilter" class="govt-input" style="padding:2px 8px; font-size:13.5px; height:24px;">
                 <option value="ALL">All Corridor Sectors</option>
                 <option value="Sector 1">Sector 1 (Pune ➔ Bhosari)</option>
                 <option value="Sector 2">Sector 2 (Bhosari ➔ Manchar)</option>
                 <option value="Sector 3">Sector 3 (Manchar ➔ Sangamner)</option>
                 <option value="Sector 4">Sector 4 (Sangamner ➔ Nashik)</option>
               </select>
-              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:12px;" id="activeAllocationsBadge">6 Active</span>
-              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:12px;" id="totalAllocationsBadge">8 Dispatches</span>
+              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:13px;" id="activeAllocationsBadge">6 Active</span>
+              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:13px;" id="totalAllocationsBadge">8 Dispatches</span>
             </div>
           </div>
           <div class="govt-table-container" style="margin:0; border:none; max-height:280px; overflow-y:auto;">
@@ -1437,7 +1437,7 @@ if __name__ == "__main__":
           <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="activity" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:14.5px;">LIVE INCIDENT & LOGISTICS ACTION TIMELINE</span>
+              <span style="font-weight:700; font-size:15.5px;">LIVE INCIDENT & LOGISTICS ACTION TIMELINE</span>
             </div>
             <div class="timeline-filter-group">
               <button type="button" class="timeline-filter-btn active" data-filter="ALL">ALL</button>
@@ -1504,13 +1504,13 @@ if __name__ == "__main__":
     <div class="drawer-header">
       <div style="display:flex; align-items:center; gap:8px;">
         <i data-lucide="bell" style="width:16px; height:16px; color:var(--maroon-primary);"></i>
-        <span style="font-weight:700; font-family:var(--font-serif); font-size:17.5px; color:var(--maroon-primary);">Operational Alerts</span>
+        <span style="font-weight:700; font-family:var(--font-serif); font-size:18.5px; color:var(--maroon-primary);">Operational Alerts</span>
       </div>
       <button type="button" class="close-modal-btn" id="notifDrawerCloseBtn">&times;</button>
     </div>
     <div class="drawer-toolbar">
-      <span style="font-size:13.5px; color:var(--text-muted);" id="drawerUnreadCountText">3 Unread Alerts</span>
-      <button type="button" class="govt-btn btn-outline" id="markAllNotifsReadBtn" style="font-size:12.5px; padding:3px 8px;">Mark All Read</button>
+      <span style="font-size:14.5px; color:var(--text-muted);" id="drawerUnreadCountText">3 Unread Alerts</span>
+      <button type="button" class="govt-btn btn-outline" id="markAllNotifsReadBtn" style="font-size:13.5px; padding:3px 8px;">Mark All Read</button>
     </div>
     <div class="drawer-content" id="drawerNotifsContainer">
       <!-- Populated dynamically from CommandPicture / API -->
@@ -1530,16 +1530,16 @@ if __name__ == "__main__":
       <form id="announcementForm">
         <div class="app-modal-body">
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:14px; margin-bottom:4px;">Announcement Message (मराठी)</label>
+            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Announcement Message (मराठी)</label>
             <textarea id="annMsgMr" class="govt-input" rows="3" required placeholder="उदा. सर्व वारकऱ्यांना नम्र विनंती वाखरी फाटा येथे गर्दी नियंत्रणासाठी पर्यायी मार्गाचा वापर करावा..."></textarea>
           </div>
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:14px; margin-bottom:4px;">Announcement Message (English)</label>
+            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Announcement Message (English)</label>
             <textarea id="annMsgEn" class="govt-input" rows="3" required placeholder="E.g. All pilgrims are requested to use the designated bypass route due to high crowd density..."></textarea>
           </div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
             <div>
-              <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Category</label>
+              <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Category</label>
               <select id="annCategory" class="govt-input">
                 <option value="CROWD_SAFETY">Crowd Safety & Advisory</option>
                 <option value="ROUTE_DIVERSION">Route Diversion Notice</option>
@@ -1548,7 +1548,7 @@ if __name__ == "__main__":
               </select>
             </div>
             <div>
-              <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Priority</label>
+              <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Priority</label>
               <select id="annPriority" class="govt-input">
                 <option value="HIGH">High Priority</option>
                 <option value="CRITICAL">Critical Emergency</option>
@@ -1580,20 +1580,20 @@ if __name__ == "__main__":
       </div>
       <form id="googleMapsKeyForm">
         <div class="app-modal-body">
-          <p style="font-size:14px; color:var(--text-secondary); margin-bottom:12px;">
+          <p style="font-size:15px; color:var(--text-secondary); margin-bottom:12px;">
             VariSetu uses high-performance dual map rendering. You can use Clean OpenStreetMap tiles (default) or Google Maps Platform vector map tiles.
           </p>
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Active Map Provider</label>
+            <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Active Map Provider</label>
             <select id="mapEngineSelect" class="govt-input">
               <option value="OPENSTREETMAP">Clean OpenStreetMap (Default - Offline Resilient)</option>
               <option value="GOOGLE_MAPS">Google Maps Platform Vector Engine (Cloud)</option>
             </select>
           </div>
           <div style="margin-bottom:12px;" id="gmapsKeyGroup">
-            <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Google Maps JavaScript API Key</label>
+            <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Google Maps JavaScript API Key</label>
             <input type="password" id="gmapsApiKeyInput" class="govt-input" placeholder="AIzaSy..." autocomplete="off">
-            <div style="font-size:12px; color:var(--text-muted); margin-top:3px;">
+            <div style="font-size:13px; color:var(--text-muted); margin-top:3px;">
               Requires Maps JavaScript API & Places Library enabled.
             </div>
           </div>
@@ -1619,16 +1619,16 @@ if __name__ == "__main__":
       <form id="corridorEndpointsForm">
         <div class="app-modal-body">
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:14px; margin-bottom:4px;">Source Origin (Pune)</label>
+            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Source Origin (Pune)</label>
             <input type="text" id="corridorOriginInput" class="govt-input" value="Flat no A9, Garden View Society, Indira shankar nagri, Near Rahul Towers, Kothrud Depo, Pune - 411038" required>
-            <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Coordinates: 18.5074, 73.8077 (Kothrud Depo)</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Coordinates: 18.5074, 73.8077 (Kothrud Depo)</div>
           </div>
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:14px; margin-bottom:4px;">Destination Terminal (Nashik)</label>
+            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Destination Terminal (Nashik)</label>
             <input type="text" id="corridorDestInput" class="govt-input" value="Narayan Park, Govind Nagar, Nashik, Maharashtra, Pin Code: 422009" required>
-            <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Coordinates: 19.9700, 73.7800 (Govind Nagar)</div>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Coordinates: 19.9700, 73.7800 (Govind Nagar)</div>
           </div>
-          <div style="background:var(--bg-subtle); padding:8px 10px; border:1px solid var(--border-main); font-size:13px; color:var(--text-secondary); border-radius:2px;">
+          <div style="background:var(--bg-subtle); padding:8px 10px; border:1px solid var(--border-main); font-size:14px; color:var(--text-secondary); border-radius:2px;">
             <strong>Corridor Profile:</strong> NH-60 National Highway (212 km) • 4 Real-time Monitored Sectors with automatic density telemetry.
           </div>
         </div>
@@ -1651,7 +1651,7 @@ if __name__ == "__main__":
         <button type="button" class="close-modal-btn" id="closeAiDiscoveryModalBtn">&times;</button>
       </div>
       <div class="app-modal-body">
-        <div style="font-size:14px; color:var(--text-secondary); margin-bottom:10px;">
+        <div style="font-size:15px; color:var(--text-secondary); margin-bottom:10px;">
           Maharashtra Police AI CCTV Re-Identification calibrated at <strong>0.1268 Cosine Distance Threshold</strong> (97.28% LFW Benchmark Accuracy, 5% FPR).
         </div>
         <div class="ai-pipeline-timeline">
@@ -1719,11 +1719,11 @@ if __name__ == "__main__":
         <input type="hidden" id="reassignResourceId">
         <div class="app-modal-body">
           <div style="margin-bottom:10px;">
-            <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Resource Code / Name</label>
+            <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Resource Code / Name</label>
             <input type="text" id="reassignResourceName" class="govt-input" readonly style="background:var(--bg-subtle); font-weight:700;">
           </div>
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Target Corridor Sector</label>
+            <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Target Corridor Sector</label>
             <select id="reassignSectorSelect" class="govt-input" required>
               <option value="Sector 1 (Pune ➔ Bhosari)">Sector 1 (Pune ➔ Bhosari - 38% Flow)</option>
               <option value="Sector 2 (Bhosari ➔ Manchar)">Sector 2 (Bhosari ➔ Manchar - 62% Flow)</option>
@@ -1732,7 +1732,7 @@ if __name__ == "__main__":
             </select>
           </div>
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Operational Notes</label>
+            <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Operational Notes</label>
             <input type="text" id="reassignNotes" class="govt-input" placeholder="E.g. Relocating to relieve Sector 3 bottleneck">
           </div>
         </div>
@@ -1761,11 +1761,11 @@ if __name__ == "__main__":
         <input type="hidden" id="routeManageId">
         <div class="app-modal-body">
           <div style="margin-bottom:10px;">
-            <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Route Segment</label>
+            <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Route Segment</label>
             <input type="text" id="routeManageName" class="govt-input" readonly style="background:var(--bg-subtle); font-weight:700;">
           </div>
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Corridor Status Action</label>
+            <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Corridor Status Action</label>
             <select id="routeManageStatusSelect" class="govt-input">
               <option value="OPEN">OPEN (Normal Flow)</option>
               <option value="DIVERTED" selected>DIVERTED (Bypass Assigned)</option>
@@ -1774,7 +1774,7 @@ if __name__ == "__main__":
             </select>
           </div>
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:13.5px; margin-bottom:4px;">Bypass / Diversion Path</label>
+            <label style="display:block; font-weight:600; font-size:14.5px; margin-bottom:4px;">Bypass / Diversion Path</label>
             <input type="text" id="routeManageBypassInput" class="govt-input" value="Sinnar East Agricultural Bypass Road (Saves ~45 mins)">
           </div>
         </div>
@@ -1798,8 +1798,8 @@ if __name__ == "__main__":
       </div>
       <div class="app-modal-body">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <span style="font-size:13.5px; color:var(--text-muted);">Real-time chronological audit trail of all crowd surges, lost persons, biometric matches, and dispatches.</span>
-          <button type="button" class="govt-btn" id="exportGovtReportBtn" style="font-size:13px; padding:4px 10px; display:flex; align-items:center; gap:5px;">
+          <span style="font-size:14.5px; color:var(--text-muted);">Real-time chronological audit trail of all crowd surges, lost persons, biometric matches, and dispatches.</span>
+          <button type="button" class="govt-btn" id="exportGovtReportBtn" style="font-size:14px; padding:4px 10px; display:flex; align-items:center; gap:5px;">
             <i data-lucide="download" style="width:12px; height:12px;"></i>
             <span>📥 Export Operational Summary (Govt Report)</span>
           </button>
@@ -1833,12 +1833,12 @@ if __name__ == "__main__":
         <div class="call-meta-left">
           <div class="call-pulse-ring" style="background:#00E676; width:12px; height:12px;"></div>
           <div>
-            <div style="font-size:16.5px; font-weight:700; display:flex; align-items:center; gap:8px; font-family:var(--font-serif); flex-wrap:wrap;">
+            <div style="font-size:17.5px; font-weight:700; display:flex; align-items:center; gap:8px; font-family:var(--font-serif); flex-wrap:wrap;">
               <span>📞 EMERGENCY 112 CITIZEN HELPLINE INTAKE &bull; नागरीक मदत केंद्र</span>
               <span class="call-state-badge call-state-IDLE" id="callStateMachineBadge">IDLE</span>
-              <span class="badge" style="background:#00E676; color:#000; font-size:12px; font-weight:800;" id="callStatusBadge">🔴 READY / STANDBY</span>
+              <span class="badge" style="background:#00E676; color:#000; font-size:13px; font-weight:800;" id="callStatusBadge">🔴 READY / STANDBY</span>
             </div>
-            <div style="font-size:13px; color:#FFE082;">Dial-in Line: 1800-233-0099 (Wari Control Desk #04) &bull; 16kHz PCM16 Stream & Indic Neural Pipeline</div>
+            <div style="font-size:14px; color:#FFE082;">Dial-in Line: 1800-233-0099 (Wari Control Desk #04) &bull; 16kHz PCM16 Stream & Indic Neural Pipeline</div>
           </div>
         </div>
         <button type="button" class="close-modal-btn" id="closeHelplineCallModalBtn" onclick="window.closeHelplineCallSimulationModal && window.closeHelplineCallSimulationModal()" style="color:#FFF; background:rgba(255,255,255,0.18);">&times;</button>
@@ -1866,22 +1866,22 @@ if __name__ == "__main__":
         </div>
 
         <!-- Mode Indicator Banner -->
-        <div id="callModeBanner" style="background:#FFF9C4; border:1px solid #FBC02D; border-radius:4px; padding:6px 12px; font-size:13.5px; display:flex; align-items:center; justify-content:space-between;">
+        <div id="callModeBanner" style="background:#FFF9C4; border:1px solid #FBC02D; border-radius:4px; padding:6px 12px; font-size:14.5px; display:flex; align-items:center; justify-content:space-between;">
           <div style="font-weight:700; color:#E65100; display:flex; align-items:center; gap:6px;">
             <span id="callModeIcon">🔴</span>
             <span id="callModeText">LIVE BROWSER AUDIO &bull; Real Microphone Streaming (16kHz Mono PCM16)</span>
           </div>
-          <span style="font-size:12.5px; color:#795548; font-family:var(--font-mono);" id="callSessionIdTag">Session: Initializing...</span>
+          <span style="font-size:13.5px; color:#795548; font-family:var(--font-mono);" id="callSessionIdTag">Session: Initializing...</span>
         </div>
 
         <!-- API Recommendations Panel (Collapsible/Togglable) -->
         <div id="apiSuggestionsSection" style="display:none;" class="api-suggestions-card">
           <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E0D7C9; padding-bottom:6px;">
-            <div style="font-size:14.5px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
+            <div style="font-size:15.5px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
               <i data-lucide="sparkles" style="width:14px; height:14px; color:#D98E2C;"></i>
               <span>RECOMMENDED APIS FOR LIVE DECCAN MARATHI SPEECH TRANSLATION</span>
             </div>
-            <span class="badge" style="background:#D98E2C; color:#000; font-size:11.5px; font-weight:700;">Deployment Ready</span>
+            <span class="badge" style="background:#D98E2C; color:#000; font-size:12.5px; font-weight:700;">Deployment Ready</span>
           </div>
 
           <div class="api-provider-grid">
@@ -1955,8 +1955,8 @@ if __name__ == "__main__":
             <div style="display:flex; align-items:center; gap:8px; min-width:130px;">
               <i data-lucide="volume-2" style="width:16px; height:16px; color:#D98E2C;"></i>
               <div>
-                <div style="font-size:11.5px; color:#8C7869; font-weight:700;">LIVE SPECTRUM</div>
-                <div style="font-size:13px; color:#7A1F1F; font-weight:700;" id="visualizerAudioSource">Microphone (PCM16)</div>
+                <div style="font-size:12.5px; color:#8C7869; font-weight:700;">LIVE SPECTRUM</div>
+                <div style="font-size:14px; color:#7A1F1F; font-weight:700;" id="visualizerAudioSource">Microphone (PCM16)</div>
               </div>
             </div>
 
@@ -1993,15 +1993,15 @@ if __name__ == "__main__":
 
               <!-- Language Selector for Speech Recognition -->
               <div class="speech-lang-pill-group" style="display:flex; align-items:center; gap:4px; margin-left:4px;" id="speechLangSelector">
-                <span style="font-size:12.5px; color:#5D4037; font-weight:700;">भाषा (Voice):</span>
-                <button type="button" class="speech-lang-btn active" data-lang="mr-IN" style="font-size:12.5px; padding:3px 8px; border-radius:12px; border:1px solid #D98E2C; background:#D98E2C; color:#FFF; font-weight:700; cursor:pointer;">मराठी</button>
-                <button type="button" class="speech-lang-btn" data-lang="hi-IN" style="font-size:12.5px; padding:3px 8px; border-radius:12px; border:1px solid #D8D1C5; background:#FFF; color:#5D4037; font-weight:700; cursor:pointer;">हिन्दी</button>
-                <button type="button" class="speech-lang-btn" data-lang="en-IN" style="font-size:12.5px; padding:3px 8px; border-radius:12px; border:1px solid #D8D1C5; background:#FFF; color:#5D4037; font-weight:700; cursor:pointer;">English</button>
+                <span style="font-size:13.5px; color:#5D4037; font-weight:700;">भाषा (Voice):</span>
+                <button type="button" class="speech-lang-btn active" data-lang="mr-IN" style="font-size:13.5px; padding:3px 8px; border-radius:12px; border:1px solid #D98E2C; background:#D98E2C; color:#FFF; font-weight:700; cursor:pointer;">मराठी</button>
+                <button type="button" class="speech-lang-btn" data-lang="hi-IN" style="font-size:13.5px; padding:3px 8px; border-radius:12px; border:1px solid #D8D1C5; background:#FFF; color:#5D4037; font-weight:700; cursor:pointer;">हिन्दी</button>
+                <button type="button" class="speech-lang-btn" data-lang="en-IN" style="font-size:13.5px; padding:3px 8px; border-radius:12px; border:1px solid #D8D1C5; background:#FFF; color:#5D4037; font-weight:700; cursor:pointer;">English</button>
               </div>
             </div>
 
             <div style="display:flex; gap:8px; align-items:center;">
-              <span style="font-size:13px; color:#7A1F1F; font-weight:700;" id="liveInputStatusText">Status: Standby</span>
+              <span style="font-size:14px; color:#7A1F1F; font-weight:700;" id="liveInputStatusText">Status: Standby</span>
               <button type="button" class="softphone-btn hangup" id="simulateCallToggleBtn">
                 <i data-lucide="phone-off" style="width:13px; height:13px;"></i>
                 <span>End Call (कॉल संपवा)</span>
@@ -2012,7 +2012,7 @@ if __name__ == "__main__":
 
         <!-- Mode 2: Scenario Quick Switcher (Visible in Preset Simulation Mode) -->
         <div id="simulationScenariosWrapper" style="display:none;">
-          <label style="font-size:13.5px; font-weight:700; color:#5D4037; margin-bottom:4px; display:block;">
+          <label style="font-size:14.5px; font-weight:700; color:#5D4037; margin-bottom:4px; display:block;">
             SELECT PRESET PILGRIMAGE CALL SCENARIOS (नमुना कॉल्स):
           </label>
           <div class="scenario-chips-row" id="scenarioChipsContainer">
@@ -2022,7 +2022,7 @@ if __name__ == "__main__":
 
         <!-- Mode 3: Custom Text Intake Area (Visible in Custom Text Mode) -->
         <div id="customTextInputWrapper" style="display:none; background:#FFF; border:1px solid #D8D1C5; padding:10px; border-radius:4px;">
-          <label style="font-size:13.5px; font-weight:700; color:#5D4037; margin-bottom:4px; display:block;">
+          <label style="font-size:14.5px; font-weight:700; color:#5D4037; margin-bottom:4px; display:block;">
             ENTER OR PASTE CUSTOM CITIZEN COMPLAINT / DISTRESS MESSAGE (मराठी / हिन्दी / English):
           </label>
           <div style="display:flex; gap:8px;">
@@ -2040,7 +2040,7 @@ if __name__ == "__main__":
           <div class="transcript-card" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #7A1F1F; padding-bottom:4px;">
               <span style="color:#7A1F1F; font-weight:700;">🎙️ CITIZEN NATIVE SPEECH (मराठी / हिन्दी)</span>
-              <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:11.5px;" id="nativeTranscriptBadge">Live Audio Transcription</span>
+              <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:12.5px;" id="nativeTranscriptBadge">Live Audio Transcription</span>
             </div>
             <div id="nativeTranscriptSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
               <!-- Completed utterance segments -->
@@ -2054,7 +2054,7 @@ if __name__ == "__main__":
           <div class="transcript-card english" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
             <div class="transcript-header" style="border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
               <span style="color:#B07817; font-weight:700;">🤖 AI NEURAL TRANSLATION (ENGLISH)</span>
-              <span class="badge" style="background:#D98E2C; color:#000; font-size:11.5px; font-weight:700;" id="englishTranslationBadge">IndicTrans-v2 Multi-lingual</span>
+              <span class="badge" style="background:#D98E2C; color:#000; font-size:12.5px; font-weight:700;" id="englishTranslationBadge">IndicTrans-v2 Multi-lingual</span>
             </div>
             <div id="englishTranslationSegmentsList" style="max-height:130px; overflow-y:auto; margin-bottom:6px;">
               <!-- Completed translation segments -->
@@ -2068,11 +2068,11 @@ if __name__ == "__main__":
         <!-- 4. Operator Report Editor (The person sitting on the system gives the report) -->
         <div class="operator-report-card">
           <div class="operator-report-header">
-            <div style="font-size:15px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
+            <div style="font-size:16px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
               <i data-lucide="clipboard-edit" style="width:15px; height:15px;"></i>
               <span>OPERATOR REPORT & CASE INTAKE &bull; ऑपरेटर नोंदणी अहवाल</span>
             </div>
-            <span style="font-size:12.5px; color:#5D4037; font-weight:600;">Review & edit extracted details from citizen speech</span>
+            <span style="font-size:13.5px; color:#5D4037; font-weight:600;">Review & edit extracted details from citizen speech</span>
           </div>
 
           <div class="report-grid-2col">
@@ -2111,7 +2111,7 @@ if __name__ == "__main__":
 
           <!-- Actions Row: Submit Report & Scan CCTV -->
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; padding-top:8px; border-top:1px dashed #D8D1C5;">
-            <div style="font-size:13.5px; color:#5D4037;">
+            <div style="font-size:14.5px; color:#5D4037;">
               <strong>Pipeline:</strong> 1. Submit Report to create case &bull; 2. AI CCTV Re-ID scan searches surveillance cameras.
             </div>
             <div style="display:flex; gap:8px;">
@@ -2130,11 +2130,11 @@ if __name__ == "__main__":
         <!-- 5. AI CCTV Candidate Matches Gallery -->
         <div class="cctv-results-container" id="cctvCandidatesSection" style="display:none;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-size:15px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
+            <div style="font-size:16px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
               <i data-lucide="scan-face" style="width:15px; height:15px;"></i>
               <span>AI CCTV CANDIDATE MATCHES DETECTED (सीटीव्ही कॅमेरा शोध निकाल)</span>
             </div>
-            <span class="badge" style="background:#9A2525; color:#FFF; font-size:12px;" id="cctvMatchesBadge">Matches Detected</span>
+            <span class="badge" style="background:#9A2525; color:#FFF; font-size:13px;" id="cctvMatchesBadge">Matches Detected</span>
           </div>
 
           <div class="cctv-candidates-grid" id="cctvCandidatesGrid">
@@ -2209,7 +2209,7 @@ body {
   background-color: var(--bg-khadi);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: 15.5px;
+  font-size: 16.5px;
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
 }
@@ -2273,7 +2273,7 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 11.5px;
+  font-size: 12.5px;
   border: 1px solid var(--maroon-dark);
   text-align: center;
   line-height: 1.1;
@@ -2287,7 +2287,7 @@ body {
 
 .brand-marathi {
   font-family: var(--font-serif);
-  font-size: 23px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--maroon-primary);
   letter-spacing: 0.2px;
@@ -2296,7 +2296,7 @@ body {
 
 .brand-english {
   font-family: var(--font-sans);
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -2307,7 +2307,7 @@ body {
   display: flex;
   align-items: center;
   gap: 20px;
-  font-size: 14.5px;
+  font-size: 15.5px;
 }
 
 .meta-pill {
@@ -2319,7 +2319,7 @@ body {
   align-items: center;
   gap: 6px;
   font-family: var(--font-mono);
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .live-dot {
@@ -2345,7 +2345,7 @@ body {
   color: #E2D7D7;
   padding: 10px 16px;
   font-family: var(--font-sans);
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 600;
   cursor: pointer;
   border-bottom: 3px solid transparent;
@@ -2370,7 +2370,7 @@ body {
 .nav-tab .badge {
   background-color: var(--saffron-gold);
   color: #000;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 2px;
@@ -2406,7 +2406,7 @@ body {
 
 .section-title {
   font-family: var(--font-serif);
-  font-size: 17.5px;
+  font-size: 18.5px;
   font-weight: 700;
   color: var(--maroon-primary);
   display: flex;
@@ -2415,7 +2415,7 @@ body {
 }
 
 .section-sub {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: var(--text-secondary);
 }
 
@@ -2467,7 +2467,7 @@ body {
   border-bottom: 1px solid var(--border-main);
   padding: 6px 10px;
   font-weight: 600;
-  font-size: 14.5px;
+  font-size: 15.5px;
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -2524,7 +2524,7 @@ body {
   align-items: flex-start;
   color: #FFF;
   font-family: var(--font-mono);
-  font-size: 12.5px;
+  font-size: 13.5px;
   text-shadow: 0 1px 2px #000;
 }
 
@@ -2546,7 +2546,7 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   color: #FFF;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   text-shadow: 0 1px 2px #000;
 }
@@ -2590,7 +2590,7 @@ body {
   background: #2D2724;
   border: 1px solid #4D4540;
   color: #EAE6DF;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 600;
   padding: 3px 7px;
   border-radius: 2px;
@@ -2634,7 +2634,7 @@ body {
 }
 
 .cctv-info-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -2642,7 +2642,7 @@ body {
 }
 
 .cctv-info-value {
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 700;
   color: var(--text-primary);
   margin-top: 2px;
@@ -2650,13 +2650,13 @@ body {
 
 .cctv-location {
   color: #FFF;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   text-shadow: 0 1px 3px #000;
 }
 
 .density-tag {
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px 5px;
@@ -2697,7 +2697,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .map-legend-item {
@@ -2728,7 +2728,7 @@ body {
 }
 
 .stat-label {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -2736,7 +2736,7 @@ body {
 }
 
 .stat-value {
-  font-size: 27px;
+  font-size: 28px;
   font-weight: 700;
   font-family: var(--font-sans);
   color: var(--maroon-primary);
@@ -2744,7 +2744,7 @@ body {
 }
 
 .stat-subtext {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: var(--text-muted);
 }
 
@@ -2758,7 +2758,7 @@ body {
   align-items: center;
   gap: 12px;
   font-family: var(--font-mono);
-  font-size: 13.5px;
+  font-size: 14.5px;
   border-radius: 2px;
 }
 
@@ -2767,7 +2767,7 @@ body {
   color: #FFF;
   padding: 2px 8px;
   font-weight: bold;
-  font-size: 12.5px;
+  font-size: 13.5px;
   letter-spacing: 1px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -2802,7 +2802,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 14.5px;
+  font-size: 15.5px;
 }
 
 .govt-table th {
@@ -2831,7 +2831,7 @@ body {
   border: 1px solid var(--maroon-dark);
   padding: 5px 12px;
   font-family: var(--font-sans);
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   border-radius: 2px;
   cursor: pointer;
@@ -2885,7 +2885,7 @@ body {
 
 .chart-title {
   font-family: var(--font-serif);
-  font-size: 16.5px;
+  font-size: 17.5px;
   font-weight: 700;
   color: var(--maroon-primary);
   margin-bottom: 10px;
@@ -2930,7 +2930,7 @@ body {
   border: 1px solid var(--border-main);
   padding: 10px;
   font-family: var(--font-serif);
-  font-size: 15.5px;
+  font-size: 16.5px;
   line-height: 1.6;
   color: #3B332B;
   margin-top: 8px;
@@ -3020,7 +3020,7 @@ body {
 
 .status-pill {
   padding: 2px 8px;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: bold;
   border-radius: 2px;
   text-transform: uppercase;
@@ -3069,7 +3069,7 @@ body {
 
 .modal-title {
   font-family: var(--font-serif);
-  font-size: 18.5px;
+  font-size: 19.5px;
   color: var(--maroon-primary);
   font-weight: 700;
 }
@@ -3077,7 +3077,7 @@ body {
 .close-modal-btn {
   background: none;
   border: none;
-  font-size: 20.5px;
+  font-size: 21.5px;
   font-weight: bold;
   color: var(--text-secondary);
   cursor: pointer;
@@ -3127,7 +3127,7 @@ body {
 
 .app-modal-kicker {
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--text-muted);
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -3136,7 +3136,7 @@ body {
 
 .app-modal-title {
   font-family: var(--font-serif);
-  font-size: 19.5px;
+  font-size: 20.5px;
   font-weight: 700;
   color: var(--maroon-primary);
 }
@@ -3172,7 +3172,7 @@ body {
 }
 
 .app-modal-detail-label {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--text-muted);
   font-family: var(--font-mono);
   text-transform: uppercase;
@@ -3180,7 +3180,7 @@ body {
 }
 
 .app-modal-detail-value {
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -3190,7 +3190,7 @@ body {
   border: 1px solid var(--status-red);
   color: var(--status-red);
   padding: 10px;
-  font-size: 14.5px;
+  font-size: 15.5px;
 }
 
 .modal-success {
@@ -3198,7 +3198,7 @@ body {
   border: 1px solid var(--status-green);
   color: var(--status-green);
   padding: 10px;
-  font-size: 14.5px;
+  font-size: 15.5px;
 }
 
 .modal-loading {
@@ -3206,7 +3206,7 @@ body {
   text-align: center;
   color: var(--text-secondary);
   font-family: var(--font-mono);
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .form-group {
@@ -3215,7 +3215,7 @@ body {
 
 .form-group label {
   display: block;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -3225,7 +3225,7 @@ body {
 .form-control {
   width: 100%;
   padding: 6px 10px;
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-family: var(--font-sans);
   border: 1px solid var(--border-main);
   background: #FFF;
@@ -3298,13 +3298,13 @@ body {
 .login-marathi {
   font-family: var(--font-serif);
   color: var(--maroon-primary);
-  font-size: 27px;
+  font-size: 28px;
   font-weight: 700;
   line-height: 1.2;
 }
 
 .login-english {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--text-secondary);
   letter-spacing: 1.2px;
   margin-top: 5px;
@@ -3322,7 +3322,7 @@ body {
   font-family: var(--font-serif);
   color: var(--maroon-primary);
   font-weight: 700;
-  font-size: 17.5px;
+  font-size: 18.5px;
   margin-bottom: 16px;
   text-align: center;
   letter-spacing: 0.5px;
@@ -3331,7 +3331,7 @@ body {
 .login-panel label {
   display: block;
   margin: 12px 0 5px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -3344,7 +3344,7 @@ body {
   border: 1px solid var(--border-main);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: 15.5px;
+  font-size: 16.5px;
   border-radius: 2px;
   box-sizing: border-box;
   outline: none;
@@ -3360,7 +3360,7 @@ body {
   margin-top: 18px;
   justify-content: center;
   padding: 9px 14px;
-  font-size: 15.5px;
+  font-size: 16.5px;
   font-weight: 700;
   letter-spacing: 0.8px;
 }
@@ -3371,7 +3371,7 @@ body {
   border: 1px solid var(--status-red);
   background: var(--status-red-bg);
   color: var(--status-red);
-  font-size: 13.5px;
+  font-size: 14.5px;
   line-height: 1.4;
   border-radius: 2px;
 }
@@ -3380,7 +3380,7 @@ body {
   margin-top: 18px;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -3443,13 +3443,13 @@ body {
 }
 
 .public-helpline-title {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .public-helpline-num {
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-weight: 700;
   font-family: var(--font-mono);
   color: var(--maroon-primary);
@@ -3485,7 +3485,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -3504,7 +3504,7 @@ body {
   right: -5px;
   background: var(--status-red);
   color: #FFF;
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 700;
   border-radius: 10px;
   padding: 1px 5px;
@@ -3549,7 +3549,7 @@ body {
   border: none;
   border-right: 1px solid var(--border-main);
   padding: 4px 8px;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
@@ -3579,7 +3579,7 @@ body {
   border: 1px solid var(--border-strong);
   padding: 3px 8px;
   border-radius: 2px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   font-family: var(--font-mono);
   color: var(--maroon-primary);
@@ -3607,7 +3607,7 @@ body {
   border: 1px solid var(--border-main);
   padding: 2px 7px;
   border-radius: 2px;
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--text-primary);
   cursor: pointer;
@@ -3691,14 +3691,14 @@ body {
 }
 
 .command-card-title {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--text-primary);
 }
 
 .sla-timer-pill {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   padding: 1px 4px;
   border-radius: 2px;
@@ -3707,7 +3707,7 @@ body {
 }
 
 .command-card-desc {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
 }
 
@@ -3719,7 +3719,7 @@ body {
 
 .cmd-btn {
   padding: 3px 7px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   border-radius: 2px;
   border: 1px solid var(--border-strong);
@@ -3764,7 +3764,7 @@ body {
   background: transparent;
   border: 1px solid var(--border-main);
   padding: 2px 6px;
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
@@ -3792,7 +3792,7 @@ body {
   gap: 8px;
   padding: 4px 0;
   border-bottom: 1px solid var(--border-main);
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .timeline-item:last-child {
@@ -3824,7 +3824,7 @@ body {
 
 .timeline-time {
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--text-muted);
 }
 
@@ -3896,7 +3896,7 @@ body {
   border-left: 3px solid var(--maroon-primary);
   padding: 8px;
   border-radius: 2px;
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .drawer-notif-item.unread {
@@ -3930,7 +3930,7 @@ body {
 }
 
 .hud-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
   letter-spacing: 0.8px;
@@ -3938,7 +3938,7 @@ body {
 }
 
 .hud-value {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: var(--text-primary);
   font-family: var(--font-mono);
@@ -3979,7 +3979,7 @@ body {
 .fleet-card-code {
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 15.5px;
+  font-size: 16.5px;
   color: var(--maroon-primary);
 }
 
@@ -3987,12 +3987,12 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .fleet-meta-label {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .fleet-meta-val {
@@ -4047,7 +4047,7 @@ body {
   right: 0;
   background: rgba(0, 0, 0, 0.75);
   color: #FFF;
-  font-size: 11.5px;
+  font-size: 12.5px;
   padding: 3px 6px;
   font-weight: 600;
   display: flex;
@@ -4077,7 +4077,7 @@ body {
   background: var(--maroon-primary);
   color: #FFF;
   font-weight: 700;
-  font-size: 12.5px;
+  font-size: 13.5px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -4086,7 +4086,7 @@ body {
 }
 
 .ai-step-body {
-  font-size: 13.5px;
+  font-size: 14.5px;
 }
 
 .ai-step-title {
@@ -4095,7 +4095,7 @@ body {
 }
 
 .ai-step-desc {
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: var(--text-secondary);
 }
 
@@ -4156,7 +4156,7 @@ body {
 }
 
 .warkari-flag-tag {
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 800;
   color: #FFFFFF;
   background: var(--maroon-primary);
@@ -4196,7 +4196,7 @@ body {
   gap: 4px;
   padding: 3px 7px;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #FFFFFF;
   border: 1.5px solid #FFFFFF;
@@ -4354,7 +4354,7 @@ body {
   border: 1px solid var(--border-main);
   padding: 6px 12px;
   border-radius: 3px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 600;
   color: var(--text-primary);
   cursor: pointer;
@@ -4405,7 +4405,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--text-secondary);
   border-bottom: 1px dashed var(--border-main);
@@ -4413,7 +4413,7 @@ body {
 }
 
 .transcript-body-text {
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.55;
   color: var(--text-primary);
   min-height: 72px;
@@ -4423,7 +4423,7 @@ body {
 
 .transcript-body-text.marathi {
   font-family: var(--font-serif);
-  font-size: 17px;
+  font-size: 18px;
 }
 
 /* Extracted Entity Tags */
@@ -4443,7 +4443,7 @@ body {
   border: 1px solid var(--border-main);
   padding: 3px 8px;
   border-radius: 2px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -4501,7 +4501,7 @@ body {
 
 .cctv-sim-badge {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 2px;
@@ -4528,7 +4528,7 @@ body {
   top: 4px;
   left: 6px;
   font-family: var(--font-mono);
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: #00E676;
   background: rgba(0,0,0,0.6);
   padding: 1px 4px;
@@ -4544,13 +4544,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: #FFD600;
   font-weight: 700;
 }
 
 .cctv-cand-meta {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: var(--text-secondary);
   line-height: 1.4;
 }
@@ -4594,14 +4594,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 23px;
+  font-size: 24px;
   box-shadow: 0 2px 8px rgba(122, 31, 31, 0.25);
   border: 2px solid #FFE082;
   color: #FFFFFF;
 }
 
 .caller-details-text .caller-name {
-  font-size: 17.5px;
+  font-size: 18.5px;
   font-weight: 700;
   color: #7A1F1F;
   letter-spacing: 0.2px;
@@ -4609,7 +4609,7 @@ body {
 }
 
 .caller-details-text .caller-sub {
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #5D4037;
   display: flex;
   align-items: center;
@@ -4626,14 +4626,14 @@ body {
 
 .call-duration-timer {
   font-family: var(--font-mono);
-  font-size: 22px;
+  font-size: 23px;
   font-weight: 800;
   color: #7A1F1F;
   letter-spacing: 1px;
 }
 
 .call-codec-tag {
-  font-size: 12px;
+  font-size: 13px;
   color: #8C7869;
   text-transform: uppercase;
   font-family: var(--font-mono);
@@ -4684,7 +4684,7 @@ body {
   color: #4A3E38;
   padding: 6px 14px;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -4723,7 +4723,7 @@ body {
   color: #3E2723;
   padding: 6px 12px;
   border-radius: 4px;
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
   display: flex;
@@ -4809,7 +4809,7 @@ body {
 }
 
 .report-form-group label {
-  font-size: 13.5px;
+  font-size: 14.5px;
   font-weight: 700;
   color: #4A3E38;
 }
@@ -4819,7 +4819,7 @@ body {
   border: 1px solid #C4B9AA;
   border-radius: 3px;
   padding: 6px 9px;
-  font-size: 14.5px;
+  font-size: 15.5px;
   font-family: var(--font-sans);
   color: #2B2623;
 }
@@ -4878,7 +4878,7 @@ body {
   right: -8px;
   background: #7A1F1F;
   color: #FFF;
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 800;
   padding: 1px 4px;
   border-radius: 6px;
@@ -4927,7 +4927,7 @@ body {
 }
 
 .api-provider-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #7A1F1F;
   display: flex;
@@ -4936,7 +4936,7 @@ body {
 }
 
 .api-provider-desc {
-  font-size: 12.5px;
+  font-size: 13.5px;
   color: #5D4037;
   margin-top: 3px;
   line-height: 1.4;
@@ -4944,7 +4944,7 @@ body {
 
 .api-provider-tag {
   display: inline-block;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 3px;
@@ -4968,7 +4968,7 @@ body {
   border: 1px solid #C4B9AA;
   border-radius: 3px;
   padding: 5px 10px;
-  font-size: 14px;
+  font-size: 15px;
   min-width: 220px;
   color: #2B2623;
 }
@@ -4983,7 +4983,7 @@ body {
   border: 1px solid #C4B9AA;
   border-radius: 3px;
   padding: 5px 8px;
-  font-size: 14px;
+  font-size: 15px;
   color: #2B2623;
 }
 
@@ -4994,7 +4994,7 @@ body {
   padding: 8px 12px;
   background: #FAF6F0;
   border-top: 1px solid #D8D1C5;
-  font-size: 13.5px;
+  font-size: 14.5px;
   color: #5D4037;
 }
 
@@ -5002,7 +5002,7 @@ body {
   background: #FFF;
   border: 1px solid #C4B9AA;
   padding: 3px 8px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   border-radius: 3px;
   cursor: pointer;
@@ -5016,7 +5016,7 @@ body {
 
 /* ==================== HELPLINE VAD, STATE MACHINE & CCTV CANDIDATE VERIFICATION ==================== */
 .call-state-badge {
-  font-size: 12.5px;
+  font-size: 13.5px;
   font-weight: 800;
   padding: 3px 8px;
   border-radius: 12px;
@@ -5058,7 +5058,7 @@ body {
   padding: 3px 8px;
   border: 1px solid #D8D1C5;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   color: #5D4037;
 }
 
@@ -5095,7 +5095,7 @@ body {
   border-radius: 3px;
   padding: 6px 10px;
   margin-bottom: 6px;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.4;
   animation: fadeInSegment 0.3s ease-out;
 }
@@ -5107,7 +5107,7 @@ body {
 .transcript-segment-meta {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 13px;
   color: #8C7869;
   font-family: var(--font-mono);
   margin-bottom: 2px;
@@ -5128,7 +5128,7 @@ body {
   background: #1B5E20;
   color: #FFF;
   border: none;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   padding: 5px 10px;
   border-radius: 3px;
@@ -5149,7 +5149,7 @@ body {
   background: #FFF;
   color: #C62828;
   border: 1px solid #C62828;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   padding: 5px 8px;
   border-radius: 3px;
@@ -5176,7 +5176,7 @@ body {
 }
 
 .verification-status-pill {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   padding: 2px 6px;
   border-radius: 3px;
@@ -5365,7 +5365,7 @@ function handleSessionExpiration() {
     title: 'SESSION EXPIRED',
     kicker: 'SECURITY PROTOCOL',
     bodyHtml: `
-      <div style="font-size:14.5px; line-height:1.6; color:var(--text-primary);">
+      <div style="font-size:15.5px; line-height:1.6; color:var(--text-primary);">
         Your command-center authorization session has expired or is invalid. Please sign in again to resume monitoring.
       </div>
     `,
@@ -5442,7 +5442,7 @@ function openConfirmModal({
   openAppModal({
     title,
     bodyHtml: `
-      <div style="font-size:14.5px; line-height:1.6; color:var(--text-primary);">
+      <div style="font-size:15.5px; line-height:1.6; color:var(--text-primary);">
         ${escapeHtml(message)}
       </div>
     `,
@@ -5682,10 +5682,10 @@ function openAddOfficerModal() {
             </div>
             <div class="app-modal-detail-item">
               <div class="app-modal-detail-label">Password</div>
-              <div class="app-modal-detail-value" style="font-family:var(--font-mono); font-size:13.5px;">${escapeHtml(password)}</div>
+              <div class="app-modal-detail-value" style="font-family:var(--font-mono); font-size:14.5px;">${escapeHtml(password)}</div>
             </div>
           </div>
-          <div style="margin-top:12px; font-size:13.5px; color:var(--text-secondary);">
+          <div style="margin-top:12px; font-size:14.5px; color:var(--text-secondary);">
             The officer can now immediately log in with these credentials.
           </div>
         `,
@@ -5795,7 +5795,7 @@ function initPublicRouteMap() {
 
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:12.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 SANT TUKARAM PALKHI</div>`,
+    html: `<div style="background:#D98E2C; color:#FFF; border:1px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:2px; box-shadow:0 1px 3px rgba(0,0,0,0.3);">🚩 SANT TUKARAM PALKHI</div>`,
     iconSize: [140, 24],
     iconAnchor: [70, 12]
   });
@@ -5804,7 +5804,7 @@ function initPublicRouteMap() {
 
   const pandharpurIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:12.5px; font-weight:bold; border-radius:2px;">🛕 Pandharpur Shrine</div>`,
+    html: `<div style="background:#7A1F1F; color:#FFF; border:1px solid #000; padding:4px 8px; font-size:13.5px; font-weight:bold; border-radius:2px;">🛕 Pandharpur Shrine</div>`,
     iconSize: [130, 24]
   });
   L.marker([17.6777, 75.3276], { icon: pandharpurIcon }).addTo(publicMap)
@@ -5983,7 +5983,7 @@ function initRouteMap() {
   // Animated Palkhi Marker at Narayangaon (Km 84)
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); animation:pulse 2s infinite;">🚩 PALKHI (Narayangaon Km 84)</div>`,
+    html: `<div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:14px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); animation:pulse 2s infinite;">🚩 PALKHI (Narayangaon Km 84)</div>`,
     iconSize: [180, 26],
     iconAnchor: [90, 13]
   });
@@ -5993,7 +5993,7 @@ function initRouteMap() {
   // Water Tankers: WT-09 (Narayangaon), WT-04 (Sangamner)
   const tankerIcon9 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-09</div>`,
+    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-09</div>`,
     iconSize: [95, 20]
   });
   L.marker([19.1200, 73.9700], { icon: tankerIcon9 }).addTo(wariMap)
@@ -6001,7 +6001,7 @@ function initRouteMap() {
 
   const tankerIcon4 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-04</div>`,
+    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-04</div>`,
     iconSize: [95, 20]
   });
   L.marker([19.5700, 74.2100], { icon: tankerIcon4 }).addTo(wariMap)
@@ -6010,7 +6010,7 @@ function initRouteMap() {
   // Medical Ambulances: MV-01 (Bhosari), MV-02 (Narayangaon), MV-03 (Sangamner)
   const medIcon1 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-01</div>`,
+    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-01</div>`,
     iconSize: [95, 20]
   });
   L.marker([18.6270, 73.8470], { icon: medIcon1 }).addTo(wariMap)
@@ -6018,7 +6018,7 @@ function initRouteMap() {
 
   const medIcon2 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-02</div>`,
+    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-02</div>`,
     iconSize: [95, 20]
   });
   L.marker([19.1240, 73.9780], { icon: medIcon2 }).addTo(wariMap)
@@ -6026,7 +6026,7 @@ function initRouteMap() {
 
   const medIcon3 = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-03</div>`,
+    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-03</div>`,
     iconSize: [95, 20]
   });
   L.marker([19.5760, 74.2120], { icon: medIcon3 }).addTo(wariMap)
@@ -6035,7 +6035,7 @@ function initRouteMap() {
   // Surveillance CCTVs: CAM-01, CAM-08, CAM-12, CAM-04
   const cctvIcon = (code) => L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#2B2623; color:#FFF; border:1px solid var(--saffron-gold); padding:2px 5px; font-size:11px; font-weight:bold; border-radius:2px;">📹 ${code}</div>`,
+    html: `<div style="background:#2B2623; color:#FFF; border:1px solid var(--saffron-gold); padding:2px 5px; font-size:12px; font-weight:bold; border-radius:2px;">📹 ${code}</div>`,
     iconSize: [60, 18]
   });
   L.marker([18.5200, 73.8500], { icon: cctvIcon('CAM-01') }).addTo(wariMap).bindPopup('<b>CAM-01 (Pune / Bhosari)</b> - 60 FPS HD Stream');
@@ -6365,12 +6365,12 @@ function renderDynamicWarkariClusters(zones) {
       const popupHtml = `
         <div style="font-family:var(--font-sans, sans-serif); min-width:220px; padding:4px;">
           <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
-            <strong style="color:#7A1F1F; font-size:14.5px;">🚩 वारकरी दिंडी पथक #${dindiNum}</strong>
-            <span class="badge" style="background:${isHigh ? '#9A2525' : '#B8551B'}; color:#FFF; font-size:12px; font-weight:700;">
+            <strong style="color:#7A1F1F; font-size:15.5px;">🚩 वारकरी दिंडी पथक #${dindiNum}</strong>
+            <span class="badge" style="background:${isHigh ? '#9A2525' : '#B8551B'}; color:#FFF; font-size:13px; font-weight:700;">
               ${segmentDensity}% Density
             </span>
           </div>
-          <div style="font-size:13.5px; margin-top:6px; color:#2B2623; line-height:1.5;">
+          <div style="font-size:14.5px; margin-top:6px; color:#2B2623; line-height:1.5;">
             <strong>पथक प्रकार:</strong> ${dindiType}<br>
             <strong>Highway Corridor:</strong> ${escapeHtml(p1.name)} ➔ ${escapeHtml(p2.name)}<br>
             <strong>Palkhi March Pace:</strong> 3.2 km/h (भजन/हरिपाठ गती)<br>
@@ -6440,15 +6440,15 @@ function renderResourceMapMarkers(resources) {
     const popupHtml = `
       <div style="font-family:var(--font-sans, sans-serif); min-width:200px; padding:4px;">
         <div style="border-bottom:1.5px solid #7A1F1F; padding-bottom:3px;">
-          <strong style="color:#7A1F1F; font-size:14.5px;">${escapeHtml(res.name)}</strong>
+          <strong style="color:#7A1F1F; font-size:15.5px;">${escapeHtml(res.name)}</strong>
         </div>
-        <div style="font-size:13.5px; margin-top:5px; color:#2B2623; line-height:1.4;">
+        <div style="font-size:14.5px; margin-top:5px; color:#2B2623; line-height:1.4;">
           <strong>Unit Code:</strong> ${escapeHtml(res.code)}<br>
           ${res.doctor ? `<strong>On-Duty Doctor:</strong> ${escapeHtml(res.doctor)}<br>` : ''}
           ${res.driver ? `<strong>Driver:</strong> ${escapeHtml(res.driver)}<br>` : ''}
           ${res.incharge ? `<strong>Incharge:</strong> ${escapeHtml(res.incharge)}<br>` : ''}
           <strong>Emergency Contact:</strong> ${escapeHtml(res.contact)}<br>
-          <span class="badge" style="background:#2E5B36; color:#FFF; font-size:11.5px; margin-top:4px;">🟢 Operational & Deployed</span>
+          <span class="badge" style="background:#2E5B36; color:#FFF; font-size:12.5px; margin-top:4px;">🟢 Operational & Deployed</span>
         </div>
       </div>
     `;
@@ -6989,7 +6989,7 @@ function openCameraDetails(camera) {
         <canvas id="modalLargeCctvCanvas" width="800" height="320" class="modal-cctv-canvas"></canvas>
         <div class="modal-cctv-toolbar">
           <div class="cctv-tool-group">
-            <span style="font-size:12px; font-weight:700; color:var(--text-muted); margin-right:4px;">PTZ:</span>
+            <span style="font-size:13px; font-weight:700; color:var(--text-muted); margin-right:4px;">PTZ:</span>
             <button type="button" class="cctv-ctrl-btn" id="ptzPanLeft" title="Pan Left">&larr; Left</button>
             <button type="button" class="cctv-ctrl-btn" id="ptzPanRight" title="Pan Right">Right &rarr;</button>
             <button type="button" class="cctv-ctrl-btn" id="ptzTiltUp" title="Tilt Up">&uarr; Up</button>
@@ -7008,8 +7008,8 @@ function openCameraDetails(camera) {
     footerHtml: `
       <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
         <div style="display:flex; gap:6px;">
-          <button type="button" class="govt-btn btn-outline" id="dispatchQrtBtn" style="font-size:13.5px;">🚨 Deploy QRT Squad</button>
-          <button type="button" class="govt-btn btn-outline" id="triggerPaBtn" style="font-size:13.5px;">📢 Trigger PA Alert</button>
+          <button type="button" class="govt-btn btn-outline" id="dispatchQrtBtn" style="font-size:14.5px;">🚨 Deploy QRT Squad</button>
+          <button type="button" class="govt-btn btn-outline" id="triggerPaBtn" style="font-size:14.5px;">📢 Trigger PA Alert</button>
         </div>
         <button type="button" class="govt-btn" id="cameraModalClose">Close Surveillance</button>
       </div>
@@ -7257,18 +7257,18 @@ function renderLostPersons(cases) {
           <i data-lucide="user" style="width:14px; height:14px;"></i>
         </div>
       </td>
-      <td><strong style="color:var(--maroon-primary); font-size:14px;">${escapeHtml(item.case_number)}</strong></td>
+      <td><strong style="color:var(--maroon-primary); font-size:15px;">${escapeHtml(item.case_number)}</strong></td>
       <td><strong>${escapeHtml(item.name || 'Unknown')}</strong></td>
       <td>${escapeHtml(item.age || '-')} / ${escapeHtml(item.gender || '-')}</td>
-      <td style="max-width:220px; font-size:13.5px; color:#443E3B;" title="${escapeHtml(item.clothing_description || '')}">${escapeHtml(item.clothing_description || '-')}</td>
-      <td style="font-size:13.5px;">${escapeHtml(item.last_seen_location || item.last_seen_camera_id || '-')}</td>
+      <td style="max-width:220px; font-size:14.5px; color:#443E3B;" title="${escapeHtml(item.clothing_description || '')}">${escapeHtml(item.clothing_description || '-')}</td>
+      <td style="font-size:14.5px;">${escapeHtml(item.last_seen_location || item.last_seen_camera_id || '-')}</td>
       <td>
         <span class="density-tag ${getStatusClass(item.status)}">
           ${escapeHtml(item.status)}
         </span>
       </td>
       <td>
-        <button class="govt-btn btn-outline" style="font-size:13.5px; padding:3px 8px;" type="button" data-lost-id="${escapeHtml(item.id)}" data-action="view-lost-case">
+        <button class="govt-btn btn-outline" style="font-size:14.5px; padding:3px 8px;" type="button" data-lost-id="${escapeHtml(item.id)}" data-action="view-lost-case">
           <span>View</span>
         </button>
       </td>
@@ -7352,7 +7352,7 @@ function openLostPersonDetails(item) {
         </div>
       </div>
       
-      <div style="margin-top:10px; background:var(--bg-subtle); padding:9px; border:1px solid var(--border-main); font-size:13.5px;">
+      <div style="margin-top:10px; background:var(--bg-subtle); padding:9px; border:1px solid var(--border-main); font-size:14.5px;">
         <strong>Attire Description:</strong> ${escapeHtml(item.clothing_description)}
       </div>
 
@@ -7363,11 +7363,11 @@ function openLostPersonDetails(item) {
           ${photos.map((url, idx) => `
             <div class="photo-upload-thumbnail" style="width:72px; height:72px; position:relative; border:1px solid var(--border-main); background:#000; border-radius:2px; overflow:hidden;">
               <img src="${url}" style="width:100%; height:100%; object-fit:cover;" alt="Photo ${idx + 1}">
-              <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.75); color:#00FF66; font-size:10px; font-family:var(--font-mono); text-align:center; padding:1px 0;">FACE #${idx + 1}</div>
+              <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.75); color:#00FF66; font-size:11px; font-family:var(--font-mono); text-align:center; padding:1px 0;">FACE #${idx + 1}</div>
             </div>
           `).join('')}
         </div>
-        <div style="margin-top:6px; font-size:12.5px; color:#2E5B36; font-family:var(--font-mono); display:flex; align-items:center; gap:4px;">
+        <div style="margin-top:6px; font-size:13.5px; color:#2E5B36; font-family:var(--font-mono); display:flex; align-items:center; gap:4px;">
           <span>✨ <strong>AI Face Recognition Active:</strong> 512-D embedding feature vectors extracted across 4 CCTV live streams.</span>
         </div>
       </div>
@@ -7495,17 +7495,17 @@ function openLostPersonCreateModal(isPublic = false) {
           <input type="file" id="lostPersonPhotoInput" multiple accept="image/*" style="display:none;">
           
           <div id="lostPersonDropzone" style="border:2px dashed var(--border-main); padding:12px; text-align:center; background:var(--bg-subtle); cursor:pointer; border-radius:2px; transition:border-color 0.2s;">
-            <div style="font-weight:600; font-size:13.5px; color:var(--maroon-primary); margin-bottom:2px;">
+            <div style="font-weight:600; font-size:14.5px; color:var(--maroon-primary); margin-bottom:2px;">
               📁 Click to Upload 4-5 Photos (Frontal Face, Profile, Full Body)
             </div>
-            <div style="font-size:12px; color:var(--text-muted);">
+            <div style="font-size:13px; color:var(--text-muted);">
               PNG, JPG, JPEG accepted &bull; Max 5 images
             </div>
           </div>
 
           <div id="selectedPhotosPreviewContainer" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
 
-          <div id="aiEmbeddingBadge" style="margin-top:6px; font-size:12.5px; color:#2E5B36; font-family:var(--font-mono); background:#E8F5E9; border:1px solid #A5D6A7; padding:6px 8px; border-radius:2px; display:none;">
+          <div id="aiEmbeddingBadge" style="margin-top:6px; font-size:13.5px; color:#2E5B36; font-family:var(--font-mono); background:#E8F5E9; border:1px solid #A5D6A7; padding:6px 8px; border-radius:2px; display:none;">
             ✨ <strong>AI Face Recognition Model Slot Ready:</strong> Feature embeddings (512-D vectors) will be indexed for instant multi-camera CCTV matching.
           </div>
         </div>
@@ -7535,7 +7535,7 @@ function openLostPersonCreateModal(isPublic = false) {
       thumb.innerHTML = `
         <img src="${dataUrl}" alt="Face ${idx + 1}">
         <button type="button" class="photo-upload-remove-btn" title="Remove" data-idx="${idx}">×</button>
-        <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:#00FF66; font-size:9.5px; font-family:var(--font-mono); text-align:center;">#${idx + 1}</div>
+        <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:#00FF66; font-size:10.5px; font-family:var(--font-mono); text-align:center;">#${idx + 1}</div>
       `;
       thumb.querySelector('.photo-upload-remove-btn')?.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -7610,11 +7610,11 @@ function openLostPersonCreateModal(isPublic = false) {
           kicker: 'AI FACIAL SEARCH ACTIVATED',
           bodyHtml: `
             <div style="text-align:center; padding:12px 0;">
-              <div style="font-size:31px; margin-bottom:8px;">✅</div>
-              <div style="font-weight:700; font-size:16.5px; color:var(--maroon-primary); margin-bottom:6px;">
+              <div style="font-size:32px; margin-bottom:8px;">✅</div>
+              <div style="font-weight:700; font-size:17.5px; color:var(--maroon-primary); margin-bottom:6px;">
                 Case Reference: ${escapeHtml(resp.case_number || '#LF-NEW')}
               </div>
-              <div style="font-size:14.5px; color:var(--text-primary); line-height:1.5;">
+              <div style="font-size:15.5px; color:var(--text-primary); line-height:1.5;">
                 Your report for <strong>${escapeHtml(name)}</strong> has been registered with the Police Command Center.<br>
                 ${uploadedPhotos.length} photo(s) submitted for biometric recognition across all CCTV checkpoints.
               </div>
@@ -7796,13 +7796,13 @@ function renderMedicalAlerts(alerts) {
   container.innerHTML = alerts.map(alert => `
     <div class="alert-card-item ${alert.status === 'RESOLVED' ? 'acknowledged' : ''}" data-medical-id="${escapeHtml(alert.id)}">
       <div>
-        <div style="font-weight:700; color:var(--status-red); font-size:15.5px;">
+        <div style="font-weight:700; color:var(--status-red); font-size:16.5px;">
           ${escapeHtml(alert.type?.replace('_', ' ') || 'MEDICAL EMERGENCY')}
         </div>
-        <div style="font-size:13.5px; color:var(--text-secondary); margin:2px 0;">
+        <div style="font-size:14.5px; color:var(--text-secondary); margin:2px 0;">
           ${escapeHtml(alert.description || 'Medical incident reported')}
         </div>
-        <div style="font-size:13.5px; color:var(--text-muted);">
+        <div style="font-size:14.5px; color:var(--text-muted);">
           Assigned Volunteer / Unit: ${escapeHtml(alert.assigned_volunteer_name || 'Standby')}
         </div>
       </div>
@@ -7957,17 +7957,17 @@ function renderResources(resources) {
     return `
       <tr>
         <td>
-          <div style="font-weight:700; font-size:14.5px; color:var(--maroon-primary);">${escapeHtml(cat.name)}</div>
-          <div style="font-size:12.5px; color:var(--text-muted);">${escapeHtml(cat.role)}</div>
+          <div style="font-weight:700; font-size:15.5px; color:var(--maroon-primary);">${escapeHtml(cat.name)}</div>
+          <div style="font-size:13.5px; color:var(--text-muted);">${escapeHtml(cat.role)}</div>
         </td>
-        <td style="font-family:var(--font-mono); font-size:14px;">
+        <td style="font-family:var(--font-mono); font-size:15px;">
           <div><strong style="color:#B8551B;">⚡ ${cat.dispatched} Dispatched</strong> &bull; <strong style="color:#2E5B36;">🟢 ${cat.available} Standby</strong></div>
-          <div style="font-size:12.5px; color:var(--text-muted);">Quota Limit: ${cat.limit} Total Units</div>
+          <div style="font-size:13.5px; color:var(--text-muted);">Quota Limit: ${cat.limit} Total Units</div>
         </td>
-        <td style="font-size:13.5px; color:var(--text-primary); max-width:240px;">
+        <td style="font-size:14.5px; color:var(--text-primary); max-width:240px;">
           ${escapeHtml(cat.activeSectors)}
         </td>
-        <td style="font-size:13px; color:var(--text-secondary); max-width:220px;">
+        <td style="font-size:14px; color:var(--text-secondary); max-width:220px;">
           ${escapeHtml(cat.standbyDepots)}
         </td>
         <td>
@@ -8019,7 +8019,7 @@ function renderFieldLogisticsGrid(units, filterOverride) {
         <div class="fleet-card-header">
           <div>
             <span class="fleet-card-code">${escapeHtml(f.code)}</span>
-            <div style="font-weight:600; font-size:14px; color:var(--text-primary); margin-top:1px;">${escapeHtml(f.name)}</div>
+            <div style="font-weight:600; font-size:15px; color:var(--text-primary); margin-top:1px;">${escapeHtml(f.name)}</div>
           </div>
           <span class="density-tag ${statusTagClass}">
             ${escapeHtml(statusLabel)}
@@ -8038,12 +8038,12 @@ function renderFieldLogisticsGrid(units, filterOverride) {
             <div class="fleet-meta-label">${isDispatched ? 'Deployed Target Sector & Location' : 'Current Standby Station Depot'}</div>
             <div class="fleet-meta-val" style="color:var(--text-primary); font-weight:600;">${escapeHtml(f.sector)}</div>
           </div>
-          <div style="grid-column: span 2; font-size:13px; color:var(--text-secondary); background:var(--bg-subtle); padding:4px 6px; border-radius:2px;">
+          <div style="grid-column: span 2; font-size:14px; color:var(--text-secondary); background:var(--bg-subtle); padding:4px 6px; border-radius:2px;">
             <strong>Mission:</strong> ${escapeHtml(f.task)}
           </div>
         </div>
         <div class="fleet-card-actions">
-          <button type="button" class="govt-btn" style="flex:1; font-size:12.5px; padding:4px 8px; ${isDispatched ? '' : 'background:#2E5B36;'}" onclick="openReassignSectorModal('${escapeHtml(f.id)}', '${escapeHtml(f.name)}')">
+          <button type="button" class="govt-btn" style="flex:1; font-size:13.5px; padding:4px 8px; ${isDispatched ? '' : 'background:#2E5B36;'}" onclick="openReassignSectorModal('${escapeHtml(f.id)}', '${escapeHtml(f.name)}')">
             <i data-lucide="${isDispatched ? 'refresh-cw' : 'send'}" style="width:10px; height:10px;"></i>
             <span>${isDispatched ? '🔄 Reassign Sector' : '🚀 Dispatch to Sector'}</span>
           </button>
@@ -8396,28 +8396,28 @@ function renderResourceAllocationHistory(items) {
 
     return `
       <tr>
-        <td style="font-family:var(--font-mono); font-size:13.5px; white-space:nowrap; color:var(--text-muted);">
+        <td style="font-family:var(--font-mono); font-size:14.5px; white-space:nowrap; color:var(--text-muted);">
           ${timeStr}
         </td>
         <td>
-          <div style="font-weight:700; font-family:var(--font-mono); color:var(--maroon-primary); font-size:14px;">
+          <div style="font-weight:700; font-family:var(--font-mono); color:var(--maroon-primary); font-size:15px;">
             ${escapeHtml(item.resource_code)}
           </div>
-          <div style="font-size:12.5px; color:var(--text-secondary);">${escapeHtml(item.resource_name || '')}</div>
+          <div style="font-size:13.5px; color:var(--text-secondary);">${escapeHtml(item.resource_name || '')}</div>
         </td>
-        <td style="font-weight:600; font-size:13.5px; color:var(--maroon-primary); white-space:nowrap;">
+        <td style="font-weight:600; font-size:14.5px; color:var(--maroon-primary); white-space:nowrap;">
           ${escapeHtml(item.allocated_capacity)}
         </td>
-        <td style="font-weight:600; font-size:13.5px; color:var(--text-primary); white-space:nowrap;">
+        <td style="font-weight:600; font-size:14.5px; color:var(--text-primary); white-space:nowrap;">
           ${escapeHtml(item.target_sector)}
         </td>
-        <td style="font-size:13px; color:var(--text-secondary); max-width:200px;">
+        <td style="font-size:14px; color:var(--text-secondary); max-width:200px;">
           ${escapeHtml(item.target_location)}
         </td>
-        <td style="font-size:13.5px; color:var(--text-secondary); max-width:240px;">
+        <td style="font-size:14.5px; color:var(--text-secondary); max-width:240px;">
           ${escapeHtml(item.purpose)}
         </td>
-        <td style="font-size:13.5px; font-weight:600; color:var(--text-primary); white-space:nowrap;">
+        <td style="font-size:14.5px; font-weight:600; color:var(--text-primary); white-space:nowrap;">
           ${escapeHtml(item.authorized_by)}
         </td>
         <td>
@@ -8451,14 +8451,14 @@ function renderRoutes(routes) {
   container.innerHTML = routes.map(route => `
     <div class="route-status-item" data-route-id="${escapeHtml(route.id)}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border:1px solid var(--border-main); margin-bottom:6px; border-radius:2px; background:var(--bg-card);">
       <div>
-        <div style="font-weight:600; font-size:14.5px;">${escapeHtml(route.name)}</div>
-        <div style="font-size:12.5px; color:var(--text-secondary);">${escapeHtml(route.description || 'Corridor transit artery')}</div>
+        <div style="font-weight:600; font-size:15.5px;">${escapeHtml(route.name)}</div>
+        <div style="font-size:13.5px; color:var(--text-secondary);">${escapeHtml(route.description || 'Corridor transit artery')}</div>
       </div>
       <div style="display:flex; align-items:center; gap:8px;">
         <span class="status-pill ${getRouteClass(route.status)}">
           ${escapeHtml(route.status?.replace('_', ' '))}
         </span>
-        <button type="button" class="govt-btn btn-outline" style="font-size:12px; padding:3px 7px;" onclick="openRouteManageModal('${escapeHtml(route.id)}', '${escapeHtml(route.name)}', '${escapeHtml(route.status)}')">
+        <button type="button" class="govt-btn btn-outline" style="font-size:13px; padding:3px 7px;" onclick="openRouteManageModal('${escapeHtml(route.id)}', '${escapeHtml(route.name)}', '${escapeHtml(route.status)}')">
           <span>🔄 Manage / Divert</span>
         </button>
       </div>
@@ -8778,7 +8778,7 @@ function renderIncidentCommandQueue(incidents) {
   }
 
   if (!incidents || incidents.length === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:8px; text-align:center;">No critical incidents in queue. All sectors nominal.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">No critical incidents in queue. All sectors nominal.</div>';
     return;
   }
 
@@ -8799,7 +8799,7 @@ function renderIncidentCommandQueue(incidents) {
               <i data-lucide="check" style="width:10px; height:10px;"></i> Ack
             </button>
           ` : `
-            <span style="font-size:12px; color:var(--status-green); font-weight:bold; margin-right:4px;">ACKNOWLEDGED</span>
+            <span style="font-size:13px; color:var(--status-green); font-weight:bold; margin-right:4px;">ACKNOWLEDGED</span>
           `}
           <button type="button" class="cmd-btn" onclick="handleDispatchSquadForIncident('${escapeHtml(inc.id)}', this)">
             <i data-lucide="send" style="width:10px; height:10px;"></i> Dispatch
@@ -8825,7 +8825,7 @@ function renderFaceMatchQueue(candidates) {
   }
 
   if (!candidates || candidates.length === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:8px; text-align:center;">No pending candidate matches. Biometric scanner active.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">No pending candidate matches. Biometric scanner active.</div>';
     return;
   }
 
@@ -8934,32 +8934,32 @@ function renderBiometricCandidates(candidates) {
       <div class="biometric-candidate-card" data-match-id="${escapeHtml(c.id || '')}" style="border:1px solid var(--border-main); background:var(--bg-card); padding:10px; border-radius:3px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <div>
-            <strong style="color:var(--text-primary); font-size:15px;">${escapeHtml(c.lost_person_name || 'Lost Person Candidate')}</strong>
-            <span style="font-size:12.5px; color:var(--text-muted); margin-left:4px;">${escapeHtml(c.case_number || '#LF-CASE')}</span>
+            <strong style="color:var(--text-primary); font-size:16px;">${escapeHtml(c.lost_person_name || 'Lost Person Candidate')}</strong>
+            <span style="font-size:13.5px; color:var(--text-muted); margin-left:4px;">${escapeHtml(c.case_number || '#LF-CASE')}</span>
           </div>
-          <span style="font-size:12.5px; color:var(--text-muted); font-family:var(--font-mono);">${escapeHtml(c.camera_code || 'CAM-04')}</span>
+          <span style="font-size:13.5px; color:var(--text-muted); font-family:var(--font-mono);">${escapeHtml(c.camera_code || 'CAM-04')}</span>
         </div>
 
         <div class="biometric-split-view" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
           <div class="split-photo-box" style="border:1px solid var(--border-main); border-radius:2px; overflow:hidden; position:relative;">
             <img src="assets/palkhi_procession_hd.jpg" alt="Registered Dossier Photo" style="width:100%; height:110px; object-fit:cover; display:block;">
-            <div class="split-photo-label" style="padding:3px 6px; font-size:12px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
+            <div class="split-photo-label" style="padding:3px 6px; font-size:13px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
               <span>Registered Dossier</span>
             </div>
           </div>
           <div class="split-photo-box" style="border:1px solid var(--border-main); border-radius:2px; overflow:hidden; position:relative;">
             <img src="assets/cctv_wakhri_phata_1785244836537.jpg" alt="Live CCTV Detected Frame" style="width:100%; height:110px; object-fit:cover; display:block;">
-            <div class="split-photo-label" style="padding:3px 6px; font-size:12px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
+            <div class="split-photo-label" style="padding:3px 6px; font-size:13px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
               <span>Live CCTV Match</span>
             </div>
           </div>
         </div>
 
         <div style="display:flex; gap:6px;">
-          <button type="button" class="govt-btn" style="flex:1; font-size:12.5px; padding:5px 8px; background:var(--maroon-primary); color:#FFF;" onclick="handleVerifyAndDispatchSquad14('${escapeHtml(c.id || '')}', '${escapeHtml(c.case_id || '')}', this)">
+          <button type="button" class="govt-btn" style="flex:1; font-size:13.5px; padding:5px 8px; background:var(--maroon-primary); color:#FFF;" onclick="handleVerifyAndDispatchSquad14('${escapeHtml(c.id || '')}', '${escapeHtml(c.case_id || '')}', this)">
             <span>Verify &amp; Dispatch Squad #14</span>
           </button>
-          <button type="button" class="govt-btn btn-outline" style="font-size:12.5px; padding:5px 10px; border-color:var(--border-main); color:var(--text-primary);" onclick="handleRejectFaceMatch('${escapeHtml(c.id || '')}', this)">
+          <button type="button" class="govt-btn btn-outline" style="font-size:13.5px; padding:5px 10px; border-color:var(--border-main); color:var(--text-primary);" onclick="handleRejectFaceMatch('${escapeHtml(c.id || '')}', this)">
             <span>Reject</span>
           </button>
         </div>
@@ -8981,7 +8981,7 @@ function renderRecommendationsQueue(resourceRecs, routeRecs) {
   }
 
   if (totalRecs === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:8px; text-align:center;">All resources and routes running on optimal configuration.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">All resources and routes running on optimal configuration.</div>';
     return;
   }
 
@@ -9042,7 +9042,7 @@ function renderIncidentTimeline(timelineEvents) {
   });
 
   if (filtered.length === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:8px; text-align:center;">No timeline logs matching filter.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:8px; text-align:center;">No timeline logs matching filter.</div>';
     return;
   }
 
@@ -9061,10 +9061,10 @@ function renderIncidentTimeline(timelineEvents) {
         </div>
         <div class="timeline-content-box">
           <div class="timeline-meta-row">
-            <strong style="color:var(--text-primary); font-size:13px;">${escapeHtml(evt.title || evt.event_type || 'Operational Event')}</strong>
+            <strong style="color:var(--text-primary); font-size:14px;">${escapeHtml(evt.title || evt.event_type || 'Operational Event')}</strong>
             <span class="timeline-time">${timeStr}</span>
           </div>
-          <div style="font-size:13px; color:var(--text-secondary);">${escapeHtml(evt.message || '')}</div>
+          <div style="font-size:14px; color:var(--text-secondary);">${escapeHtml(evt.message || '')}</div>
         </div>
       </div>
     `;
@@ -9084,7 +9084,7 @@ function renderNotificationDrawerItems(actions) {
   if (countText) countText.textContent = `${count} Recent Operational Actions`;
 
   if (!actions || actions.length === 0) {
-    container.innerHTML = '<div style="font-size:13.5px; color:var(--text-muted); padding:12px; text-align:center;">No recent command actions.</div>';
+    container.innerHTML = '<div style="font-size:14.5px; color:var(--text-muted); padding:12px; text-align:center;">No recent command actions.</div>';
     return;
   }
 
@@ -9093,11 +9093,11 @@ function renderNotificationDrawerItems(actions) {
     return `
       <div class="drawer-notif-item">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-          <strong style="color:var(--maroon-primary); font-size:13.5px;">${escapeHtml(act.action_type.replace('_', ' '))}</strong>
-          <span style="font-size:12px; font-family:var(--font-mono); color:var(--text-muted);">${timeStr}</span>
+          <strong style="color:var(--maroon-primary); font-size:14.5px;">${escapeHtml(act.action_type.replace('_', ' '))}</strong>
+          <span style="font-size:13px; font-family:var(--font-mono); color:var(--text-muted);">${timeStr}</span>
         </div>
-        <div style="font-size:13px; color:var(--text-secondary);">${escapeHtml(act.target_type || 'COMMAND')}: ${escapeHtml(act.target_id || act.incident_id || 'Global')}</div>
-        <div style="font-size:12px; color:var(--status-green); font-weight:600; margin-top:2px;">STATUS: ${escapeHtml(act.status)}</div>
+        <div style="font-size:14px; color:var(--text-secondary);">${escapeHtml(act.target_type || 'COMMAND')}: ${escapeHtml(act.target_id || act.incident_id || 'Global')}</div>
+        <div style="font-size:13px; color:var(--status-green); font-weight:600; margin-top:2px;">STATUS: ${escapeHtml(act.status)}</div>
       </div>
     `;
   }).join('');
@@ -9117,8 +9117,8 @@ function updateYatraMapMarker(yatra) {
 
   const palkhiHtml = `
     <div style="position:relative; display:flex; align-items:center; justify-content:center;">
-      <div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:12.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
-        <span style="transform:rotate(${heading}deg); display:inline-block; font-size:14.5px;">➤</span>
+      <div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:13.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); display:flex; align-items:center; gap:4px; white-space:nowrap;">
+        <span style="transform:rotate(${heading}deg); display:inline-block; font-size:15.5px;">➤</span>
         <span>🚩 ${escapeHtml(palkhiName)} (${speed} km/h)</span>
       </div>
     </div>
@@ -9137,8 +9137,8 @@ function updateYatraMapMarker(yatra) {
   } else {
     AppState.palkhiMarker = L.marker([lat, lon], { icon: palkhiIcon, zIndexOffset: 1000 }).addTo(window.wariMap);
     AppState.palkhiMarker.bindPopup(`
-      <div style="font-family:var(--font-sans); font-size:14.5px;">
-        <strong style="color:var(--maroon-primary); font-size:15.5px;">🚩 ${escapeHtml(palkhiName)}</strong><br>
+      <div style="font-family:var(--font-sans); font-size:15.5px;">
+        <strong style="color:var(--maroon-primary); font-size:16.5px;">🚩 ${escapeHtml(palkhiName)}</strong><br>
         <strong>Speed:</strong> ${speed} km/h | <strong>Heading:</strong> ${heading}°<br>
         <strong>Checkpoint:</strong> ${escapeHtml(yatra.current_checkpoint || 'Wakhri Sector')}<br>
         <strong>Next:</strong> ${escapeHtml(yatra.next_checkpoint || 'Pandharpur Temple')}<br>
@@ -9241,9 +9241,9 @@ window.fetchAndRenderAuditTrail = async function() {
     const t = evt.created_at ? new Date(evt.created_at).toLocaleTimeString('en-IN') : 'LIVE';
     return `
       <tr>
-        <td style="font-family:var(--font-mono); font-size:13.5px;">${t}</td>
-        <td><span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:11.5px;">${escapeHtml(evt.event_type || 'EVENT')}</span></td>
-        <td style="font-size:13.5px; color:var(--text-primary);">${escapeHtml(evt.message || '')}</td>
+        <td style="font-family:var(--font-mono); font-size:14.5px;">${t}</td>
+        <td><span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:12.5px;">${escapeHtml(evt.event_type || 'EVENT')}</span></td>
+        <td style="font-size:14.5px; color:var(--text-primary);">${escapeHtml(evt.message || '')}</td>
       </tr>
     `;
   }).join('');
@@ -10485,7 +10485,7 @@ async function loadHelplineScenarios() {
     container.innerHTML = scenarios.map((sc, idx) => `
       <button type="button" class="scenario-chip-btn ${idx === 0 ? 'active' : ''}" data-scenario-id="${escapeHtml(sc.id)}" data-index="${idx}">
         <span>${escapeHtml(sc.title)}</span>
-        <span class="badge" style="font-size:11px; padding:1px 4px; background:#FAF0E1; color:#7A1F1F;">${sc.language === 'mr' ? 'मराठी' : 'हिन्दी'}</span>
+        <span class="badge" style="font-size:12px; padding:1px 4px; background:#FAF0E1; color:#7A1F1F;">${sc.language === 'mr' ? 'मराठी' : 'हिन्दी'}</span>
       </button>
     `).join('');
 
@@ -10781,7 +10781,7 @@ function renderCCTVCandidates(matches, caseObj) {
   if (badge) badge.textContent = `${matches.length} Candidates Identified`;
 
   if (!matches || matches.length === 0) {
-    grid.innerHTML = '<div style="font-size:14px; color:var(--text-secondary); padding:10px;">No CCTV matches found within the spatial-temporal search perimeter.</div>';
+    grid.innerHTML = '<div style="font-size:15px; color:var(--text-secondary); padding:10px;">No CCTV matches found within the spatial-temporal search perimeter.</div>';
     return;
   }
 
@@ -10795,7 +10795,7 @@ function renderCCTVCandidates(matches, caseObj) {
     return `
       <div class="cctv-candidate-card ${isVerified ? 'is-verified' : ''} ${isRejected ? 'is-rejected' : ''}" id="candCard-${matchId}">
         <div class="cctv-cand-header">
-          <div style="font-weight:700; font-size:14px; color:var(--maroon-primary); display:flex; align-items:center; gap:4px;">
+          <div style="font-weight:700; font-size:15px; color:var(--maroon-primary); display:flex; align-items:center; gap:4px;">
             <i data-lucide="camera" style="width:12px; height:12px;"></i>
             <span>${escapeHtml(m.camera_code || 'CAM-04')} &bull; ${escapeHtml(m.location_name || m.camera_name || 'Temple Chowk')}</span>
           </div>
@@ -10830,18 +10830,18 @@ function renderCCTVCandidates(matches, caseObj) {
               <span>❌ Reject (नाकारा)</span>
             </button>
           ` : `
-            <div style="font-size:13.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
+            <div style="font-size:14.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
               ${isVerified ? '✅ Confirmed by Human Operator' : '❌ Rejected by Human Operator'}
             </div>
           `}
         </div>
 
         <div style="display:flex; gap:6px; margin-top:4px;">
-          <button type="button" class="govt-btn" style="flex:1; font-size:12.5px; padding:4px 6px;" onclick="highlightCCTVOnMap('${m.camera_code || 'CAM-04'}', ${m.latitude || 17.6777}, ${m.longitude || 75.3276})">
+          <button type="button" class="govt-btn" style="flex:1; font-size:13.5px; padding:4px 6px;" onclick="highlightCCTVOnMap('${m.camera_code || 'CAM-04'}', ${m.latitude || 17.6777}, ${m.longitude || 75.3276})">
             <i data-lucide="map-pin" style="width:10px; height:10px;"></i>
             <span>📍 Show on Map</span>
           </button>
-          <button type="button" class="govt-btn btn-outline" style="font-size:12.5px; padding:4px 6px;" onclick="dispatchPatrolToCCTV('${m.camera_code || 'CAM-04'}', '${escapeHtml(caseObj?.name || 'Missing Pilgrim')}')">
+          <button type="button" class="govt-btn btn-outline" style="font-size:13.5px; padding:4px 6px;" onclick="dispatchPatrolToCCTV('${m.camera_code || 'CAM-04'}', '${escapeHtml(caseObj?.name || 'Missing Pilgrim')}')">
             <span>🚓 Dispatch</span>
           </button>
         </div>
@@ -10862,7 +10862,7 @@ window.verifyCCTVCandidate = async function(caseId, matchId, isVerified, personN
     const actionsGroup = document.getElementById(`verifyActions-${matchId}`);
 
     if (actionsGroup) {
-      actionsGroup.innerHTML = '<span style="font-size:13px; color:#5D4037;">⏳ Recording human verification...</span>';
+      actionsGroup.innerHTML = '<span style="font-size:14px; color:#5D4037;">⏳ Recording human verification...</span>';
     }
 
     const payload = {
@@ -10891,7 +10891,7 @@ window.verifyCCTVCandidate = async function(caseId, matchId, isVerified, personN
 
     if (actionsGroup) {
       actionsGroup.innerHTML = `
-        <div style="font-size:13.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
+        <div style="font-size:14.5px; font-weight:700; color:${isVerified ? '#1B5E20' : '#B71C1C'}; padding:4px 0;">
           ${isVerified ? '✅ Confirmed by Human Operator' : '❌ Rejected by Human Operator'}
         </div>
       `;
@@ -10938,10 +10938,10 @@ window.highlightCCTVOnMap = function(camId, lat, lng) {
 
     const popupContent = `
       <div style="font-family:var(--font-sans, sans-serif); min-width:180px;">
-        <div style="font-weight:700; color:#7A1F1F; font-size:14.5px; border-bottom:1px solid #D8D1C5; padding-bottom:3px;">
+        <div style="font-weight:700; color:#7A1F1F; font-size:15.5px; border-bottom:1px solid #D8D1C5; padding-bottom:3px;">
           📹 AI RE-ID DETECTION: ${camId}
         </div>
-        <div style="font-size:13.5px; margin-top:5px; color:#2B2623;">
+        <div style="font-size:14.5px; margin-top:5px; color:#2B2623;">
           Target matched on live CCTV feed.<br>
           Patrol squad alerted for physical verification.
         </div>
