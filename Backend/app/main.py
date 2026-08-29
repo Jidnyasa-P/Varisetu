@@ -12,6 +12,7 @@ from app.api.auth import router as auth_router
 from app.api.cameras import router as cameras_router
 from app.api.crowd import router as crowd_router
 from app.api.dashboard import router as dashboard_router
+from app.api.helpline import router as helpline_router
 from app.api.incidents import router as incidents_router
 from app.api.lost_persons import router as lost_persons_router
 from app.api.medical import router as medical_router
@@ -100,6 +101,7 @@ app.include_router(zones_router, prefix=settings.API_V1_STR)
 app.include_router(crowd_router, prefix=settings.API_V1_STR)
 app.include_router(incidents_router, prefix=settings.API_V1_STR)
 app.include_router(lost_persons_router, prefix=settings.API_V1_STR)
+app.include_router(helpline_router, prefix=settings.API_V1_STR)
 app.include_router(medical_router, prefix=settings.API_V1_STR)
 app.include_router(resources_router, prefix=settings.API_V1_STR)
 app.include_router(routes_router, prefix=settings.API_V1_STR)
