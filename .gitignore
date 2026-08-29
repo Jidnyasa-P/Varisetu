@@ -1,1 +1,24 @@
+# Dependencies & Environments
 node_modules/
+__pycache__/
+*.py[cod]
+*.class
+.pytest_cache/
+.venv/
+env/
+venv/
+
+# Environment Variables & Databases
+.env
+.env.local
+*.db
+*.sqlite3
+
+# OS & Logs
+.DS_Store
+dist/
+*.log
+
+# ML artifacts
+artifacts/
+
