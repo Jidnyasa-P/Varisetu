@@ -137,6 +137,41 @@ async def websocket_endpoint(websocket: WebSocket, channel: str = "all", token: 
         ws_manager.disconnect(websocket, channel=channel)
 
 
+# Direct Frontend UI Mounting on root URL
+from pathlib import Path
+from fastapi.responses import FileResponse
+
+FRONTEND_DIR = Path(__file__).resolve().parent.parent.parent / "Frontend"
+
+if (FRONTEND_DIR / "assets").exists():
+    app.mount("/assets", StaticFiles(directory=str(FRONTEND_DIR / "assets")), name="assets")
+
+
+@app.get("/", summary="Command Center Frontend Dashboard")
+async def serve_index():
+    index_file = FRONTEND_DIR / "index.html"
+    if index_file.exists():
+        return FileResponse(index_file)
+    return {"status": "ok", "service": "varisetu-backend", "version": "2.0.0"}
+
+
+@app.get("/app.js")
+async def serve_app_js():
+    js_file = FRONTEND_DIR / "app.js"
+    if js_file.exists():
+        return FileResponse(js_file, media_type="application/javascript")
+    return {"detail": "app.js not found"}
+
+
+@app.get("/styles.css")
+async def serve_styles_css():
+    css_file = FRONTEND_DIR / "styles.css"
+    if css_file.exists():
+        return FileResponse(css_file, media_type="text/css")
+    return {"detail": "styles.css not found"}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+

@@ -38,13 +38,17 @@ class VisionAdapter:
 
     def __init__(self):
         self.provider = settings.VISION_PROVIDER
-        self._client = None
+        self._client: Optional[Any] = None
         if self.provider == "hf_space":
             if Client is None:
-                logger.warning("gradio_client not installed. Falling back to mock vision mode.")
+                logger.warning("gradio_client is not installed; operating in fallback mock mode.")
                 self.provider = "mock"
             else:
-                self._client = Client(settings.HF_SPACE_ID)
+                try:
+                    self._client = Client(settings.HF_SPACE_ID)
+                except Exception as e:
+                    logger.warning("Failed to initialize HF Space Client (%s); fallback to mock.", e)
+                    self.provider = "mock"
 
     # -------------------------------------------------------------------
     # Crowd density

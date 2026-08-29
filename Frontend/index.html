@@ -817,19 +817,20 @@
         </div>
 
         <div class="resource-grid">
-          <!-- Left: Resource Summary Table -->
+          <!-- Left: Resource Summary Table (Limit: 20 per type) -->
           <div class="govt-table-container">
-            <div class="panel-header" style="margin-bottom:6px;">
-              <span>DEPLOYMENT SUMMARY METRICS</span>
+            <div class="panel-header" style="margin-bottom:6px; justify-content:space-between;">
+              <span>DEPLOYMENT SUMMARY METRICS (LIMIT: 20 PER RESOURCE TYPE)</span>
+              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:9.5px;" id="totalFleetQuotaBadge">80 Total Fleet Units</span>
             </div>
             <table class="govt-table">
               <thead>
                 <tr>
-                  <th>Resource Type</th>
-                  <th>Deployed Count</th>
-                  <th>Available Count</th>
-                  <th>Current Key Location</th>
-                  <th>Status</th>
+                  <th>Resource Category &amp; Role</th>
+                  <th>Fleet Inventory (Limit: 20)</th>
+                  <th>Active Deployment Sectors</th>
+                  <th>Reserve Standby Depots</th>
+                  <th>Operational Readiness</th>
                 </tr>
               </thead>
               <tbody id="resourcesTableBody">
@@ -850,19 +851,70 @@
           </div>
         </div>
 
-        <!-- Field Logistics Fleet Cards Grid -->
+        <!-- Field Logistics Fleet Cards Grid (20 Per Resource Type) -->
         <div class="panel-card" style="padding:0; margin-top:14px;">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
+          <div class="panel-header" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:6px;">
               <i data-lucide="truck" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:12px;">FIELD LOGISTICS & FLEET UNITS GRID</span>
+              <span style="font-weight:700; font-size:12px;">FIELD LOGISTICS &amp; FLEET UNITS INVENTORY (20 PER TYPE)</span>
             </div>
-            <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:9.5px;" id="fleetUnitsCountBadge">7 Units Online</span>
+            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+              <button type="button" class="timeline-filter-btn active fleet-filter-btn" data-fleet-filter="ALL">All (80)</button>
+              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="WATER_TANKER">Water (20)</button>
+              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="MEDICAL_VAN">Medical (20)</button>
+              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="POLICE_SQUAD">Police (20)</button>
+              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="VOLUNTEER_TEAM">Volunteers (20)</button>
+              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="DISPATCHED" style="border-color:#B8551B; font-weight:700;">⚡ Dispatched (38)</button>
+              <button type="button" class="timeline-filter-btn fleet-filter-btn" data-fleet-filter="AVAILABLE" style="border-color:#2E5B36; font-weight:700;">🟢 Available (42)</button>
+              <span class="badge" style="background:var(--maroon-primary); color:#FFF; font-size:9.5px;" id="fleetUnitsCountBadge">80 Units Managed</span>
+            </div>
           </div>
-          <div class="field-logistics-grid" id="resourceCardsContainer" style="padding:10px;">
-            <!-- Populated dynamically with fleet cards for WT-09, WT-04, MV-01, MV-02, PS-14 -->
+          <div class="field-logistics-grid" id="resourceCardsContainer" style="padding:10px; max-height:460px; overflow-y:auto;">
+            <!-- Populated dynamically with full 80 units (20 per type) with dispatched vs available indicators -->
           </div>
         </div>
+
+
+        <!-- Resource Allocation & Sector Dispatch History Log -->
+        <div class="panel-card" style="padding:0; margin-top:14px;">
+          <div class="panel-header" style="justify-content:space-between; padding:8px 12px; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <i data-lucide="history" style="width:14px; height:14px; color:var(--maroon-primary);"></i>
+              <span style="font-weight:700; font-size:12px;">RESOURCE ALLOCATION &amp; SECTOR DISPATCH HISTORY</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <select id="allocationSectorFilter" class="govt-input" style="padding:2px 8px; font-size:10px; height:24px;">
+                <option value="ALL">All Corridor Sectors</option>
+                <option value="Sector 1">Sector 1 (Pune ➔ Bhosari)</option>
+                <option value="Sector 2">Sector 2 (Bhosari ➔ Manchar)</option>
+                <option value="Sector 3">Sector 3 (Manchar ➔ Sangamner)</option>
+                <option value="Sector 4">Sector 4 (Sangamner ➔ Nashik)</option>
+              </select>
+              <span class="badge" style="background:#2E5B36; color:#FFF; font-size:9.5px;" id="activeAllocationsBadge">6 Active</span>
+              <span class="badge" style="background:var(--bg-subtle); color:var(--text-secondary); border:1px solid var(--border-main); font-size:9.5px;" id="totalAllocationsBadge">8 Dispatches</span>
+            </div>
+          </div>
+          <div class="govt-table-container" style="margin:0; border:none; max-height:280px; overflow-y:auto;">
+            <table class="govt-table">
+              <thead>
+                <tr>
+                  <th>Timestamp (IST)</th>
+                  <th>Resource Unit</th>
+                  <th>Allocated Capacity</th>
+                  <th>Corridor Sector</th>
+                  <th>Stationed Checkpoint</th>
+                  <th>Operational Mission</th>
+                  <th>Authorized Officer</th>
+                  <th>Dispatch Status</th>
+                </tr>
+              </thead>
+              <tbody id="resourceAllocationHistoryBody">
+                <!-- Populated dynamically from /api/resources/allocations/history -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
 
         <!-- Live Incident & Logistics Action Timeline Stream -->
         <div class="panel-card" style="padding:0; margin-top:14px;">

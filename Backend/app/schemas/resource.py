@@ -72,3 +72,41 @@ class ResourceOut(ResourceBase):
     updated_at: datetime
     distance_km: Optional[float] = None
     assignments: Optional[List[ResourceAssignmentOut]] = None
+
+
+class ResourceAllocationHistoryItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    resource_code: str
+    resource_name: str
+    resource_type: ResourceType
+    allocated_capacity: str
+    target_sector: str
+    target_location: str
+    assigned_at: datetime
+    status: str
+    authorized_by: str
+    purpose: str
+    duration: Optional[str] = None
+
+
+class ResourceCategoryInventory(BaseModel):
+    resource_type: ResourceType
+    display_name: str
+    total_quota_limit: int = 20
+    dispatched_count: int
+    available_count: int
+    dispatched_units: List[str]
+    available_units: List[str]
+    key_deployment_locations: List[str]
+    status_tag: str
+
+
+class ResourceInventorySummary(BaseModel):
+    total_fleet_limit: int = 80
+    total_dispatched: int
+    total_available: int
+    categories: List[ResourceCategoryInventory]
+
+

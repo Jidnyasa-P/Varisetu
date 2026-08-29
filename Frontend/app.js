@@ -2645,122 +2645,548 @@ async function refreshResources() {
     const resources = await apiRequest('/resources');
     AppState.resources = resources;
     renderResources(resources);
-    renderResourceMapMarkers(resources);
+    if (typeof renderResourceMapMarkers === 'function') renderResourceMapMarkers(resources);
+    await refreshResourceAllocationsHistory();
     return resources;
   } catch (err) {
     console.debug('[VariSetu] Resources fetch skipped.');
+    await refreshResourceAllocationsHistory();
     return [];
   }
 }
 
+
 function renderResources(resources) {
   const tbody = document.getElementById('resourcesTableBody');
-  if (!tbody || !resources || resources.length === 0) return;
+  const quotaBadge = document.getElementById('totalFleetQuotaBadge');
+  if (quotaBadge) quotaBadge.textContent = '80 Total Fleet Units (20 Per Type)';
+  if (!tbody) return;
 
-  const grouped = {};
-  resources.forEach(r => {
-    let key = r.resource_type?.replace('_', ' ') || 'GENERAL RESOURCE';
-    if (r.resource_type === 'WATER_TANKER') key = 'Water Tankers (10,000L)';
-    else if (r.resource_type === 'MEDICAL_VAN' || r.resource_type === 'AMBULANCE') key = 'Mobile Medical Vans & Ambulances';
-    else if (r.resource_type === 'POLICE_SQUAD') key = 'Police Patrol Squads';
-    else if (r.resource_type === 'VOLUNTEER_TEAM') key = 'Volunteer Dindi Stewards';
-    else if (r.resource_type === 'FOOD_VAN') key = 'Food Distribution Vans';
+  const allUnits = getAllManagedFleetUnits();
 
-    if (!grouped[key]) {
-      grouped[key] = { total: 0, available: 0, deployed: 0, locations: [] };
+  // 4 Resource Categories with strict limit of 20 per type
+  const categories = [
+    {
+      type: 'WATER_TANKER',
+      name: 'Water Tankers (10,000L)',
+      role: 'Potable Drinking Water & Mist Sprayer Supply',
+      limit: 20,
+      dispatched: allUnits.filter(u => u.type === 'WATER_TANKER' && u.isDispatched).length,
+      available: allUnits.filter(u => u.type === 'WATER_TANKER' && !u.isDispatched).length,
+      activeSectors: 'Sector 3 (Narayangaon Km 84), Sector 3 (Sangamner), Sector 2 (Manchar), Sector 1 (Alandi)',
+      standbyDepots: 'Kothrud Central Depot, Bhosari Base Depot, Manchar Transit Depot'
+    },
+    {
+      type: 'MEDICAL_VAN',
+      name: 'Mobile Medical Vans & Ambulances',
+      role: 'Emergency Medical Triage & Mobile ICU Resuscitation',
+      limit: 20,
+      dispatched: allUnits.filter(u => u.type === 'MEDICAL_VAN' && u.isDispatched).length,
+      available: allUnits.filter(u => u.type === 'MEDICAL_VAN' && !u.isDispatched).length,
+      activeSectors: 'Sector 3 (Narayangaon ICU Camp), Sector 1 (Bhosari Base), Sector 3 (Sangamner Hospital), Sector 4 (Nashik)',
+      standbyDepots: 'Pune Civil Hospital, Manchar Sub-District Clinic, Nashik District Hospital'
+    },
+    {
+      type: 'POLICE_SQUAD',
+      name: 'Police Patrol Squads',
+      role: 'Perimeter Security, Crowd Chokepoint & Quick Response',
+      limit: 20,
+      dispatched: allUnits.filter(u => u.type === 'POLICE_SQUAD' && u.isDispatched).length,
+      available: allUnits.filter(u => u.type === 'POLICE_SQUAD' && !u.isDispatched).length,
+      activeSectors: 'Sector 4 (Nashik Terminal Security), Sector 3 (Narayangaon Chokepoint), Sector 2 (Manchar Chowk)',
+      standbyDepots: 'District Police HQ Reserve, Chakan Outpost, Pimpri-Chinchwad HQ'
+    },
+    {
+      type: 'VOLUNTEER_TEAM',
+      name: 'Volunteer Dindi Stewards',
+      role: 'Pilgrim Queue Marshalling, Hydration & Lost Person Help',
+      limit: 20,
+      dispatched: allUnits.filter(u => u.type === 'VOLUNTEER_TEAM' && u.isDispatched).length,
+      available: allUnits.filter(u => u.type === 'VOLUNTEER_TEAM' && !u.isDispatched).length,
+      activeSectors: 'Sector 2 (Manchar Bypass Queue), Sector 3 (Hydration Lanes), Sector 1 (Departure Ghats)',
+      standbyDepots: 'Alandi Volunteer Base Camp, Narayangaon Base, Nashik Govind Nagar Camp'
     }
-    grouped[key].total += 1;
-    if (r.availability === 'AVAILABLE') {
-      grouped[key].available += 1;
-    } else {
-      grouped[key].deployed += 1;
-    }
-    if (r.location_description) {
-      grouped[key].locations.push(r.location_description);
-    }
-  });
+  ];
 
-  tbody.innerHTML = Object.entries(grouped).map(([type, item]) => `
-    <tr>
-      <td><strong>${escapeHtml(type)}</strong></td>
-      <td>${item.deployed} Units</td>
-      <td>${item.available} Units</td>
-      <td>${escapeHtml(item.locations.slice(0, 2).join(' & ') || 'Corridor Stations')}</td>
-      <td>
-        <span class="density-tag ${item.available > 0 ? 'green' : 'red'}">
-          ${item.available > 0 ? 'OPTIMAL' : 'DEPLOYED'}
-        </span>
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = categories.map(cat => {
+    const statusClass = cat.dispatched >= 10 ? 'orange' : (cat.dispatched >= 6 ? 'yellow' : 'green');
+    const percent = Math.round((cat.dispatched / cat.limit) * 100);
+    return `
+      <tr>
+        <td>
+          <div style="font-weight:700; font-size:12px; color:var(--maroon-primary);">${escapeHtml(cat.name)}</div>
+          <div style="font-size:10px; color:var(--text-muted);">${escapeHtml(cat.role)}</div>
+        </td>
+        <td style="font-family:var(--font-mono); font-size:11.5px;">
+          <div><strong style="color:#B8551B;">⚡ ${cat.dispatched} Dispatched</strong> &bull; <strong style="color:#2E5B36;">🟢 ${cat.available} Standby</strong></div>
+          <div style="font-size:10px; color:var(--text-muted);">Quota Limit: ${cat.limit} Total Units</div>
+        </td>
+        <td style="font-size:11px; color:var(--text-primary); max-width:240px;">
+          ${escapeHtml(cat.activeSectors)}
+        </td>
+        <td style="font-size:10.5px; color:var(--text-secondary); max-width:220px;">
+          ${escapeHtml(cat.standbyDepots)}
+        </td>
+        <td>
+          <span class="density-tag ${statusClass}">
+            ${percent}% DEPLOYED (${cat.available} RESERVE)
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join('');
 
-  renderFieldLogisticsGrid(resources);
+  renderFieldLogisticsGrid(allUnits);
 }
 
-function renderFieldLogisticsGrid(resources) {
+
+let activeFleetFilter = 'ALL';
+
+function renderFieldLogisticsGrid(units, filterOverride) {
   const container = document.getElementById('resourceCardsContainer');
   const badge = document.getElementById('fleetUnitsCountBadge');
   if (!container) return;
 
-  const defaultFleet = [
-    { id: 'WT-09', code: 'WT-09', name: '10,000L Water Tanker #09', type: 'WATER_TANKER', capacity: '10,000 Litres', phone: '+91-9822001122 (R. Shinde)', sector: 'Sector 3 (Narayangaon Km 84)', status: 'OPTIMAL' },
-    { id: 'WT-04', code: 'WT-04', name: '10,000L Water Tanker #04', type: 'WATER_TANKER', capacity: '10,000 Litres', phone: '+91-9822002233 (D. More)', sector: 'Sector 3 (Sangamner North)', status: 'DEPLOYED' },
-    { id: 'MV-01', code: 'MV-01', name: 'Mobile Medical Ambulance #01', type: 'MEDICAL_VAN', capacity: '4 Beds / ICU', phone: '+91-9822003344 (Dr. Joshi)', sector: 'Sector 1 (Bhosari Base)', status: 'STANDBY' },
-    { id: 'MV-02', code: 'MV-02', name: 'Mobile Medical Ambulance #02', type: 'MEDICAL_VAN', capacity: '4 Beds / ICU', phone: '+91-9822005566 (Dr. Deshmukh)', sector: 'Sector 3 (Narayangaon)', status: 'ACTIVE' },
-    { id: 'MV-03', code: 'MV-03', name: 'Emergency Mobile ICU #03', type: 'MEDICAL_VAN', capacity: '2 Trauma Beds', phone: '+91-9822007788 (Dr. Shirole)', sector: 'Sector 3 (Sangamner Base)', status: 'ACTIVE' },
-    { id: 'PS-14', code: 'PS-14', name: 'Police Patrol Squad #14', type: 'POLICE_SQUAD', capacity: '8 Officers / QRT', phone: '+91-9822008899 (Insp. V. Jadhav)', sector: 'Sector 4 (Nashik Terminal)', status: 'ON_SCENE' },
-    { id: 'VT-08', code: 'VT-08', name: 'Dindi Volunteer Stewards #08', type: 'VOLUNTEER_TEAM', capacity: '25 Stewards', phone: '+91-9822009900 (K. Pawar)', sector: 'Sector 2 (Manchar Chowk)', status: 'ACTIVE' }
-  ];
+  const fleet = units || getAllManagedFleetUnits();
+  const filter = filterOverride || activeFleetFilter || 'ALL';
 
-  const items = (resources && resources.length > 0) ? resources.map(r => ({
-    id: r.id || r.resource_code,
-    code: r.resource_code || r.name,
-    name: r.name,
-    type: r.resource_type,
-    capacity: r.capacity ? `${r.capacity} Units/L` : 'Standard Capacity',
-    phone: '+91-9822001122',
-    sector: r.location_description || 'NH-60 Corridor Sector',
-    status: r.status_tag || r.availability || 'ACTIVE'
-  })) : defaultFleet;
+  let filtered = fleet;
+  if (filter === 'WATER_TANKER' || filter === 'MEDICAL_VAN' || filter === 'POLICE_SQUAD' || filter === 'VOLUNTEER_TEAM') {
+    filtered = fleet.filter(u => u.type === filter);
+  } else if (filter === 'DISPATCHED') {
+    filtered = fleet.filter(u => u.isDispatched);
+  } else if (filter === 'AVAILABLE') {
+    filtered = fleet.filter(u => !u.isDispatched);
+  }
 
-  if (badge) badge.textContent = `${items.length} Units Online`;
+  if (badge) {
+    const dispCount = fleet.filter(u => u.isDispatched).length;
+    const availCount = fleet.filter(u => !u.isDispatched).length;
+    badge.textContent = `${filtered.length} Showing (${dispCount} Dispatched • ${availCount} Available / 80 Total)`;
+  }
 
-  container.innerHTML = items.map(f => `
-    <div class="fleet-card" data-resource-id="${escapeHtml(f.id)}">
-      <div class="fleet-card-header">
-        <div>
-          <span class="fleet-card-code">${escapeHtml(f.code)}</span>
-          <div style="font-weight:600; font-size:11.5px; color:var(--text-primary); margin-top:1px;">${escapeHtml(f.name)}</div>
+  container.innerHTML = filtered.map(f => {
+    const isDispatched = f.isDispatched;
+    const statusTagClass = isDispatched ? 'yellow' : 'green';
+    const statusLabel = isDispatched ? `⚡ DISPATCHED (${f.status})` : '🟢 AVAILABLE (STANDBY RESERVE)';
+    const cardBorderLeft = isDispatched ? 'var(--status-orange)' : 'var(--status-green)';
+
+    return `
+      <div class="fleet-card" data-resource-id="${escapeHtml(f.id)}" style="border-left: 4px solid ${cardBorderLeft};">
+        <div class="fleet-card-header">
+          <div>
+            <span class="fleet-card-code">${escapeHtml(f.code)}</span>
+            <div style="font-weight:600; font-size:11.5px; color:var(--text-primary); margin-top:1px;">${escapeHtml(f.name)}</div>
+          </div>
+          <span class="density-tag ${statusTagClass}">
+            ${escapeHtml(statusLabel)}
+          </span>
         </div>
-        <span class="density-tag ${f.status === 'OPTIMAL' || f.status === 'STANDBY' ? 'green' : (f.status === 'ACTIVE' || f.status === 'ON_SCENE' ? 'yellow' : 'orange')}">
-          ${escapeHtml(f.status)}
-        </span>
+        <div class="fleet-card-meta">
+          <div>
+            <div class="fleet-meta-label">Allocated Capacity</div>
+            <div class="fleet-meta-val" style="color:var(--maroon-primary);">${escapeHtml(f.capacity)}</div>
+          </div>
+          <div>
+            <div class="fleet-meta-label">Operator Contact</div>
+            <div class="fleet-meta-val">${escapeHtml(f.phone)}</div>
+          </div>
+          <div style="grid-column: span 2;">
+            <div class="fleet-meta-label">${isDispatched ? 'Deployed Target Sector & Location' : 'Current Standby Station Depot'}</div>
+            <div class="fleet-meta-val" style="color:var(--text-primary); font-weight:600;">${escapeHtml(f.sector)}</div>
+          </div>
+          <div style="grid-column: span 2; font-size:10.5px; color:var(--text-secondary); background:var(--bg-subtle); padding:4px 6px; border-radius:2px;">
+            <strong>Mission:</strong> ${escapeHtml(f.task)}
+          </div>
+        </div>
+        <div class="fleet-card-actions">
+          <button type="button" class="govt-btn" style="flex:1; font-size:10px; padding:4px 8px; ${isDispatched ? '' : 'background:#2E5B36;'}" onclick="openReassignSectorModal('${escapeHtml(f.id)}', '${escapeHtml(f.name)}')">
+            <i data-lucide="${isDispatched ? 'refresh-cw' : 'send'}" style="width:10px; height:10px;"></i>
+            <span>${isDispatched ? '🔄 Reassign Sector' : '🚀 Dispatch to Sector'}</span>
+          </button>
+        </div>
       </div>
-      <div class="fleet-card-meta">
-        <div>
-          <div class="fleet-meta-label">Capacity</div>
-          <div class="fleet-meta-val">${escapeHtml(f.capacity)}</div>
-        </div>
-        <div>
-          <div class="fleet-meta-label">Operator Contact</div>
-          <div class="fleet-meta-val">${escapeHtml(f.phone)}</div>
-        </div>
-        <div style="grid-column: span 2;">
-          <div class="fleet-meta-label">Stationed Corridor Sector</div>
-          <div class="fleet-meta-val" style="color:var(--maroon-primary);">${escapeHtml(f.sector)}</div>
-        </div>
-      </div>
-      <div class="fleet-card-actions">
-        <button type="button" class="govt-btn" style="flex:1; font-size:10px; padding:4px 8px;" onclick="openReassignSectorModal('${escapeHtml(f.id)}', '${escapeHtml(f.name)}')">
-          <i data-lucide="refresh-cw" style="width:10px; height:10px;"></i>
-          <span>🔄 Reassign Sector</span>
-        </button>
-      </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
+
+  // Wire filter button clicks
+  document.querySelectorAll('.fleet-filter-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.fleet-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFleetFilter = btn.getAttribute('data-fleet-filter') || 'ALL';
+      renderFieldLogisticsGrid(fleet, activeFleetFilter);
+    };
+  });
 
   if (window.lucide) lucide.createIcons();
 }
+
+function getAllManagedFleetUnits() {
+  const units = [];
+
+  // 1. Water Tankers (WT-01 to WT-20) - 20 Units (6 Dispatched, 14 Available)
+  const waterLocations = [
+    { num: 1, disp: true, sector: 'Sector 1 (Pune ➔ Bhosari)', phone: '+91-9822001101 (R. Shinde)', task: 'Corridor entry water refilling point' },
+    { num: 2, disp: false, sector: 'Kothrud Central Depot (Standby Reserve)', phone: '+91-9822001102 (D. Mane)', task: 'Standby reserve for emergency deployment' },
+    { num: 3, disp: false, sector: 'Kothrud Central Depot (Standby Reserve)', phone: '+91-9822001103 (K. Jagtap)', task: 'Standby reserve for emergency deployment' },
+    { num: 4, disp: true, sector: 'Sector 3 (Sangamner North Chowk)', phone: '+91-9822001104 (D. More)', task: 'Replenishing Water Station Hub #4 & ORSL misting' },
+    { num: 5, disp: false, sector: 'Bhosari Base Depot (Standby Reserve)', phone: '+91-9822001105 (P. Salve)', task: 'Standby reserve for Sector 1 surge' },
+    { num: 6, disp: false, sector: 'Bhosari Base Depot (Standby Reserve)', phone: '+91-9822001106 (S. Kamble)', task: 'Standby reserve for Sector 1 surge' },
+    { num: 7, disp: true, sector: 'Sector 2 (Manchar Bypass Post)', phone: '+91-9822001107 (A. Jadhav)', task: 'Continuous hydration along pedestrian corridor' },
+    { num: 8, disp: false, sector: 'Manchar Transit Depot (Standby Reserve)', phone: '+91-9822001108 (M. Bhise)', task: 'Standby reserve for Sector 2 surge' },
+    { num: 9, disp: true, sector: 'Sector 3 (Narayangaon Km 84 Transit Camp)', phone: '+91-9822001109 (V. Kulkarni)', task: 'Surge crowd hydration & mist sprayer supply' },
+    { num: 10, disp: false, sector: 'Narayangaon Camp Standby Depot', phone: '+91-9822001110 (G. Shinde)', task: 'Standby reserve for Sector 3 choke point' },
+    { num: 11, disp: false, sector: 'Narayangaon Camp Standby Depot', phone: '+91-9822001111 (T. Raut)', task: 'Standby reserve for Sector 3 choke point' },
+    { num: 12, disp: true, sector: 'Sector 1 (Alandi Corridor Exit Point)', phone: '+91-9822001112 (S. Thorat)', task: 'Morning procession departure hydration quota' },
+    { num: 13, disp: false, sector: 'Sangamner Base Standby Depot', phone: '+91-9822001113 (N. Ghadge)', task: 'Standby reserve for Sector 3 bypass' },
+    { num: 14, disp: false, sector: 'Sangamner Base Standby Depot', phone: '+91-9822001114 (B. Landge)', task: 'Standby reserve for Sector 3 bypass' },
+    { num: 15, disp: true, sector: 'Sector 4 (Govind Nagar Terminal, Nashik)', phone: '+91-9822001115 (M. Gawande)', task: 'Terminal reception hydration & dindi welcome camp' },
+    { num: 16, disp: false, sector: 'Nashik Central Depot (Standby Reserve)', phone: '+91-9822001116 (Y. Kale)', task: 'Terminal buffer reserve' },
+    { num: 17, disp: false, sector: 'Nashik Central Depot (Standby Reserve)', phone: '+91-9822001117 (O. Sonawane)', task: 'Terminal buffer reserve' },
+    { num: 18, disp: false, sector: 'State Strategic Fleet Reserve', phone: '+91-9822001118 (H. Chavan)', task: 'Emergency strategic buffer' },
+    { num: 19, disp: false, sector: 'State Strategic Fleet Reserve', phone: '+91-9822001119 (F. Shaikh)', task: 'Emergency strategic buffer' },
+    { num: 20, disp: false, sector: 'State Strategic Fleet Reserve', phone: '+91-9822001120 (R. Waghmare)', task: 'Emergency strategic buffer' }
+  ];
+  waterLocations.forEach(w => {
+    const code = `WT-${w.num < 10 ? '0' + w.num : w.num}`;
+    units.push({
+      id: code,
+      code: code,
+      name: `10,000L Water Tanker #${w.num < 10 ? '0' + w.num : w.num}`,
+      type: 'WATER_TANKER',
+      categoryName: 'Water Tankers (10,000L)',
+      capacity: '10,000 Litres Hydration',
+      phone: w.phone,
+      sector: w.sector,
+      task: w.task,
+      isDispatched: w.disp,
+      status: w.disp ? 'DEPLOYED' : 'AVAILABLE'
+    });
+  });
+
+  // 2. Mobile Medical Vans & Ambulances (MV-01 to MV-20) - 20 Units (8 Dispatched, 12 Available)
+  const medLocations = [
+    { num: 1, disp: true, sector: 'Sector 1 (Bhosari Base Station)', phone: '+91-9822002201 (Dr. Joshi)', task: 'Corridor entry medical triage & ambulance standby' },
+    { num: 2, disp: true, sector: 'Sector 3 (Narayangaon Km 84 Emergency Post)', phone: '+91-9822002202 (Dr. Deshmukh)', task: 'First responder ambulance for fainting & heat exhaustion' },
+    { num: 3, disp: true, sector: 'Sector 3 (Sangamner Base Hospital Point)', phone: '+91-9822002203 (Dr. Shirole)', task: 'Mobile ICU trauma & cardiac resuscitation' },
+    { num: 4, disp: false, sector: 'Pune Civil Hospital Base (Standby Reserve)', phone: '+91-9822002204 (Dr. Khare)', task: 'Standby reserve ambulance unit' },
+    { num: 5, disp: true, sector: 'Sector 4 (Govind Nagar Terminal, Nashik)', phone: '+91-9822002205 (Dr. Patil)', task: 'Destination medical triage center & ER transit' },
+    { num: 6, disp: false, sector: 'Manchar Sub-District Hospital (Standby)', phone: '+91-9822002206 (Dr. Kadam)', task: 'Standby reserve ambulance unit' },
+    { num: 7, disp: false, sector: 'Narayangaon Transit Clinic (Standby)', phone: '+91-9822002207 (Dr. Gaikwad)', task: 'Standby reserve ambulance unit' },
+    { num: 8, disp: true, sector: 'Sector 2 (Manchar Junction Highway Post)', phone: '+91-9822002208 (Dr. Chavan)', task: 'Pedestrian corridor heat stress screening' },
+    { num: 9, disp: false, sector: 'Sangamner Civil Hospital (Standby)', phone: '+91-9822002209 (Dr. Mohite)', task: 'Standby reserve ambulance unit' },
+    { num: 10, disp: false, sector: 'Nashik District Hospital (Standby)', phone: '+91-9822002210 (Dr. Jagdale)', task: 'Standby reserve ambulance unit' },
+    { num: 11, disp: true, sector: 'Sector 3 (Narayangaon Transit Camp North)', phone: '+91-9822002211 (Dr. Gite)', task: 'Rapid paramedic dispatch for elderly warkaris' },
+    { num: 12, disp: false, sector: 'Reserve Medical Hub Pune', phone: '+91-9822002212 (Dr. Pardeshi)', task: 'Standby reserve ambulance unit' },
+    { num: 13, disp: false, sector: 'Reserve Medical Hub Nashik', phone: '+91-9822002213 (Dr. Nikam)', task: 'Standby reserve ambulance unit' },
+    { num: 14, disp: true, sector: 'Sector 4 (Sangamner ➔ Nashik Highway Km 140)', phone: '+91-9822002214 (Dr. Wagh)', task: 'Highway patrol ambulance and emergency triage' },
+    { num: 15, disp: false, sector: 'Red Cross Emergency Depot Pune', phone: '+91-9822002215 (Dr. Inamdar)', task: 'Standby reserve ambulance unit' },
+    { num: 16, disp: false, sector: 'Red Cross Emergency Depot Nashik', phone: '+91-9822002216 (Dr. Sonje)', task: 'Standby reserve ambulance unit' },
+    { num: 17, disp: true, sector: 'Sector 1 (Kothrud Origin Departure Point)', phone: '+91-9822002217 (Dr. Bhalerao)', task: 'Origin health checkpost & emergency ambulance' },
+    { num: 18, disp: false, sector: 'Directorate Health Reserve Standby', phone: '+91-9822002218 (Dr. Salunke)', task: 'Strategic ambulance buffer' },
+    { num: 19, disp: false, sector: 'Directorate Health Reserve Standby', phone: '+91-9822002219 (Dr. Kolhe)', task: 'Strategic ambulance buffer' },
+    { num: 20, disp: false, sector: 'Directorate Health Reserve Standby', phone: '+91-9822002220 (Dr. Ahire)', task: 'Strategic ambulance buffer' }
+  ];
+  medLocations.forEach(m => {
+    const code = `MV-${m.num < 10 ? '0' + m.num : m.num}`;
+    units.push({
+      id: code,
+      code: code,
+      name: m.num % 3 === 0 ? `Emergency Mobile ICU #${m.num < 10 ? '0' + m.num : m.num}` : `Mobile Medical Van #${m.num < 10 ? '0' + m.num : m.num}`,
+      type: 'MEDICAL_VAN',
+      categoryName: 'Mobile Medical Vans & Ambulances',
+      capacity: m.num % 3 === 0 ? '2 Trauma ICU Beds' : '4 Beds / Triage Unit',
+      phone: m.phone,
+      sector: m.sector,
+      task: m.task,
+      isDispatched: m.disp,
+      status: m.disp ? 'ACTIVE' : 'AVAILABLE'
+    });
+  });
+
+  // 3. Police Patrol Squads (PS-01 to PS-20) - 20 Units (11 Dispatched, 9 Available)
+  const policeLocations = [
+    { num: 1, disp: true, sector: 'Sector 1 (Kothrud to Pune City Corridor)', phone: '+91-9822003301 (Insp. S. Kadam)', task: 'Traffic diversion & heavy vehicle blockage' },
+    { num: 2, disp: false, sector: 'Pune Police HQ (QRT Reserve)', phone: '+91-9822003302 (Sub-Insp. A. More)', task: 'Quick Response Team reserve' },
+    { num: 3, disp: true, sector: 'Sector 1 (Bhosari Flyover Intersection)', phone: '+91-9822003303 (Insp. D. Shinde)', task: 'Procession lane separation & perimeter patrol' },
+    { num: 4, disp: false, sector: 'Pimpri-Chinchwad Police HQ (Reserve)', phone: '+91-9822003304 (Sub-Insp. P. Thorat)', task: 'Standby reserve police squad' },
+    { num: 5, disp: false, sector: 'Chakan Police Station (Reserve Standby)', phone: '+91-9822003305 (Sub-Insp. V. Jagtap)', task: 'Standby reserve police squad' },
+    { num: 6, disp: true, sector: 'Sector 2 (Chakan Industrial Bypass Node)', phone: '+91-9822003306 (Insp. R. Bhosale)', task: 'Heavy freight detour enforcement' },
+    { num: 7, disp: false, sector: 'Manchar Police Outpost (Standby)', phone: '+91-9822003307 (Sub-Insp. M. Chavan)', task: 'Standby reserve police squad' },
+    { num: 8, disp: true, sector: 'Sector 2 (Manchar Junction Chokepoint)', phone: '+91-9822003308 (Insp. G. Pawar)', task: 'Pedestrian flow management & surveillance' },
+    { num: 9, disp: true, sector: 'Sector 3 (Narayangaon Chokepoint Km 84)', phone: '+91-9822003309 (Insp. S. Patil)', task: 'CCTV surveillance node & crowd density control' },
+    { num: 10, disp: false, sector: 'Narayangaon Police Camp (Reserve)', phone: '+91-9822003310 (Sub-Insp. N. Salve)', task: 'Standby reserve police squad' },
+    { num: 11, disp: true, sector: 'Sector 3 (Alephata Intersection Highway 60)', phone: '+91-9822003311 (Insp. T. Gawade)', task: 'National highway junction crowd regulation' },
+    { num: 12, disp: false, sector: 'Sangamner Police Station (Reserve)', phone: '+91-9822003312 (Sub-Insp. K. Landge)', task: 'Standby reserve police squad' },
+    { num: 13, disp: false, sector: 'Sangamner Police Station (Reserve)', phone: '+91-9822003313 (Sub-Insp. H. Raut)', task: 'Standby reserve police squad' },
+    { num: 14, disp: true, sector: 'Sector 4 (Govind Nagar Terminal, Nashik)', phone: '+91-9822003314 (Insp. Vikram Jadhav)', task: 'Biometric CCTV match verification & crowd safety' },
+    { num: 15, disp: true, sector: 'Sector 3 (Sangamner Bypass Sector 3 Entry)', phone: '+91-9822003315 (Insp. A. Deshmukh)', task: 'Corridor surveillance & emergency vehicle lane' },
+    { num: 16, disp: true, sector: 'Sector 4 (Sinnar Ghat Section Safety Node)', phone: '+91-9822003316 (Insp. B. Sonawane)', task: 'Ghat descent traffic restriction & patrol' },
+    { num: 17, disp: false, sector: 'Nashik Rural Police HQ (Reserve)', phone: '+91-9822003317 (Sub-Insp. Y. Kale)', task: 'Standby reserve police squad' },
+    { num: 18, disp: true, sector: 'Sector 4 (Nashik City Dwarka Chowk)', phone: '+91-9822003318 (Insp. O. Wagh)', task: 'City entry bottleneck control & patrol' },
+    { num: 19, disp: false, sector: 'Nashik Commissionerate Reserve', phone: '+91-9822003319 (Sub-Insp. R. Gore)', task: 'Standby reserve police squad' },
+    { num: 20, disp: true, sector: 'Sector 4 (Narayan Park Terminal Perimeter)', phone: '+91-9822003320 (Insp. S. Nikam)', task: 'Terminal perimeter security & crowd dispersal' }
+  ];
+  policeLocations.forEach(p => {
+    const code = `PS-${p.num < 10 ? '0' + p.num : p.num}`;
+    units.push({
+      id: code,
+      code: code,
+      name: `Police Patrol Squad #${p.num < 10 ? '0' + p.num : p.num}`,
+      type: 'POLICE_SQUAD',
+      categoryName: 'Police Patrol Squads',
+      capacity: '8 Officers / QRT Patrol',
+      phone: p.phone,
+      sector: p.sector,
+      task: p.task,
+      isDispatched: p.disp,
+      status: p.disp ? 'ON_SCENE' : 'AVAILABLE'
+    });
+  });
+
+  // 4. Volunteer Dindi Stewards (VT-01 to VT-20) - 20 Units (13 Dispatched, 7 Available)
+  const volLocations = [
+    { num: 1, disp: true, sector: 'Sector 1 (Pune Origin Ghats)', phone: '+91-9822004401 (V. Shinde)', task: 'Dindi procession starting order & pilgrim registration' },
+    { num: 2, disp: false, sector: 'Alandi Volunteer Base Camp (Resting Shift)', phone: '+91-9822004402 (M. Jagtap)', task: 'Off-duty rest & night shift reserve' },
+    { num: 3, disp: true, sector: 'Sector 1 (Dighi-Bhosari Road)', phone: '+91-9822004403 (K. Pawar)', task: 'Elderly assistance & wheelchair mobility lane' },
+    { num: 4, disp: true, sector: 'Sector 2 (Moshi-Chakan Segment)', phone: '+91-9822004404 (S. More)', task: 'Pilgrim food packet & drinking water guidance' },
+    { num: 5, disp: false, sector: 'Chakan Volunteer Hub (Resting Shift)', phone: '+91-9822004405 (D. Chavan)', task: 'Off-duty rest & night shift reserve' },
+    { num: 6, disp: false, sector: 'Rajgurunagar Volunteer Hub (Reserve)', phone: '+91-9822004406 (A. Gaikwad)', task: 'Standby volunteer squad' },
+    { num: 7, disp: true, sector: 'Sector 2 (Peth Ghat Rest Shelter)', phone: '+91-9822004407 (T. Patil)', task: 'Shade rest area management & foot blister triage' },
+    { num: 8, disp: true, sector: 'Sector 2 (Manchar Chowk Pedestrian Bypass)', phone: '+91-9822004408 (K. Pawar)', task: 'Foot traffic separation & bypass diversion help' },
+    { num: 9, disp: true, sector: 'Sector 3 (Kalamb-Narayangaon Approach)', phone: '+91-9822004409 (G. Shinde)', task: 'Pilgrim queue discipline & singing dindi guidance' },
+    { num: 10, disp: false, sector: 'Narayangaon Volunteer Base (Resting Shift)', phone: '+91-9822004410 (B. Thorat)', task: 'Off-duty rest & night shift reserve' },
+    { num: 11, disp: true, sector: 'Sector 3 (Narayangaon Transit Camp Plaza)', phone: '+91-9822004411 (N. Kulkarni)', task: 'Lost children identification & Helpdesk 112 assist' },
+    { num: 12, disp: true, sector: 'Sector 3 (Bota Ghat Water Point)', phone: '+91-9822004412 (S. Kamble)', task: 'Electrolyte sachet & water distribution' },
+    { num: 13, disp: false, sector: 'Sangamner Volunteer Hub (Resting Shift)', phone: '+91-9822004413 (H. Bhosale)', task: 'Off-duty rest & night shift reserve' },
+    { num: 14, disp: true, sector: 'Sector 3 (Sangamner City Entry Junction)', phone: '+91-9822004414 (O. Landge)', task: 'Pilgrim welcoming & temple guidance' },
+    { num: 15, disp: true, sector: 'Sector 4 (Dolarane Highway Stop)', phone: '+91-9822004415 (R. Ghadge)', task: 'Highway pedestrian safety marshalling' },
+    { num: 16, disp: false, sector: 'Sinnar Volunteer Camp (Reserve Standby)', phone: '+91-9822004416 (P. Salve)', task: 'Standby volunteer squad' },
+    { num: 17, disp: true, sector: 'Sector 4 (Sinnar Rest Complex)', phone: '+91-9822004417 (V. Raut)', task: 'Sanitation point guidance & meals distribution' },
+    { num: 18, disp: true, sector: 'Sector 4 (Nashik City Border Welcome Point)', phone: '+91-9822004418 (M. Gawande)', task: 'Dindi reception & accommodation assistance' },
+    { num: 19, disp: false, sector: 'Nashik Govind Nagar Volunteer HQ (Reserve)', phone: '+91-9822004419 (Y. Sonawane)', task: 'Terminal reserve volunteer squad' },
+    { num: 20, disp: true, sector: 'Sector 4 (Narayan Park Terminal Grounds)', phone: '+91-9822004420 (S. Nikam)', task: 'Final darshan line regulation & lost person reunion' }
+  ];
+  volLocations.forEach(v => {
+    const code = `VT-${v.num < 10 ? '0' + v.num : v.num}`;
+    units.push({
+      id: code,
+      code: code,
+      name: `Dindi Volunteer Stewards (Squad ${v.num < 10 ? '0' + v.num : v.num})`,
+      type: 'VOLUNTEER_TEAM',
+      categoryName: 'Volunteer Dindi Stewards',
+      capacity: '25 Stewards',
+      phone: v.phone,
+      sector: v.sector,
+      task: v.task,
+      isDispatched: v.disp,
+      status: v.disp ? 'ACTIVE' : 'AVAILABLE'
+    });
+  });
+
+  return units;
+}
+
+
+/* ==================== RESOURCE ALLOCATION & SECTOR DISPATCH HISTORY ==================== */
+async function refreshResourceAllocationsHistory() {
+  try {
+    const historyItems = await apiRequest('/resources/allocations/history');
+    AppState.resourceAllocationHistory = historyItems;
+    renderResourceAllocationHistory(historyItems);
+    return historyItems;
+  } catch (err) {
+    console.debug('[VariSetu] Resource allocation history fetch fallback:', err);
+    const fallbackHistory = [
+      {
+        id: 'alloc-hist-01',
+        resource_code: 'WT-09',
+        resource_name: '10,000L Water Tanker #09',
+        resource_type: 'WATER_TANKER',
+        allocated_capacity: '10,000 Litres Hydration',
+        target_sector: 'Sector 3 (Manchar ➔ Sangamner)',
+        target_location: 'Narayangaon Transit Camp (Km 84 on NH-60)',
+        assigned_at: new Date(Date.now() - 45 * 60000).toISOString(),
+        status: 'ON_SCENE',
+        authorized_by: 'Command Center Controller',
+        purpose: 'Surge crowd hydration & mist sprayer supply at bottleneck',
+        duration: 'Active (45 mins)'
+      },
+      {
+        id: 'alloc-hist-02',
+        resource_code: 'MV-02',
+        resource_name: 'Mobile Medical Van #02 (Ambulance)',
+        resource_type: 'MEDICAL_VAN',
+        allocated_capacity: '4 Beds / ICU Telemetry Unit',
+        target_sector: 'Sector 3 (Manchar ➔ Sangamner)',
+        target_location: 'Narayangaon Km 84 Emergency Post',
+        assigned_at: new Date(Date.now() - 80 * 60000).toISOString(),
+        status: 'ACTIVE',
+        authorized_by: 'Dr. Shubhada Deshmukh',
+        purpose: 'Emergency medical standby & first aid triage',
+        duration: 'Active (1h 20m)'
+      },
+      {
+        id: 'alloc-hist-03',
+        resource_code: 'PS-14',
+        resource_name: 'Police Patrol Squad #14',
+        resource_type: 'POLICE_SQUAD',
+        allocated_capacity: '8 Officers (QRT Unit)',
+        target_sector: 'Sector 4 (Sangamner ➔ Nashik)',
+        target_location: 'Govind Nagar Terminal, Nashik',
+        assigned_at: new Date(Date.now() - 120 * 60000).toISOString(),
+        status: 'ON_SCENE',
+        authorized_by: 'Inspector Vikram Jadhav',
+        purpose: 'Biometric CCTV match verification & crowd corridor security',
+        duration: 'Active (2h 00m)'
+      },
+      {
+        id: 'alloc-hist-04',
+        resource_code: 'WT-04',
+        resource_name: '10,000L Water Tanker #04',
+        resource_type: 'WATER_TANKER',
+        allocated_capacity: '10,000 Litres Hydration',
+        target_sector: 'Sector 3 (Manchar ➔ Sangamner)',
+        target_location: 'Sangamner North Chowk Station',
+        assigned_at: new Date(Date.now() - 190 * 60000).toISOString(),
+        status: 'DEPLOYED',
+        authorized_by: 'Inspector R. K. Patil',
+        purpose: 'Replenishing Water Station Hub #4 & ORSL packet distribution',
+        duration: 'Active (3h 10m)'
+      },
+      {
+        id: 'alloc-hist-05',
+        resource_code: 'MV-03',
+        resource_name: 'Emergency Mobile ICU #03',
+        resource_type: 'MEDICAL_VAN',
+        allocated_capacity: '2 Trauma ICU Beds',
+        target_sector: 'Sector 3 (Manchar ➔ Sangamner)',
+        target_location: 'Sangamner Base Hospital Point',
+        assigned_at: new Date(Date.now() - 240 * 60000).toISOString(),
+        status: 'ACTIVE',
+        authorized_by: 'Dr. Shubhada Deshmukh',
+        purpose: 'Cardiac risk monitoring and heat stroke resuscitation standby',
+        duration: 'Active (4h 00m)'
+      },
+      {
+        id: 'alloc-hist-06',
+        resource_code: 'VT-08',
+        resource_name: 'Dindi Volunteer Stewards (Squad 8)',
+        resource_type: 'VOLUNTEER_TEAM',
+        allocated_capacity: '25 Stewards',
+        target_sector: 'Sector 2 (Bhosari ➔ Manchar)',
+        target_location: 'Manchar Junction Pedestrian Bypass',
+        assigned_at: new Date(Date.now() - 330 * 60000).toISOString(),
+        status: 'ACTIVE',
+        authorized_by: 'Command Center Controller',
+        purpose: 'Pilgrim foot traffic separation & bypass diversion assistance',
+        duration: 'Active (5h 30m)'
+      },
+      {
+        id: 'alloc-hist-07',
+        resource_code: 'MV-01',
+        resource_name: 'Mobile Medical Ambulance #01',
+        resource_type: 'MEDICAL_VAN',
+        allocated_capacity: '4 Beds / Standard Triage',
+        target_sector: 'Sector 1 (Pune ➔ Bhosari)',
+        target_location: 'Bhosari Sector 1 Base Post',
+        assigned_at: new Date(Date.now() - 360 * 60000).toISOString(),
+        status: 'STANDBY',
+        authorized_by: 'Command Center Controller',
+        purpose: 'Corridor entry reserve and emergency backup staging',
+        duration: 'Active Standby (6h)'
+      },
+      {
+        id: 'alloc-hist-08',
+        resource_code: 'WT-12',
+        resource_name: '10,000L Water Tanker #12',
+        resource_type: 'WATER_TANKER',
+        allocated_capacity: '10,000 Litres Hydration',
+        target_sector: 'Sector 1 (Pune ➔ Bhosari)',
+        target_location: 'Kothrud Depo Origin Point',
+        assigned_at: new Date(Date.now() - 480 * 60000).toISOString(),
+        status: 'COMPLETED',
+        authorized_by: 'Command Center Controller',
+        purpose: 'Morning departure hydration quota distribution',
+        duration: 'Completed (Shift Logged)'
+      }
+    ];
+    AppState.resourceAllocationHistory = fallbackHistory;
+    renderResourceAllocationHistory(fallbackHistory);
+    return fallbackHistory;
+  }
+}
+
+function renderResourceAllocationHistory(items) {
+  const tbody = document.getElementById('resourceAllocationHistoryBody');
+  const activeBadge = document.getElementById('activeAllocationsBadge');
+  const totalBadge = document.getElementById('totalAllocationsBadge');
+  const sectorFilter = document.getElementById('allocationSectorFilter')?.value || 'ALL';
+  if (!tbody) return;
+
+  const historyList = items || AppState.resourceAllocationHistory || [];
+  const filtered = sectorFilter === 'ALL'
+    ? historyList
+    : historyList.filter(item => (item.target_sector || '').toLowerCase().includes(sectorFilter.toLowerCase()));
+
+  const activeCount = historyList.filter(h => h.status !== 'COMPLETED' && h.status !== 'CANCELLED').length;
+  if (activeBadge) activeBadge.textContent = `${activeCount} Active Units`;
+  if (totalBadge) totalBadge.textContent = `${historyList.length} Total Dispatches`;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align:center; color:var(--text-muted); padding:16px;">
+          No resource allocations recorded for selected filter criteria.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(item => {
+    const timeStr = item.assigned_at ? new Date(item.assigned_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '14:30 IST';
+    const statusClass = (item.status === 'ON_SCENE' || item.status === 'ACTIVE' || item.status === 'DEPLOYED')
+      ? 'yellow'
+      : (item.status === 'COMPLETED' || item.status === 'OPTIMAL' ? 'green' : 'orange');
+
+    return `
+      <tr>
+        <td style="font-family:var(--font-mono); font-size:11px; white-space:nowrap; color:var(--text-muted);">
+          ${timeStr}
+        </td>
+        <td>
+          <div style="font-weight:700; font-family:var(--font-mono); color:var(--maroon-primary); font-size:11.5px;">
+            ${escapeHtml(item.resource_code)}
+          </div>
+          <div style="font-size:10px; color:var(--text-secondary);">${escapeHtml(item.resource_name || '')}</div>
+        </td>
+        <td style="font-weight:600; font-size:11px; color:var(--maroon-primary); white-space:nowrap;">
+          ${escapeHtml(item.allocated_capacity)}
+        </td>
+        <td style="font-weight:600; font-size:11px; color:var(--text-primary); white-space:nowrap;">
+          ${escapeHtml(item.target_sector)}
+        </td>
+        <td style="font-size:10.5px; color:var(--text-secondary); max-width:200px;">
+          ${escapeHtml(item.target_location)}
+        </td>
+        <td style="font-size:11px; color:var(--text-secondary); max-width:240px;">
+          ${escapeHtml(item.purpose)}
+        </td>
+        <td style="font-size:11px; font-weight:600; color:var(--text-primary); white-space:nowrap;">
+          ${escapeHtml(item.authorized_by)}
+        </td>
+        <td>
+          <span class="density-tag ${statusClass}">
+            ${escapeHtml(item.status)}
+          </span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
 
 /* ==================== ROUTES DIVERSION ==================== */
 async function refreshRoutes() {
@@ -3754,11 +4180,35 @@ function setupUnifiedCommandUIEventListeners() {
       console.debug('[Resource Reassign] Fallback applied.');
     }
 
-    appendTickerEvent(`[FLEET REASSIGNED] Resource ${id} relocated to ${sector}.`);
-    closeReassignModal();
-    alert(`Unit ${id} reassigned to ${sector}!`);
-    await refreshResources();
-  });
+      appendTickerEvent(`[FLEET REASSIGNED] Resource ${id} relocated to ${sector}.`);
+      const newAllocRecord = {
+        id: 'alloc-hist-' + Date.now(),
+        resource_code: id,
+        resource_name: id,
+        resource_type: id.startsWith('WT') ? 'WATER_TANKER' : (id.startsWith('MV') ? 'MEDICAL_VAN' : (id.startsWith('PS') ? 'POLICE_SQUAD' : 'VOLUNTEER_TEAM')),
+        allocated_capacity: id.startsWith('WT') ? '10,000 Litres' : (id.startsWith('MV') ? '4 Beds ICU' : '8 Officers'),
+        target_sector: sector,
+        target_location: sector,
+        assigned_at: new Date().toISOString(),
+        status: 'DEPLOYED',
+        authorized_by: AppState.currentUser?.name || 'Command Center Controller',
+        purpose: notes || 'Dynamic emergency sector relocation & surge support',
+        duration: 'Active (Just now)'
+      };
+      AppState.resourceAllocationHistory = [newAllocRecord, ...(AppState.resourceAllocationHistory || [])];
+      renderResourceAllocationHistory(AppState.resourceAllocationHistory);
+
+      closeReassignModal();
+      alert(`Unit ${id} reassigned to ${sector}!`);
+      await refreshResources();
+    });
+
+    // Allocation Sector Filter Listener
+    const allocationSectorFilter = document.getElementById('allocationSectorFilter');
+    allocationSectorFilter?.addEventListener('change', () => {
+      renderResourceAllocationHistory(AppState.resourceAllocationHistory);
+    });
+
 
   // Route Manage / Divert Modal
   const routeManageModal = document.getElementById('routeManageModalBackdrop');
