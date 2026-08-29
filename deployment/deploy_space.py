@@ -11,20 +11,22 @@ USAGE:
     python ../upload_script/deploy_space.py
 """
 
-from huggingface_hub import HfApi, create_repo
+from huggingface_hub import HfApi, create_repo, SpaceHardware
 
 HF_USERNAME = "Saj2005"          # <-- change this
 SPACE_ID = f"{HF_USERNAME}/VariSetu"
 
 api = HfApi()
 
-# create_repo(
-#     repo_id=SPACE_ID,
-#     repo_type="space",
-#     space_sdk="gradio",
-#     private=False,
-#     exist_ok=True,
-# )
+create_repo(
+    repo_id=SPACE_ID,
+    repo_type="space",
+    space_sdk="gradio",
+    space_hardware=SpaceHardware.ZERO_A10G,   # REQUIRED on free accounts -- omitting this
+                                                # defaults to cpu-basic, which now needs PRO to create
+    private=False,
+    exist_ok=True,
+)
 
 api.upload_folder(
     folder_path=".",
