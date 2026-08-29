@@ -551,7 +551,7 @@ if __name__ == "__main__":
 ---
 
 ## 7. Frontend HTML Interface
-**File Path:** `Frontend/index.html` | **Lines of Code:** 1646
+**File Path:** `Frontend/index.html` | **Lines of Code:** 1596
 
 ```html
 <!DOCTYPE html>
@@ -799,14 +799,6 @@ if __name__ == "__main__":
       </div>
 
       <div class="header-meta">
-        <div class="meta-pill" id="backendHealthBadge">
-          <span class="live-dot"></span>
-          <span id="backendHealthText">LIVE</span>
-        </div>
-        <div class="meta-pill" id="dataFreshnessPill" title="Real-time telemetry freshness">
-          <i data-lucide="radio" style="width:12px; height:12px; color:var(--status-green);"></i>
-          <span id="dataFreshnessText" style="font-family:var(--font-mono); font-size:10px; font-weight:600;">DATA: 2s OLD</span>
-        </div>
         <div class="meta-pill">
           <i data-lucide="clock" style="width:13px; height:13px;"></i>
           <span id="sysClock">28 JUL 2026 18:50:00 IST</span>
@@ -831,19 +823,15 @@ if __name__ == "__main__":
           <span>Alerts</span>
           <span class="notif-badge-count" id="notifBadgeCount">3</span>
         </button>
-        <div class="meta-pill" id="userProfileBadge" style="display:flex; align-items:center; border-color:var(--maroon-primary);">
-          <i data-lucide="shield-check" style="width:13px; height:13px; color:var(--maroon-primary); margin-right:4px;"></i>
-          <span id="userProfileText" style="font-weight:700; color:var(--maroon-primary); text-transform:uppercase;">COMMANDER</span>
-          <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:9px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
-        </div>
         <button class="govt-btn btn-outline" id="addOfficerBtn" type="button" style="display:none; font-size:10px; padding:4px 9px;">
           <i data-lucide="user-plus" style="width:11px; height:11px;"></i>
           <span>+ Add Officer</span>
         </button>
-        <button class="govt-btn btn-outline" id="demoToggleBtn" type="button" style="font-size:10px; padding:4px 9px;">
-          <i data-lucide="play" style="width:11px; height:11px;"></i>
-          <span id="demoToggleText">Start Demo</span>
-        </button>
+        <div class="meta-pill" id="userProfileBadge" style="display:flex; align-items:center; border-color:var(--border-main); margin-left:auto;">
+          <i data-lucide="shield-check" style="width:13px; height:13px; color:var(--text-primary); margin-right:4px;"></i>
+          <span id="userProfileText" style="font-weight:700; color:var(--text-primary); text-transform:uppercase;">COMMANDER</span>
+          <button id="logoutBtn" type="button" class="govt-btn btn-outline" style="font-size:9px; padding:2px 7px; margin-left:8px;">LOG OUT</button>
+        </div>
       </div>
     </header>
 
@@ -908,10 +896,6 @@ if __name__ == "__main__":
                   <span class="cctv-cam-id">CAM-12</span>
                   <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
-                <div class="cctv-bottom-info">
-                  <span class="cctv-location">Wakhri Phata Junction</span>
-                  <span class="density-tag orange">HEAVY 88%</span>
-                </div>
               </div>
             </div>
 
@@ -922,10 +906,6 @@ if __name__ == "__main__":
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-04</span>
                   <span class="cctv-timestamp">LIVE STREAM</span>
-                </div>
-                <div class="cctv-bottom-info">
-                  <span class="cctv-location">Pandharpur Chowk</span>
-                  <span class="density-tag red">CRITICAL 94%</span>
                 </div>
               </div>
             </div>
@@ -938,10 +918,6 @@ if __name__ == "__main__":
                   <span class="cctv-cam-id">CAM-08</span>
                   <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
-                <div class="cctv-bottom-info">
-                  <span class="cctv-location">Saswad Corridor</span>
-                  <span class="density-tag yellow">MODERATE 62%</span>
-                </div>
               </div>
             </div>
 
@@ -952,10 +928,6 @@ if __name__ == "__main__":
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-01</span>
                   <span class="cctv-timestamp">LIVE STREAM</span>
-                </div>
-                <div class="cctv-bottom-info">
-                  <span class="cctv-location">Alandi Ghat Rd</span>
-                  <span class="density-tag green">NORMAL 35%</span>
                 </div>
               </div>
             </div>
@@ -1089,10 +1061,7 @@ if __name__ == "__main__":
                 <div style="position:relative; width:100%; height:110px; overflow:hidden; border:1px solid var(--border-main); cursor:pointer;">
                   <video class="cctv-feed-video" id="video-PHOTO-01" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
                   <canvas class="cctv-feed-canvas" id="canvas-PHOTO-01" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
-                  <div class="cctv-overlay" style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(0,0,0,0.8)); padding:4px 8px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
-                    <span style="color:#FFF; font-size:9.5px; font-weight:600;">Main Palkhi Procession Corridor</span>
-                    <span class="density-tag orange" style="font-size:9px; padding:1px 5px;">FLOW 92%</span>
-                  </div>
+
                 </div>
               </div></div>
             </div>
@@ -1181,11 +1150,11 @@ if __name__ == "__main__":
         <div class="section-bar">
           <div class="section-title">
             <i data-lucide="user-search" style="width:16px; height:16px;"></i>
-            <span>Lost & Found Incident Desk (Automated Match)</span>
+            <span>Lost & Found Incident Desk</span>
           </div>
           <div style="display:flex; gap:8px;">
-            <button class="govt-btn" id="lostFoundCallIntakeBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:11px; padding:4px 10px; display:flex; align-items:center; gap:6px; border-color:var(--saffron-gold);">
-              <i data-lucide="phone-call" style="width:13px; height:13px; color:#FFE082;"></i>
+            <button class="govt-btn" id="lostFoundCallIntakeBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:11px; padding:4px 10px; display:flex; align-items:center; gap:6px; border-color:var(--border-main);">
+              <i data-lucide="phone-call" style="width:13px; height:13px;"></i>
               <span>📞 Citizen Helpline Call (नागरीक मदत)</span>
             </button>
             <button class="govt-btn" id="registerLostPersonBtn" type="button">
@@ -1194,36 +1163,21 @@ if __name__ == "__main__":
           </div>
         </div>
 
-        <!-- Incident Command & Lost/Found Escalation Queue -->
-        <div class="panel-card" style="padding:0; margin-bottom:14px;">
+        <!-- AI Face Match Candidates Panel with Clean Multi-Page Pagination -->
+        <div class="panel-card" style="padding:0; margin-bottom:14px; border:1px solid var(--border-main);">
           <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:6px;">
-              <i data-lucide="shield-alert" style="width:14px; height:14px; color:var(--status-red);"></i>
-              <span style="font-weight:700; font-size:12px;">INCIDENT COMMAND & ESCALATION QUEUE</span>
-            </div>
-            <span class="badge" style="background:var(--status-red); color:#FFF; font-size:9.5px;" id="incidentQueueCountBadge">2 Critical</span>
-          </div>
-          <div class="command-action-queue-list" id="incidentCommandQueueList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:8px; padding:10px; max-height:220px; overflow-y:auto;">
-            <!-- Populated dynamically from CommandPicture / API -->
-          </div>
-        </div>
-
-        <!-- AI Biometric CCTV Re-ID Matching Panel (Threshold: 0.1268) -->
-        <div class="panel-card" style="padding:0; margin-bottom:14px; border-left:4px solid var(--saffron-gold);">
-          <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
-            <div style="display:flex; align-items:center; gap:6px;">
-              <i data-lucide="scan-face" style="width:14px; height:14px; color:var(--saffron-gold);"></i>
-              <span style="font-weight:700; font-size:12px;">AI FACE MATCH CANDIDATES (BIOMETRIC CCTV RE-ID)</span>
+              <i data-lucide="scan-face" style="width:14px; height:14px;"></i>
+              <span style="font-weight:700; font-size:12px;">AI FACE MATCH CANDIDATES</span>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge" style="background:var(--saffron-light); color:var(--saffron-gold); font-size:9.5px; border:1px solid var(--saffron-gold);">Threshold: 0.1268 (97.28% LFW)</span>
-              <button type="button" class="govt-btn btn-outline" id="openAiDiscoveryBtn" style="font-size:9.5px; padding:2px 7px;">
-                <i data-lucide="info" style="width:10px; height:10px;"></i> 6-Stage AI Pipeline
-              </button>
+              <span id="faceMatchPaginationInfo" style="font-size:10px; color:var(--text-muted);">Page 1 of 1</span>
+              <button type="button" class="pagination-btn" id="faceMatchPrevBtn" style="padding:2px 7px; font-size:10px;" disabled>&laquo; Prev</button>
+              <button type="button" class="pagination-btn" id="faceMatchNextBtn" style="padding:2px 7px; font-size:10px;" disabled>Next &raquo;</button>
             </div>
           </div>
-          <div id="biometricCandidatesContainer" style="padding:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap:10px;">
-            <!-- Populated dynamically with split-screen comparison cards -->
+          <div id="biometricCandidatesContainer" style="padding:10px; display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:10px;">
+            <!-- Populated dynamically with paginated candidate cards -->
           </div>
         </div>
 
@@ -1530,15 +1484,11 @@ if __name__ == "__main__":
         <div class="cctv-overlay">
           <div class="cctv-top-info">
             <span class="cctv-cam-id" id="modalCamId">CAM-12</span>
-            <span class="cctv-timestamp" style="color:#00FF66;">LIVE DENSITY FEED</span>
-          </div>
-          <div class="cctv-bottom-info">
-            <span class="cctv-location" id="modalCamStatus" style="background:rgba(0,0,0,0.7); padding:4px 8px;">Density 88%</span>
+            <span class="cctv-timestamp" style="color:#FFF;">LIVE FEED</span>
           </div>
         </div>
       </div>
-      <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
-        <span style="font-size:11px; color:var(--text-secondary);" id="modalCamSub">Bounding Box Analytics Active</span>
+      <div style="margin-top:12px; display:flex; justify-content:flex-end; align-items:center;">
         <div style="display:flex; gap:8px;">
           <button class="govt-btn" id="modalCamPtzBtn" type="button">PTZ Control</button>
           <button class="govt-btn btn-outline" id="modalCamCloseFooterBtn" type="button">Close Window</button>
@@ -4061,7 +4011,7 @@ body {
 .biometric-candidate-card {
   background: var(--bg-card);
   border: 1px solid var(--border-main);
-  border-left: 4px solid var(--saffron-gold);
+  border-left: 3px solid var(--border-strong);
   border-radius: 3px;
   padding: 12px;
   margin-bottom: 12px;
@@ -5257,7 +5207,7 @@ body {
 ---
 
 ## 9. Frontend Application & CCTV Engine
-**File Path:** `Frontend/app.js` | **Lines of Code:** 5747
+**File Path:** `Frontend/app.js` | **Lines of Code:** 5745
 
 ```javascript
 /* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Private Command Center Logic & Realtime Client */
@@ -6676,7 +6626,8 @@ async function fetchCameras() {
     return cameras;
   } catch (err) {
     console.debug('[VariSetu] Camera fetch failed; keeping fallback tiles.');
-    setupFallbackCameraTiles();
+    setupFaceMatchPagination();
+  setupFallbackCameraTiles();
     return [];
   }
 }
@@ -6906,16 +6857,7 @@ class CCTVFeedPlayer {
     const recWidth = ctx.measureText(recText).width;
     ctx.fillText(recText, w - recWidth - 8, this.isLargeModal ? 17 : 14);
 
-    // Bottom telemetry bar for Large Modal
-    if (this.isLargeModal) {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-      ctx.fillRect(0, h - 24, w, 24);
-      ctx.fillStyle = '#00FF66';
-      ctx.font = '600 10px monospace';
-      ctx.fillText(`DENSITY: ${this.density}% [${this.densityStatus}] | ZOOM: ${this.zoom.toFixed(1)}x | 1080p CCTV STREAM @ 60FPS | LATENCY: 8ms`, 8, h - 8);
-      ctx.fillStyle = '#E5A93C';
-      ctx.fillText(`CCTV VIDEO FEED ACTIVE`, w - 170, h - 8);
-    }
+    // Bottom telemetry bar cleaned
 
     this.animFrame = requestAnimationFrame((ts) => this.render(ts));
   }
@@ -7058,48 +7000,6 @@ function openCameraDetails(camera) {
             <button type="button" class="cctv-ctrl-btn" id="ptzZoomOut" title="Zoom Out">- Zoom Out</button>
             <button type="button" class="cctv-ctrl-btn active" id="ptzToggleAi" title="Toggle AI Bounding Boxes">🎯 AI Vision [ON]</button>
             <button type="button" class="cctv-ctrl-btn" id="ptzSnapshot" title="Save Snapshot">📸 Snapshot</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- BOTTOM: COMPLETE OPERATIONAL INFORMATION & FIRST RESPONDER TELEMETRY -->
-      <div class="cctv-info-section">
-        <div class="cctv-info-grid">
-          <div class="cctv-info-card">
-            <div class="cctv-info-label">Checkpoint Location</div>
-            <div class="cctv-info-value">${escapeHtml(camName)}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Route Km 184.2 &bull; Junction Chokepoint</div>
-          </div>
-
-          <div class="cctv-info-card">
-            <div class="cctv-info-label">Live Crowd Density</div>
-            <div class="cctv-info-value" style="color:${tagColor};">${escapeHtml(density)}% &bull; ${escapeHtml(densityStatus)}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Inflow: ~420 pilgrims/min</div>
-          </div>
-
-          <div class="cctv-info-card">
-            <div class="cctv-info-label">Stream & Hardware</div>
-            <div class="cctv-info-value" style="color:var(--status-green); font-family:var(--font-mono); font-size:11px;">1080p @ 60 FPS &bull; ${escapeHtml(status)}</div>
-            <div style="font-size:10px; color:var(--text-muted); margin-top:2px;">Latency: 12ms &bull; AES-256 State Net</div>
-          </div>
-        </div>
-
-        <div class="cctv-info-grid" style="grid-template-columns: 1fr 1fr;">
-          <div class="cctv-info-card">
-            <div class="cctv-info-label">Stationed Field Units</div>
-            <div style="font-size:11px; margin-top:3px; line-height:1.4;">
-              <div>👮 <strong>Patrol Squad #14</strong> (Insp. Jadhav &bull; 120m away)</div>
-              <div>🚑 <strong>Ambulance Unit #MV-02</strong> (Dr. Deshmukh &bull; 250m)</div>
-              <div>💧 <strong>Water Tanker #WT-09</strong> (10,000L &bull; 400m)</div>
-            </div>
-          </div>
-
-          <div class="cctv-info-card">
-            <div class="cctv-info-label">AI Incident & Chokepoint Risk</div>
-            <div style="font-size:11px; margin-top:3px; line-height:1.4;">
-              <div style="color:var(--status-red); font-weight:600;">⚠️ Barricade Gate Congestion Detected</div>
-              <div style="color:var(--text-secondary);">Recommendation: Deploy secondary bypass lane to ease flow toward shrine.</div>
-            </div>
           </div>
         </div>
       </div>
@@ -7514,6 +7414,7 @@ async function reuniteLostPerson(caseId) {
 }
 
 function setupLostFoundButtons() {
+  setupFaceMatchPagination();
   document.getElementById('registerLostPersonBtn')?.addEventListener('click', () => openLostPersonCreateModal(false));
 
   document.getElementById('dispatchVolunteerBtn')?.addEventListener('click', () => {
@@ -8951,66 +8852,114 @@ function renderFaceMatchQueue(candidates) {
   if (window.lucide) lucide.createIcons();
 }
 
+let currentFaceMatchPage = 1;
+const FACE_MATCH_PAGE_SIZE = 2;
+let allFaceMatchCandidates = [];
+
+function setupFaceMatchPagination() {
+  document.getElementById('faceMatchPrevBtn')?.addEventListener('click', () => {
+    if (currentFaceMatchPage > 1) {
+      currentFaceMatchPage--;
+      renderBiometricCandidates(allFaceMatchCandidates);
+    }
+  });
+  document.getElementById('faceMatchNextBtn')?.addEventListener('click', () => {
+    const totalPages = Math.ceil(allFaceMatchCandidates.length / FACE_MATCH_PAGE_SIZE) || 1;
+    if (currentFaceMatchPage < totalPages) {
+      currentFaceMatchPage++;
+      renderBiometricCandidates(allFaceMatchCandidates);
+    }
+  });
+}
+
 function renderBiometricCandidates(candidates) {
   const container = document.getElementById('biometricCandidatesContainer');
   if (!container) return;
 
-  const demoCandidate = {
-    id: 'match-demo-01',
-    case_id: 'case-demo-802',
-    lost_person_name: 'Maruti Kisan Shinde (वय ६८)',
-    case_number: '#LF-802',
-    camera_code: 'CAM-04 (Govind Nagar Terminal, Nashik)',
-    confidence_score: 0.94,
-    distance_score: 0.1102,
-    status: 'PENDING_VERIFICATION'
-  };
+  const defaultList = [
+    {
+      id: 'match-demo-01',
+      case_id: 'case-demo-802',
+      lost_person_name: 'Maruti Kisan Shinde (वय ६८)',
+      case_number: '#LF-802',
+      camera_code: 'CAM-04 (Pandharpur Chowk)',
+      status: 'PENDING_VERIFICATION'
+    },
+    {
+      id: 'match-demo-02',
+      case_id: 'case-demo-805',
+      lost_person_name: 'Anandi Gopal Joshi (वय ७१)',
+      case_number: '#LF-805',
+      camera_code: 'CAM-12 (Wakhri Phata Junction)',
+      status: 'PENDING_VERIFICATION'
+    },
+    {
+      id: 'match-demo-03',
+      case_id: 'case-demo-809',
+      lost_person_name: 'Tukaram Pandurang Patil (वय ५४)',
+      case_number: '#LF-809',
+      camera_code: 'CAM-08 (Saswad Corridor)',
+      status: 'PENDING_VERIFICATION'
+    },
+    {
+      id: 'match-demo-04',
+      case_id: 'case-demo-812',
+      lost_person_name: 'Sunita Ramesh Kadam (वय ६२)',
+      case_number: '#LF-812',
+      camera_code: 'CAM-01 (Alandi Ghat Rd)',
+      status: 'PENDING_VERIFICATION'
+    }
+  ];
 
-  const list = (candidates && candidates.length > 0) ? candidates : [demoCandidate];
+  allFaceMatchCandidates = (candidates && candidates.length > 0) ? candidates : defaultList;
 
-  container.innerHTML = list.map(c => {
-    const dist = c.distance_score || 0.1102;
-    const scorePct = Math.round((c.confidence_score || c.similarity_score || 0.94) * 100);
+  const totalPages = Math.ceil(allFaceMatchCandidates.length / FACE_MATCH_PAGE_SIZE) || 1;
+  if (currentFaceMatchPage > totalPages) currentFaceMatchPage = totalPages;
+  if (currentFaceMatchPage < 1) currentFaceMatchPage = 1;
+
+  const prevBtn = document.getElementById('faceMatchPrevBtn');
+  const nextBtn = document.getElementById('faceMatchNextBtn');
+  const pageInfo = document.getElementById('faceMatchPaginationInfo');
+
+  if (prevBtn) prevBtn.disabled = currentFaceMatchPage <= 1;
+  if (nextBtn) nextBtn.disabled = currentFaceMatchPage >= totalPages;
+  if (pageInfo) pageInfo.textContent = `Page ${currentFaceMatchPage} of ${totalPages}`;
+
+  const startIdx = (currentFaceMatchPage - 1) * FACE_MATCH_PAGE_SIZE;
+  const pageItems = allFaceMatchCandidates.slice(startIdx, startIdx + FACE_MATCH_PAGE_SIZE);
+
+  container.innerHTML = pageItems.map(c => {
     return `
-      <div class="biometric-candidate-card" data-match-id="${escapeHtml(c.id || '')}">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div class="biometric-candidate-card" data-match-id="${escapeHtml(c.id || '')}" style="border:1px solid var(--border-main); background:var(--bg-card); padding:10px; border-radius:3px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
           <div>
-            <strong style="color:var(--maroon-primary); font-size:12.5px;">${escapeHtml(c.lost_person_name || 'Maruti Kisan Shinde (वय ६८)')}</strong>
-            <span style="font-size:10px; color:var(--text-muted); margin-left:4px;">${escapeHtml(c.case_number || '#LF-802')}</span>
+            <strong style="color:var(--text-primary); font-size:12.5px;">${escapeHtml(c.lost_person_name || 'Lost Person Candidate')}</strong>
+            <span style="font-size:10px; color:var(--text-muted); margin-left:4px;">${escapeHtml(c.case_number || '#LF-CASE')}</span>
           </div>
-          <span class="badge" style="background:#2E5B36; color:#FFF; font-size:9.5px; font-weight:700;">
-            ${scorePct}% Match (Dist: ${dist} &lt; 0.1268)
-          </span>
+          <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-mono);">${escapeHtml(c.camera_code || 'CAM-04')}</span>
         </div>
 
-        <div class="biometric-split-view">
-          <div class="split-photo-box">
-            <img src="assets/palkhi_procession_hd.jpg" alt="Registered Dossier Photo" style="object-fit:cover;">
-            <div class="split-photo-label">
-              <span>📋 Registered Dossier</span>
-              <span>512-D MobileNetV4</span>
+        <div class="biometric-split-view" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+          <div class="split-photo-box" style="border:1px solid var(--border-main); border-radius:2px; overflow:hidden; position:relative;">
+            <img src="assets/palkhi_procession_hd.jpg" alt="Registered Dossier Photo" style="width:100%; height:110px; object-fit:cover; display:block;">
+            <div class="split-photo-label" style="padding:3px 6px; font-size:9.5px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
+              <span>Registered Dossier</span>
             </div>
           </div>
-          <div class="split-photo-box">
-            <img src="assets/cctv_wakhri_phata_1785244836537.jpg" alt="Live CCTV Detected Frame" style="object-fit:cover;">
-            <div class="split-photo-label">
-              <span>📹 Live CCTV Detected Frame</span>
-              <span>${escapeHtml(c.camera_code || 'CAM-04')}</span>
+          <div class="split-photo-box" style="border:1px solid var(--border-main); border-radius:2px; overflow:hidden; position:relative;">
+            <img src="assets/cctv_wakhri_phata_1785244836537.jpg" alt="Live CCTV Detected Frame" style="width:100%; height:110px; object-fit:cover; display:block;">
+            <div class="split-photo-label" style="padding:3px 6px; font-size:9.5px; background:var(--bg-subtle); color:var(--text-secondary); border-top:1px solid var(--border-main); display:flex; justify-content:space-between;">
+              <span>Live CCTV Match</span>
             </div>
           </div>
-        </div>
-
-        <div style="font-size:10.5px; color:var(--text-secondary); margin-bottom:8px; line-height:1.3;">
-          <strong>Biometric Telemetry:</strong> Calibrated 0.1268 LFW Vector Match • Detected at <strong>${escapeHtml(c.camera_code || 'CAM-04')}</strong> • Attire &amp; posture match Helpline 112 ASR transcript.
         </div>
 
         <div style="display:flex; gap:6px;">
-          <button type="button" class="govt-btn" style="flex:1; font-size:10px; padding:4px 8px; background:#2E5B36;" onclick="handleVerifyAndDispatchSquad14('${escapeHtml(c.id || '')}', '${escapeHtml(c.case_id || '')}', this)">
-            <i data-lucide="shield-check" style="width:11px; height:11px;"></i>
-            <span>✅ Verify &amp; Dispatch Squad #14 (Inspector Vikram Jadhav)</span>
+          <button type="button" class="govt-btn" style="flex:1; font-size:10px; padding:5px 8px; background:var(--maroon-primary); color:#FFF;" onclick="handleVerifyAndDispatchSquad14('${escapeHtml(c.id || '')}', '${escapeHtml(c.case_id || '')}', this)">
+            <span>Verify &amp; Dispatch Squad #14</span>
           </button>
-          <button type="button" class="govt-btn btn-outline" style="font-size:10px; padding:4px 8px; color:var(--status-red); border-color:var(--status-red);" onclick="handleRejectFaceMatch('${escapeHtml(c.id || '')}', this)">
-            <span>❌ Reject</span>
+          <button type="button" class="govt-btn btn-outline" style="font-size:10px; padding:5px 10px; border-color:var(--border-main); color:var(--text-primary);" onclick="handleRejectFaceMatch('${escapeHtml(c.id || '')}', this)">
+            <span>Reject</span>
           </button>
         </div>
       </div>
@@ -9019,7 +8968,6 @@ function renderBiometricCandidates(candidates) {
 
   if (window.lucide) lucide.createIcons();
 }
-
 function renderRecommendationsQueue(resourceRecs, routeRecs) {
 
   const container = document.getElementById('recommendationsQueueList');

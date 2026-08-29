@@ -1850,7 +1850,7 @@ body {
 .biometric-candidate-card {
   background: var(--bg-card);
   border: 1px solid var(--border-main);
-  border-left: 4px solid var(--saffron-gold);
+  border-left: 3px solid var(--border-strong);
   border-radius: 3px;
   padding: 12px;
   margin-bottom: 12px;
