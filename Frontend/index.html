@@ -266,6 +266,10 @@
           <i data-lucide="file-text" style="width:11px; height:11px;"></i>
           <span>Audit Trail</span>
         </button>
+        <button class="govt-btn" id="openHelplineCallBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:10px; padding:4px 9px; display:flex; align-items:center; gap:5px; border-color:var(--saffron-gold); box-shadow:0 0 6px rgba(217,142,44,0.35);" title="Citizen SOS Emergency Helpline Intake & AI Translation">
+          <i data-lucide="phone-call" style="width:12px; height:12px; color:#FFE082;"></i>
+          <span>📞 SOS Helpline (नागरीक मदत)</span>
+        </button>
         <button class="govt-btn btn-outline" id="notifDrawerBtn" type="button" style="position:relative; font-size:10px; padding:4px 9px;" title="Operational Alerts & Outbox">
           <i data-lucide="bell" style="width:12px; height:12px;"></i>
           <span>Alerts</span>
@@ -329,6 +333,8 @@
             Active Surveillance: 4 CCTVs &bull; Route: Alandi - Dehu - Pune - Wakhri - Pandharpur
           </div>
         </div>
+
+
 
         <div class="command-grid">
           <!-- Left: CCTV surveillance tiles -->
@@ -442,16 +448,28 @@
                 <span>Sector 1 (Pune ➔ Bhosari 38%)</span>
               </div>
               <div class="map-legend-item" style="margin-top:3px;">
-                <i data-lucide="navigation" style="width:11px; height:11px; color:#D98E2C;"></i>
-                <span>Live Palkhi (Km 84 Narayangaon)</span>
+                <i data-lucide="navigation" style="width:12px; height:12px; color:#D98E2C;"></i>
+                <span>Live Palkhi Lead (Km 84 Narayangaon)</span>
               </div>
               <div class="map-legend-item">
-                <i data-lucide="cross" style="width:11px; height:11px; color:#9A2525;"></i>
-                <span>Medical Vans (MV-01/02/03)</span>
+                <span style="font-size:13px;">🚩</span>
+                <span>वारकरी दिंडी पदयात्रा (Procession on Route)</span>
               </div>
               <div class="map-legend-item">
-                <i data-lucide="droplet" style="width:11px; height:11px; color:#1D6F8A;"></i>
+                <span style="font-size:13px;">🚑</span>
+                <span>Mobile Medical Vans (MV-01/02/03)</span>
+              </div>
+              <div class="map-legend-item">
+                <span style="font-size:13px;">💧</span>
                 <span>Water Tankers (WT-09/04)</span>
+              </div>
+              <div class="map-legend-item">
+                <span style="font-size:13px;">🚓</span>
+                <span>MahaPolice Patrol Squad (PS-14)</span>
+              </div>
+              <div class="map-legend-item">
+                <span style="font-size:13px;">🍲</span>
+                <span>Annadanam Food Distribution Van</span>
               </div>
             </div>
           </div>
@@ -605,6 +623,10 @@
             <span>Lost & Found Incident Desk (Automated Match)</span>
           </div>
           <div style="display:flex; gap:8px;">
+            <button class="govt-btn" id="lostFoundCallIntakeBtn" onclick="window.openHelplineCallSimulationModal && window.openHelplineCallSimulationModal()" type="button" style="background:var(--maroon-primary); color:#FFF; font-size:11px; padding:4px 10px; display:flex; align-items:center; gap:6px; border-color:var(--saffron-gold);">
+              <i data-lucide="phone-call" style="width:13px; height:13px; color:#FFE082;"></i>
+              <span>📞 Citizen Helpline Call (नागरीक मदत)</span>
+            </button>
             <button class="govt-btn" id="registerLostPersonBtn" type="button">
               <i data-lucide="plus" style="width:12px; height:12px;"></i> Register New Case
             </button>
@@ -648,6 +670,22 @@
 
           <!-- Left Column: Table of Active Cases -->
           <div class="govt-table-container">
+            <div class="table-filter-toolbar">
+              <div style="display:flex; gap:6px; align-items:center;">
+                <i data-lucide="search" style="width:14px; height:14px; color:#7A1F1F;"></i>
+                <input type="text" id="lostCaseSearchInput" class="lost-search-input" placeholder="Search 100 cases by name, location, attire...">
+              </div>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <select id="lostCaseStatusFilter" class="lost-status-filter">
+                  <option value="ALL">All Statuses (सर्व)</option>
+                  <option value="SEARCHING">Searching (शोध सुरू)</option>
+                  <option value="MATCH_FOUND">Match Found (सापडला)</option>
+                  <option value="REUNITED">Reunited (एकत्र आले)</option>
+                </select>
+                <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:10px;" id="lostTotalCountBadge">100 Cases</span>
+              </div>
+            </div>
+
             <table class="govt-table">
               <thead>
                 <tr>
@@ -665,6 +703,15 @@
                 <!-- Populated dynamically from /api/lost-persons -->
               </tbody>
             </table>
+
+            <div class="lost-pagination-bar">
+              <span id="lostPaginationInfo">Showing 1-15 of 100 cases</span>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="pagination-btn" id="lostPrevPageBtn" disabled>&laquo; Prev</button>
+                <span id="lostCurrentPageNum" style="font-weight:700; padding:2px 6px;">1</span>
+                <button type="button" class="pagination-btn" id="lostNextPageBtn">Next &raquo;</button>
+              </div>
+            </div>
           </div>
 
           <!-- Right Column: Devanagari Transcript Snippet -->
@@ -1210,6 +1257,299 @@
       </div>
       <div class="app-modal-footer">
         <button type="button" class="govt-btn btn-outline" id="closeAuditTrailFooterBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CITIZEN SOS EMERGENCY HELPLINE CALL & AI TRANSLATION MODAL ==================== -->
+  <div class="helpline-modal-overlay" id="helplineCallModal" style="display: none;">
+    <div class="helpline-modal-content" role="dialog" aria-modal="true" style="max-width: 1040px; background:#FFFDF9; border:2px solid var(--maroon-primary);">
+      <!-- Header -->
+      <div class="helpline-call-header" style="background: linear-gradient(90deg, #7A1F1F 0%, #9B2D2D 100%); color:#FFF; padding:12px 18px; border-bottom:2px solid #D98E2C;">
+        <div class="call-meta-left">
+          <div class="call-pulse-ring" style="background:#00E676; width:12px; height:12px;"></div>
+          <div>
+            <div style="font-size:14px; font-weight:700; display:flex; align-items:center; gap:8px; font-family:var(--font-serif);">
+              <span>📞 EMERGENCY 112 CITIZEN HELPLINE INTAKE &bull; नागरीक मदत केंद्र</span>
+              <span class="badge" style="background:#00E676; color:#000; font-size:9.5px; font-weight:800;" id="callStatusBadge">🔴 READY / LISTENING</span>
+            </div>
+            <div style="font-size:10.5px; color:#FFE082;">Dial-in Line: 1800-233-0099 (Wari Control Desk #04) &bull; One-Way Audio Intake & AI Translation</div>
+          </div>
+        </div>
+        <button type="button" class="close-modal-btn" id="closeHelplineCallModalBtn" onclick="window.closeHelplineCallSimulationModal && window.closeHelplineCallSimulationModal()" style="color:#FFF; background:rgba(255,255,255,0.18);">&times;</button>
+      </div>
+
+      <div class="helpline-modal-body" style="padding:16px; background:#FAF6F0; display:flex; flex-direction:column; gap:12px;">
+        <!-- Mode Switcher Tabs: 1-Way Live Voice Call vs Simulation vs Custom Text vs API Guide -->
+        <div class="intake-mode-tab-bar">
+          <button type="button" class="intake-mode-btn active" id="modeLiveMicBtn">
+            <i data-lucide="mic" style="width:14px; height:14px; color:#D32F2F;"></i>
+            <span>🎙️ 1-Way Live Voice Call (थेट आवाज कॉल)</span>
+          </button>
+          <button type="button" class="intake-mode-btn" id="modeSimulationBtn">
+            <i data-lucide="phone-call" style="width:14px; height:14px; color:#7A1F1F;"></i>
+            <span>📞 Preset Call Simulation (नमुना कॉल)</span>
+          </button>
+          <button type="button" class="intake-mode-btn" id="modeCustomTextBtn">
+            <i data-lucide="edit-3" style="width:14px; height:14px; color:#B07817;"></i>
+            <span>✍️ Custom Text Intake (मजकूर नोंद)</span>
+          </button>
+          <button type="button" class="intake-mode-btn" id="modeApiGuideBtn" style="margin-left:auto; background:#FFF; border-color:#D98E2C; color:#7A1F1F;">
+            <i data-lucide="code" style="width:13px; height:13px; color:#D98E2C;"></i>
+            <span>⚙️ Speech & Translation APIs</span>
+          </button>
+        </div>
+
+        <!-- API Recommendations Panel (Collapsible/Togglable) -->
+        <div id="apiSuggestionsSection" style="display:none;" class="api-suggestions-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E0D7C9; padding-bottom:6px;">
+            <div style="font-size:12px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="sparkles" style="width:14px; height:14px; color:#D98E2C;"></i>
+              <span>RECOMMENDED APIS FOR LIVE DECCAN MARATHI SPEECH TRANSLATION</span>
+            </div>
+            <span class="badge" style="background:#D98E2C; color:#000; font-size:9px; font-weight:700;">Deployment Ready</span>
+          </div>
+
+          <div class="api-provider-grid">
+            <div class="api-provider-item">
+              <div class="api-provider-title">
+                <span>🏛️ Bhashini API (Govt of India / AI4Bharat)</span>
+              </div>
+              <div class="api-provider-desc">
+                National Language Translation Mission. Specialized for 22 Indian languages including rural Marathi and Konkani dialects. Integrated IndicASR + IndicTrans2 NMT.
+              </div>
+              <span class="api-provider-tag">Recommended for Govt Projects • bhashini.gov.in</span>
+            </div>
+
+            <div class="api-provider-item">
+              <div class="api-provider-title">
+                <span>⚡ Sarvam AI (Saaras Indic Speech)</span>
+              </div>
+              <div class="api-provider-desc">
+                High-performance Indian voice model suite (Saaras ASR & Bulbul TTS). Ultra-low latency Marathi/Hindi speech transcription with streaming WebSocket support.
+              </div>
+              <span class="api-provider-tag">Ultra Fast Voice AI • sarvam.ai</span>
+            </div>
+
+            <div class="api-provider-item">
+              <div class="api-provider-title">
+                <span>🤖 OpenAI Whisper-Large-v3 + GPT-4o</span>
+              </div>
+              <div class="api-provider-desc">
+                State-of-the-art multilingual ASR with zero-shot Devanagari translation and automated JSON entity extraction for clothing, age, gender, and landmark tags.
+              </div>
+              <span class="api-provider-tag">Global Multilingual • platform.openai.com</span>
+            </div>
+
+            <div class="api-provider-item">
+              <div class="api-provider-title">
+                <span>🌐 Google Cloud Speech-to-Text & Translate</span>
+              </div>
+              <div class="api-provider-desc">
+                Enterprise `mr-IN` and `hi-IN` neural acoustic models with real-time bidirectional streaming recognition and Neural Machine Translation.
+              </div>
+              <span class="api-provider-tag">Enterprise SLA • cloud.google.com</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. Softphone Card (Warm Parchment Theme) -->
+        <div class="softphone-card">
+          <div class="softphone-top-bar">
+            <div class="caller-identity-box">
+              <div class="caller-avatar-circle" id="callerAvatarCircle">👤</div>
+              <div class="caller-details-text">
+                <div class="caller-name" id="callerDisplayName">Sunita Jadhav (सुनिता जाधव)</div>
+                <div class="caller-sub">
+                  <span id="callerDisplayPhone">📱 +91 94220 88912</span>
+                  <span>&bull;</span>
+                  <span id="callerDisplayLocation">📍 Pandharpur Sector 4 / Temple Perimeter</span>
+                  <span>&bull;</span>
+                  <span style="color:#2E7D32; font-weight:700;">📶 5G VoLTE</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="call-telemetry-right">
+              <div class="call-duration-timer" id="callDurationTimer">00:00</div>
+              <div class="call-codec-tag" id="callCodecTag">REAL-TIME WEB AUDIO &bull; 48 KHZ</div>
+            </div>
+          </div>
+
+          <!-- Real-Time Audio Frequency Equalizer (Saffron Gold Theme) -->
+          <div class="audio-visualizer-box">
+            <div style="display:flex; align-items:center; gap:8px; min-width:145px;">
+              <i data-lucide="volume-2" style="width:16px; height:16px; color:#D98E2C;"></i>
+              <div>
+                <div style="font-size:9.5px; color:#8C7869; font-weight:700;">LIVE SPECTRUM</div>
+                <div style="font-size:11px; color:#7A1F1F; font-weight:700;" id="visualizerAudioSource">Microphone / Audio</div>
+              </div>
+            </div>
+            <div class="audio-freq-bars" id="audioEqualizerBars">
+              <!-- 32 dynamic bars animated to real-time voice frequencies -->
+            </div>
+          </div>
+
+          <!-- Softphone Controls Bar -->
+          <div class="softphone-controls-row">
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <button type="button" class="softphone-btn record-mic" id="toggleLiveMicBtn">
+                <i data-lucide="mic" style="width:13px; height:13px;"></i>
+                <span id="micBtnText">🎙️ Start Live Mic Voice</span>
+              </button>
+              <button type="button" class="softphone-btn" id="toggleSpeakerBtn" title="Speak out audio using Speech Synthesis">
+                <i data-lucide="volume-2" style="width:13px; height:13px;"></i>
+                <span id="speakerBtnText">🔊 Speaker: ON</span>
+              </button>
+              <button type="button" class="softphone-btn" id="toggleHoldBtn">
+                <i data-lucide="pause" style="width:13px; height:13px;"></i>
+                <span id="holdBtnText">⏸️ Hold</span>
+              </button>
+
+              <!-- Language Selector for Speech Recognition -->
+              <div class="speech-lang-pill-group" style="display:flex; align-items:center; gap:4px; margin-left:4px;" id="speechLangSelector">
+                <span style="font-size:10px; color:#5D4037; font-weight:700;">भाषा (Voice):</span>
+                <button type="button" class="speech-lang-btn active" data-lang="mr-IN" style="font-size:10px; padding:3px 8px; border-radius:12px; border:1px solid #D98E2C; background:#D98E2C; color:#FFF; font-weight:700; cursor:pointer;">मराठी</button>
+                <button type="button" class="speech-lang-btn" data-lang="hi-IN" style="font-size:10px; padding:3px 8px; border-radius:12px; border:1px solid #D8D1C5; background:#FFF; color:#5D4037; font-weight:700; cursor:pointer;">हिन्दी</button>
+                <button type="button" class="speech-lang-btn" data-lang="en-IN" style="font-size:10px; padding:3px 8px; border-radius:12px; border:1px solid #D8D1C5; background:#FFF; color:#5D4037; font-weight:700; cursor:pointer;">English</button>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span style="font-size:10.5px; color:#7A1F1F; font-weight:700;" id="liveInputStatusText">Status: Standby</span>
+              <button type="button" class="softphone-btn hangup" id="simulateCallToggleBtn">
+                <i data-lucide="phone-off" style="width:13px; height:13px;"></i>
+                <span>End Call (कॉल संपवा)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mode 2: Scenario Quick Switcher (Visible in Preset Simulation Mode) -->
+        <div id="simulationScenariosWrapper">
+          <label style="font-size:11px; font-weight:700; color:#5D4037; margin-bottom:4px; display:block;">
+            SELECT PRESET PILGRIMAGE CALL SCENARIOS (नमुना कॉल्स):
+          </label>
+          <div class="scenario-chips-row" id="scenarioChipsContainer">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Mode 3: Custom Text Intake Area (Visible in Custom Text Mode) -->
+        <div id="customTextInputWrapper" style="display:none; background:#FFF; border:1px solid #D8D1C5; padding:10px; border-radius:4px;">
+          <label style="font-size:11px; font-weight:700; color:#5D4037; margin-bottom:4px; display:block;">
+            ENTER OR PASTE CUSTOM CITIZEN COMPLAINT / DISTRESS MESSAGE (मराठी / हिन्दी / English):
+          </label>
+          <div style="display:flex; gap:8px;">
+            <textarea id="customTextInputBox" class="report-input" style="flex:1; min-height:50px;" placeholder="उदा. माझे वडील एकनाथ शिंदे (वय ७०) वाखरी फाट्याजवळ हरवले आहेत. त्यांनी पांढरा कुर्ता आणि भगवी टोपी घातली आहे."></textarea>
+            <button type="button" class="govt-btn" id="submitCustomTextBtn" style="background:#7A1F1F; color:#FFF; font-weight:700; padding:8px 16px;">
+              <i data-lucide="sparkles" style="width:13px; height:13px;"></i>
+              <span>Translate & Extract</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Dual Live-Streaming Transcript (Warm Themed) -->
+        <div class="dual-transcript-grid">
+          <!-- Left: Marathi / Hindi Native Speech Transcript -->
+          <div class="transcript-card" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
+            <div class="transcript-header" style="border-bottom:1.5px solid #7A1F1F; padding-bottom:4px;">
+              <span style="color:#7A1F1F; font-weight:700;">🎙️ CITIZEN NATIVE SPEECH (मराठी / हिन्दी)</span>
+              <span class="badge" style="background:#7A1F1F; color:#FFF; font-size:9px;">Live Audio Transcription</span>
+            </div>
+            <div class="transcript-body-text marathi" id="nativeTranscriptBox" style="color:#2B2623; min-height:60px;">
+              "हॅलो मदत कक्ष, माझी लहान मुलगी गोदावरी जाधव (वय ८) पुंडलिक मंदिराच्या पायऱ्यांजवळ गर्दीत हरवली आहे..."
+            </div>
+          </div>
+
+          <!-- Right: AI Neural Translation -->
+          <div class="transcript-card english" style="background:#FFFFFF; border:1.5px solid #D8D1C5;">
+            <div class="transcript-header" style="border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
+              <span style="color:#B07817; font-weight:700;">🤖 AI NEURAL TRANSLATION (ENGLISH)</span>
+              <span class="badge" style="background:#D98E2C; color:#000; font-size:9px; font-weight:700;">IndicTrans-v2 Multi-lingual</span>
+            </div>
+            <div class="transcript-body-text" id="englishTranscriptBox" style="color:#2B2623; min-height:60px;">
+              "Hello Help Desk, my young daughter Godavari Jadhav (age 8) got lost in the surge near the steps of Pundalik Temple..."
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Operator Report Editor (The person sitting on the system gives the report) -->
+        <div class="operator-report-card">
+          <div class="operator-report-header">
+            <div style="font-size:12.5px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="clipboard-edit" style="width:15px; height:15px;"></i>
+              <span>OPERATOR REPORT & CASE INTAKE &bull; ऑपरेटर नोंदणी अहवाल</span>
+            </div>
+            <span style="font-size:10px; color:#5D4037; font-weight:600;">Review & edit extracted details from citizen speech</span>
+          </div>
+
+          <div class="report-grid-2col">
+            <div class="report-form-group">
+              <label>Missing Person Full Name (व्यक्तीचे नाव)</label>
+              <input type="text" id="repPersonName" class="report-input" value="Godavari Jadhav (गोदावरी जाधव)">
+            </div>
+            <div class="report-form-group">
+              <label>Age & Gender (वय व लिंग)</label>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                <input type="number" id="repPersonAge" class="report-input" value="8" placeholder="Age">
+                <select id="repPersonGender" class="report-input">
+                  <option value="F">Female (स्त्री)</option>
+                  <option value="M">Male (पुरुष)</option>
+                  <option value="O">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-grid-2col">
+            <div class="report-form-group">
+              <label>Clothing & Appearance Details (पोशाख व वर्णन)</label>
+              <input type="text" id="repClothing" class="report-input" value="Yellow frock with floral pattern, red hair ribbons">
+            </div>
+            <div class="report-form-group">
+              <label>Last Seen Landmark / Sector (शेवटचे पाहिलेले ठिकाण)</label>
+              <input type="text" id="repLocation" class="report-input" value="Pundalik Temple Steps / Pandharpur Chowk">
+            </div>
+          </div>
+
+          <div class="report-form-group">
+            <label>Operator Incident Notes & Description (अधिकारी शेरा)</label>
+            <textarea id="repOfficerNotes" class="report-input report-textarea" rows="2">Distressed mother called stating child slipped away during sudden crowd surge on temple ghat steps. Immediate CCTV scan alerted.</textarea>
+          </div>
+
+          <!-- Actions Row: Submit Report & Scan CCTV -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; padding-top:8px; border-top:1px dashed #D8D1C5;">
+            <div style="font-size:11px; color:#5D4037;">
+              <strong>Pipeline:</strong> 1. Submit Report to create case &bull; 2. AI CCTV Re-ID scan searches surveillance cameras.
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="govt-btn" id="generateCaseFromCallBtn" style="background:#7A1F1F; color:#FFF; padding:6px 14px;">
+                <i data-lucide="file-check" style="width:13px; height:13px;"></i>
+                <span>1. Submit Report & Create Case</span>
+              </button>
+              <button type="button" class="govt-btn" id="scanCCTVFeedsBtn" style="background:#D98E2C; color:#000; font-weight:700; padding:6px 14px;">
+                <i data-lucide="cctv" style="width:13px; height:13px;"></i>
+                <span>2. AI CCTV Re-ID Scan</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. AI CCTV Candidate Matches Gallery -->
+        <div class="cctv-results-container" id="cctvCandidatesSection" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-size:12.5px; font-weight:700; color:#7A1F1F; display:flex; align-items:center; gap:6px;">
+              <i data-lucide="scan-face" style="width:15px; height:15px;"></i>
+              <span>AI CCTV CANDIDATE MATCHES DETECTED (सीटीव्ही कॅमेरा शोध निकाल)</span>
+            </div>
+            <span class="badge" style="background:#9A2525; color:#FFF; font-size:9.5px;" id="cctvMatchesBadge">Matches Detected</span>
+          </div>
+
+          <div class="cctv-candidates-grid" id="cctvCandidatesGrid">
+            <!-- Dynamic Candidate Cards -->
+          </div>
+        </div>
       </div>
     </div>
   </div>

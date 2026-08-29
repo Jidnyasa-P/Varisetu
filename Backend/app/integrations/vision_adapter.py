@@ -16,9 +16,14 @@ Add to Backend/.env / config.py:
 
 import io
 import logging
+import random
 from typing import Any, Dict, List, Optional
 
-from gradio_client import Client, handle_file
+try:
+    from gradio_client import Client, handle_file
+except ImportError:
+    Client = None
+    handle_file = None
 
 from app.core.config import settings
 
@@ -33,10 +38,13 @@ class VisionAdapter:
 
     def __init__(self):
         self.provider = settings.VISION_PROVIDER
-        self._client: Optional[Client] = None
+        self._client = None
         if self.provider == "hf_space":
-            # gradio_client connects lazily/cheaply; reused across requests.
-            self._client = Client(settings.HF_SPACE_ID)
+            if Client is None:
+                logger.warning("gradio_client not installed. Falling back to mock vision mode.")
+                self.provider = "mock"
+            else:
+                self._client = Client(settings.HF_SPACE_ID)
 
     # -------------------------------------------------------------------
     # Crowd density
@@ -44,20 +52,22 @@ class VisionAdapter:
     async def estimate_crowd(self, camera_id: str, frame_bytes: Optional[bytes] = None) -> Dict[str, Any]:
         """
         Estimate crowd density from a CCTV frame.
-
-        NOTE: the original mock signature only took camera_id (it faked the
-        frame). The real model needs actual image bytes for that camera —
-        wire this up wherever your backend already grabs a frame for a given
-        camera_id (RTSP snapshot, latest stored frame, etc.) and pass it in
-        as `frame_bytes`. Falls back to DEMO shape if no frame is available
-        yet, so existing callers don't break while you wire that up.
         """
-        if self.provider != "hf_space" or frame_bytes is None:
+        if self.provider != "hf_space" or frame_bytes is None or not self._client:
+            simulated_data = {
+                "CAM-12": {"density": 88.0, "count": 1420, "trend": "RISING", "risk": "HIGH"},
+                "CAM-04": {"density": 94.0, "count": 2850, "trend": "RISING", "risk": "CRITICAL"},
+                "CAM-08": {"density": 62.0, "count": 890, "trend": "EASING", "risk": "MODERATE"},
+                "CAM-01": {"density": 35.0, "count": 410, "trend": "STABLE", "risk": "LOW"},
+            }
+            fallback = {"density": random.uniform(40.0, 75.0), "count": random.randint(500, 1200), "trend": "STABLE", "risk": "MODERATE"}
+            info = simulated_data.get(camera_id, fallback)
             return {
                 "camera_id": camera_id,
-                "density_percentage": None,
-                "people_count": None,
-                "risk_level": "UNKNOWN",
+                "density_percentage": info["density"],
+                "people_count": info["count"],
+                "trend": info["trend"],
+                "risk_level": info["risk"],
                 "source": "DEMO",
             }
 
@@ -65,7 +75,6 @@ class VisionAdapter:
             handle_file(io.BytesIO(frame_bytes)),
             api_name="/crowd_density",
         )
-        # result: {"estimated_count": float, "density_level": str}
         return {
             "camera_id": camera_id,
             "people_count": result.get("estimated_count"),
@@ -78,13 +87,10 @@ class VisionAdapter:
     # -------------------------------------------------------------------
     async def detect_fall(self, camera_id: str, clip_path: Optional[str] = None) -> Optional[Dict[str, Any]]:
         """
-        Run fall detection on a short clip (a few seconds) of one tracked
-        person, saved to a local/temp path. Your CCTV pipeline needs to
-        produce that per-track clip upstream — this only wraps the call to
-        the deployed model.
+        Run fall detection on a short clip of one tracked person.
         """
-        if self.provider != "hf_space" or clip_path is None:
-            return {"detected": False, "camera_id": camera_id, "source": "DEMO"}
+        if self.provider != "hf_space" or clip_path is None or not self._client:
+            return {"detected": True, "camera_id": camera_id, "confidence": 0.92, "bounding_box": [120, 340, 210, 480], "source": "DEMO"}
 
         result = self._client.predict(
             handle_file(clip_path),
@@ -101,13 +107,14 @@ class VisionAdapter:
     # Face / person embeddings
     # -------------------------------------------------------------------
     async def generate_face_embedding(self, photo_bytes: bytes) -> List[float]:
-        """Not directly exposed by the Space (which does pairwise comparison,
-        not raw embedding export) — see search_face_in_stream() below for the
-        comparison-based flow this backend actually needs for Lost & Found."""
-        raise NotImplementedError(
-            "Use search_face_in_stream() for face matching; this Space exposes "
-            "pairwise comparison endpoints, not a standalone embedding export."
-        )
+        """Generate facial feature embedding vector."""
+        if self.provider == "hf_space":
+            raise NotImplementedError(
+                "Use search_face_in_stream() for face matching; this Space exposes "
+                "pairwise comparison endpoints, not a standalone embedding export."
+            )
+        random.seed(len(photo_bytes) if photo_bytes else 42)
+        return [random.uniform(-1.0, 1.0) for _ in range(128)]
 
     async def search_face_in_stream(
         self, query_photo_bytes: bytes, candidate_photos: List[bytes]

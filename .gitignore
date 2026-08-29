@@ -1,5 +1,6 @@
 # Dependencies & Environments
 node_modules/
+Frontend/node_modules/
 __pycache__/
 *.py[cod]
 *.class
@@ -7,39 +8,31 @@ __pycache__/
 .venv/
 env/
 venv/
-# ---- Python ----
-*.pyc
-*.pyo
 *.egg-info/
 .mypy_cache/
 
 # Environment Variables & Databases
 .env
-*.db
-*.sqlite3
-
-# OS & Logs
-.DS_Store
-dist/
-*.log
-
-# Local environment secret keys
-.env
-.env.local
-
-# ML artifacts (still ignore these; HF or Docker will handle them)
-artifacts/
-VariSetu/
-*.pt
-
 .env.local
 Backend/.env
 *.token
+*.db
+*.sqlite3
+Backend/varisetu.db
 
-# ---- Model weight files — NEVER commit these to GitHub ----
-# These belong on Hugging Face (via upload_weights.py), not in git history.
-# GitHub hard-caps individual files at 100MB and isn't built for LFS-scale
-# model artifacts the way HF is.
+# OS & Build Artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+dist/
+Frontend/dist/
+*.log
+
+# ML artifacts & Weights
+artifacts/
+VariSetu/
+*.pt
 *.pth
 *.onnx
 *.h5
@@ -49,32 +42,10 @@ Model1_CrowdDensity/**/artifacts/
 Model2_Fall_Detection/**/artifacts/
 Model3_Person_Reidentification/**/artifacts/
 Model3_Person_Reidentification/**/*.pt
-
-# ---- Local copies of weights staged for upload ----
-# If you keep a temp local folder with copies of your 3 .pt files before
-# running upload_weights.py, ignore it too:
 local_weights/
 deployment/local_weights/
-
-# ---- Database ----
-# Backend/varisetu.db is currently tracked in the repo from earlier commits —
-# fine to leave as-is for the demo seed data, but stop tracking it going
-# forward so real operational data never lands in git history:
-Backend/varisetu.db
-
-# ---- Frontend build artifacts ----
-Frontend/node_modules/
-Frontend/dist/
-
-# ---- Downloaded model assets (auto-fetched at runtime, don't commit) ----
 *.task
 pose_landmarker_lite.task
 .insightface/
 .cache/
 hf_cache/
-
-# ---- OS / editor junk ----
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
