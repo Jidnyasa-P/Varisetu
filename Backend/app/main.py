@@ -142,9 +142,14 @@ from pathlib import Path
 from fastapi.responses import FileResponse
 
 FRONTEND_DIR = Path(__file__).resolve().parent.parent.parent / "Frontend"
+BACKEND_DIR = Path(__file__).resolve().parent.parent
 
 if (FRONTEND_DIR / "assets").exists():
     app.mount("/assets", StaticFiles(directory=str(FRONTEND_DIR / "assets")), name="assets")
+
+CCTV_VIDEOS_DIR = BACKEND_DIR / "cctv video"
+if CCTV_VIDEOS_DIR.exists():
+    app.mount("/cctv-videos", StaticFiles(directory=str(CCTV_VIDEOS_DIR)), name="cctv_videos")
 
 
 @app.get("/", summary="Command Center Frontend Dashboard")
@@ -169,6 +174,16 @@ async def serve_styles_css():
     if css_file.exists():
         return FileResponse(css_file, media_type="text/css")
     return {"detail": "styles.css not found"}
+
+
+@app.get("/pcm-worklet.js")
+async def serve_pcm_worklet():
+    worklet_file = FRONTEND_DIR / "pcm-worklet.js"
+    if not worklet_file.exists():
+        worklet_file = FRONTEND_DIR / "assets" / "pcm-worklet.js"
+    if worklet_file.exists():
+        return FileResponse(worklet_file, media_type="application/javascript")
+    return {"detail": "pcm-worklet.js not found"}
 
 
 if __name__ == "__main__":

@@ -1428,14 +1428,23 @@ const CCTV_ASSET_MAP = {
   'DEFAULT': 'assets/cctv_wakhri_phata_1785244836537.jpg'
 };
 
+const CCTV_VIDEO_MAP = {
+  'CAM-12': 'assets/videos/cctv_cam_12_wakhri.mp4',
+  'CAM-04': 'assets/videos/cctv_cam_04_pandharpur.mp4',
+  'CAM-08': 'assets/videos/cctv_cam_08_saswad.mp4',
+  'CAM-01': 'assets/videos/cctv_cam_01_alandi.mp4',
+  'PHOTO-01': 'assets/videos/cctv_cam_12_wakhri.mp4',
+  'DRONE-01': 'assets/videos/cctv_cam_04_pandharpur.mp4',
+  'DEFAULT': 'assets/videos/cctv_cam_12_wakhri.mp4'
+};
+
 const activeCctvPlayers = {};
 let currentModalPlayer = null;
 
 class CCTVFeedPlayer {
-  constructor(canvas, imageSrc, camConfig = {}) {
+  constructor(canvas, videoSrc, camConfig = {}) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
-    this.imageSrc = imageSrc || CCTV_ASSET_MAP.DEFAULT;
     this.camCode = camConfig.camCode || 'CAM-01';
     this.location = camConfig.location || 'Surveillance Node';
     this.density = camConfig.density !== undefined ? camConfig.density : 85;
@@ -1448,10 +1457,48 @@ class CCTVFeedPlayer {
     this.running = false;
     this.animFrame = null;
 
+    this.videoSrc = videoSrc || CCTV_VIDEO_MAP[this.camCode] || CCTV_VIDEO_MAP.DEFAULT;
+    this.imageFallbackSrc = CCTV_ASSET_MAP[this.camCode] || CCTV_ASSET_MAP.DEFAULT;
+
+    // Load actual CCTV Video element for smooth 60fps streaming playback
+    this.video = document.createElement('video');
+    this.video.src = this.videoSrc;
+    this.video.muted = true;
+    this.video.loop = true;
+    this.video.autoplay = true;
+    this.video.playsInline = true;
+    this.video.crossOrigin = 'anonymous';
+    this.video.setAttribute('muted', '');
+    this.video.setAttribute('playsinline', '');
+    this.video.setAttribute('autoplay', '');
+    this.video.setAttribute('loop', '');
+    this.videoLoaded = false;
+
+    const playVideoSafely = () => {
+      this.videoLoaded = true;
+      const playPromise = this.video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay policy fallback: muted user action
+          this.video.muted = true;
+        });
+      }
+    };
+
+    this.video.oncanplay = playVideoSafely;
+    this.video.onloadeddata = playVideoSafely;
+    this.video.onerror = () => {
+      console.debug(`[VariSetu CCTV] Video fallback to image for ${this.camCode}`);
+      this.videoLoaded = false;
+    };
+    this.video.load();
+
+    // Fallback image
     this.img = new Image();
     this.imgLoaded = false;
-    this.img.src = this.imageSrc;
+    this.img.src = this.imageFallbackSrc;
     this.img.onload = () => { this.imgLoaded = true; };
+
     this.boxes = this.createDetectionBoxes();
   }
 
@@ -1478,11 +1525,17 @@ class CCTVFeedPlayer {
   start() {
     if (this.running) return;
     this.running = true;
+    if (this.video && this.video.paused) {
+      this.video.play().catch(() => {});
+    }
     this.render();
   }
 
   stop() {
     this.running = false;
+    if (this.video) {
+      try { this.video.pause(); } catch {}
+    }
     if (this.animFrame) {
       cancelAnimationFrame(this.animFrame);
       this.animFrame = null;
@@ -1491,7 +1544,7 @@ class CCTVFeedPlayer {
 
   render(timestamp = performance.now()) {
     if (!this.running) return;
-    const { canvas, ctx, img, imgLoaded } = this;
+    const { canvas, ctx, video, videoLoaded, img, imgLoaded } = this;
     const w = canvas.width;
     const h = canvas.height;
 
@@ -1499,90 +1552,99 @@ class CCTVFeedPlayer {
     ctx.fillStyle = '#080A0C';
     ctx.fillRect(0, 0, w, h);
 
-    if (imgLoaded) {
-      // Subtle organic Ken Burns drift loop
+    // Primary: Draw CCTV video frame
+    if (videoLoaded && video.readyState >= 2) {
+      if (video.paused) {
+        video.play().catch(() => {});
+      }
+      ctx.save();
+      ctx.translate(w / 2 + this.panX, h / 2 + this.panY);
+      ctx.scale(this.zoom, this.zoom);
+      ctx.drawImage(video, -w / 2, -h / 2, w, h);
+      ctx.restore();
+    } else if (imgLoaded) {
+      // Fallback: Ken burns drift on high-res still
       const timeSec = timestamp / 1000;
       const driftX = Math.sin(timeSec * 0.35) * 6;
       const driftY = Math.cos(timeSec * 0.25) * 3;
       const currentZoom = this.zoom + (Math.sin(timeSec * 0.2) * 0.02);
 
-      // Render image with pan and zoom
       ctx.save();
       ctx.translate(w / 2 + this.panX + driftX, h / 2 + this.panY + driftY);
       ctx.scale(currentZoom, currentZoom);
       ctx.drawImage(img, -w / 2, -h / 2, w, h);
       ctx.restore();
+    }
 
-      // Optical scanlines
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.12)';
-      for (let y = 0; y < h; y += 4) {
-        ctx.fillRect(0, y, w, 1.5);
-      }
+    // Optical scanlines
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.10)';
+    for (let y = 0; y < h; y += 4) {
+      ctx.fillRect(0, y, w, 1.5);
+    }
 
-      // Draw dynamic AI detection bounding boxes
-      if (this.showBoundingBoxes) {
-        this.boxes.forEach(box => {
-          box.baseX += box.speedX;
-          box.baseY += box.speedY;
-          if (box.baseX < 0.04 || box.baseX > 0.86) box.speedX *= -1;
-          if (box.baseY < 0.22 || box.baseY > 0.74) box.speedY *= -1;
+    // Draw dynamic AI detection bounding boxes
+    if (this.showBoundingBoxes) {
+      this.boxes.forEach(box => {
+        box.baseX += box.speedX;
+        box.baseY += box.speedY;
+        if (box.baseX < 0.04 || box.baseX > 0.86) box.speedX *= -1;
+        if (box.baseY < 0.22 || box.baseY > 0.74) box.speedY *= -1;
 
-          const bx = (box.baseX * w) + (this.panX * 0.5);
-          const by = (box.baseY * h) + (this.panY * 0.5);
-          const bw = box.w * w;
-          const bh = box.h * h;
+        const bx = (box.baseX * w) + (this.panX * 0.5);
+        const by = (box.baseY * h) + (this.panY * 0.5);
+        const bw = box.w * w;
+        const bh = box.h * h;
 
-          ctx.strokeStyle = box.color;
-          ctx.lineWidth = this.isLargeModal ? 2 : 1.5;
-          ctx.strokeRect(bx, by, bw, bh);
+        ctx.strokeStyle = box.color;
+        ctx.lineWidth = this.isLargeModal ? 2 : 1.5;
+        ctx.strokeRect(bx, by, bw, bh);
 
-          // Label pill
-          const fontSize = this.isLargeModal ? 10 : 8;
-          ctx.font = `600 ${fontSize}px monospace`;
-          const text = `${box.label} ${box.confidence}%`;
-          const textW = ctx.measureText(text).width + 6;
+        // Label pill
+        const fontSize = this.isLargeModal ? 10 : 8;
+        ctx.font = `600 ${fontSize}px monospace`;
+        const text = `${box.label} ${box.confidence}%`;
+        const textW = ctx.measureText(text).width + 6;
 
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-          ctx.fillRect(bx, by - (fontSize + 4), textW, fontSize + 3);
-          ctx.fillStyle = box.color;
-          ctx.fillText(text, bx + 3, by - 3);
-        });
-      }
-
-      // Live Timecode & Metadata HUD
-      const now = new Date();
-      const pad = (n) => String(n).padStart(2, '0');
-      const ms = String(now.getMilliseconds()).padStart(3, '0');
-      const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${ms} IST`;
-      const dateStr = `28 AUG 2026`;
-
-      // Top HUD Bar
-      const hudHeight = this.isLargeModal ? 26 : 20;
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.68)';
-      ctx.fillRect(0, 0, w, hudHeight);
-
-      // Camera Code + Location
-      ctx.font = `700 ${this.isLargeModal ? 11 : 9}px monospace`;
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillText(`${this.camCode} | LIVE | ${this.location.toUpperCase()}`, 8, this.isLargeModal ? 17 : 14);
-
-      // Flashing REC Dot & Timecode
-      const isRecOn = Math.floor(timestamp / 500) % 2 === 0;
-      const recText = `● REC  ${dateStr} ${timeStr}`;
-      ctx.fillStyle = isRecOn ? '#FF3B30' : '#888888';
-      const recWidth = ctx.measureText(recText).width;
-      ctx.fillText(recText, w - recWidth - 8, this.isLargeModal ? 17 : 14);
-
-      // Bottom telemetry bar for Large Modal
-      if (this.isLargeModal) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-        ctx.fillRect(0, h - 24, w, 24);
-        ctx.fillStyle = '#00FF66';
-        ctx.font = '600 10px monospace';
-        ctx.fillText(`DENSITY: ${this.density}% [${this.densityStatus}] | ZOOM: ${this.zoom.toFixed(1)}x | 1080p @ 60FPS | LATENCY: 12ms`, 8, h - 8);
-        ctx.fillStyle = '#E5A93C';
-        ctx.fillText(`OPTICAL AI VISION ACTIVE`, w - 170, h - 8);
-      }
+        ctx.fillRect(bx, by - (fontSize + 4), textW, fontSize + 3);
+        ctx.fillStyle = box.color;
+        ctx.fillText(text, bx + 3, by - 3);
+      });
+    }
+
+    // Live Timecode & Metadata HUD
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const ms = String(now.getMilliseconds()).padStart(3, '0');
+    const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${ms} IST`;
+    const dateStr = `28 AUG 2026`;
+
+    // Top HUD Bar
+    const hudHeight = this.isLargeModal ? 26 : 20;
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.68)';
+    ctx.fillRect(0, 0, w, hudHeight);
+
+    // Camera Code + Location
+    ctx.font = `700 ${this.isLargeModal ? 11 : 9}px monospace`;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(`${this.camCode} | LIVE VIDEO | ${this.location.toUpperCase()}`, 8, this.isLargeModal ? 17 : 14);
+
+    // Flashing REC Dot & Timecode
+    const isRecOn = Math.floor(timestamp / 500) % 2 === 0;
+    const recText = `● LIVE REC  ${dateStr} ${timeStr}`;
+    ctx.fillStyle = isRecOn ? '#FF3B30' : '#888888';
+    const recWidth = ctx.measureText(recText).width;
+    ctx.fillText(recText, w - recWidth - 8, this.isLargeModal ? 17 : 14);
+
+    // Bottom telemetry bar for Large Modal
+    if (this.isLargeModal) {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+      ctx.fillRect(0, h - 24, w, 24);
+      ctx.fillStyle = '#00FF66';
+      ctx.font = '600 10px monospace';
+      ctx.fillText(`DENSITY: ${this.density}% [${this.densityStatus}] | ZOOM: ${this.zoom.toFixed(1)}x | 1080p CCTV STREAM @ 60FPS | LATENCY: 8ms`, 8, h - 8);
+      ctx.fillStyle = '#E5A93C';
+      ctx.fillText(`CCTV VIDEO FEED ACTIVE`, w - 170, h - 8);
     }
 
     this.animFrame = requestAnimationFrame((ts) => this.render(ts));
@@ -1606,8 +1668,8 @@ function initCctvTilePlayers() {
       activeCctvPlayers[cfg.code].stop();
     }
 
-    const imageSrc = CCTV_ASSET_MAP[cfg.code] || CCTV_ASSET_MAP.DEFAULT;
-    const player = new CCTVFeedPlayer(canvas, imageSrc, {
+    const videoSrc = CCTV_VIDEO_MAP[cfg.code] || CCTV_VIDEO_MAP.DEFAULT;
+    const player = new CCTVFeedPlayer(canvas, videoSrc, {
       camCode: cfg.code,
       location: cfg.loc,
       density: cfg.density,
@@ -1618,7 +1680,6 @@ function initCctvTilePlayers() {
     activeCctvPlayers[cfg.code] = player;
   });
 }
-
 function renderCameras(cameras) {
   const container = document.getElementById('cctvTilesContainer');
   if (!container || !cameras || cameras.length === 0) return;
@@ -1694,6 +1755,7 @@ function openCameraDetails(camera) {
   const status = camera.status || 'ONLINE';
   const densityStatus = camera.density_status || (density >= 90 ? 'CRITICAL' : (density >= 75 ? 'HEAVY' : 'MODERATE'));
   const tagColor = density >= 90 ? 'var(--status-red)' : (density >= 75 ? 'var(--status-orange)' : 'var(--status-yellow)');
+  const videoSrc = CCTV_VIDEO_MAP[camCode] || CCTV_VIDEO_MAP.DEFAULT;
   const imageSrc = CCTV_ASSET_MAP[camCode] || CCTV_ASSET_MAP.DEFAULT;
 
   openAppModal({
@@ -1777,7 +1839,7 @@ function openCameraDetails(camera) {
   // Start live running stream player in the modal
   const modalCanvas = document.getElementById('modalLargeCctvCanvas');
   if (modalCanvas) {
-    currentModalPlayer = new CCTVFeedPlayer(modalCanvas, imageSrc, {
+    currentModalPlayer = new CCTVFeedPlayer(modalCanvas, videoSrc, {
       camCode: camCode,
       location: camName,
       density: density,
@@ -1843,20 +1905,20 @@ function openCameraDetails(camera) {
 }
 
 function setupCctvModal() {
-  document.getElementById('camModalCloseBtn')?.addEventListener('click', () => {
+  const closeModal = () => {
     if (currentModalPlayer) {
       currentModalPlayer.stop();
       currentModalPlayer = null;
     }
-    document.getElementById('camModal')?.classList.remove('open');
-  });
-  document.getElementById('modalCamCloseFooterBtn')?.addEventListener('click', () => {
-    if (currentModalPlayer) {
-      currentModalPlayer.stop();
-      currentModalPlayer = null;
+    const video = document.getElementById('modalCamVideo');
+    if (video) {
+      try { video.pause(); } catch {}
     }
     document.getElementById('camModal')?.classList.remove('open');
-  });
+  };
+
+  document.getElementById('camModalCloseBtn')?.addEventListener('click', closeModal);
+  document.getElementById('modalCamCloseFooterBtn')?.addEventListener('click', closeModal);
 }
 
 /* ==================== CROWD INTELLIGENCE ==================== */
