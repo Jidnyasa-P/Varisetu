@@ -1,5 +1,6 @@
 # Dependencies & Environments
 node_modules/
+Frontend/node_modules/
 __pycache__/
 *.py[cod]
 *.class
@@ -7,18 +8,44 @@ __pycache__/
 .venv/
 env/
 venv/
+*.egg-info/
+.mypy_cache/
 
 # Environment Variables & Databases
 .env
 .env.local
+Backend/.env
+*.token
 *.db
 *.sqlite3
+Backend/varisetu.db
 
-# OS & Logs
+# OS & Build Artifacts
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
 dist/
+Frontend/dist/
 *.log
 
-# ML artifacts
+# ML artifacts & Weights
 artifacts/
-
+VariSetu/
+*.pt
+*.pth
+*.onnx
+*.h5
+*.bin
+*.safetensors
+Model1_CrowdDensity/**/artifacts/
+Model2_Fall_Detection/**/artifacts/
+Model3_Person_Reidentification/**/artifacts/
+Model3_Person_Reidentification/**/*.pt
+local_weights/
+deployment/local_weights/
+*.task
+pose_landmarker_lite.task
+.insightface/
+.cache/
+hf_cache/

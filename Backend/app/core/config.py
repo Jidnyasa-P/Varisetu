@@ -58,6 +58,7 @@ class Settings(BaseSettings):
 
     SPEECH_PROVIDER: str = "mock"
     VISION_PROVIDER: str = "mock"
+    HF_SPACE_ID: str = "Jidnyasa-P/VariSetu-Vision"
     WEATHER_PROVIDER: str = "mock"
     NOTIFICATION_PROVIDER: str = "mock"
 
