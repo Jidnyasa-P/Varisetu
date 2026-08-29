@@ -4,7 +4,7 @@ import logging
 from typing import Dict, Set
 from fastapi import WebSocket
 
-from app.core.redis import redis_client
+# from app.core.redis import redis_client             not used since we are not using redis
 from app.websocket.events import WebSocketEventType, WebSocketMessage
 
 logger = logging.getLogger("varisetu.websocket")
