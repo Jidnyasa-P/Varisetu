@@ -551,7 +551,7 @@ if __name__ == "__main__":
 ---
 
 ## 7. Frontend HTML Interface
-**File Path:** `Frontend/index.html` | **Lines of Code:** 1641
+**File Path:** `Frontend/index.html` | **Lines of Code:** 1646
 
 ```html
 <!DOCTYPE html>
@@ -901,8 +901,9 @@ if __name__ == "__main__":
             </div>
 
             <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for live HD stream & telemetry">
-              <canvas class="cctv-feed-canvas" id="canvas-CAM-12" width="360" height="200"></canvas>
-              <div class="cctv-overlay">
+              <video class="cctv-feed-video" id="video-CAM-12" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-12" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+              <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-12</span>
                   <span class="cctv-timestamp">LIVE STREAM</span>
@@ -915,8 +916,9 @@ if __name__ == "__main__":
             </div>
 
             <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04" title="Click for live HD stream & telemetry">
-              <canvas class="cctv-feed-canvas" id="canvas-CAM-04" width="360" height="200"></canvas>
-              <div class="cctv-overlay">
+              <video class="cctv-feed-video" id="video-CAM-04" src="assets/videos/cctv_cam_04_pandharpur.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-04" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+              <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-04</span>
                   <span class="cctv-timestamp">LIVE STREAM</span>
@@ -929,8 +931,9 @@ if __name__ == "__main__":
             </div>
 
             <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08" title="Click for live HD stream & telemetry">
-              <canvas class="cctv-feed-canvas" id="canvas-CAM-08" width="360" height="200"></canvas>
-              <div class="cctv-overlay">
+              <video class="cctv-feed-video" id="video-CAM-08" src="assets/videos/cctv_cam_08_saswad.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-08" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+              <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-08</span>
                   <span class="cctv-timestamp">LIVE STREAM</span>
@@ -943,8 +946,9 @@ if __name__ == "__main__":
             </div>
 
             <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01" title="Click for live HD stream & telemetry">
-              <canvas class="cctv-feed-canvas" id="canvas-CAM-01" width="360" height="200"></canvas>
-              <div class="cctv-overlay">
+              <video class="cctv-feed-video" id="video-CAM-01" src="assets/videos/cctv_cam_01_alandi.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+              <canvas class="cctv-feed-canvas" id="canvas-CAM-01" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+              <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-01</span>
                   <span class="cctv-timestamp">LIVE STREAM</span>
@@ -1083,13 +1087,14 @@ if __name__ == "__main__":
                   <span style="color:#2E7D32; font-family:var(--font-mono); font-size:9px;"><span class="live-dot" style="display:inline-block; width:5px; height:5px; margin-right:3px;"></span>LIVE 60 FPS</span>
                 </div>
                 <div style="position:relative; width:100%; height:110px; overflow:hidden; border:1px solid var(--border-main); cursor:pointer;">
-                  <canvas class="cctv-feed-canvas" id="canvas-PHOTO-01" width="360" height="200" style="width:100%; height:100%; object-fit:cover; display:block;"></canvas>
-                  <div class="cctv-overlay" style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(0,0,0,0.8)); padding:4px 8px; display:flex; justify-content:space-between; align-items:center;">
+                  <video class="cctv-feed-video" id="video-PHOTO-01" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+                  <canvas class="cctv-feed-canvas" id="canvas-PHOTO-01" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
+                  <div class="cctv-overlay" style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent, rgba(0,0,0,0.8)); padding:4px 8px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
                     <span style="color:#FFF; font-size:9.5px; font-weight:600;">Main Palkhi Procession Corridor</span>
                     <span class="density-tag orange" style="font-size:9px; padding:1px 5px;">FLOW 92%</span>
                   </div>
                 </div>
-              </div>
+              </div></div>
             </div>
           </div>
         </div>
@@ -5252,7 +5257,7 @@ body {
 ---
 
 ## 9. Frontend Application & CCTV Engine
-**File Path:** `Frontend/app.js` | **Lines of Code:** 5730
+**File Path:** `Frontend/app.js` | **Lines of Code:** 5747
 
 ```javascript
 /* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Private Command Center Logic & Realtime Client */
@@ -6805,34 +6810,42 @@ class CCTVFeedPlayer {
     const w = canvas.width;
     const h = canvas.height;
 
-    // Fill background
-    ctx.fillStyle = '#080A0C';
-    ctx.fillRect(0, 0, w, h);
+    // Check if there is a hardware-accelerated video element directly underneath this canvas
+    const domVideo = document.getElementById(`video-${this.camCode}`) || canvas.parentElement?.querySelector('video');
 
-    // Primary: Draw CCTV video frame
-    if (videoLoaded && video.readyState >= 2) {
-      if (video.paused) {
-        video.play().catch(() => {});
+    if (domVideo && !this.isLargeModal) {
+      // Clear canvas for transparent HUD / AI overlay over native video element
+      ctx.clearRect(0, 0, w, h);
+      if (domVideo.paused) {
+        domVideo.play().catch(() => {});
       }
-      ctx.save();
-      ctx.translate(w / 2 + this.panX, h / 2 + this.panY);
-      ctx.scale(this.zoom, this.zoom);
-      ctx.drawImage(video, -w / 2, -h / 2, w, h);
-      ctx.restore();
-    } else if (imgLoaded) {
-      // Fallback: Ken burns drift on high-res still
-      const timeSec = timestamp / 1000;
-      const driftX = Math.sin(timeSec * 0.35) * 6;
-      const driftY = Math.cos(timeSec * 0.25) * 3;
-      const currentZoom = this.zoom + (Math.sin(timeSec * 0.2) * 0.02);
+    } else {
+      // Fill background and draw video frame
+      ctx.fillStyle = '#080A0C';
+      ctx.fillRect(0, 0, w, h);
 
-      ctx.save();
-      ctx.translate(w / 2 + this.panX + driftX, h / 2 + this.panY + driftY);
-      ctx.scale(currentZoom, currentZoom);
-      ctx.drawImage(img, -w / 2, -h / 2, w, h);
-      ctx.restore();
+      if (videoLoaded && video.readyState >= 2) {
+        if (video.paused) {
+          video.play().catch(() => {});
+        }
+        ctx.save();
+        ctx.translate(w / 2 + this.panX, h / 2 + this.panY);
+        ctx.scale(this.zoom, this.zoom);
+        ctx.drawImage(video, -w / 2, -h / 2, w, h);
+        ctx.restore();
+      } else if (imgLoaded) {
+        const timeSec = timestamp / 1000;
+        const driftX = Math.sin(timeSec * 0.35) * 6;
+        const driftY = Math.cos(timeSec * 0.25) * 3;
+        const currentZoom = this.zoom + (Math.sin(timeSec * 0.2) * 0.02);
+
+        ctx.save();
+        ctx.translate(w / 2 + this.panX + driftX, h / 2 + this.panY + driftY);
+        ctx.scale(currentZoom, currentZoom);
+        ctx.drawImage(img, -w / 2, -h / 2, w, h);
+        ctx.restore();
+      }
     }
-
     // Optical scanlines
     ctx.fillStyle = 'rgba(0, 0, 0, 0.10)';
     for (let y = 0; y < h; y += 4) {
@@ -6957,6 +6970,15 @@ function renderCameras(cameras) {
     if (locEl) locEl.textContent = cam.name;
     if (densityEl && cam.current_density !== undefined) {
       densityEl.textContent = `${cam.density_status || 'DENSITY'} ${cam.current_density}%`;
+    }
+
+    const domVideo = tile.querySelector('video');
+    if (domVideo) {
+      const vidSrc = CCTV_VIDEO_MAP[cam.camera_code] || CCTV_VIDEO_MAP.DEFAULT;
+      if (!domVideo.src.includes(vidSrc.split('/').pop())) {
+        domVideo.src = vidSrc;
+        domVideo.play().catch(() => {});
+      }
     }
 
     // Update active player metadata if exists

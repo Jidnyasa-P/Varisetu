@@ -1548,34 +1548,42 @@ class CCTVFeedPlayer {
     const w = canvas.width;
     const h = canvas.height;
 
-    // Fill background
-    ctx.fillStyle = '#080A0C';
-    ctx.fillRect(0, 0, w, h);
+    // Check if there is a hardware-accelerated video element directly underneath this canvas
+    const domVideo = document.getElementById(`video-${this.camCode}`) || canvas.parentElement?.querySelector('video');
 
-    // Primary: Draw CCTV video frame
-    if (videoLoaded && video.readyState >= 2) {
-      if (video.paused) {
-        video.play().catch(() => {});
+    if (domVideo && !this.isLargeModal) {
+      // Clear canvas for transparent HUD / AI overlay over native video element
+      ctx.clearRect(0, 0, w, h);
+      if (domVideo.paused) {
+        domVideo.play().catch(() => {});
       }
-      ctx.save();
-      ctx.translate(w / 2 + this.panX, h / 2 + this.panY);
-      ctx.scale(this.zoom, this.zoom);
-      ctx.drawImage(video, -w / 2, -h / 2, w, h);
-      ctx.restore();
-    } else if (imgLoaded) {
-      // Fallback: Ken burns drift on high-res still
-      const timeSec = timestamp / 1000;
-      const driftX = Math.sin(timeSec * 0.35) * 6;
-      const driftY = Math.cos(timeSec * 0.25) * 3;
-      const currentZoom = this.zoom + (Math.sin(timeSec * 0.2) * 0.02);
+    } else {
+      // Fill background and draw video frame
+      ctx.fillStyle = '#080A0C';
+      ctx.fillRect(0, 0, w, h);
 
-      ctx.save();
-      ctx.translate(w / 2 + this.panX + driftX, h / 2 + this.panY + driftY);
-      ctx.scale(currentZoom, currentZoom);
-      ctx.drawImage(img, -w / 2, -h / 2, w, h);
-      ctx.restore();
+      if (videoLoaded && video.readyState >= 2) {
+        if (video.paused) {
+          video.play().catch(() => {});
+        }
+        ctx.save();
+        ctx.translate(w / 2 + this.panX, h / 2 + this.panY);
+        ctx.scale(this.zoom, this.zoom);
+        ctx.drawImage(video, -w / 2, -h / 2, w, h);
+        ctx.restore();
+      } else if (imgLoaded) {
+        const timeSec = timestamp / 1000;
+        const driftX = Math.sin(timeSec * 0.35) * 6;
+        const driftY = Math.cos(timeSec * 0.25) * 3;
+        const currentZoom = this.zoom + (Math.sin(timeSec * 0.2) * 0.02);
+
+        ctx.save();
+        ctx.translate(w / 2 + this.panX + driftX, h / 2 + this.panY + driftY);
+        ctx.scale(currentZoom, currentZoom);
+        ctx.drawImage(img, -w / 2, -h / 2, w, h);
+        ctx.restore();
+      }
     }
-
     // Optical scanlines
     ctx.fillStyle = 'rgba(0, 0, 0, 0.10)';
     for (let y = 0; y < h; y += 4) {
@@ -1700,6 +1708,15 @@ function renderCameras(cameras) {
     if (locEl) locEl.textContent = cam.name;
     if (densityEl && cam.current_density !== undefined) {
       densityEl.textContent = `${cam.density_status || 'DENSITY'} ${cam.current_density}%`;
+    }
+
+    const domVideo = tile.querySelector('video');
+    if (domVideo) {
+      const vidSrc = CCTV_VIDEO_MAP[cam.camera_code] || CCTV_VIDEO_MAP.DEFAULT;
+      if (!domVideo.src.includes(vidSrc.split('/').pop())) {
+        domVideo.src = vidSrc;
+        domVideo.play().catch(() => {});
+      }
     }
 
     // Update active player metadata if exists
