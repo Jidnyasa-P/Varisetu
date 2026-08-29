@@ -224,7 +224,7 @@ def reid_compare(image_a: Image.Image, image_b: Image.Image):
 # Tab 4 — Face Recognition (pretrained InsightFace buffalo_l)
 # =============================================================================
 
-VERIFICATION_THRESHOLD = 0.1268  # calibrated on LFW, see repo's face_calibration_result.json
+VERIFICATION_THRESHOLD = 0.12682099330986973  # calibrated on LFW, see repo's face_calibration_result.json
 
 def face_compare(image_a: Image.Image, image_b: Image.Image):
     if image_a is None or image_b is None:
