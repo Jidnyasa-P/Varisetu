@@ -329,14 +329,33 @@
           <!-- Left Column: NH-60 Corridor Map Legend & GIS Live Telemetry -->
           <div class="map-legend-column">
             <div class="panel-header">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <i data-lucide="map" style="width:15px; height:15px; color:var(--maroon-primary);"></i>
-                <span>NH-60 CORRIDOR MAP LEGEND</span>
-              </div>
+              <span>CROWD DENSITY HEATMAP &amp; CORRIDOR</span>
             </div>
             <div class="map-legend-column-content">
-              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:2px; text-transform:uppercase; letter-spacing:0.4px;">
-                Route Sectors &amp; Crowd Density
+              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px;">
+                Density Classification
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#9A2525;"></div>
+                <span><strong>Critical (&gt; 85%):</strong> High Congestion</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#B8551B;"></div>
+                <span><strong>High Surge (70% - 85%):</strong> Heavy Density</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#D98E2C;"></div>
+                <span><strong>Moderate (50% - 70%):</strong> Steady Flow</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#2E5B36;"></div>
+                <span><strong>Normal (&lt; 50%):</strong> Unobstructed Flow</span>
+              </div>
+
+              <div style="height:1px; background:var(--border-main); margin:6px 0;"></div>
+
+              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px;">
+                NH-60 Corridor Sectors
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#9A2525;"></div>
@@ -357,32 +376,24 @@
 
               <div style="height:1px; background:var(--border-main); margin:6px 0;"></div>
 
-              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:2px; text-transform:uppercase; letter-spacing:0.4px;">
-                Live Procession &amp; Field Assets
+              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px;">
+                Field Resource Checkpoints
               </div>
               <div class="map-legend-item">
-                <i data-lucide="navigation" style="width:14px; height:14px; color:#D98E2C;"></i>
-                <span><strong>Live Palkhi Lead:</strong> Km 84 Narayangaon</span>
+                <div class="legend-color-box" style="background:#D98E2C; border-radius:50%;"></div>
+                <span><strong>Palkhi Lead:</strong> Narayangaon (Km 84)</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚩</span>
-                <span>वारकरी दिंडी पदयात्रा (Procession on Route)</span>
+                <div class="legend-color-box" style="background:#9A2525; border-radius:50%;"></div>
+                <span><strong>Medical Ambulances:</strong> Sectors 3 &amp; 5</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚑</span>
-                <span>Mobile Medical Vans (MV-01/02/03)</span>
+                <div class="legend-color-box" style="background:#1D6F8A; border-radius:50%;"></div>
+                <span><strong>Water Tankers:</strong> Sectors 2 &amp; 4</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:16.5px;">💧</span>
-                <span>Water Tankers (WT-09/04)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚓</span>
-                <span>MahaPolice Patrol Squad (PS-14)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">🍲</span>
-                <span>Annadanam Food Distribution Van</span>
+                <div class="legend-color-box" style="background:#1A237E; border-radius:50%;"></div>
+                <span><strong>Police Patrol Squads:</strong> PS-01 to PS-14</span>
               </div>
             </div>
           </div>
@@ -469,57 +480,53 @@
           <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <i data-lucide="video" style="width:16px; height:16px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px;">LIVE CCTV SURVEILLANCE &amp; CHECKPOINT FEEDS (4 CHANNELS)</span>
+              <span style="font-weight:700; font-size:15.5px;">CCTV SURVEILLANCE &amp; CHECKPOINT FEEDS (4 CHANNELS)</span>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:13.5px; color:var(--text-muted);"><span class="live-dot" style="display:inline-block; width:6px; height:6px; margin-right:4px;"></span>LIVE 60 FPS • 1080p AI SURVEILLANCE</span>
+              <span style="font-size:13.5px; color:var(--text-muted);">4 Channels • 1080p AI Surveillance</span>
             </div>
           </div>
           <div class="cctv-horizontal-grid">
             <!-- CAM-12 (Wakhri Phata Junction) -->
-            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-12" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for camera telemetry &amp; PTZ controls">
+              <video class="cctv-feed-video" id="video-CAM-12" src="assets/videos/cctv_cam_12_wakhri.mp4" poster="assets/cctv_highway4_naka.jpg" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
               <canvas class="cctv-feed-canvas" id="canvas-CAM-12" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
               <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-12</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
               </div>
             </div>
 
             <!-- CAM-04 (Pandharpur Chowk) -->
-            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-04" src="assets/videos/cctv_cam_04_pandharpur.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04" title="Click for camera telemetry &amp; PTZ controls">
+              <video class="cctv-feed-video" id="video-CAM-04" src="assets/videos/cctv_cam_04_pandharpur.mp4" poster="assets/cctv_highway4_naka.jpg" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
               <canvas class="cctv-feed-canvas" id="canvas-CAM-04" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
               <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-04</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
               </div>
             </div>
 
             <!-- CAM-08 (Saswad Corridor) -->
-            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-08" src="assets/videos/cctv_cam_08_saswad.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08" title="Click for camera telemetry &amp; PTZ controls">
+              <video class="cctv-feed-video" id="video-CAM-08" src="assets/videos/cctv_cam_08_saswad.mp4" poster="assets/palkhi_procession_hd.jpg" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
               <canvas class="cctv-feed-canvas" id="canvas-CAM-08" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
               <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-08</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
               </div>
             </div>
 
             <!-- CAM-01 (Alandi Ghat Rd) -->
-            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-01" src="assets/videos/cctv_cam_01_alandi.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01" title="Click for camera telemetry &amp; PTZ controls">
+              <video class="cctv-feed-video" id="video-CAM-01" src="assets/videos/cctv_cam_01_alandi.mp4" poster="assets/wari_aerial_procession_hd.jpg" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
               <canvas class="cctv-feed-canvas" id="canvas-CAM-01" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
               <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-01</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
               </div>
             </div>

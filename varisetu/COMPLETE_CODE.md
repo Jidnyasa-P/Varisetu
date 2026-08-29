@@ -551,7 +551,7 @@ if __name__ == "__main__":
 ---
 
 ## 7. Frontend HTML Interface
-**File Path:** `Frontend/index.html` | **Lines of Code:** 1610
+**File Path:** `Frontend/index.html` | **Lines of Code:** 1617
 
 ```html
 <!DOCTYPE html>
@@ -885,14 +885,33 @@ if __name__ == "__main__":
           <!-- Left Column: NH-60 Corridor Map Legend & GIS Live Telemetry -->
           <div class="map-legend-column">
             <div class="panel-header">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <i data-lucide="map" style="width:15px; height:15px; color:var(--maroon-primary);"></i>
-                <span>NH-60 CORRIDOR MAP LEGEND</span>
-              </div>
+              <span>CROWD DENSITY HEATMAP &amp; CORRIDOR</span>
             </div>
             <div class="map-legend-column-content">
-              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:2px; text-transform:uppercase; letter-spacing:0.4px;">
-                Route Sectors &amp; Crowd Density
+              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px;">
+                Density Classification
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#9A2525;"></div>
+                <span><strong>Critical (&gt; 85%):</strong> High Congestion</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#B8551B;"></div>
+                <span><strong>High Surge (70% - 85%):</strong> Heavy Density</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#D98E2C;"></div>
+                <span><strong>Moderate (50% - 70%):</strong> Steady Flow</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#2E5B36;"></div>
+                <span><strong>Normal (&lt; 50%):</strong> Unobstructed Flow</span>
+              </div>
+
+              <div style="height:1px; background:var(--border-main); margin:6px 0;"></div>
+
+              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px;">
+                NH-60 Corridor Sectors
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#9A2525;"></div>
@@ -913,32 +932,24 @@ if __name__ == "__main__":
 
               <div style="height:1px; background:var(--border-main); margin:6px 0;"></div>
 
-              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:2px; text-transform:uppercase; letter-spacing:0.4px;">
-                Live Procession &amp; Field Assets
+              <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px;">
+                Field Resource Checkpoints
               </div>
               <div class="map-legend-item">
-                <i data-lucide="navigation" style="width:14px; height:14px; color:#D98E2C;"></i>
-                <span><strong>Live Palkhi Lead:</strong> Km 84 Narayangaon</span>
+                <div class="legend-color-box" style="background:#D98E2C; border-radius:50%;"></div>
+                <span><strong>Palkhi Lead:</strong> Narayangaon (Km 84)</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚩</span>
-                <span>वारकरी दिंडी पदयात्रा (Procession on Route)</span>
+                <div class="legend-color-box" style="background:#9A2525; border-radius:50%;"></div>
+                <span><strong>Medical Ambulances:</strong> Sectors 3 &amp; 5</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚑</span>
-                <span>Mobile Medical Vans (MV-01/02/03)</span>
+                <div class="legend-color-box" style="background:#1D6F8A; border-radius:50%;"></div>
+                <span><strong>Water Tankers:</strong> Sectors 2 &amp; 4</span>
               </div>
               <div class="map-legend-item">
-                <span style="font-size:16.5px;">💧</span>
-                <span>Water Tankers (WT-09/04)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">🚓</span>
-                <span>MahaPolice Patrol Squad (PS-14)</span>
-              </div>
-              <div class="map-legend-item">
-                <span style="font-size:16.5px;">🍲</span>
-                <span>Annadanam Food Distribution Van</span>
+                <div class="legend-color-box" style="background:#1A237E; border-radius:50%;"></div>
+                <span><strong>Police Patrol Squads:</strong> PS-01 to PS-14</span>
               </div>
             </div>
           </div>
@@ -1025,57 +1036,53 @@ if __name__ == "__main__":
           <div class="panel-header" style="justify-content:space-between; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <i data-lucide="video" style="width:16px; height:16px; color:var(--maroon-primary);"></i>
-              <span style="font-weight:700; font-size:15.5px;">LIVE CCTV SURVEILLANCE &amp; CHECKPOINT FEEDS (4 CHANNELS)</span>
+              <span style="font-weight:700; font-size:15.5px;">CCTV SURVEILLANCE &amp; CHECKPOINT FEEDS (4 CHANNELS)</span>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:13.5px; color:var(--text-muted);"><span class="live-dot" style="display:inline-block; width:6px; height:6px; margin-right:4px;"></span>LIVE 60 FPS • 1080p AI SURVEILLANCE</span>
+              <span style="font-size:13.5px; color:var(--text-muted);">4 Channels • 1080p AI Surveillance</span>
             </div>
           </div>
           <div class="cctv-horizontal-grid">
             <!-- CAM-12 (Wakhri Phata Junction) -->
-            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-12" src="assets/videos/cctv_cam_12_wakhri.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+            <div class="cctv-tile status-heavy" id="tile-CAM-12" data-cam-code="CAM-12" title="Click for camera telemetry &amp; PTZ controls">
+              <video class="cctv-feed-video" id="video-CAM-12" src="assets/videos/cctv_cam_12_wakhri.mp4" poster="assets/cctv_highway4_naka.jpg" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
               <canvas class="cctv-feed-canvas" id="canvas-CAM-12" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
               <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-12</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
               </div>
             </div>
 
             <!-- CAM-04 (Pandharpur Chowk) -->
-            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-04" src="assets/videos/cctv_cam_04_pandharpur.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+            <div class="cctv-tile status-critical" id="tile-CAM-04" data-cam-code="CAM-04" title="Click for camera telemetry &amp; PTZ controls">
+              <video class="cctv-feed-video" id="video-CAM-04" src="assets/videos/cctv_cam_04_pandharpur.mp4" poster="assets/cctv_highway4_naka.jpg" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
               <canvas class="cctv-feed-canvas" id="canvas-CAM-04" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
               <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-04</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
               </div>
             </div>
 
             <!-- CAM-08 (Saswad Corridor) -->
-            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-08" src="assets/videos/cctv_cam_08_saswad.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+            <div class="cctv-tile status-moderate" id="tile-CAM-08" data-cam-code="CAM-08" title="Click for camera telemetry &amp; PTZ controls">
+              <video class="cctv-feed-video" id="video-CAM-08" src="assets/videos/cctv_cam_08_saswad.mp4" poster="assets/palkhi_procession_hd.jpg" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
               <canvas class="cctv-feed-canvas" id="canvas-CAM-08" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
               <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-08</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
               </div>
             </div>
 
             <!-- CAM-01 (Alandi Ghat Rd) -->
-            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01" title="Click for live HD stream & telemetry">
-              <video class="cctv-feed-video" id="video-CAM-01" src="assets/videos/cctv_cam_01_alandi.mp4" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
+            <div class="cctv-tile status-normal" id="tile-CAM-01" data-cam-code="CAM-01" title="Click for camera telemetry &amp; PTZ controls">
+              <video class="cctv-feed-video" id="video-CAM-01" src="assets/videos/cctv_cam_01_alandi.mp4" poster="assets/wari_aerial_procession_hd.jpg" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block; z-index:1;"></video>
               <canvas class="cctv-feed-canvas" id="canvas-CAM-01" width="360" height="200" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2;"></canvas>
               <div class="cctv-overlay" style="z-index:3;">
                 <div class="cctv-top-info">
                   <span class="cctv-cam-id">CAM-01</span>
-                  <span class="cctv-timestamp">LIVE STREAM</span>
                 </div>
               </div>
             </div>
@@ -5288,7 +5295,7 @@ body {
 ---
 
 ## 9. Frontend Application & CCTV Engine
-**File Path:** `Frontend/app.js` | **Lines of Code:** 5745
+**File Path:** `Frontend/app.js` | **Lines of Code:** 5446
 
 ```javascript
 /* VariSetu (वारी सेतु) - Maharashtra Police IT Cell Private Command Center Logic & Realtime Client */
@@ -6060,76 +6067,52 @@ function initRouteMap() {
   L.polyline(sector4, { color: '#9A2525', weight: 8.5, opacity: 0.95 }).addTo(wariMap)
     .bindPopup('<b>Sector 4 (Sangamner ➔ Govind Nagar Nashik):</b> Red (#9A2525) - 92% Critical Surge');
 
-  // Animated Palkhi Marker at Narayangaon (Km 84)
+  // Palkhi Marker at Narayangaon (Km 84) - Clean text marker (No emojis)
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:4px 8px; font-weight:bold; font-size:14px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); animation:pulse 2s infinite;">🚩 PALKHI (Narayangaon Km 84)</div>`,
-    iconSize: [180, 26],
-    iconAnchor: [90, 13]
+    html: `<div style="background:#D98E2C; color:#FFF; border:2px solid #7A1F1F; padding:3px 8px; font-weight:bold; font-size:13px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35);">PALKHI LEAD (Narayangaon Km 84)</div>`,
+    iconSize: [190, 24],
+    iconAnchor: [95, 12]
   });
   AppState.palkhiMarker = L.marker([19.1240, 73.9780], { icon: palkhiIcon }).addTo(wariMap)
     .bindPopup('<b>Sant Tukaram Maharaj Palkhi</b><br>Location: Narayangaon (Km 84 on NH-60)<br>Speed: 3.2 km/h • Heading: North<br>Destination: Narayan Park, Govind Nagar, Nashik');
 
-  // Water Tankers: WT-09 (Narayangaon), WT-04 (Sangamner)
-  const tankerIcon9 = L.divIcon({
+  const makeTextBadge = (text, bg) => L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-09</div>`,
-    iconSize: [95, 20]
+    html: `<div style="background:${bg}; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px; white-space:nowrap;">${escapeHtml(text)}</div>`,
+    iconSize: [110, 20],
+    iconAnchor: [55, 10]
   });
-  L.marker([19.1200, 73.9700], { icon: tankerIcon9 }).addTo(wariMap)
+
+  // Water Tankers
+  L.marker([19.1200, 73.9700], { icon: makeTextBadge('Tanker WT-09', '#1D6F8A') }).addTo(wariMap)
     .bindPopup('<b>Water Tanker #WT-09</b><br>Capacity: 10,000L (80% Full)<br>Operator: Ramesh Shinde (+91-9822001122)<br>Location: Narayangaon Standby');
 
-  const tankerIcon4 = L.divIcon({
-    className: 'custom-map-icon',
-    html: `<div style="background:#1D6F8A; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">💧 Tanker WT-04</div>`,
-    iconSize: [95, 20]
-  });
-  L.marker([19.5700, 74.2100], { icon: tankerIcon4 }).addTo(wariMap)
+  L.marker([19.5700, 74.2100], { icon: makeTextBadge('Tanker WT-04', '#1D6F8A') }).addTo(wariMap)
     .bindPopup('<b>Water Tanker #WT-04</b><br>Capacity: 10,000L (Deployed)<br>Operator: D. V. More (+91-9822002233)<br>Location: Sangamner North Chowk');
 
-  // Medical Ambulances: MV-01 (Bhosari), MV-02 (Narayangaon), MV-03 (Sangamner)
-  const medIcon1 = L.divIcon({
-    className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-01</div>`,
-    iconSize: [95, 20]
-  });
-  L.marker([18.6270, 73.8470], { icon: medIcon1 }).addTo(wariMap)
+  // Medical Ambulances
+  L.marker([18.6270, 73.8470], { icon: makeTextBadge('Ambulance MV-01', '#9A2525') }).addTo(wariMap)
     .bindPopup('<b>Mobile Medical Ambulance #MV-01</b><br>Doctor: Dr. A. V. Joshi<br>Location: Bhosari Sector 1 Base');
 
-  const medIcon2 = L.divIcon({
-    className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-02</div>`,
-    iconSize: [95, 20]
-  });
-  L.marker([19.1240, 73.9780], { icon: medIcon2 }).addTo(wariMap)
+  L.marker([19.1240, 73.9780], { icon: makeTextBadge('Ambulance MV-02', '#9A2525') }).addTo(wariMap)
     .bindPopup('<b>Mobile Medical Ambulance #MV-02</b><br>Doctor: Dr. S. P. Deshmukh<br>Location: Narayangaon Km 84 Transit Camp');
 
-  const medIcon3 = L.divIcon({
-    className: 'custom-map-icon',
-    html: `<div style="background:#9A2525; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:12.5px; font-weight:bold; border-radius:2px;">🚑 MedVan MV-03</div>`,
-    iconSize: [95, 20]
-  });
-  L.marker([19.5760, 74.2120], { icon: medIcon3 }).addTo(wariMap)
+  L.marker([19.5760, 74.2120], { icon: makeTextBadge('Ambulance MV-03', '#9A2525') }).addTo(wariMap)
     .bindPopup('<b>Emergency Mobile ICU #MV-03</b><br>Doctor: Dr. P. K. Shirole<br>Location: Sangamner Choke Base');
 
-  // Surveillance CCTVs: CAM-01, CAM-08, CAM-12, CAM-04
-  const cctvIcon = (code) => L.divIcon({
-    className: 'custom-map-icon',
-    html: `<div style="background:#2B2623; color:#FFF; border:1px solid var(--saffron-gold); padding:2px 5px; font-size:12px; font-weight:bold; border-radius:2px;">📹 ${code}</div>`,
-    iconSize: [60, 18]
-  });
-  L.marker([18.5200, 73.8500], { icon: cctvIcon('CAM-01') }).addTo(wariMap).bindPopup('<b>CAM-01 (Pune / Bhosari)</b> - 60 FPS HD Stream');
-  L.marker([19.0060, 73.9450], { icon: cctvIcon('CAM-08') }).addTo(wariMap).bindPopup('<b>CAM-08 (Manchar Highway)</b> - 60 FPS HD Stream');
-  L.marker([19.1240, 73.9780], { icon: cctvIcon('CAM-12') }).addTo(wariMap).bindPopup('<b>CAM-12 (Narayangaon Checkpoint)</b> - 60 FPS HD Stream');
-  L.marker([19.9700, 73.7800], { icon: cctvIcon('CAM-04') }).addTo(wariMap).bindPopup('<b>CAM-04 (Govind Nagar, Nashik Terminal)</b> - 60 FPS HD Stream');
+  // Surveillance CCTVs
+  L.marker([18.5200, 73.8500], { icon: makeTextBadge('CAM-01 (Pune)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-01 (Pune / Bhosari)</b>');
+  L.marker([19.0060, 73.9450], { icon: makeTextBadge('CAM-08 (Manchar)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-08 (Manchar Highway)</b>');
+  L.marker([19.1240, 73.9780], { icon: makeTextBadge('CAM-12 (Narayangaon)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-12 (Narayangaon Checkpoint)</b>');
+  L.marker([19.9700, 73.7800], { icon: makeTextBadge('CAM-04 (Nashik)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-04 (Govind Nagar, Nashik Terminal)</b>');
 
   if (typeof renderDynamicWarkariClusters === 'function') renderDynamicWarkariClusters(AppState.crowdZones || []);
   if (typeof renderResourceMapMarkers === 'function') renderResourceMapMarkers(AppState.resources || []);
 }
 
-/* ==================== REALISTIC WARKARI & VEHICLE ROUTE-ALIGNED RENDERING ==================== */
+/* ==================== COLOR-WISE CROWD DENSITY HEATMAP & RESOURCE MARKERS ==================== */
 
-// Exact highway route polyline segments (Alandi -> Pune -> Saswad -> Lonand -> Bhalwani -> Wakhri -> Pandharpur)
 const PILGRIMAGE_ROUTE_WAYPOINTS = [
   { name: "Alandi Start Ghat", lat: 18.6772, lng: 73.8967, zone: "ZONE-ALANDI", density: 35 },
   { name: "Pune Hadapsar Chowk", lat: 18.5080, lng: 73.9250, zone: "ZONE-PUNE", density: 50 },
@@ -6143,247 +6126,22 @@ const PILGRIMAGE_ROUTE_WAYPOINTS = [
   { name: "Pandharpur Vitthal Mandir", lat: 17.6777, lng: 75.3276, zone: "ZONE-PANDHARPUR", density: 94 }
 ];
 
-// Helper to interpolate points strictly along route line segments
-function interpolatePointsAlongSegment(p1, p2, count, laneOffset = 0.00035) {
+function interpolatePointsAlongSegment(p1, p2, count) {
   const points = [];
   for (let i = 1; i <= count; i++) {
     const t = i / (count + 1);
     const lat = p1.lat + t * (p2.lat - p1.lat);
     const lng = p1.lng + t * (p2.lng - p1.lng);
-    // Subtle alternating lane shift so pilgrims march in two neat columns along the highway
-    const laneSign = (i % 2 === 0) ? 1 : -1;
-    points.push({
-      lat: lat + (laneSign * laneOffset * 0.5),
-      lng: lng + (laneSign * laneOffset)
-    });
+    points.push({ lat, lng });
   }
   return points;
 }
 
-// 1. Realistic Multi-Variant SVG Warkari Pilgrim (Dhwajdhari, Veenadhari, Taalkari)
-function createRealisticWarkariSvg(dindiNumber, isHighDensity = false) {
-  const variant = dindiNumber % 3;
-  const flagColor = isHighDensity ? '#FF5722' : '#FF9800';
-  const auraPulse = isHighDensity ? `<circle cx="19" cy="24" r="18" fill="rgba(217, 142, 44, 0.2)" class="warkari-density-pulse" />` : '';
-
-  if (variant === 0) {
-    // Variant 0: Dhwajdhari (भगवा पताका / ध्वजकरी - Pilgrim Flag Bearer)
-    return `
-      <div class="realistic-warkari-wrapper ${isHighDensity ? 'high-density-warkari' : ''}" style="width:36px; height:46px; position:relative;">
-        <svg viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
-          ${auraPulse}
-          <!-- Ground Shadow -->
-          <ellipse cx="19" cy="45" rx="10" ry="2.2" fill="rgba(25,18,12,0.4)"/>
-
-          <!-- Tall Wooden Flag Pole -->
-          <line x1="24" y1="2" x2="24" y2="44" stroke="#5D4037" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="24" cy="2" r="1.6" fill="#FFD54F"/>
-
-          <!-- Flowing Saffron Flag (भगवा ध्वज) -->
-          <path d="M24 3L37 8.5L24 14.5V3Z" fill="${flagColor}" stroke="#E65100" stroke-width="0.8"/>
-          <path d="M24 6.5L33 9.5L24 12.5V6.5Z" fill="#FFE082" opacity="0.85"/>
-
-          <!-- Traditional Saffron Pagadi / Turban -->
-          <path d="M12 9C12 6.2 14.5 4.8 17.5 4.8C20.5 4.8 23 6.2 23 9C23 9.8 22.2 11 20 11.5H15C12.8 11 12 9.8 12 9Z" fill="#E65100"/>
-          <ellipse cx="17.5" cy="7" rx="3.5" ry="1.5" fill="#FF9800"/>
-          <circle cx="17.5" cy="6.2" r="1" fill="#FFF9C4"/>
-
-          <!-- Face & Sacred Chandan Tilak -->
-          <circle cx="17.5" cy="12.5" r="3.3" fill="#FFCC80"/>
-          <line x1="17.5" y1="10.8" x2="17.5" y2="13.5" stroke="#D32F2F" stroke-width="0.8"/>
-
-          <!-- White Kurta (वारकरी सदरा) -->
-          <path d="M11 16.5C11 15 13 14.5 17.5 14.5C22 14.5 24 15 24 16.5L25 28C25 29.5 23 30.5 17.5 30.5C12 30.5 10 29.5 10 28L11 16.5Z" fill="#FFFFFF" stroke="#BCAAA4" stroke-width="0.8"/>
-
-          <!-- Saffron Angavastra / Shoulder Stole -->
-          <path d="M11 16.5L24 25L21.5 28L10 19.5Z" fill="#FF9800" opacity="0.95"/>
-
-          <!-- White Dhoti & Walking Pose -->
-          <path d="M12.5 30.5L10.5 42H14L16.5 34H18.5L21 42H24.5L22.5 30.5H12.5Z" fill="#F8F8F8" stroke="#BCAAA4" stroke-width="0.8"/>
-
-          <!-- Footwear (वारकरी चपला) -->
-          <ellipse cx="12.2" cy="42.5" rx="2" ry="1" fill="#4E342E"/>
-          <ellipse cx="22.8" cy="42.5" rx="2" ry="1" fill="#4E342E"/>
-        </svg>
-      </div>
-    `;
-  } else if (variant === 1) {
-    // Variant 1: Veenadhari (विणेकरी - Pilgrim Veena / Ektara Singer)
-    return `
-      <div class="realistic-warkari-wrapper ${isHighDensity ? 'high-density-warkari' : ''}" style="width:36px; height:46px; position:relative;">
-        <svg viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
-          ${auraPulse}
-          <!-- Ground Shadow -->
-          <ellipse cx="19" cy="45" rx="9.5" ry="2.2" fill="rgba(25,18,12,0.4)"/>
-
-          <!-- Sacred Veena / Ektara (विणा) held vertically -->
-          <line x1="22" y1="4" x2="16" y2="34" stroke="#8D6E63" stroke-width="1.8" stroke-linecap="round"/>
-          <circle cx="22.5" cy="4.5" r="2.2" fill="#D7CCC8" stroke="#5D4037" stroke-width="0.8"/>
-          <circle cx="16" cy="33" r="3.2" fill="#FFB74D" stroke="#E65100" stroke-width="0.8"/>
-          <path d="M22 6L16 32" stroke="#FFF9C4" stroke-width="0.6"/>
-
-          <!-- White Gandhi Topi (वारकरी टोपी) -->
-          <path d="M13 8C13 6 15 5 18 5C21 5 23 6 23 8C23 9 22 10.5 20.5 10.8H15.5C14 10.5 13 9 13 8Z" fill="#FFFFFF" stroke="#D7CCC8" stroke-width="0.8"/>
-
-          <!-- Face & Holy Bukka Tilak -->
-          <circle cx="18" cy="12.5" r="3.3" fill="#FFCC80"/>
-          <circle cx="18" cy="12" r="0.8" fill="#212121"/>
-
-          <!-- White Kurta -->
-          <path d="M12 16.5C12 15 14 14.5 18 14.5C22 14.5 24 15 24 16.5L25 28C25 29.5 23 30.5 18 30.5C13 30.5 11 29.5 11 28L12 16.5Z" fill="#FFFFFF" stroke="#BCAAA4" stroke-width="0.8"/>
-
-          <!-- Green/Saffron Devotional Angavastra -->
-          <path d="M12 16.5L24 24L22 27L11 19.5Z" fill="#D98E2C" opacity="0.95"/>
-
-          <!-- Tulsi Mala Beads around neck -->
-          <path d="M15 16.5C16 19 20 19 21 16.5" stroke="#5D4037" stroke-width="0.8" stroke-dasharray="1 1"/>
-
-          <!-- Dhoti & Walking Pose -->
-          <path d="M13 30.5L11 42H14.5L17 34H19L21.5 42H25L23 30.5H13Z" fill="#F8F8F8" stroke="#BCAAA4" stroke-width="0.8"/>
-          <ellipse cx="12.5" cy="42.5" rx="2" ry="1" fill="#4E342E"/>
-          <ellipse cx="23.2" cy="42.5" rx="2" ry="1" fill="#4E342E"/>
-        </svg>
-      </div>
-    `;
-  } else {
-    // Variant 2: Taalkari (टाळकरी - Brass Cymbals / Chipli Rhythm Player)
-    return `
-      <div class="realistic-warkari-wrapper ${isHighDensity ? 'high-density-warkari' : ''}" style="width:36px; height:46px; position:relative;">
-        <svg viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
-          ${auraPulse}
-          <!-- Ground Shadow -->
-          <ellipse cx="19" cy="45" rx="9.5" ry="2.2" fill="rgba(25,18,12,0.4)"/>
-
-          <!-- Saffron Feta / Pagadi -->
-          <path d="M12 8.5C12 6 14.5 4.8 17.5 4.8C20.5 4.8 23 6 23 8.5C23 9.5 22 10.8 20 11.2H15C13 10.8 12 9.5 12 8.5Z" fill="#FF6F00"/>
-          <ellipse cx="17.5" cy="6.8" rx="3" ry="1.2" fill="#FFA000"/>
-
-          <!-- Face & Chandan Tilak -->
-          <circle cx="17.5" cy="12.5" r="3.3" fill="#FFCC80"/>
-          <line x1="17.5" y1="10.8" x2="17.5" y2="13.5" stroke="#C62828" stroke-width="0.8"/>
-
-          <!-- White Kurta -->
-          <path d="M11 16.5C11 15 13 14.5 17.5 14.5C22 14.5 24 15 24 16.5L25 28C25 29.5 23 30.5 17.5 30.5C12 30.5 10 29.5 10 28L11 16.5Z" fill="#FFFFFF" stroke="#BCAAA4" stroke-width="0.8"/>
-
-          <!-- Saffron Shawl / Shela -->
-          <path d="M11 16.5L24 25L21.5 28L10 19.5Z" fill="#E65100" opacity="0.95"/>
-
-          <!-- Golden Brass Taals (झांज / टाळ) held in both hands playing rhythm -->
-          <circle cx="9" cy="22" r="2.8" fill="#FFD54F" stroke="#F57F17" stroke-width="0.8"/>
-          <circle cx="26" cy="22" r="2.8" fill="#FFD54F" stroke="#F57F17" stroke-width="0.8"/>
-          <path d="M9 22L12 18" stroke="#8D6E63" stroke-width="1.2"/>
-          <path d="M26 22L23 18" stroke="#8D6E63" stroke-width="1.2"/>
-
-          <!-- White Dhoti & Rhythmic Stepping Pose -->
-          <path d="M12.5 30.5L9.5 42H13.5L16.5 34H18.5L21.5 42H25.5L22.5 30.5H12.5Z" fill="#F8F8F8" stroke="#BCAAA4" stroke-width="0.8"/>
-          <ellipse cx="11.5" cy="42.5" rx="2.2" ry="1" fill="#4E342E"/>
-          <ellipse cx="23.5" cy="42.5" rx="2.2" ry="1" fill="#4E342E"/>
-        </svg>
-      </div>
-    `;
-  }
-}
-
-// 2. Realistic 108 ICU Ambulance SVG
-function createRealisticAmbulanceSvg(code) {
-  return `
-    <div style="position:relative; width:54px; height:34px;">
-      <svg viewBox="0 0 54 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <ellipse cx="27" cy="30" rx="24" ry="2.2" fill="rgba(0,0,0,0.4)"/>
-        <!-- Flashing Emergency Strobe -->
-        <rect x="22" y="1" width="5" height="3" rx="0.8" fill="#D50000"/>
-        <rect x="27" y="1" width="5" height="3" rx="0.8" fill="#0091EA"/>
-        <circle cx="24" cy="2.5" r="4.5" fill="#FF1744" opacity="0.75" class="siren-strobe-left"/>
-        <circle cx="29" cy="2.5" r="4.5" fill="#2979FF" opacity="0.75" class="siren-strobe-right"/>
-        <!-- Ambulance Body -->
-        <path d="M3 10C3 7 5 5 8 5H36L45 12L51 16V25C51 26 50 27 49 27H43C43 24 40.5 22 37.5 22C34.5 22 32 24 32 27H19C19 24 16.5 22 13.5 22C10.5 22 8 24 8 27H4C3 27 2 26 2 25V11C2 10.5 2.5 10 3 10Z" fill="#FFFFFF" stroke="#90A4AE" stroke-width="0.8"/>
-        <!-- Windows -->
-        <path d="M36 7H39L45 13H36V7Z" fill="#263238"/>
-        <rect x="23" y="7" width="10" height="6" rx="1" fill="#37474F"/>
-        <rect x="10" y="7" width="10" height="6" rx="1" fill="#37474F"/>
-        <!-- Red Cross -->
-        <rect x="16" y="14" width="3" height="7" rx="0.5" fill="#D32F2F"/>
-        <rect x="14" y="16" width="7" height="3" rx="0.5" fill="#D32F2F"/>
-        <path d="M2 18H51" stroke="#D32F2F" stroke-width="1.2"/>
-        <text x="24" y="19" font-family="Arial, sans-serif" font-weight="900" font-size="5" fill="#D32F2F">108 ICU</text>
-        <circle cx="13.5" cy="26" r="4" fill="#212121"/>
-        <circle cx="13.5" cy="26" r="2" fill="#B0BEC5"/>
-        <circle cx="37.5" cy="26" r="4" fill="#212121"/>
-        <circle cx="37.5" cy="26" r="2" fill="#B0BEC5"/>
-      </svg>
-      <div class="vehicle-mini-label" style="border-color:#EF5350;">🚑 ${escapeHtml(code)}</div>
-    </div>
-  `;
-}
-
-// 3. Realistic Water Tanker 10,000L SVG
-function createRealisticTankerSvg(code) {
-  return `
-    <div style="position:relative; width:56px; height:34px;">
-      <svg viewBox="0 0 56 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <ellipse cx="28" cy="30" rx="25" ry="2.2" fill="rgba(0,0,0,0.4)"/>
-        <!-- Blue Cylindrical Water Tank -->
-        <rect x="4" y="5" width="31" height="18" rx="8" fill="#0288D1" stroke="#01579B" stroke-width="0.8"/>
-        <text x="7" y="14.5" font-family="Arial, sans-serif" font-weight="900" font-size="4.2" fill="#FFFFFF">WATER 10,000L</text>
-        <circle cx="28" cy="14" r="3.5" fill="#01579B"/>
-        <path d="M28 11.5C28 11.5 26 14 26 15C26 16.1 26.9 17 28 17C29.1 17 30 16.1 30 15C30 14 28 11.5 28 11.5Z" fill="#FFFFFF"/>
-        <!-- Orange Truck Driver Cab -->
-        <path d="M36 10H43L49 15L52 17V25C52 26 51 27 50 27H47C47 24 44.5 22 41.5 22C38.5 22 36 24 36 27H34V10Z" fill="#E65100" stroke="#BF360C" stroke-width="0.8"/>
-        <path d="M42 11H44L48 15H42V11Z" fill="#263238"/>
-        <circle cx="11" cy="26" r="4" fill="#212121"/>
-        <circle cx="11" cy="26" r="2" fill="#B0BEC5"/>
-        <circle cx="26" cy="26" r="4" fill="#212121"/>
-        <circle cx="26" cy="26" r="2" fill="#B0BEC5"/>
-        <circle cx="41.5" cy="26" r="4" fill="#212121"/>
-        <circle cx="41.5" cy="26" r="2" fill="#B0BEC5"/>
-      </svg>
-      <div class="vehicle-mini-label" style="border-color:#29B6F6;">💧 ${escapeHtml(code)}</div>
-    </div>
-  `;
-}
-
-// 4. Realistic Maharashtra Police Patrol SUV SVG
-function createRealisticPoliceSvg(code) {
-  return `
-    <div style="position:relative; width:52px; height:32px;">
-      <svg viewBox="0 0 52 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <ellipse cx="26" cy="28" rx="23" ry="2.2" fill="rgba(0,0,0,0.4)"/>
-        <rect x="22" y="2" width="4" height="2.5" rx="0.5" fill="#D50000"/>
-        <rect x="26" y="2" width="4" height="2.5" rx="0.5" fill="#0091EA"/>
-        <circle cx="23" cy="3" r="3.5" fill="#FF1744" opacity="0.7" class="siren-strobe-left"/>
-        <circle cx="27" cy="3" r="3.5" fill="#2979FF" opacity="0.7" class="siren-strobe-right"/>
-        <path d="M4 11C4 8 6 6 9 6H34L43 12L49 14V23C49 24 48 25 47 25H43C43 22 40.5 20 37.5 20C34.5 20 32 22 32 25H18C18 22 15.5 20 12.5 20C9.5 20 7 22 7 25H4C3 25 2 24 2 23V12C2 11.5 3 11 4 11Z" fill="#1A237E" stroke="#0D47A1" stroke-width="0.8"/>
-        <rect x="16" y="11" width="16" height="10" fill="#FFFFFF"/>
-        <text x="17.5" y="17" font-family="Arial, sans-serif" font-weight="900" font-size="4.2" fill="#1A237E">POLICE</text>
-        <path d="M12 8H33L39 12H12V8Z" fill="#212121"/>
-        <circle cx="12.5" cy="24" r="3.8" fill="#212121"/>
-        <circle cx="12.5" cy="24" r="1.8" fill="#ECEFF1"/>
-        <circle cx="37.5" cy="24" r="3.8" fill="#212121"/>
-        <circle cx="37.5" cy="24" r="1.8" fill="#ECEFF1"/>
-      </svg>
-      <div class="vehicle-mini-label" style="border-color:#3949AB;">🚓 ${escapeHtml(code)}</div>
-    </div>
-  `;
-}
-
-// 5. Realistic Food / Annadanam Van SVG
-function createRealisticFoodSvg(code) {
-  return `
-    <div style="position:relative; width:54px; height:34px;">
-      <svg viewBox="0 0 54 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <ellipse cx="27" cy="30" rx="24" ry="2.2" fill="rgba(0,0,0,0.4)"/>
-        <rect x="4" y="6" width="31" height="17" rx="3" fill="#2E7D32" stroke="#1B5E20" stroke-width="0.8"/>
-        <text x="6" y="15" font-family="Arial, sans-serif" font-weight="900" font-size="4.5" fill="#FFE082">अन्नदान &bull; FOOD</text>
-        <path d="M35 10H42L48 15L51 17V25C51 26 50 27 49 27H45C45 24 42.5 22 39.5 22C36.5 22 34 24 34 27H4V10Z" fill="#F57C00"/>
-        <path d="M41 11H43L47 15H41V11Z" fill="#263238"/>
-        <circle cx="11.5" cy="26" r="3.8" fill="#212121"/>
-        <circle cx="11.5" cy="26" r="1.8" fill="#FFE082"/>
-        <circle cx="39.5" cy="26" r="3.8" fill="#212121"/>
-        <circle cx="39.5" cy="26" r="1.8" fill="#FFE082"/>
-      </svg>
-      <div class="vehicle-mini-label" style="border-color:#43A047;">🍲 ${escapeHtml(code)}</div>
-    </div>
-  `;
+function getDensityColor(density) {
+  if (density >= 85) return { color: '#9A2525', fill: '#9A2525', label: 'Critical Surge', opacity: 0.65, radius: 450 };
+  if (density >= 70) return { color: '#B8551B', fill: '#B8551B', label: 'High Surge', opacity: 0.55, radius: 350 };
+  if (density >= 50) return { color: '#D98E2C', fill: '#D98E2C', label: 'Moderate Flow', opacity: 0.45, radius: 280 };
+  return { color: '#2E5B36', fill: '#2E5B36', label: 'Normal Flow', opacity: 0.35, radius: 200 };
 }
 
 function renderDynamicWarkariClusters(zones) {
@@ -6391,14 +6149,10 @@ function renderDynamicWarkariClusters(zones) {
 
   window.warkariLayerGroup.clearLayers();
 
-  let totalWarkariCount = 0;
-
-  // March strictly along the pilgrimage highway segments
   for (let i = 0; i < PILGRIMAGE_ROUTE_WAYPOINTS.length - 1; i++) {
     const p1 = PILGRIMAGE_ROUTE_WAYPOINTS[i];
     const p2 = PILGRIMAGE_ROUTE_WAYPOINTS[i + 1];
 
-    // Check if zone data provides a higher real-time density
     let segmentDensity = Math.max(p1.density, p2.density);
     if (zones && Array.isArray(zones)) {
       const z1 = zones.find(z => (z.name || '').toLowerCase().includes(p1.name.toLowerCase().split(' ')[0]));
@@ -6407,65 +6161,34 @@ function renderDynamicWarkariClusters(zones) {
       if (z2 && z2.current_density) segmentDensity = Math.max(segmentDensity, Math.round(z2.current_density));
     }
 
-    // Direct proportional icon count based on heatmap density
-    let countOnSegment = 3;
-    if (segmentDensity >= 85) {
-      // Critical Congestion (Wakhri Phata -> Pandharpur Chowk): 20 walking pilgrims in dense highway line
-      countOnSegment = 20;
-    } else if (segmentDensity >= 70) {
-      // Heavy Density (Taradgaon -> Bhalwani -> Wakhri): 12 pilgrims
-      countOnSegment = 12;
-    } else if (segmentDensity >= 50) {
-      // Moderate (Saswad -> Lonand): 7 pilgrims
-      countOnSegment = 7;
-    } else {
-      // Normal/Low (Alandi -> Pune): 3 pilgrims
-      countOnSegment = 3;
-    }
+    const cfg = getDensityColor(segmentDensity);
+    const pointsCount = segmentDensity >= 85 ? 5 : (segmentDensity >= 70 ? 4 : 3);
+    const heatPoints = interpolatePointsAlongSegment(p1, p2, pointsCount);
 
-    const marchPoints = interpolatePointsAlongSegment(p1, p2, countOnSegment, 0.0004);
-
-    marchPoints.forEach((pt, idx) => {
-      totalWarkariCount++;
-      const isHigh = segmentDensity >= 85;
-      const dindiNum = (totalWarkariCount % 36) + 1;
-      const dindiTypes = ['पताका दिंडी (Dhwaj Dindi)', 'विणा मंडळ (Veena Bhajan)', 'टाळकरी पथक (Taal Mandal)'];
-      const dindiType = dindiTypes[dindiNum % 3];
-
-      const warkariIcon = L.divIcon({
-        className: 'warkari-route-marker',
-        html: createRealisticWarkariSvg(dindiNum, isHigh),
-        iconSize: [36, 46],
-        iconAnchor: [18, 44],
-        popupAnchor: [0, -44]
+    heatPoints.forEach(pt => {
+      const circle = L.circle([pt.lat, pt.lng], {
+        radius: cfg.radius,
+        color: cfg.color,
+        fillColor: cfg.fill,
+        fillOpacity: cfg.opacity,
+        weight: 1.5
       });
 
-      const marker = L.marker([pt.lat, pt.lng], { icon: warkariIcon });
-
-      const popupHtml = `
-        <div style="font-family:var(--font-sans, sans-serif); min-width:220px; padding:4px;">
-          <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1.5px solid #D98E2C; padding-bottom:4px;">
-            <strong style="color:#7A1F1F; font-size:15.5px;">🚩 वारकरी दिंडी पथक #${dindiNum}</strong>
-            <span class="badge" style="background:${isHigh ? '#9A2525' : '#B8551B'}; color:#FFF; font-size:13px; font-weight:700;">
-              ${segmentDensity}% Density
-            </span>
+      circle.bindPopup(`
+        <div style="font-family:var(--font-sans, sans-serif); min-width:180px; padding:4px;">
+          <div style="font-weight:bold; color:${cfg.color}; font-size:14px; border-bottom:1px solid #D8D1C5; padding-bottom:3px;">
+            ${cfg.label}: ${segmentDensity}% Density
           </div>
-          <div style="font-size:14.5px; margin-top:6px; color:#2B2623; line-height:1.5;">
-            <strong>पथक प्रकार:</strong> ${dindiType}<br>
-            <strong>Highway Corridor:</strong> ${escapeHtml(p1.name)} ➔ ${escapeHtml(p2.name)}<br>
-            <strong>Palkhi March Pace:</strong> 3.2 km/h (भजन/हरिपाठ गती)<br>
-            <strong>Crowd Density Level:</strong> ${isHigh ? '🔥 अत्यंत गर्दी (Critical Choke)' : (segmentDensity >= 70 ? '⚠️ मध्यम गर्दी (Heavy)' : '✅ सुरळीत (Fluid)')}<br>
-            <strong>Chanting:</strong> <em>"पुंडलिक वरदा हरि विठ्ठल, श्री ज्ञानदेव तुकाराम"</em>
+          <div style="font-size:13px; color:#2B2623; margin-top:4px;">
+            <strong>Sector:</strong> ${escapeHtml(p1.name)} ➔ ${escapeHtml(p2.name)}<br>
+            <strong>Status:</strong> ${segmentDensity >= 85 ? 'Chokepoint Alert' : 'Active Movement'}
           </div>
         </div>
-      `;
+      `);
 
-      marker.bindPopup(popupHtml);
-      window.warkariLayerGroup.addLayer(marker);
+      window.warkariLayerGroup.addLayer(circle);
     });
   }
-
-  console.debug(`[VariSetu] Placed ${totalWarkariCount} realistic Warkaris strictly along the pilgrimage highway based on heat map density.`);
 }
 
 function renderResourceMapMarkers(resources) {
@@ -6473,67 +6196,25 @@ function renderResourceMapMarkers(resources) {
 
   window.resourceLayerGroup.clearLayers();
 
-  // Precise junction coordinates along pilgrimage highway
   const resourcePlacements = [
-    { type: 'AMBULANCE', code: '#AMB-01', lat: 17.7280, lng: 75.2950, name: '108 Advanced Life Support ICU', doctor: 'Dr. Swapnil Kulkarni', contact: '108 / +91 94220 11081' },
-    { type: 'AMBULANCE', code: '#MV-02', lat: 17.6790, lng: 75.3250, name: 'Mandir North Gate Mobile Clinic', doctor: 'Dr. Priyadarshini Joshi', contact: '108 / +91 94220 11082' },
-    { type: 'WATER_TANKER', code: '#WT-09', lat: 17.7340, lng: 75.2890, name: 'Water Tanker 10,000L (Wakhri Approach)', driver: 'Suresh More', contact: 'Wireless Ch-3' },
-    { type: 'WATER_TANKER', code: '#WT-14', lat: 17.6820, lng: 75.3190, name: 'Water Tanker 10,000L (Pandharpur Bypass)', driver: 'Ganesh Pawar', contact: 'Wireless Ch-3' },
-    { type: 'POLICE_PATROL', code: '#PS-03', lat: 17.7240, lng: 75.2980, name: 'MahaPolice Highway Interceptor #03', incharge: 'PSI V. R. Shinde', contact: 'Police Wireless Ch-1' },
-    { type: 'POLICE_PATROL', code: '#PS-07', lat: 17.6755, lng: 75.3285, name: 'MahaPolice Mandir Perimeter Squad #07', incharge: 'API K. D. Patil', contact: 'Police Wireless Ch-1' },
-    { type: 'FOOD_VAN', code: '#FV-01', lat: 17.8900, lng: 75.0200, name: 'Annadanam Prasadam Van #01 (Bhalwani Camp)', incharge: 'Seva Trust Coordinator', contact: 'Camp Hotline' }
+    { type: 'AMBULANCE', code: 'AMB-01', lat: 17.7280, lng: 75.2950, name: '108 Advanced Life Support ICU', color: '#9A2525' },
+    { type: 'AMBULANCE', code: 'MV-02', lat: 17.6790, lng: 75.3250, name: 'Mandir North Gate Mobile Clinic', color: '#9A2525' },
+    { type: 'WATER_TANKER', code: 'WT-09', lat: 17.7340, lng: 75.2890, name: 'Water Tanker 10,000L (Wakhri)', color: '#1D6F8A' },
+    { type: 'WATER_TANKER', code: 'WT-14', lat: 17.6820, lng: 75.3190, name: 'Water Tanker 10,000L (Pandharpur)', color: '#1D6F8A' },
+    { type: 'POLICE_PATROL', code: 'PS-03', lat: 17.7240, lng: 75.2980, name: 'MahaPolice Highway Interceptor', color: '#1A237E' },
+    { type: 'POLICE_PATROL', code: 'PS-07', lat: 17.6755, lng: 75.3285, name: 'MahaPolice Mandir Perimeter Squad', color: '#1A237E' }
   ];
 
   resourcePlacements.forEach(res => {
-    let iconHtml = '';
-    let size = [54, 34];
-    let anchor = [27, 30];
-
-    if (res.type === 'AMBULANCE') {
-      iconHtml = createRealisticAmbulanceSvg(res.code);
-      size = [54, 34];
-      anchor = [27, 30];
-    } else if (res.type === 'WATER_TANKER') {
-      iconHtml = createRealisticTankerSvg(res.code);
-      size = [56, 34];
-      anchor = [28, 30];
-    } else if (res.type === 'POLICE_PATROL') {
-      iconHtml = createRealisticPoliceSvg(res.code);
-      size = [52, 32];
-      anchor = [26, 28];
-    } else {
-      iconHtml = createRealisticFoodSvg(res.code);
-      size = [54, 34];
-      anchor = [27, 30];
-    }
-
-    const customIcon = L.divIcon({
-      className: 'realistic-vehicle-marker',
-      html: iconHtml,
-      iconSize: size,
-      iconAnchor: anchor,
-      popupAnchor: [0, -30]
+    const badge = L.divIcon({
+      className: 'custom-map-icon',
+      html: `<div style="background:${res.color}; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px; white-space:nowrap;">${escapeHtml(res.code)} (${res.type === 'AMBULANCE' ? 'Medical' : (res.type === 'WATER_TANKER' ? 'Water' : 'Police')})</div>`,
+      iconSize: [110, 20],
+      iconAnchor: [55, 10]
     });
 
-    const marker = L.marker([res.lat, res.lng], { icon: customIcon });
-
-    const popupHtml = `
-      <div style="font-family:var(--font-sans, sans-serif); min-width:200px; padding:4px;">
-        <div style="border-bottom:1.5px solid #7A1F1F; padding-bottom:3px;">
-          <strong style="color:#7A1F1F; font-size:15.5px;">${escapeHtml(res.name)}</strong>
-        </div>
-        <div style="font-size:14.5px; margin-top:5px; color:#2B2623; line-height:1.4;">
-          <strong>Unit Code:</strong> ${escapeHtml(res.code)}<br>
-          ${res.doctor ? `<strong>On-Duty Doctor:</strong> ${escapeHtml(res.doctor)}<br>` : ''}
-          ${res.driver ? `<strong>Driver:</strong> ${escapeHtml(res.driver)}<br>` : ''}
-          ${res.incharge ? `<strong>Incharge:</strong> ${escapeHtml(res.incharge)}<br>` : ''}
-          <strong>Emergency Contact:</strong> ${escapeHtml(res.contact)}<br>
-          <span class="badge" style="background:#2E5B36; color:#FFF; font-size:12.5px; margin-top:4px;">🟢 Operational & Deployed</span>
-        </div>
-      </div>
-    `;
-
-    marker.bindPopup(popupHtml);
+    const marker = L.marker([res.lat, res.lng], { icon: badge });
+    marker.bindPopup(`<b>${escapeHtml(res.name)}</b><br>Unit Code: ${escapeHtml(res.code)}<br>Status: Deployed & Operational`);
     window.resourceLayerGroup.addLayer(marker);
   });
 }
@@ -6843,10 +6524,10 @@ class CCTVFeedPlayer {
     const h = canvas.height;
 
     // Check if there is a hardware-accelerated video element directly underneath this canvas
-    const domVideo = document.getElementById(`video-${this.camCode}`) || canvas.parentElement?.querySelector('video');
+    const domVideo = this.isLargeModal ? document.getElementById('modalDomVideo') : (document.getElementById(`video-${this.camCode}`) || canvas.parentElement?.querySelector('video'));
 
-    if (domVideo && !this.isLargeModal) {
-      // Clear canvas for transparent HUD / AI overlay over native video element
+    if (domVideo) {
+      // Clear canvas for transparent HUD / AI overlay over native hardware-decoded video element
       ctx.clearRect(0, 0, w, h);
       if (domVideo.paused) {
         domVideo.play().catch(() => {});
@@ -7056,18 +6737,18 @@ function openCameraDetails(camera) {
   const density = camera.current_density ?? 94;
   const status = camera.status || 'ONLINE';
   const densityStatus = camera.density_status || (density >= 90 ? 'CRITICAL' : (density >= 75 ? 'HEAVY' : 'MODERATE'));
-  const tagColor = density >= 90 ? 'var(--status-red)' : (density >= 75 ? 'var(--status-orange)' : 'var(--status-yellow)');
   const videoSrc = CCTV_VIDEO_MAP[camCode] || CCTV_VIDEO_MAP.DEFAULT;
   const imageSrc = CCTV_ASSET_MAP[camCode] || CCTV_ASSET_MAP.DEFAULT;
 
   openAppModal({
-    title: `REALTIME SURVEILLANCE & TELEMETRY: ${escapeHtml(camCode)}`,
-    kicker: 'POLICE COMMAND CCTV NETWORK &bull; REALTIME STREAM',
+    title: `CCTV SURVEILLANCE FEED: ${escapeHtml(camCode)}`,
+    kicker: 'POLICE SURVEILLANCE NETWORK • 1080p FEED',
     bodyHtml: `
-      <!-- TOP: REALTIME RUNNING CAMERA STREAM -->
-      <div class="modal-cctv-wrapper">
-        <canvas id="modalLargeCctvCanvas" width="800" height="320" class="modal-cctv-canvas"></canvas>
-        <div class="modal-cctv-toolbar">
+      <!-- TOP: RUNNING CAMERA VIDEO STREAM -->
+      <div class="modal-cctv-wrapper" style="position:relative; height:340px; background:#000; overflow:hidden; border-radius:2px;">
+        <video id="modalDomVideo" src="${videoSrc}" poster="${imageSrc}" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;"></video>
+        <canvas id="modalLargeCctvCanvas" width="800" height="340" class="modal-cctv-canvas" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:2; pointer-events:none;"></canvas>
+        <div class="modal-cctv-toolbar" style="position:absolute; bottom:0; left:0; right:0; z-index:3; background:rgba(24,21,19,0.85); backdrop-filter:blur(4px);">
           <div class="cctv-tool-group">
             <span style="font-size:13px; font-weight:700; color:var(--text-muted); margin-right:4px;">PTZ:</span>
             <button type="button" class="cctv-ctrl-btn" id="ptzPanLeft" title="Pan Left">&larr; Left</button>
@@ -7079,8 +6760,8 @@ function openCameraDetails(camera) {
           <div class="cctv-tool-group">
             <button type="button" class="cctv-ctrl-btn" id="ptzZoomIn" title="Zoom In">+ Zoom In</button>
             <button type="button" class="cctv-ctrl-btn" id="ptzZoomOut" title="Zoom Out">- Zoom Out</button>
-            <button type="button" class="cctv-ctrl-btn active" id="ptzToggleAi" title="Toggle AI Bounding Boxes">🎯 AI Vision [ON]</button>
-            <button type="button" class="cctv-ctrl-btn" id="ptzSnapshot" title="Save Snapshot">📸 Snapshot</button>
+            <button type="button" class="cctv-ctrl-btn active" id="ptzToggleAi" title="Toggle AI Bounding Boxes">AI Vision [ON]</button>
+            <button type="button" class="cctv-ctrl-btn" id="ptzSnapshot" title="Save Snapshot">Snapshot</button>
           </div>
         </div>
       </div>
@@ -7088,8 +6769,8 @@ function openCameraDetails(camera) {
     footerHtml: `
       <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
         <div style="display:flex; gap:6px;">
-          <button type="button" class="govt-btn btn-outline" id="dispatchQrtBtn" style="font-size:14.5px;">🚨 Deploy QRT Squad</button>
-          <button type="button" class="govt-btn btn-outline" id="triggerPaBtn" style="font-size:14.5px;">📢 Trigger PA Alert</button>
+          <button type="button" class="govt-btn btn-outline" id="dispatchQrtBtn" style="font-size:14.5px;">Deploy QRT Squad</button>
+          <button type="button" class="govt-btn btn-outline" id="triggerPaBtn" style="font-size:14.5px;">Trigger PA Alert</button>
         </div>
         <button type="button" class="govt-btn" id="cameraModalClose">Close Surveillance</button>
       </div>
@@ -7098,6 +6779,14 @@ function openCameraDetails(camera) {
 
   // Start live running stream player in the modal
   const modalCanvas = document.getElementById('modalLargeCctvCanvas');
+  const modalVideo = document.getElementById('modalDomVideo');
+  if (modalVideo) {
+    modalVideo.muted = true;
+    modalVideo.defaultMuted = true;
+    modalVideo.playsInline = true;
+    modalVideo.play().catch(() => {});
+  }
+
   if (modalCanvas) {
     currentModalPlayer = new CCTVFeedPlayer(modalCanvas, videoSrc, {
       camCode: camCode,
@@ -7139,20 +6828,12 @@ function openCameraDetails(camera) {
   document.getElementById('ptzToggleAi')?.addEventListener('click', (e) => {
     if (currentModalPlayer) {
       currentModalPlayer.showBoundingBoxes = !currentModalPlayer.showBoundingBoxes;
-      e.currentTarget.textContent = currentModalPlayer.showBoundingBoxes ? '🎯 AI Vision [ON]' : '🎯 AI Vision [OFF]';
       e.currentTarget.classList.toggle('active', currentModalPlayer.showBoundingBoxes);
+      e.currentTarget.textContent = currentModalPlayer.showBoundingBoxes ? 'AI Vision [ON]' : 'AI Vision [OFF]';
     }
   });
   document.getElementById('ptzSnapshot')?.addEventListener('click', () => {
-    alert(`[VariSetu Surveillance] High-Resolution Snapshot captured for ${camCode} and archived to evidence locker.`);
-  });
-
-  // Wire Field Dispatch Buttons
-  document.getElementById('dispatchQrtBtn')?.addEventListener('click', () => {
-    alert(`[Dispatched] Quick Response Team (QRT Squad #14) dispatched to ${camName}.`);
-  });
-  document.getElementById('triggerPaBtn')?.addEventListener('click', () => {
-    alert(`[Public Address System] Marathi crowd direction advisory broadcasted at ${camName} speakers.`);
+    takeCctvSnapshot(camCode);
   });
 
   document.getElementById('cameraModalClose')?.addEventListener('click', () => {
@@ -7161,6 +6842,25 @@ function openCameraDetails(camera) {
       currentModalPlayer = null;
     }
     closeAppModal();
+  });
+
+  document.getElementById('dispatchQrtBtn')?.addEventListener('click', () => {
+    alert(`QRT Squad #14 Dispatched to ${camCode} (${camName})`);
+  });
+  document.getElementById('triggerPaBtn')?.addEventListener('click', () => {
+    openAppModal({
+      title: `Emergency PA Broadcast: ${escapeHtml(camCode)}`,
+      kicker: 'LOUDSPEAKER ANNOUNCEMENT OVERRIDE',
+      bodyHtml: `
+        <div style="font-size:14.5px; line-height:1.5;">
+          <p>Initiating automated loudspeaker announcement at <strong>${escapeHtml(camName)}</strong>...</p>
+          <div style="margin-top:10px; background:var(--bg-subtle); padding:10px; border-radius:2px; border:1px solid var(--border-main);">
+            <em>"सर्व भाविकांना नम्र विनंती, कृपया गर्दी करू नका आणि मुख्य दर्शन मार्गावर शिस्त पाळा."</em>
+          </div>
+        </div>
+      `,
+      footerHtml: `<button type="button" class="govt-btn" onclick="closeAppModal()">Broadcast Completed</button>`
+    });
   });
 }
 
@@ -11036,6 +10736,14 @@ window.dispatchPatrolToCCTV = function(camId, personName) {
   alert(`Patrol squad PS-07 and nearest Volunteer Team VT-04 dispatched to ${camId} for visual verification of ${personName}.`);
   appendTickerEvent(`[DISPATCH] Quick response squad dispatched to ${camId} for ${personName}`);
 };
+
+
+// Global autoplay recovery on first user interaction
+window.addEventListener('click', () => {
+  document.querySelectorAll('.cctv-feed-video').forEach(v => {
+    if (v.paused) v.play().catch(() => {});
+  });
+}, { once: true });
 
 ```
 
