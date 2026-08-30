@@ -28,7 +28,6 @@ from app.core.logging import setup_logging
 from app.core.security import decode_token
 from app.seed.seed_data import seed_database
 from app.services.demo_service import demo_service
-from app.services.live_simulator import live_simulator
 from app.websocket.manager import ws_manager
 
 logger = setup_logging()
@@ -44,14 +43,11 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"Auto-seeding skipped or failed: {e}")
 
-    await live_simulator.start()
-
     yield
 
     # Shutdown sequence
     logger.info("Shutting down VariSetu Command Center Backend...")
     await demo_service.stop()
-    await live_simulator.stop()
 
 
 app = FastAPI(
@@ -175,6 +171,14 @@ async def serve_styles_css():
     if css_file.exists():
         return FileResponse(css_file, media_type="text/css")
     return {"detail": "styles.css not found"}
+
+
+@app.get("/i18n.js")
+async def serve_i18n_js():
+    js_file = FRONTEND_DIR / "i18n.js"
+    if js_file.exists():
+        return FileResponse(js_file, media_type="application/javascript")
+    return {"detail": "i18n.js not found"}
 
 
 @app.get("/pcm-worklet.js")
