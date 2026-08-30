@@ -173,6 +173,14 @@ async def serve_styles_css():
     return {"detail": "styles.css not found"}
 
 
+@app.get("/i18n.js")
+async def serve_i18n_js():
+    js_file = FRONTEND_DIR / "i18n.js"
+    if js_file.exists():
+        return FileResponse(js_file, media_type="application/javascript")
+    return {"detail": "i18n.js not found"}
+
+
 @app.get("/pcm-worklet.js")
 async def serve_pcm_worklet():
     worklet_file = FRONTEND_DIR / "pcm-worklet.js"
