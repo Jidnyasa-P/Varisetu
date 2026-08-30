@@ -44,6 +44,13 @@
   <body>
     <!-- ==================== PRIVATE LOGIN ENTRY VIEW ==================== -->
     <section id="loginView" class="login-view">
+      <button
+        type="button"
+        class="lang-toggle-btn"
+        title="Switch Language / भाषा बदला"
+      >
+        मराठी
+      </button>
       <div class="login-panel">
         <div
           class="login-brand"
@@ -102,10 +109,10 @@
 
         <div class="login-divider"></div>
 
-        <div class="login-title">COMMAND CENTER ACCESS</div>
+        <div class="login-title" data-i18n="commandCenterAccess">COMMAND CENTER ACCESS</div>
 
         <form id="loginForm">
-          <label for="loginEmail">Official Email / Officer ID</label>
+          <label for="loginEmail" data-i18n="emailLabel">Official Email / Officer ID</label>
           <input
             id="loginEmail"
             type="email"
@@ -114,7 +121,7 @@
             required
           />
 
-          <label for="loginPassword">Password</label>
+          <label for="loginPassword" data-i18n="passwordLabel">Password</label>
           <div class="password-input-wrapper">
             <input
               id="loginPassword"
@@ -157,7 +164,7 @@
             class="govt-btn login-submit"
             id="loginSubmitBtn"
           >
-            SIGN IN
+            <span data-i18n="signIn">SIGN IN</span>
           </button>
         </form>
 
@@ -184,11 +191,11 @@
             "
           >
             <i data-lucide="users" style="width: 14px; height: 14px"></i>
-            <span> Public Pilgrim Portal & Helplines (नागरिक माहिती)</span>
+            <span data-i18n="publicPortalBtn"> Public Pilgrim Portal & Helplines (नागरिक माहिती)</span>
           </button>
         </div>
 
-        <div class="login-restricted-note">
+        <div class="login-restricted-note" data-i18n="restrictedNote">
           Authorised Personnel Only &bull; Access Monitored
         </div>
       </div>
@@ -228,10 +235,11 @@
                 line-height: 1.1;
               "
             >
-              वारी सेतु &bull; सार्वजनिक वारकरी सेवा पोर्टल
+              <span data-i18n="brandTaglinePublic">वारी सेतु &bull; सार्वजनिक वारकरी सेवा पोर्टल</span>
             </h1>
             <span
               class="brand-english"
+              data-i18n="brandSubtitle"
               style="
                 font-size: 13px;
                 color: var(--text-muted);
@@ -252,8 +260,15 @@
               font-weight: 700;
             "
           >
-            <span> PALKHI: APPROACHING WAKHRI</span>
+            <span data-i18n="palkhiStatus"> PALKHI: APPROACHING WAKHRI</span>
           </div>
+          <button
+            type="button"
+            class="lang-toggle-btn"
+            title="Switch Language / भाषा बदला"
+          >
+            मराठी
+          </button>
           <button
             id="backToLoginBtn"
             type="button"
@@ -267,7 +282,7 @@
             "
           >
             <i data-lucide="lock" style="width: 12px; height: 12px"></i>
-            <span>Officer Login</span>
+            <span data-i18n="officerLogin">Officer Login</span>
           </button>
         </div>
       </header>
@@ -299,9 +314,9 @@
                 color: #f5d38a;
               "
             >
-              संत तुकाराम महाराज व संत ज्ञानेश्वर महाराज पालखी सोहळा २०२६
+              <span data-i18n="heroTitle">संत तुकाराम महाराज व संत ज्ञानेश्वर महाराज पालखी सोहळा २०२६</span>
             </div>
-            <div style="font-size: 15.5px; color: #efece6; margin-top: 4px">
+            <div style="font-size: 15.5px; color: #efece6; margin-top: 4px" data-i18n="heroLive">
               Live Location: Wakhri Phata Junction (Km 184) &bull; Moving
               smoothly towards Pandharpur Shrine
             </div>
@@ -317,7 +332,7 @@
             >
               ~8,45,000
             </div>
-            <div style="font-size: 13.5px; color: #ddd">
+            <div style="font-size: 13.5px; color: #ddd" data-i18n="heroCount">
               Estimated Pilgrim Count
             </div>
           </div>
@@ -329,8 +344,8 @@
           <div>
             <div class="panel-card" style="padding: 12px; margin-bottom: 12px">
               <div class="panel-header" style="margin-bottom: 8px">
-                <span>PILGRIMAGE ROUTE & HALT STATIONS MAP</span>
-                <span style="font-size: 13.5px; color: var(--text-muted)"
+                <span data-i18n="routeMapTitle">PILGRIMAGE ROUTE & HALT STATIONS MAP</span>
+                <span style="font-size: 13.5px; color: var(--text-muted)" data-i18n="routeMapStops"
                   >Alandi &rarr; Saswad &rarr; Lonand &rarr; Wakhri &rarr;
                   Pandharpur</span
                 >
@@ -352,7 +367,7 @@
                 class="panel-header"
                 style="margin-bottom: 8px; color: var(--saffron-gold)"
               >
-                <span>☀️ PILGRIM HEALTH & HYDRATION ADVISORY</span>
+                <span data-i18n="weatherTitle">☀️ PILGRIM HEALTH & HYDRATION ADVISORY</span>
                 <span class="density-tag yellow">34°C MODERATE HEAT</span>
               </div>
               <div
@@ -361,6 +376,7 @@
                   color: var(--text-primary);
                   line-height: 1.5;
                 "
+                data-i18n="weatherAdvisory"
               >
                 <strong>Advisory:</strong> Drink plenty of water. Free ORSL salt
                 sachets & medical assistance are available at all 24 water
@@ -380,15 +396,15 @@
               "
             >
               <div class="panel-header" style="margin-bottom: 10px">
-                <span> EMERGENCY & HELPLINE NUMBERS</span>
-                <span style="font-size: 13.5px; color: var(--status-green)"
+                <span data-i18n="helplineTitle"> EMERGENCY & HELPLINE NUMBERS</span>
+                <span style="font-size: 13.5px; color: var(--status-green)" data-i18n="helplineActive"
                   >24x7 ACTIVE</span
                 >
               </div>
               <div style="display: flex; flex-direction: column; gap: 8px">
                 <a href="tel:112" class="public-helpline-card">
                   <div>
-                    <div class="public-helpline-title">
+                    <div class="public-helpline-title" data-i18n="policeControl">
                       Police Control Room (महाराष्ट्र पोलीस)
                     </div>
                     <div class="public-helpline-num">112 / 02186-223344</div>
@@ -396,13 +412,14 @@
                   <span
                     class="govt-btn"
                     style="padding: 3px 8px; font-size: 13.5px"
+                    data-i18n="callNow"
                     >CALL NOW</span
                   >
                 </a>
 
                 <a href="tel:108" class="public-helpline-card">
                   <div>
-                    <div class="public-helpline-title">
+                    <div class="public-helpline-title" data-i18n="ambulanceLabel">
                       Ambulance & Medical Emergency
                     </div>
                     <div class="public-helpline-num">108 / 102</div>
@@ -414,29 +431,31 @@
                       font-size: 13.5px;
                       background: var(--status-red);
                     "
+                    data-i18n="callNow"
                     >CALL NOW</span
                   >
                 </a>
 
                 <a href="tel:18002330099" class="public-helpline-card">
                   <div>
-                    <div class="public-helpline-title">
+                    <div class="public-helpline-title" data-i18n="lostFoundBooth">
                       Lost & Found Pilgrim Assistance Booth
                     </div>
                     <div class="public-helpline-num">
-                      1800-233-0099 (Toll Free)
+                      1800-233-0099 (<span data-i18n="tollFree">Toll Free</span>)
                     </div>
                   </div>
                   <span
                     class="govt-btn btn-outline"
                     style="padding: 3px 8px; font-size: 13.5px"
+                    data-i18n="callNow"
                     >CALL NOW</span
                   >
                 </a>
 
                 <a href="tel:02186223550" class="public-helpline-card">
                   <div>
-                    <div class="public-helpline-title">
+                    <div class="public-helpline-title" data-i18n="vitthalDesk">
                       Shri Vitthal Mandir Samiti Control Desk
                     </div>
                     <div class="public-helpline-num">02186-223550</div>
@@ -444,6 +463,7 @@
                   <span
                     class="govt-btn btn-outline"
                     style="padding: 3px 8px; font-size: 13.5px"
+                    data-i18n="callNow"
                     >CALL NOW</span
                   >
                 </a>
@@ -456,7 +476,7 @@
               style="padding: 12px; background: var(--bg-subtle)"
             >
               <div class="panel-header" style="margin-bottom: 6px">
-                <span> REPORT MISSING FAMILY MEMBER</span>
+                <span data-i18n="reportMissingTitle"> REPORT MISSING FAMILY MEMBER</span>
               </div>
               <div
                 style="
@@ -464,6 +484,7 @@
                   color: var(--text-secondary);
                   margin-bottom: 8px;
                 "
+                data-i18n="reportMissingDesc"
               >
                 Separated from your family or group in the crowd? Submit details
                 and photos directly for instant AI matching across state CCTV
@@ -487,7 +508,7 @@
                   data-lucide="user-plus"
                   style="width: 13px; height: 13px"
                 ></i>
-                <span>Submit Missing Person Report (तक्रार नोंदवा)</span>
+                <span data-i18n="submitMissingBtn">Submit Missing Person Report (तक्रार नोंदवा)</span>
               </button>
             </div>
           </div>
@@ -558,6 +579,13 @@
           >
             <span>PILGRIM COUNT: ~8,45,000</span>
           </div>
+          <button
+            type="button"
+            class="lang-toggle-btn"
+            title="Switch Language / भाषा बदला"
+          >
+            मराठी
+          </button>
           <button
             class="govt-btn btn-outline"
             id="configGoogleMapsKeyBtn"
@@ -4682,6 +4710,9 @@ Distressed mother called stating child slipped away during sudden crowd surge on
         </div>
       </div>
     </div>
+
+    <!-- i18n Language Toggle Engine (must load before app.js) -->
+    <script src="i18n.js"></script>
 
     <!-- Application Logic JavaScript -->
     <script src="app.js"></script>

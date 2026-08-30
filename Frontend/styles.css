@@ -699,6 +699,35 @@ body {
   background-color: var(--maroon-bg);
 }
 
+/* ==================== Language Toggle Button ==================== */
+.lang-toggle-btn {
+  background-color: transparent;
+  color: var(--maroon-primary);
+  border: 1px solid var(--maroon-primary);
+  padding: 5px 12px;
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.lang-toggle-btn:hover {
+  background-color: var(--maroon-primary);
+  color: #fff;
+}
+
+/* Toggle button placed on the login screen (no header there) */
+#loginView .lang-toggle-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
 .govt-btn.btn-disabled {
   background-color: #D6D1C7;
   border-color: #C2BBB0;
@@ -1103,6 +1132,7 @@ body {
 }
 
 .login-view {
+  position: relative;
   min-height: 100vh;
   background: var(--bg-khadi);
   display: flex;
