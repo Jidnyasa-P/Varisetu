@@ -325,15 +325,20 @@ body {
 .cctv-tile.status-normal { border-left-color: var(--status-green); }
 .cctv-tile.status-moderate { border-left-color: var(--status-yellow); }
 .cctv-tile.status-heavy { border-left-color: var(--status-orange); }
-.cctv-tile.status-critical { border-left-color: var(--status-red); }
-
-.cctv-feed-img,
-.cctv-feed-canvas {
+.cctv-feed-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
   background: #0B0D0F;
+}
+
+.cctv-feed-canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: transparent !important;
 }
 
 .cctv-tile:hover {
@@ -404,7 +409,7 @@ body {
   width: 100%;
   height: 280px;
   display: block;
-  background: #000;
+  background: transparent !important;
 }
 
 .modal-cctv-toolbar {
@@ -1757,24 +1762,60 @@ body {
   border-left-color: var(--saffron-gold);
 }
 
-/* ==================== CORRIDOR WAYPOINT HUD BAR ==================== */
+/* ==================== COMPACT DUAL-ROUTE WARI BANNERS ==================== */
 .map-corridor-hud {
   position: absolute;
-  top: 8px;
-  left: 58px;
-  right: 10px;
+  top: 6px;
+  left: 54px;
+  right: 8px;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.94);
   border: 1px solid var(--border-strong);
-  border-left: 4px solid var(--maroon-primary);
+  border-left: 3px solid var(--maroon-primary);
   border-radius: 3px;
-  padding: 6px 12px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+.hud-route-line {
   display: flex;
   align-items: center;
-  gap: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  backdrop-filter: blur(4px);
-  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hud-route-badge {
+  color: #FFF;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 2px;
+  letter-spacing: 0.4px;
+  flex-shrink: 0;
+}
+
+.hud-route-title {
+  font-weight: 700;
+  color: var(--text-primary);
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.hud-route-path {
+  color: var(--text-secondary);
+  font-family: var(--font-mono, monospace);
+  font-size: 11.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hud-item {

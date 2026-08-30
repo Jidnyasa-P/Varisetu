@@ -355,23 +355,23 @@
               <div style="height:1px; background:var(--border-main); margin:6px 0;"></div>
 
               <div style="font-weight:700; color:var(--text-primary); font-size:14px; margin-bottom:4px; text-transform:uppercase; letter-spacing:0.4px;">
-                NH-60 Corridor Sectors
-              </div>
-              <div class="map-legend-item">
-                <div class="legend-color-box" style="background:#9A2525;"></div>
-                <span><strong>Sector 4:</strong> Sangamner ➔ Nashik (92%)</span>
-              </div>
-              <div class="map-legend-item">
-                <div class="legend-color-box" style="background:#B8551B;"></div>
-                <span><strong>Sector 3:</strong> Manchar ➔ Sangamner (82%)</span>
+                Wari Pilgrimage Corridors
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#D98E2C;"></div>
-                <span><strong>Sector 2:</strong> Bhosari ➔ Manchar (62%)</span>
+                <span><strong>Route 1:</strong> Alandi ➔ Pandharpur (210 km)</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#B8551B;"></div>
+                <span><strong>Route 2:</strong> Dehu ➔ Pandharpur (218 km)</span>
+              </div>
+              <div class="map-legend-item">
+                <div class="legend-color-box" style="background:#9A2525;"></div>
+                <span><strong>Confluence:</strong> Wakhri ➔ Pandharpur (96%)</span>
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#2E5B36;"></div>
-                <span><strong>Sector 1:</strong> Pune ➔ Bhosari (38%)</span>
+                <span><strong>Origins:</strong> Alandi &amp; Dehu Ghats (35%)</span>
               </div>
 
               <div style="height:1px; background:var(--border-main); margin:6px 0;"></div>
@@ -381,15 +381,15 @@
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#D98E2C; border-radius:50%;"></div>
-                <span><strong>Palkhi Lead:</strong> Narayangaon (Km 84)</span>
+                <span><strong>Palkhi Lead:</strong> Wakhri Phata (Km 184)</span>
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#9A2525; border-radius:50%;"></div>
-                <span><strong>Medical Ambulances:</strong> Sectors 3 &amp; 5</span>
+                <span><strong>Medical Ambulances:</strong> Saswad, Wakhri &amp; Mandir</span>
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#1D6F8A; border-radius:50%;"></div>
-                <span><strong>Water Tankers:</strong> Sectors 2 &amp; 4</span>
+                <span><strong>Water Tankers:</strong> Wakhri &amp; Pandharpur Base</span>
               </div>
               <div class="map-legend-item">
                 <div class="legend-color-box" style="background:#1A237E; border-radius:50%;"></div>
@@ -400,27 +400,17 @@
 
           <!-- Center: Interactive Route Map & Live GIS Common Operating Picture -->
           <div class="map-container" style="position:relative;">
-            <!-- Interactive Corridor Waypoint HUD Bar -->
+            <!-- Compact Dual-Route Wari Banners (2 Single Lines) -->
             <div class="map-corridor-hud" id="mapCorridorHud">
-              <div class="hud-item">
-                <span class="hud-label">CORRIDOR</span>
-                <span class="hud-value" id="hudCorridorTitle">NH-60 (212 km) Pune ➔ Nashik</span>
+              <div class="hud-route-line">
+                <span class="hud-route-badge" style="background:#D98E2C;">ROUTE 1</span>
+                <span class="hud-route-title">Sant Dnyaneshwar Maharaj Palkhi:</span>
+                <span class="hud-route-path">Alandi ➔ Pune (Hadapsar) ➔ Saswad ➔ Lonand ➔ Phaltan ➔ Malshiras ➔ Wakhri ➔ Pandharpur (210 km)</span>
               </div>
-              <div class="hud-divider"></div>
-              <div class="hud-item">
-                <span class="hud-label">ACTIVE PALKHI</span>
-                <span class="hud-value" style="color: #D98E2C;" id="hudPalkhiStatus">Narayangaon (Km 84) • 3.2 km/h</span>
-              </div>
-              <div class="hud-divider"></div>
-              <div class="hud-item">
-                <span class="hud-label">SECTOR SURGE</span>
-                <span class="hud-value" style="color: #9A2525;" id="hudSectorStatus">S4 Nashik Surge (92%)</span>
-              </div>
-              <div class="hud-actions" style="display:flex; gap:6px; margin-left:auto;">
-                <button type="button" class="govt-btn" id="changeCorridorEndpointsBtn" style="font-size:13px; padding:3px 8px;">
-                  <i data-lucide="map-pin" style="width:10px; height:10px;"></i>
-                  <span>Change Origin / Destination</span>
-                </button>
+              <div class="hud-route-line">
+                <span class="hud-route-badge" style="background:#B8551B;">ROUTE 2</span>
+                <span class="hud-route-title">Sant Tukaram Maharaj Palkhi:</span>
+                <span class="hud-route-path">Dehu ➔ Pune (Nana Peth) ➔ Yavat ➔ Baramati ➔ Indapur ➔ Akluj ➔ Wakhri ➔ Pandharpur (218 km)</span>
               </div>
             </div>
 
@@ -1352,33 +1342,38 @@
 
   <!-- Change Corridor Origin & Destination Endpoints Modal -->
   <div class="app-modal-backdrop" id="corridorEndpointsModalBackdrop" aria-hidden="true" style="display:none;">
-    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:520px;">
+    <div class="app-modal" role="dialog" aria-modal="true" style="max-width:560px;">
       <div class="app-modal-header">
         <div>
-          <div class="app-modal-kicker">NH-60 PILGRIMAGE CORRIDOR</div>
-          <div class="app-modal-title">Configure Pilgrimage Corridor Waypoints</div>
+          <div class="app-modal-kicker">WARI PILGRIMAGE CORRIDORS</div>
+          <div class="app-modal-title">Pilgrimage Corridor Origins &amp; Terminals</div>
         </div>
         <button type="button" class="close-modal-btn" id="closeCorridorEndpointsModalBtn">&times;</button>
       </div>
       <form id="corridorEndpointsForm">
         <div class="app-modal-body">
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Source Origin (Pune)</label>
-            <input type="text" id="corridorOriginInput" class="govt-input" value="Flat no A9, Garden View Society, Indira shankar nagri, Near Rahul Towers, Kothrud Depo, Pune - 411038" required>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Coordinates: 18.5074, 73.8077 (Kothrud Depo)</div>
+            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Route 1 Origin: Alandi Devsthan (Sant Dnyaneshwar Palkhi)</label>
+            <input type="text" id="corridorOriginInput" class="govt-input" value="Sant Dnyaneshwar Maharaj Sanjeevan Samadhi Mandir, Alandi, Pune - 412105 (18.6772, 73.8967)" readonly>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Route: Alandi ➔ Saswad ➔ Lonand ➔ Phaltan ➔ Malshiras ➔ Wakhri ➔ Pandharpur (210 km)</div>
           </div>
           <div style="margin-bottom:12px;">
-            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Destination Terminal (Nashik)</label>
-            <input type="text" id="corridorDestInput" class="govt-input" value="Narayan Park, Govind Nagar, Nashik, Maharashtra, Pin Code: 422009" required>
-            <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Coordinates: 19.9700, 73.7800 (Govind Nagar)</div>
+            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Route 2 Origin: Dehu Devsthan (Sant Tukaram Palkhi)</label>
+            <input type="text" id="corridorOrigin2Input" class="govt-input" value="Sant Tukaram Maharaj Gatha Mandir, Dehu, Pune - 412109 (18.7180, 73.7710)" readonly>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Route: Dehu ➔ Pune ➔ Yavat ➔ Baramati ➔ Indapur ➔ Akluj ➔ Wakhri ➔ Pandharpur (218 km)</div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="display:block; font-weight:600; font-size:15px; margin-bottom:4px;">Shared Destination: Pandharpur Vitthal Mandir</label>
+            <input type="text" id="corridorDestInput" class="govt-input" value="Shri Vitthal-Rukmini Mandir &amp; Chandrabhaga Ghat, Pandharpur, Solapur - 413304 (17.6777, 75.3276)" readonly>
+            <div style="font-size:13px; color:var(--text-muted); margin-top:2px;">Confluence Point: Wakhri Phata Ubhe Ringan (17.7280, 75.2950)</div>
           </div>
           <div style="background:var(--bg-subtle); padding:8px 10px; border:1px solid var(--border-main); font-size:14px; color:var(--text-secondary); border-radius:2px;">
-            <strong>Corridor Profile:</strong> NH-60 National Highway (212 km) • 4 Real-time Monitored Sectors with automatic density telemetry.
+            <strong>Wari Corridor Profile:</strong> Live dual-route crowd density heatmap monitoring from Alandi &amp; Dehu to Pandharpur.
           </div>
         </div>
         <div class="app-modal-footer">
-          <button type="button" class="govt-btn btn-outline" id="cancelCorridorEndpointsModalBtn">Cancel</button>
-          <button type="submit" class="govt-btn" id="saveCorridorEndpointsBtn">Update Active Corridor</button>
+          <button type="button" class="govt-btn btn-outline" id="cancelCorridorEndpointsModalBtn">Close</button>
+          <button type="submit" class="govt-btn" id="saveCorridorEndpointsBtn">Confirm Active Routes</button>
         </div>
       </form>
     </div>

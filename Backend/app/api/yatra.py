@@ -10,6 +10,7 @@ from app.services.yatra_service import yatra_service
 router = APIRouter(prefix="/yatra", tags=["Yatra / Palkhi Tracking"])
 
 
+@router.get("", response_model=YatraLiveOut, summary="Get live Yatra / Palkhi telemetry")
 @router.get("/live", response_model=YatraLiveOut, summary="Get live Yatra / Palkhi telemetry")
 async def get_yatra_live(
     db: AsyncSession = Depends(get_db),

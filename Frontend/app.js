@@ -724,7 +724,7 @@ function initRouteMap() {
   if (!mapElement || window.wariMap) return;
 
   const wariMap = L.map('routeMap', {
-    center: [19.2000, 74.0000],
+    center: [18.1800, 74.5500],
     zoom: 8,
     zoomControl: true
   });
@@ -732,7 +732,7 @@ function initRouteMap() {
   window.wariMap = wariMap;
 
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &bull; Maharashtra Police IT (NH-60 Corridor Engine)',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &bull; Maharashtra Police IT (Pandharpur Wari Corridor Engine)',
     maxZoom: 19
   }).addTo(wariMap);
 
@@ -741,97 +741,154 @@ function initRouteMap() {
   window.resourceLayerGroup = L.layerGroup().addTo(wariMap);
   window.cctvHighlightLayerGroup = L.layerGroup().addTo(wariMap);
 
-  // Active Pilgrimage Corridor along NH-60 (212 km) Pune (Kothrud) to Nashik (Govind Nagar)
-  const sector1 = [
-    [18.5074, 73.8077], // Origin: Kothrud Depo, Pune
-    [18.5300, 73.8400], // Shivajinagar
-    [18.6270, 73.8470]  // Bhosari
-  ];
-  const sector2 = [
-    [18.6270, 73.8470], // Bhosari
-    [18.7180, 73.8780], // Chakan
-    [18.8600, 73.9100], // Rajgurunagar
-    [19.0060, 73.9450]  // Manchar
-  ];
-  const sector3 = [
-    [19.0060, 73.9450], // Manchar
-    [19.1240, 73.9780], // Narayangaon (Km 84)
-    [19.3100, 74.0600], // Alephata
-    [19.5760, 74.2120]  // Sangamner
-  ];
-  const sector4 = [
-    [19.5760, 74.2120], // Sangamner
-    [19.7050, 73.9900], // Sinnar
-    [19.9700, 73.7800]  // Terminal: Govind Nagar, Nashik
+  // -------------------------------------------------------------
+  // ROUTE 1: Sant Dnyaneshwar Maharaj Palkhi (Alandi ➔ Pandharpur)
+  // -------------------------------------------------------------
+  const dnyaneshwarRoute = [
+    [18.6772, 73.8967], // START 1: Alandi Devsthan Ghat
+    [18.5080, 73.9250], // Pune (Hadapsar / Bhawani Peth)
+    [18.3440, 74.0305], // Saswad (Dive Ghat)
+    [18.2750, 74.1600], // Jejuri
+    [18.1500, 74.1800], // Walhe
+    [18.0400, 74.1900], // Lonand (Nira River Snan)
+    [17.9600, 74.5200], // Taradgaon
+    [17.9850, 74.4300], // Phaltan
+    [17.9000, 74.6500], // Barad
+    [17.8900, 74.7800], // Natepute
+    [17.8200, 74.9000], // Malshiras
+    [17.7800, 75.0500], // Velapur
+    [17.7500, 75.1800], // Shegaon
+    [17.7280, 75.2950], // CONFLUENCE: Wakhri Phata
+    [17.7020, 75.3120], // Bhatumbare Bypass
+    [17.6777, 75.3276]  // END: Pandharpur Vitthal Mandir
   ];
 
-  L.polyline(sector1, { color: '#2E5B36', weight: 6, opacity: 0.85 }).addTo(wariMap)
-    .bindPopup('<b>Sector 1 (Pune ➔ Bhosari):</b> Green Flow (#2E5B36) - 38% Density');
-  L.polyline(sector2, { color: '#D98E2C', weight: 6.5, opacity: 0.85 }).addTo(wariMap)
-    .bindPopup('<b>Sector 2 (Bhosari ➔ Manchar):</b> Saffron Flow (#D98E2C) - 62% Density');
-  L.polyline(sector3, { color: '#B8551B', weight: 7.5, opacity: 0.9 }).addTo(wariMap)
-    .bindPopup('<b>Sector 3 (Manchar ➔ Sangamner):</b> Dark Orange (#B8551B) - 82% Heavy Flow');
-  L.polyline(sector4, { color: '#9A2525', weight: 8.5, opacity: 0.95 }).addTo(wariMap)
-    .bindPopup('<b>Sector 4 (Sangamner ➔ Govind Nagar Nashik):</b> Red (#9A2525) - 92% Critical Surge');
+  // -------------------------------------------------------------
+  // ROUTE 2: Sant Tukaram Maharaj Palkhi (Dehu ➔ Pandharpur)
+  // -------------------------------------------------------------
+  const tukaramRoute = [
+    [18.7180, 73.7710], // START 2: Dehu Gatha Mandir
+    [18.6500, 73.7900], // Akurdi / Pimpri
+    [18.5150, 73.8650], // Pune (Nana Peth / Nivdungya Vithoba)
+    [18.4850, 74.0200], // Loni Kalbhor
+    [18.4600, 74.2800], // Yavat
+    [18.4400, 74.4100], // Varvand
+    [18.3200, 74.5200], // Undawadi
+    [18.1500, 74.5800], // Baramati
+    [18.0400, 74.7200], // Sansar
+    [17.9600, 74.8500], // Anthurne
+    [18.0500, 74.8800], // Nimgaon Ketki
+    [18.1150, 75.0300], // Indapur
+    [17.9200, 75.0900], // Sarati (Nira River Snan)
+    [17.8900, 75.0200], // Akluj
+    [17.8200, 74.9000], // Malshiras
+    [17.7600, 75.1200], // Bondale
+    [17.7280, 75.2950], // CONFLUENCE: Wakhri Phata
+    [17.7020, 75.3120], // Bhatumbare Bypass
+    [17.6777, 75.3276]  // END: Pandharpur Vitthal Mandir
+  ];
 
-  // Palkhi Marker at Narayangaon (Km 84) - Clean text marker (No emojis)
+  const makeTextBadge = (text, bg, textColor = '#FFF', border = '#000') => L.divIcon({
+    className: 'custom-map-icon',
+    html: `<div style="background:${bg}; color:${textColor}; border:1.5px solid ${border}; padding:3px 8px; font-size:12px; font-weight:bold; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); white-space:nowrap;">${escapeHtml(text)}</div>`,
+    iconSize: [140, 24],
+    iconAnchor: [70, 12]
+  });
+
+  // 1. EXACT START LOCATIONS
+  L.marker([18.6772, 73.8967], { icon: makeTextBadge('🚩 START 1: Alandi (Dnyaneshwar Palkhi)', '#16A34A') }).addTo(wariMap)
+    .bindPopup('<b>Start Location 1: Alandi Devsthan</b><br>Sant Dnyaneshwar Maharaj Sanjeevan Samadhi Mandir, Indrayani River Ghat');
+
+  L.marker([18.7180, 73.7710], { icon: makeTextBadge('🚩 START 2: Dehu (Tukaram Palkhi)', '#16A34A') }).addTo(wariMap)
+    .bindPopup('<b>Start Location 2: Dehu Devsthan</b><br>Sant Tukaram Maharaj Gatha Mandir, Indrayani River Ghat');
+
+  // 2. CONFLUENCE & EXACT END LOCATIONS
+  L.marker([17.7280, 75.2950], { icon: makeTextBadge('⚡ CONFLUENCE: Wakhri Phata', '#DC2626') }).addTo(wariMap)
+    .bindPopup('<b>Wakhri Phata Confluence Ground</b><br>Historic Ubhe Ringan & Palkhi Confluence point before Pandharpur entrance');
+
+  L.marker([17.6777, 75.3276], { icon: makeTextBadge('🛕 END: Pandharpur Vitthal Mandir', '#991B1B') }).addTo(wariMap)
+    .bindPopup('<b>End Location: Shri Vitthal-Rukmini Mandir & Chandrabhaga Ghat</b><br>Ultimate pilgrimage culmination point for both Palkhi processions');
+
+  // Palkhi Live Lead Markers
   const palkhiIcon = L.divIcon({
     className: 'custom-map-icon',
-    html: `<div style="background:transparent; color:#2B2623; border:2px solid #7A1F1F; padding:3px 8px; font-weight:bold; font-size:13px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35);">PALKHI LEAD (Narayangaon Km 84)</div>`,
-    iconSize: [190, 24],
-    iconAnchor: [95, 12]
+    html: `<div style="background:#FFF8E7; color:#7A1F1F; border:2px solid #7A1F1F; padding:3px 8px; font-weight:bold; font-size:12.5px; border-radius:3px; box-shadow:0 2px 6px rgba(0,0,0,0.35); white-space:nowrap;">PALKHI LEAD (Wakhri Km 184)</div>`,
+    iconSize: [180, 24],
+    iconAnchor: [90, 12]
   });
-  AppState.palkhiMarker = L.marker([19.1240, 73.9780], { icon: palkhiIcon }).addTo(wariMap)
-    .bindPopup('<b>Sant Tukaram Maharaj Palkhi</b><br>Location: Narayangaon (Km 84 on NH-60)<br>Speed: 3.2 km/h • Heading: North<br>Destination: Narayan Park, Govind Nagar, Nashik');
+  AppState.palkhiMarker = L.marker([17.7280, 75.2950], { icon: palkhiIcon }).addTo(wariMap)
+    .bindPopup('<b>Sant Tukaram Maharaj & Sant Dnyaneshwar Maharaj Palkhi Lead</b><br>Location: Wakhri Phata (Km 184)<br>Speed: 2.8 km/h • Heading: Pandharpur South-East');
 
-  const makeTextBadge = (text, bg) => L.divIcon({
-    className: 'custom-map-icon',
-    html: `<div style="background:${bg}; color:#FFF; border:1px solid #000; padding:2px 6px; font-size:11.5px; font-weight:bold; border-radius:2px; white-space:nowrap;">${escapeHtml(text)}</div>`,
-    iconSize: [110, 20],
-    iconAnchor: [55, 10]
-  });
+  // Water Tankers positioned along Pandharpur corridor
+  L.marker([17.7340, 75.2890], { icon: makeTextBadge('Tanker WT-09', '#1D6F8A') }).addTo(wariMap)
+    .bindPopup('<b>Water Tanker #WT-09</b><br>Capacity: 10,000L (80% Full)<br>Operator: Ramesh Shinde (+91-9822001122)<br>Location: Wakhri Phata Standby');
 
-  // Water Tankers
-  L.marker([19.1200, 73.9700], { icon: makeTextBadge('Tanker WT-09', '#1D6F8A') }).addTo(wariMap)
-    .bindPopup('<b>Water Tanker #WT-09</b><br>Capacity: 10,000L (80% Full)<br>Operator: Ramesh Shinde (+91-9822001122)<br>Location: Narayangaon Standby');
-
-  L.marker([19.5700, 74.2100], { icon: makeTextBadge('Tanker WT-04', '#1D6F8A') }).addTo(wariMap)
-    .bindPopup('<b>Water Tanker #WT-04</b><br>Capacity: 10,000L (Deployed)<br>Operator: D. V. More (+91-9822002233)<br>Location: Sangamner North Chowk');
+  L.marker([17.6820, 75.3190], { icon: makeTextBadge('Tanker WT-04', '#1D6F8A') }).addTo(wariMap)
+    .bindPopup('<b>Water Tanker #WT-04</b><br>Capacity: 10,000L (Deployed)<br>Operator: D. V. More (+91-9822002233)<br>Location: Pandharpur North Chowk');
 
   // Medical Ambulances
-  L.marker([18.6270, 73.8470], { icon: makeTextBadge('Ambulance MV-01', '#9A2525') }).addTo(wariMap)
-    .bindPopup('<b>Mobile Medical Ambulance #MV-01</b><br>Doctor: Dr. A. V. Joshi<br>Location: Bhosari Sector 1 Base');
+  L.marker([18.3440, 74.0305], { icon: makeTextBadge('Ambulance MV-01', '#9A2525') }).addTo(wariMap)
+    .bindPopup('<b>Mobile Medical Ambulance #MV-01</b><br>Doctor: Dr. A. V. Joshi<br>Location: Saswad Sector 1 Base');
 
-  L.marker([19.1240, 73.9780], { icon: makeTextBadge('Ambulance MV-02', '#9A2525') }).addTo(wariMap)
-    .bindPopup('<b>Mobile Medical Ambulance #MV-02</b><br>Doctor: Dr. S. P. Deshmukh<br>Location: Narayangaon Km 84 Transit Camp');
+  L.marker([17.7280, 75.2950], { icon: makeTextBadge('Ambulance MV-02', '#9A2525') }).addTo(wariMap)
+    .bindPopup('<b>Mobile Medical Ambulance #MV-02</b><br>Doctor: Dr. S. P. Deshmukh<br>Location: Wakhri Transit Camp');
 
-  L.marker([19.5760, 74.2120], { icon: makeTextBadge('Ambulance MV-03', '#9A2525') }).addTo(wariMap)
-    .bindPopup('<b>Emergency Mobile ICU #MV-03</b><br>Doctor: Dr. P. K. Shirole<br>Location: Sangamner Choke Base');
+  L.marker([17.6790, 75.3250], { icon: makeTextBadge('Ambulance MV-03', '#9A2525') }).addTo(wariMap)
+    .bindPopup('<b>Emergency Mobile ICU #MV-03</b><br>Doctor: Dr. P. K. Shirole<br>Location: Pandharpur Temple Chowk Base');
 
   // Surveillance CCTVs
-  L.marker([18.5200, 73.8500], { icon: makeTextBadge('CAM-01 (Pune)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-01 (Pune / Bhosari)</b>');
-  L.marker([19.0060, 73.9450], { icon: makeTextBadge('CAM-08 (Manchar)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-08 (Manchar Highway)</b>');
-  L.marker([19.1240, 73.9780], { icon: makeTextBadge('CAM-12 (Narayangaon)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-12 (Narayangaon Checkpoint)</b>');
-  L.marker([19.9700, 73.7800], { icon: makeTextBadge('CAM-04 (Nashik)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-04 (Govind Nagar, Nashik Terminal)</b>');
+  L.marker([18.6772, 73.8967], { icon: makeTextBadge('CAM-01 (Alandi)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-01 (Alandi Ghat Section)</b>');
+  L.marker([18.3440, 74.0305], { icon: makeTextBadge('CAM-08 (Saswad)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-08 (Saswad Highway Stop)</b>');
+  L.marker([17.7280, 75.2950], { icon: makeTextBadge('CAM-12 (Wakhri)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-12 (Wakhri Phata Junction)</b>');
+  L.marker([17.6777, 75.3276], { icon: makeTextBadge('CAM-04 (Pandharpur)', '#2B2623') }).addTo(wariMap).bindPopup('<b>CAM-04 (Pandharpur Temple Chowk)</b>');
 
   if (typeof renderDynamicWarkariClusters === 'function') renderDynamicWarkariClusters(AppState.crowdZones || []);
   if (typeof renderResourceMapMarkers === 'function') renderResourceMapMarkers(AppState.resources || []);
 }
 
-/* ==================== COLOR-WISE CROWD DENSITY HEATMAP & RESOURCE MARKERS ==================== */
+/* ==================== GOOGLE MAPS TRAFFIC CONGESTION HEATMAP ENGINE ==================== */
 
-const PILGRIMAGE_ROUTE_WAYPOINTS = [
-  { name: "Alandi Start Ghat", lat: 18.6772, lng: 73.8967, zone: "ZONE-ALANDI", density: 35 },
-  { name: "Pune Hadapsar Chowk", lat: 18.5080, lng: 73.9250, zone: "ZONE-PUNE", density: 50 },
-  { name: "Saswad Dive Ghat", lat: 18.3440, lng: 74.0305, zone: "ZONE-SASWAD", density: 62 },
-  { name: "Lonand Nira River", lat: 18.0400, lng: 74.1900, zone: "ZONE-LONAND", density: 68 },
-  { name: "Taradgaon Camp", lat: 17.9600, lng: 74.5200, zone: "ZONE-TARADGAON", density: 70 },
-  { name: "Bhalwani Junction", lat: 17.8900, lng: 75.0200, zone: "ZONE-BHALWANI", density: 74 },
-  { name: "Malshiras Sector", lat: 17.8200, lng: 74.9000, zone: "ZONE-MALSHIRAS", density: 78 },
-  { name: "Wakhri Phata Base", lat: 17.7280, lng: 75.2950, zone: "ZONE-WAKHRI", density: 88 },
-  { name: "Bhatumbare Bypass", lat: 17.7020, lng: 75.3120, zone: "ZONE-PANDHARPUR", density: 92 },
-  { name: "Pandharpur Vitthal Mandir", lat: 17.6777, lng: 75.3276, zone: "ZONE-PANDHARPUR", density: 94 }
+const DNYANESHWAR_ROUTE_WAYPOINTS = [
+  { name: "Alandi Start Ghat", lat: 18.6772, lng: 73.8967, density: 35 },
+  { name: "Pune Hadapsar Chowk", lat: 18.5080, lng: 73.9250, density: 50 },
+  { name: "Saswad Dive Ghat", lat: 18.3440, lng: 74.0305, density: 62 },
+  { name: "Jejuri Mandir Stop", lat: 18.2750, lng: 74.1600, density: 65 },
+  { name: "Lonand Nira River", lat: 18.0400, lng: 74.1900, density: 68 },
+  { name: "Taradgaon Camp", lat: 17.9600, lng: 74.5200, density: 72 },
+  { name: "Phaltan Rest Base", lat: 17.9850, lng: 74.4300, density: 75 },
+  { name: "Barad Ringan", lat: 17.9000, lng: 74.6500, density: 76 },
+  { name: "Natepute Chowk", lat: 17.8900, lng: 74.7800, density: 78 },
+  { name: "Malshiras Sector", lat: 17.8200, lng: 74.9000, density: 82 },
+  { name: "Velapur Halt", lat: 17.7800, lng: 75.0500, density: 85 },
+  { name: "Shegaon Ring Road", lat: 17.7500, lng: 75.1800, density: 88 },
+  { name: "Wakhri Phata Base", lat: 17.7280, lng: 75.2950, density: 92 },
+  { name: "Bhatumbare Bypass", lat: 17.7020, lng: 75.3120, density: 95 },
+  { name: "Pandharpur Vitthal Mandir", lat: 17.6777, lng: 75.3276, density: 96 }
 ];
+
+const TUKARAM_ROUTE_WAYPOINTS = [
+  { name: "Dehu Start Mandir", lat: 18.7180, lng: 73.7710, density: 35 },
+  { name: "Akurdi Pimpri Chowk", lat: 18.6500, lng: 73.7900, density: 45 },
+  { name: "Pune Nana Peth", lat: 18.5150, lng: 73.8650, density: 52 },
+  { name: "Loni Kalbhor", lat: 18.4850, lng: 74.0200, density: 58 },
+  { name: "Yavat Halt", lat: 18.4600, lng: 74.2800, density: 64 },
+  { name: "Varvand Rest Camp", lat: 18.4400, lng: 74.4100, density: 66 },
+  { name: "Undawadi Base", lat: 18.3200, lng: 74.5200, density: 68 },
+  { name: "Baramati Junction", lat: 18.1500, lng: 74.5800, density: 72 },
+  { name: "Sansar Sector", lat: 18.0400, lng: 74.7200, density: 74 },
+  { name: "Anthurne Halt", lat: 17.9600, lng: 74.8500, density: 76 },
+  { name: "Nimgaon Ketki", lat: 18.0500, lng: 74.8800, density: 78 },
+  { name: "Indapur Camp", lat: 18.1150, lng: 75.0300, density: 82 },
+  { name: "Sarati Nira Snan", lat: 17.9200, lng: 75.0900, density: 84 },
+  { name: "Akluj Ringan Ground", lat: 17.8900, lng: 75.0200, density: 86 },
+  { name: "Malshiras Sector", lat: 17.8200, lng: 74.9000, density: 88 },
+  { name: "Bondale Pass", lat: 17.7600, lng: 75.1200, density: 90 },
+  { name: "Wakhri Phata Base", lat: 17.7280, lng: 75.2950, density: 93 },
+  { name: "Bhatumbare Bypass", lat: 17.7020, lng: 75.3120, density: 95 },
+  { name: "Pandharpur Vitthal Mandir", lat: 17.6777, lng: 75.3276, density: 96 }
+];
+
+const PILGRIMAGE_ROUTE_WAYPOINTS = DNYANESHWAR_ROUTE_WAYPOINTS;
 
 function interpolatePointsAlongSegment(p1, p2, count) {
   const points = [];
@@ -844,11 +901,65 @@ function interpolatePointsAlongSegment(p1, p2, count) {
   return points;
 }
 
-function getDensityColor(density) {
-  if (density >= 85) return { color: '#9A2525', fill: '#9A2525', label: 'Critical Surge', opacity: 0.65, radius: 450 };
-  if (density >= 70) return { color: '#B8551B', fill: '#B8551B', label: 'High Surge', opacity: 0.55, radius: 350 };
-  if (density >= 50) return { color: '#D98E2C', fill: '#D98E2C', label: 'Moderate Flow', opacity: 0.45, radius: 280 };
-  return { color: '#2E5B36', fill: '#2E5B36', label: 'Normal Flow', opacity: 0.35, radius: 200 };
+function getTrafficCongestionStyle(density) {
+  if (density >= 90) {
+    return {
+      color: '#991B1B', // Dark Red / Severe Chokepoint
+      glowColor: 'rgba(153, 27, 27, 0.45)',
+      circleColor: '#7F1D1D',
+      label: 'Severe Bottleneck (Critical Surge)',
+      tag: 'CRITICAL',
+      badgeBg: '#991B1B',
+      radius: 480,
+      opacity: 0.65
+    };
+  }
+  if (density >= 80) {
+    return {
+      color: '#DC2626', // Red / Heavy Density
+      glowColor: 'rgba(220, 38, 38, 0.40)',
+      circleColor: '#DC2626',
+      label: 'Heavy Crowd Congestion',
+      tag: 'HIGH SURGE',
+      badgeBg: '#DC2626',
+      radius: 380,
+      opacity: 0.55
+    };
+  }
+  if (density >= 65) {
+    return {
+      color: '#EA580C', // Orange / Moderate-Heavy
+      glowColor: 'rgba(234, 88, 12, 0.35)',
+      circleColor: '#EA580C',
+      label: 'Moderate-Heavy Flow',
+      tag: 'MODERATE-HIGH',
+      badgeBg: '#EA580C',
+      radius: 300,
+      opacity: 0.45
+    };
+  }
+  if (density >= 50) {
+    return {
+      color: '#EAB308', // Yellow / Slowdown
+      glowColor: 'rgba(234, 179, 8, 0.35)',
+      circleColor: '#EAB308',
+      label: 'Moderate Steady Flow',
+      tag: 'MODERATE',
+      badgeBg: '#CA8A04',
+      radius: 250,
+      opacity: 0.40
+    };
+  }
+  return {
+    color: '#16A34A', // Green / Free Flow
+    glowColor: 'rgba(22, 163, 74, 0.30)',
+    circleColor: '#16A34A',
+    label: 'Unobstructed Normal Flow',
+    tag: 'NORMAL',
+    badgeBg: '#16A34A',
+    radius: 200,
+    opacity: 0.35
+  };
 }
 
 function renderDynamicWarkariClusters(zones) {
@@ -856,46 +967,92 @@ function renderDynamicWarkariClusters(zones) {
 
   window.warkariLayerGroup.clearLayers();
 
-  for (let i = 0; i < PILGRIMAGE_ROUTE_WAYPOINTS.length - 1; i++) {
-    const p1 = PILGRIMAGE_ROUTE_WAYPOINTS[i];
-    const p2 = PILGRIMAGE_ROUTE_WAYPOINTS[i + 1];
+  const allRoutes = [
+    { name: 'Sant Dnyaneshwar Maharaj Route (Alandi ➔ Pandharpur)', waypoints: DNYANESHWAR_ROUTE_WAYPOINTS },
+    { name: 'Sant Tukaram Maharaj Route (Dehu ➔ Pandharpur)', waypoints: TUKARAM_ROUTE_WAYPOINTS }
+  ];
 
-    let segmentDensity = Math.max(p1.density, p2.density);
-    if (zones && Array.isArray(zones)) {
-      const z1 = zones.find(z => (z.name || '').toLowerCase().includes(p1.name.toLowerCase().split(' ')[0]));
-      const z2 = zones.find(z => (z.name || '').toLowerCase().includes(p2.name.toLowerCase().split(' ')[0]));
-      if (z1 && z1.current_density) segmentDensity = Math.max(segmentDensity, Math.round(z1.current_density));
-      if (z2 && z2.current_density) segmentDensity = Math.max(segmentDensity, Math.round(z2.current_density));
-    }
+  allRoutes.forEach(routeObj => {
+    const waypoints = routeObj.waypoints;
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      const p1 = waypoints[i];
+      const p2 = waypoints[i + 1];
 
-    const cfg = getDensityColor(segmentDensity);
-    const pointsCount = segmentDensity >= 85 ? 5 : (segmentDensity >= 70 ? 4 : 3);
-    const heatPoints = interpolatePointsAlongSegment(p1, p2, pointsCount);
+      let segmentDensity = Math.max(p1.density, p2.density);
+      if (zones && Array.isArray(zones)) {
+        const z1 = zones.find(z => (z.name || '').toLowerCase().includes(p1.name.toLowerCase().split(' ')[0]));
+        const z2 = zones.find(z => (z.name || '').toLowerCase().includes(p2.name.toLowerCase().split(' ')[0]));
+        if (z1 && z1.current_density) segmentDensity = Math.max(segmentDensity, Math.round(z1.current_density));
+        if (z2 && z2.current_density) segmentDensity = Math.max(segmentDensity, Math.round(z2.current_density));
+      }
 
-    heatPoints.forEach(pt => {
-      const circle = L.circle([pt.lat, pt.lng], {
-        radius: cfg.radius,
+      const cfg = getTrafficCongestionStyle(segmentDensity);
+
+      // 1. Google Maps Traffic Segment: Outer Ambient Glow Polyline
+      const glowLine = L.polyline([[p1.lat, p1.lng], [p2.lat, p2.lng]], {
+        color: cfg.glowColor,
+        weight: 12,
+        opacity: 0.85,
+        lineCap: 'round',
+        lineJoin: 'round'
+      });
+      window.warkariLayerGroup.addLayer(glowLine);
+
+      // 2. Google Maps Traffic Segment: Core Congestion Polyline (Green / Yellow / Orange / Red)
+      const coreLine = L.polyline([[p1.lat, p1.lng], [p2.lat, p2.lng]], {
         color: cfg.color,
-        fillColor: cfg.fill,
-        fillOpacity: cfg.opacity,
-        weight: 1.5
+        weight: 6.5,
+        opacity: 0.95,
+        lineCap: 'round',
+        lineJoin: 'round'
       });
 
-      circle.bindPopup(`
-        <div style="font-family:var(--font-sans, sans-serif); min-width:180px; padding:4px;">
-          <div style="font-weight:bold; color:${cfg.color}; font-size:14px; border-bottom:1px solid #D8D1C5; padding-bottom:3px;">
-            ${cfg.label}: ${segmentDensity}% Density
+      coreLine.bindPopup(`
+        <div style="font-family:var(--font-sans, sans-serif); min-width:210px; padding:4px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #E5E7EB; padding-bottom:4px; margin-bottom:6px;">
+            <span style="font-weight:700; color:${cfg.color}; font-size:13.5px;">${cfg.label}</span>
+            <span style="background:${cfg.badgeBg}; color:#FFF; font-size:10.5px; font-weight:700; padding:1px 6px; border-radius:2px;">${segmentDensity}% DENSITY</span>
           </div>
-          <div style="font-size:13px; color:#2B2623; margin-top:4px;">
+          <div style="font-size:12.5px; color:#1F2937; line-height:1.45;">
+            <strong>Corridor:</strong> ${escapeHtml(routeObj.name)}<br>
             <strong>Sector:</strong> ${escapeHtml(p1.name)} ➔ ${escapeHtml(p2.name)}<br>
-            <strong>Status:</strong> ${segmentDensity >= 85 ? 'Chokepoint Alert' : 'Active Movement'}
+            <strong>Congestion State:</strong> ${segmentDensity >= 85 ? '🚨 High Congestion Chokepoint' : (segmentDensity >= 65 ? '⚠️ Heavy Pilgrim Surge' : (segmentDensity >= 50 ? '🟡 Moderate Steady Flow' : '🟢 Smooth Pedestrian Movement'))}
           </div>
         </div>
       `);
 
-      window.warkariLayerGroup.addLayer(circle);
-    });
-  }
+      window.warkariLayerGroup.addLayer(coreLine);
+
+      // 3. Dense Continuous Heatmap Gradient Discs along the road
+      const pointsCount = segmentDensity >= 85 ? 5 : (segmentDensity >= 70 ? 4 : 3);
+      const heatPoints = interpolatePointsAlongSegment(p1, p2, pointsCount);
+
+      heatPoints.forEach(pt => {
+        const circle = L.circle([pt.lat, pt.lng], {
+          radius: cfg.radius,
+          color: cfg.color,
+          fillColor: cfg.circleColor,
+          fillOpacity: cfg.opacity,
+          weight: 1.2
+        });
+
+        circle.bindPopup(`
+          <div style="font-family:var(--font-sans, sans-serif); min-width:190px; padding:4px;">
+            <div style="font-weight:bold; color:${cfg.color}; font-size:13.5px; border-bottom:1px solid #D8D1C5; padding-bottom:3px;">
+              ${cfg.label}: ${segmentDensity}% Density
+            </div>
+            <div style="font-size:12.5px; color:#2B2623; margin-top:4px;">
+              <strong>Corridor:</strong> ${escapeHtml(routeObj.name)}<br>
+              <strong>Sector:</strong> ${escapeHtml(p1.name)} ➔ ${escapeHtml(p2.name)}<br>
+              <strong>Status:</strong> ${segmentDensity >= 85 ? 'Chokepoint Alert' : 'Active Movement'}
+            </div>
+          </div>
+        `);
+
+        window.warkariLayerGroup.addLayer(circle);
+      });
+    }
+  });
 }
 
 function renderResourceMapMarkers(resources) {
@@ -1120,6 +1277,253 @@ const CCTV_VIDEO_MAP = {
   'DEFAULT': 'assets/videos/cctv_cam_12_wakhri.mp4'
 };
 
+const CCTV_AI_PROFILES = {
+  'CAM-12': [
+    {
+      label: 'Police Bandobast',
+      startX: 0.26,
+      startY: 0.18,
+      startW: 0.05,
+      startH: 0.16,
+      endX: 0.26,
+      endY: 0.26,
+      endW: 0.07,
+      endH: 0.20,
+      progress: 0.50,
+      speed: 0.015,
+      gaitPhase: 0,
+      confidence: 96,
+      color: '#00E5FF',
+      category: 'POLICE',
+      trackId: 'POLICE-12'
+    },
+    {
+      label: 'Devotee (Warkari)',
+      startX: 0.38,
+      startY: 0.22,
+      startW: 0.08,
+      startH: 0.22,
+      endX: 0.44,
+      endY: 0.88,
+      endW: 0.16,
+      endH: 0.54,
+      progress: 0.45,
+      speed: 0.075,
+      gaitPhase: 0,
+      confidence: 97,
+      color: '#00FF66',
+      category: 'PILGRIM',
+      trackId: 'TRK-1201'
+    },
+    {
+      label: 'Pilgrim (Kalash)',
+      startX: 0.48,
+      startY: 0.26,
+      startW: 0.07,
+      startH: 0.20,
+      endX: 0.60,
+      endY: 0.86,
+      endW: 0.14,
+      endH: 0.50,
+      progress: 0.80,
+      speed: 0.085,
+      gaitPhase: 2.1,
+      confidence: 94,
+      color: '#00FF66',
+      category: 'PILGRIM',
+      trackId: 'TRK-1202'
+    }
+  ],
+  'CAM-08': [
+    {
+      label: 'Ambulance 108 Standby',
+      startX: 0.16,
+      startY: 0.22,
+      startW: 0.18,
+      startH: 0.24,
+      endX: 0.16,
+      endY: 0.26,
+      endW: 0.18,
+      endH: 0.24,
+      progress: 0.50,
+      speed: 0.01,
+      gaitPhase: 0,
+      confidence: 98,
+      color: '#FF3B30',
+      category: 'MEDICAL',
+      trackId: 'AMB-108'
+    },
+    {
+      label: 'Dindi Procession',
+      startX: 0.32,
+      startY: 0.22,
+      startW: 0.22,
+      startH: 0.26,
+      endX: 0.38,
+      endY: 0.80,
+      endW: 0.34,
+      endH: 0.48,
+      progress: 0.40,
+      speed: 0.065,
+      gaitPhase: 1.5,
+      confidence: 94,
+      color: '#00FF66',
+      category: 'PILGRIM',
+      trackId: 'TRK-0801'
+    },
+    {
+      label: 'Police Escort',
+      startX: 0.68,
+      startY: 0.26,
+      startW: 0.06,
+      startH: 0.18,
+      endX: 0.70,
+      endY: 0.45,
+      endW: 0.09,
+      endH: 0.26,
+      progress: 0.30,
+      speed: 0.035,
+      gaitPhase: 3.0,
+      confidence: 95,
+      color: '#00E5FF',
+      category: 'POLICE',
+      trackId: 'POLICE-08'
+    }
+  ],
+  'CAM-04': [
+    {
+      label: 'Police Naka (Crowd Control)',
+      startX: 0.12,
+      startY: 0.30,
+      startW: 0.12,
+      startH: 0.26,
+      endX: 0.12,
+      endY: 0.32,
+      endW: 0.12,
+      endH: 0.26,
+      progress: 0.50,
+      speed: 0.005,
+      gaitPhase: 0,
+      confidence: 96,
+      color: '#00E5FF',
+      category: 'POLICE',
+      trackId: 'POLICE-04'
+    },
+    {
+      label: 'Darshan Flow (High Density)',
+      startX: 0.26,
+      startY: 0.25,
+      startW: 0.24,
+      startH: 0.28,
+      endX: 0.32,
+      endY: 0.78,
+      endW: 0.38,
+      endH: 0.46,
+      progress: 0.55,
+      speed: 0.060,
+      gaitPhase: 0,
+      confidence: 95,
+      color: '#FFB800',
+      category: 'CROWD',
+      trackId: 'TRK-0401'
+    },
+    {
+      label: 'Pilgrim Queue',
+      startX: 0.56,
+      startY: 0.28,
+      startW: 0.16,
+      startH: 0.24,
+      endX: 0.52,
+      endY: 0.80,
+      endW: 0.24,
+      endH: 0.40,
+      progress: 0.20,
+      speed: 0.070,
+      gaitPhase: 3.1,
+      confidence: 92,
+      color: '#00FF66',
+      category: 'PILGRIM',
+      trackId: 'TRK-0402'
+    }
+  ],
+  'CAM-01': [
+    {
+      label: 'Pilgrim Stream (Normal Flow)',
+      startX: 0.28,
+      startY: 0.20,
+      startW: 0.18,
+      startH: 0.24,
+      endX: 0.34,
+      endY: 0.78,
+      endW: 0.30,
+      endH: 0.48,
+      progress: 0.50,
+      speed: 0.065,
+      gaitPhase: 0.8,
+      confidence: 95,
+      color: '#00FF66',
+      category: 'PILGRIM',
+      trackId: 'TRK-0101'
+    },
+    {
+      label: 'Devotee',
+      startX: 0.46,
+      startY: 0.22,
+      startW: 0.09,
+      startH: 0.20,
+      endX: 0.52,
+      endY: 0.82,
+      endW: 0.15,
+      endH: 0.42,
+      progress: 0.25,
+      speed: 0.080,
+      gaitPhase: 3.4,
+      confidence: 92,
+      color: '#00FF66',
+      category: 'PILGRIM',
+      trackId: 'TRK-0102'
+    }
+  ],
+  'DEFAULT': [
+    {
+      label: 'Devotee (Warkari)',
+      startX: 0.38,
+      startY: 0.22,
+      startW: 0.08,
+      startH: 0.24,
+      endX: 0.44,
+      endY: 0.84,
+      endW: 0.16,
+      endH: 0.50,
+      progress: 0.50,
+      speed: 0.075,
+      gaitPhase: 0,
+      confidence: 94,
+      color: '#00FF66',
+      category: 'PILGRIM',
+      trackId: 'TRK-0001'
+    },
+    {
+      label: 'Pilgrim Stream',
+      startX: 0.50,
+      startY: 0.25,
+      startW: 0.10,
+      startH: 0.22,
+      endX: 0.58,
+      endY: 0.82,
+      endW: 0.18,
+      endH: 0.44,
+      progress: 0.15,
+      speed: 0.080,
+      gaitPhase: 2.5,
+      confidence: 91,
+      color: '#00FF66',
+      category: 'PILGRIM',
+      trackId: 'TRK-0002'
+    }
+  ]
+};
+
 const activeCctvPlayers = {};
 let currentModalPlayer = null;
 
@@ -1138,6 +1542,7 @@ class CCTVFeedPlayer {
     this.zoom = 1.0;
     this.running = false;
     this.animFrame = null;
+    this.lastTimestamp = null;
 
     this.videoSrc = videoSrc || CCTV_VIDEO_MAP[this.camCode] || CCTV_VIDEO_MAP.DEFAULT;
     this.imageFallbackSrc = CCTV_ASSET_MAP[this.camCode] || CCTV_ASSET_MAP.DEFAULT;
@@ -1161,7 +1566,6 @@ class CCTVFeedPlayer {
       const playPromise = this.video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Autoplay policy fallback: muted user action
           this.video.muted = true;
         });
       }
@@ -1185,23 +1589,8 @@ class CCTVFeedPlayer {
   }
 
   createDetectionBoxes() {
-    const count = this.isLargeModal ? 6 : 3;
-    const labels = ['Devotee', 'Pilgrim Squad', 'Police Naka', 'Vehicle', 'Palkhi Queue', 'Ambulance Sector'];
-    const boxes = [];
-    for (let i = 0; i < count; i++) {
-      boxes.push({
-        baseX: 0.12 + (i * 0.13) + (Math.random() * 0.04),
-        baseY: 0.30 + (Math.random() * 0.38),
-        w: 0.08 + Math.random() * 0.05,
-        h: 0.12 + Math.random() * 0.08,
-        speedX: (Math.random() - 0.5) * 0.0003,
-        speedY: (Math.random() - 0.5) * 0.0002,
-        label: labels[i % labels.length],
-        confidence: Math.floor(88 + Math.random() * 11),
-        color: (i === 0 && this.density > 80) ? '#FF3B30' : '#00FF66'
-      });
-    }
-    return boxes;
+    const profile = CCTV_AI_PROFILES[this.camCode] || CCTV_AI_PROFILES.DEFAULT;
+    return profile.map(item => ({ ...item }));
   }
 
   start() {
@@ -1210,6 +1599,7 @@ class CCTVFeedPlayer {
     if (this.video && this.video.paused) {
       this.video.play().catch(() => {});
     }
+    this.lastTimestamp = performance.now();
     this.render();
   }
 
@@ -1222,6 +1612,7 @@ class CCTVFeedPlayer {
       cancelAnimationFrame(this.animFrame);
       this.animFrame = null;
     }
+    this.lastTimestamp = null;
   }
 
   render(timestamp = performance.now()) {
@@ -1229,6 +1620,11 @@ class CCTVFeedPlayer {
     const { canvas, ctx, video, videoLoaded, img, imgLoaded } = this;
     const w = canvas.width;
     const h = canvas.height;
+
+    // Delta time calculation for smooth constant 60fps tracking
+    if (!this.lastTimestamp) this.lastTimestamp = timestamp;
+    const dt = Math.min(0.1, (timestamp - this.lastTimestamp) / 1000);
+    this.lastTimestamp = timestamp;
 
     // Check if there is a hardware-accelerated video element directly underneath this canvas
     const domVideo = this.isLargeModal ? document.getElementById('modalDomVideo') : (document.getElementById(`video-${this.camCode}`) || canvas.parentElement?.querySelector('video'));
@@ -1267,66 +1663,153 @@ class CCTVFeedPlayer {
       }
     }
     // Optical scanlines
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.10)';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
     for (let y = 0; y < h; y += 4) {
       ctx.fillRect(0, y, w, 1.5);
     }
 
-    // Draw dynamic AI detection bounding boxes
-    if (this.showBoundingBoxes) {
+    // Draw dynamic AI detection bounding boxes that move along with walking devotees
+    if (this.showBoundingBoxes && this.boxes && this.boxes.length > 0) {
       this.boxes.forEach(box => {
-        box.baseX += box.speedX;
-        box.baseY += box.speedY;
-        if (box.baseX < 0.04 || box.baseX > 0.86) box.speedX *= -1;
-        if (box.baseY < 0.22 || box.baseY > 0.74) box.speedY *= -1;
+        let curX, curY, curW, curH;
+        let alpha = 1.0;
 
-        const bx = (box.baseX * w) + (this.panX * 0.5);
-        const by = (box.baseY * h) + (this.panY * 0.5);
-        const bw = box.w * w;
-        const bh = box.h * h;
+        if (box.speed <= 0.03) {
+          // Stationary anchor: Bandobast / Standby post
+          const anchorSway = Math.sin((timestamp * 0.002) + box.gaitPhase) * 0.002;
+          curX = box.startX + anchorSway;
+          curY = box.startY + anchorSway;
+          curW = box.startW;
+          curH = box.startH;
+          alpha = 1.0;
+        } else {
+          // Dynamic walking trajectory: Follows pilgrims moving forward down the road
+          box.progress += box.speed * dt;
+          if (box.progress >= 1.0) {
+            box.progress -= 1.0;
+          }
 
+          const p = box.progress;
+          const t = Math.pow(p, 1.28);
+
+          curX = box.startX + (box.endX - box.startX) * t;
+          curY = box.startY + (box.endY - box.startY) * t;
+          curW = box.startW + (box.endW - box.startW) * t;
+          curH = box.startH + (box.endH - box.startH) * t;
+
+          if (p < 0.08) {
+            alpha = p / 0.08;
+          } else if (p > 0.90) {
+            alpha = (1.0 - p) / 0.10;
+          }
+        }
+
+        if (alpha <= 0.02) return;
+
+        // Subtle realistic walking cadence (vertical & lateral gait bobbing)
+        const gaitBobY = box.speed > 0.03 ? Math.sin((timestamp * 0.008) + box.gaitPhase) * (curH * 0.022) : 0;
+        const gaitSwayX = box.speed > 0.03 ? Math.cos((timestamp * 0.004) + box.gaitPhase) * (curW * 0.015) : 0;
+
+        const bx = ((curX + gaitSwayX) * w) + (this.panX * 0.5);
+        const by = ((curY + gaitBobY) * h) + (this.panY * 0.5);
+        const bw = curW * w;
+        const bh = curH * h;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+
+        // 1. Sleek Bounding Box
         ctx.strokeStyle = box.color;
-        ctx.lineWidth = this.isLargeModal ? 2 : 1.5;
+        ctx.lineWidth = this.isLargeModal ? 1.8 : 1.2;
         ctx.strokeRect(bx, by, bw, bh);
 
-        // Label pill
+        // 2. High-Tech Corner Reticles (L-corners)
+        const cornerLen = Math.min(12, bw * 0.25, bh * 0.25);
+        ctx.lineWidth = this.isLargeModal ? 2.5 : 1.8;
+
+        // Top-Left
+        ctx.beginPath();
+        ctx.moveTo(bx, by + cornerLen);
+        ctx.lineTo(bx, by);
+        ctx.lineTo(bx + cornerLen, by);
+        ctx.stroke();
+
+        // Top-Right
+        ctx.beginPath();
+        ctx.moveTo(bx + bw - cornerLen, by);
+        ctx.lineTo(bx + bw, by);
+        ctx.lineTo(bx + bw, by + cornerLen);
+        ctx.stroke();
+
+        // Bottom-Left
+        ctx.beginPath();
+        ctx.moveTo(bx, by + bh - cornerLen);
+        ctx.lineTo(bx, by + bh);
+        ctx.lineTo(bx + cornerLen, by + bh);
+        ctx.stroke();
+
+        // Bottom-Right
+        ctx.beginPath();
+        ctx.moveTo(bx + bw - cornerLen, by + bh);
+        ctx.lineTo(bx + bw, by + bh);
+        ctx.lineTo(bx + bw, by + bh - cornerLen);
+        ctx.stroke();
+
+        // 3. Identification Label Pill with Track ID and Confidence
         const fontSize = this.isLargeModal ? 10 : 8;
         ctx.font = `600 ${fontSize}px monospace`;
-        const text = `${box.label} ${box.confidence}%`;
-        const textW = ctx.measureText(text).width + 6;
+        const labelText = `${box.label} ${box.confidence}%`;
+        const textW = ctx.measureText(labelText).width + 8;
+        const pillH = fontSize + 6;
 
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-        ctx.fillRect(bx, by - (fontSize + 4), textW, fontSize + 3);
+        ctx.fillStyle = 'rgba(11, 13, 15, 0.85)';
+        ctx.fillRect(bx, by - pillH - 2, textW, pillH);
+
+        // Accent border on label pill
+        ctx.strokeStyle = box.color;
+        ctx.lineWidth = 1;
+        ctx.strokeRect(bx, by - pillH - 2, textW, pillH);
+
         ctx.fillStyle = box.color;
-        ctx.fillText(text, bx + 3, by - 3);
+        ctx.fillText(labelText, bx + 4, by - 5);
+
+        ctx.restore();
       });
     }
 
-    // Live Timecode & Metadata HUD
-    const now = new Date();
-    const pad = (n) => String(n).padStart(2, '0');
-    const ms = String(now.getMilliseconds()).padStart(3, '0');
-    const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${ms} IST`;
-    const dateStr = `28 AUG 2026`;
+    // Render live timecode ONLY for the large modal view (when clicked)
+    if (this.isLargeModal) {
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const ms = String(now.getMilliseconds()).padStart(3, '0');
+      const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}.${ms} IST`;
+      const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+      const dateStr = `${pad(now.getDate())} ${months[now.getMonth()]} ${now.getFullYear()}`;
+      const liveTimeFormatted = `${dateStr}  ${timeStr}`;
 
-    // Top HUD Bar
-    const hudHeight = this.isLargeModal ? 26 : 20;
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.68)';
-    ctx.fillRect(0, 0, w, hudHeight);
+      // Update the above header section timestamp in real time
+      const headerTimestampEl = document.getElementById('modalCctvLiveTimestamp');
+      if (headerTimestampEl) {
+        headerTimestampEl.textContent = liveTimeFormatted;
+      }
 
-    // Camera Code + Location
-    ctx.font = `700 ${this.isLargeModal ? 11 : 9}px monospace`;
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText(`${this.camCode} | LIVE VIDEO | ${this.location.toUpperCase()}`, 8, this.isLargeModal ? 17 : 14);
+      // Top HUD Bar
+      const hudHeight = 26;
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.72)';
+      ctx.fillRect(0, 0, w, hudHeight);
 
-    // Flashing REC Dot & Timecode
-    const isRecOn = Math.floor(timestamp / 500) % 2 === 0;
-    const recText = `● LIVE REC  ${dateStr} ${timeStr}`;
-    ctx.fillStyle = isRecOn ? '#FF3B30' : '#888888';
-    const recWidth = ctx.measureText(recText).width;
-    ctx.fillText(recText, w - recWidth - 8, this.isLargeModal ? 17 : 14);
+      // Camera Code + Location
+      ctx.font = '700 11px monospace';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(`${this.camCode} | LIVE VIDEO | ${this.location.toUpperCase()}`, 8, 17);
 
-    // Bottom telemetry bar cleaned
+      // Flashing REC Dot & Timecode
+      const isRecOn = Math.floor(timestamp / 500) % 2 === 0;
+      const recText = `● LIVE REC  ${liveTimeFormatted}`;
+      ctx.fillStyle = isRecOn ? '#FF3B30' : '#888888';
+      const recWidth = ctx.measureText(recText).width;
+      ctx.fillText(recText, w - recWidth - 8, 17);
+    }
 
     this.animFrame = requestAnimationFrame((ts) => this.render(ts));
   }
@@ -1349,6 +1832,14 @@ function initCctvTilePlayers() {
       activeCctvPlayers[cfg.code].stop();
     }
 
+    const domVideo = document.getElementById(`video-${cfg.code}`) || canvas.parentElement?.querySelector('video');
+    if (domVideo) {
+      domVideo.muted = true;
+      domVideo.defaultMuted = true;
+      domVideo.playsInline = true;
+      domVideo.play().catch(() => {});
+    }
+
     const videoSrc = CCTV_VIDEO_MAP[cfg.code] || CCTV_VIDEO_MAP.DEFAULT;
     const player = new CCTVFeedPlayer(canvas, videoSrc, {
       camCode: cfg.code,
@@ -1361,6 +1852,37 @@ function initCctvTilePlayers() {
     activeCctvPlayers[cfg.code] = player;
   });
 }
+
+function takeCctvSnapshot(camCode) {
+  const modalVideo = document.getElementById('modalDomVideo');
+  const modalCanvas = document.getElementById('modalLargeCctvCanvas');
+  if (!modalVideo && !modalCanvas) return;
+
+  const snapCanvas = document.createElement('canvas');
+  snapCanvas.width = modalVideo?.videoWidth || 1280;
+  snapCanvas.height = modalVideo?.videoHeight || 720;
+  const ctx = snapCanvas.getContext('2d');
+
+  try {
+    if (modalVideo) ctx.drawImage(modalVideo, 0, 0, snapCanvas.width, snapCanvas.height);
+    if (modalCanvas) ctx.drawImage(modalCanvas, 0, 0, snapCanvas.width, snapCanvas.height);
+  } catch (e) {
+    if (modalCanvas) ctx.drawImage(modalCanvas, 0, 0, snapCanvas.width, snapCanvas.height);
+  }
+
+  // Watermark
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
+  ctx.fillRect(0, snapCanvas.height - 32, snapCanvas.width, 32);
+  ctx.font = 'bold 13px monospace';
+  ctx.fillStyle = '#00FF66';
+  ctx.fillText(`VARISETU POLICE SURVEILLANCE • ${camCode} • ${new Date().toISOString()}`, 12, snapCanvas.height - 11);
+
+  const link = document.createElement('a');
+  link.download = `CCTV_${camCode}_${Date.now()}.png`;
+  link.href = snapCanvas.toDataURL('image/png');
+  link.click();
+}
+
 function renderCameras(cameras) {
   const container = document.getElementById('cctvTilesContainer');
   if (!container || !cameras || cameras.length === 0) return;
@@ -1388,6 +1910,9 @@ function renderCameras(cameras) {
       const vidSrc = CCTV_VIDEO_MAP[cam.camera_code] || CCTV_VIDEO_MAP.DEFAULT;
       if (!domVideo.src.includes(vidSrc.split('/').pop())) {
         domVideo.src = vidSrc;
+        domVideo.muted = true;
+        domVideo.defaultMuted = true;
+        domVideo.playsInline = true;
         domVideo.play().catch(() => {});
       }
     }
@@ -1451,6 +1976,18 @@ function openCameraDetails(camera) {
     title: `CCTV SURVEILLANCE FEED: ${escapeHtml(camCode)}`,
     kicker: 'POLICE SURVEILLANCE NETWORK • 1080p FEED',
     bodyHtml: `
+      <!-- ABOVE HEADER SECTION: REAL-TIME UPDATING TIMESTAMP & CAMERA TELEMETRY -->
+      <div class="modal-cctv-header-strip" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding:6px 12px; background:var(--bg-subtle,#181513); border:1px solid var(--border-main,#3D352E); border-radius:2px; font-family:var(--font-mono,monospace); font-size:12.5px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#00FF66; box-shadow:0 0 6px #00FF66;"></span>
+          <span style="font-weight:700; color:var(--text-main,#E8E6E3);">${escapeHtml(camCode)} &bull; ${escapeHtml(camName)}</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="color:#FF3B30; font-weight:700;">● LIVE REC</span>
+          <span id="modalCctvLiveTimestamp" style="color:var(--status-green,#00FF66); font-weight:700; letter-spacing:0.5px;">INITIALIZING...</span>
+        </div>
+      </div>
+
       <!-- TOP: RUNNING CAMERA VIDEO STREAM -->
       <div class="modal-cctv-wrapper" style="position:relative; height:340px; background:#000; overflow:hidden; border-radius:2px;">
         <video id="modalDomVideo" src="${videoSrc}" poster="${imageSrc}" autoplay loop muted playsinline style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;"></video>
@@ -1507,30 +2044,56 @@ function openCameraDetails(camera) {
   }
 
   // Wire PTZ and Stream Controls
+  const applyModalTransform = () => {
+    if (modalVideo && currentModalPlayer) {
+      modalVideo.style.transformOrigin = 'center center';
+      modalVideo.style.transform = `translate(${currentModalPlayer.panX}px, ${currentModalPlayer.panY}px) scale(${currentModalPlayer.zoom})`;
+    }
+  };
+
   document.getElementById('ptzPanLeft')?.addEventListener('click', () => {
-    if (currentModalPlayer) currentModalPlayer.panX -= 25;
+    if (currentModalPlayer) {
+      currentModalPlayer.panX -= 25;
+      applyModalTransform();
+    }
   });
   document.getElementById('ptzPanRight')?.addEventListener('click', () => {
-    if (currentModalPlayer) currentModalPlayer.panX += 25;
+    if (currentModalPlayer) {
+      currentModalPlayer.panX += 25;
+      applyModalTransform();
+    }
   });
   document.getElementById('ptzTiltUp')?.addEventListener('click', () => {
-    if (currentModalPlayer) currentModalPlayer.panY -= 20;
+    if (currentModalPlayer) {
+      currentModalPlayer.panY -= 20;
+      applyModalTransform();
+    }
   });
   document.getElementById('ptzTiltDown')?.addEventListener('click', () => {
-    if (currentModalPlayer) currentModalPlayer.panY += 20;
+    if (currentModalPlayer) {
+      currentModalPlayer.panY += 20;
+      applyModalTransform();
+    }
   });
   document.getElementById('ptzReset')?.addEventListener('click', () => {
     if (currentModalPlayer) {
       currentModalPlayer.panX = 0;
       currentModalPlayer.panY = 0;
       currentModalPlayer.zoom = 1.0;
+      applyModalTransform();
     }
   });
   document.getElementById('ptzZoomIn')?.addEventListener('click', () => {
-    if (currentModalPlayer) currentModalPlayer.zoom = Math.min(2.5, currentModalPlayer.zoom + 0.25);
+    if (currentModalPlayer) {
+      currentModalPlayer.zoom = Math.min(2.5, currentModalPlayer.zoom + 0.25);
+      applyModalTransform();
+    }
   });
   document.getElementById('ptzZoomOut')?.addEventListener('click', () => {
-    if (currentModalPlayer) currentModalPlayer.zoom = Math.max(1.0, currentModalPlayer.zoom - 0.25);
+    if (currentModalPlayer) {
+      currentModalPlayer.zoom = Math.max(1.0, currentModalPlayer.zoom - 0.25);
+      applyModalTransform();
+    }
   });
   document.getElementById('ptzToggleAi')?.addEventListener('click', (e) => {
     if (currentModalPlayer) {
@@ -4090,7 +4653,7 @@ function handleMapModeChange(mode) {
   if (mode === 'YATRA' && AppState.palkhiMarker) {
     window.wariMap.setView(AppState.palkhiMarker.getLatLng(), 13);
   } else if (mode === 'TRAFFIC' || mode === 'OPERATIONAL') {
-    window.wariMap.setView([19.2000, 74.0000], 8);
+    window.wariMap.setView([18.1800, 74.5500], 8);
   }
 }
 
