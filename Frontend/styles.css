@@ -676,7 +676,7 @@ body {
   font-family: var(--font-sans);
   font-size: 14.5px;
   font-weight: 600;
-  border-radius: 2px;
+  border-radius: 5px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -3855,43 +3855,37 @@ div.badge {
 
 
 
-/* ==================== VariSetu Marathi/English UI Language Toggle ====================
-   Purely additive — does not alter any existing selectors or rules.
-   Toggle button is injected at runtime by app.js (see bottom of that file). */
-.varisetu-lang-toggle {
-  position: fixed;
-  bottom: 18px;
-  right: 18px;
-  z-index: 100000;
-  padding: 10px 16px;
-  border-radius: 999px;
-  border: 1.5px solid var(--maroon-primary, #7A1F1F);
-  background: var(--bg-card, #FFFFFF);
-  color: var(--maroon-primary, #7A1F1F);
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.3px;
-  cursor: pointer;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
-  transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease;
+
+/* ==================== SUBTLE ROUNDED BUTTONS (4-5px BORDER RADIUS) ==================== */
+button,
+.govt-btn,
+.cmd-btn,
+.cctv-ctrl-btn,
+.timeline-filter-btn,
+.fleet-filter-btn,
+.pagination-btn,
+.quick-call-btn,
+.softphone-btn,
+.toggle-password-btn,
+.login-submit,
+.btn-primary,
+.btn-outline,
+.resource-dropdown-select,
+.resource-search-input {
+  border-radius: 5px !important;
 }
 
-.varisetu-lang-toggle:hover {
-  background: var(--maroon-primary, #7A1F1F);
-  color: #FFFFFF;
-  transform: translateY(-1px);
+.govt-input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+select,
+textarea {
+  border-radius: 4px !important;
 }
 
-.varisetu-lang-toggle:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 640px) {
-  .varisetu-lang-toggle {
-    bottom: 12px;
-    right: 12px;
-    padding: 8px 13px;
-    font-size: 12px;
-  }
+.nav-tab {
+  border-radius: 4px 4px 0 0 !important;
 }
