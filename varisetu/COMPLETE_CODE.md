@@ -11219,7 +11219,9 @@ GOOGLE_MAPS_SERVER_API_KEY=
 CORS_ORIGINS=["http://localhost:5173","http://localhost:5174","http://127.0.0.1:5173","http://127.0.0.1:5174","http://localhost:3000"]
 
 ```
-
+curl -X POST "https://varisetu-backend.onrender.com/api/v1/auth/login" \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "username=admin@varisetu.com&password=admin123"
 ---
 
 ## 13. Backend Pytest Config
